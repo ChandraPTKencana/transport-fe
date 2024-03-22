@@ -60,15 +60,18 @@
           <div id="panel" class="h-7 text-xs relative">
             <div v-show="is_panel_open"
               class="w-full absolute bottom-full mb-2 bg-slate-700 bg-opacity-80 cursor-pointer">
-              <nuxt-link to="/profile" class="block w-full text-left p-2 hover:bg-slate-900">
+              <!-- <nuxt-link to="/profile" class="block w-full text-left p-2 hover:bg-slate-900">
                 Setting
+              </nuxt-link> -->
+              <nuxt-link to="/profile/change_password" class="block w-full text-left p-2 hover:bg-slate-900">
+                Change Password
               </nuxt-link>
               <nuxt-link v-if="authenticated" class="block w-full text-left p-2 hover:bg-slate-900" @click="logout">
                 Logout
               </nuxt-link>
             </div>
             <div class="bg-slate-700 bg-opacity-80 p-2 cursor-pointer" @click="is_panel_open = !is_panel_open">
-              {{ fullname }}
+              {{ username }}
             </div>
           </div>
         </header>

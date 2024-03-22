@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full flex flex-col">
-    <Header :title="'List ujalan'" />
+    <Header :title="'List Ujalan'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
         <button type="button" name="button" class="m-1 text-2xl "
