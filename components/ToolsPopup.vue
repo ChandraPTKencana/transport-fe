@@ -94,7 +94,7 @@ const moveBottom=()=>{
 </script>
 <style scoped>
 .box{
-  z-index:5;
+  z-index:11;
   position:fixed;
   left:0px;
   top:0px;

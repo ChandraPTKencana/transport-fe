@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   // rootDir : "",
   runtimeConfig: {
     public: {
-      baseURL: process.env.MY_API_ADDR,
+      // baseURL: process.env.MY_API_ADDR,
     },
   },
   app:{
@@ -52,7 +52,7 @@ export default defineNuxtConfig({
   nitro: {
     routeRules: {
       // "/api/**": { proxy: 'http://127.0.0.1:8000/api/internal/**' },
-      "/api/**": { proxy: 'http://127.0.0.1/api/a9p/**' },
+      "/api/**": { proxy: 'http://127.0.0.1/transport-be/a9p/**' },
       // "/api/**": { proxy: 'https://genkagromas.com/api/a9p/**' },
       // "^/stok/api/**": { proxy: 'http://127.0.0.1/api/a9p/**' },
       // "/stok/api/**": { proxy: 'http://127.0.0.1/api/a9p/**' }

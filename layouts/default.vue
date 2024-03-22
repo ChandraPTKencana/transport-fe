@@ -18,12 +18,18 @@
                 Dashboard
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" :class="activeMenu == '/data_satuan'?'active':''" >
+            <li :class="activeMenu == '/data_ujalan'?'active':''" >
+              <nuxt-link to="/data_ujalan"  class="cursor-pointer" @click="goTo('/data_ujalan')">
+                <IconsScale class="mr-1"/>
+                U.Jalan
+              </nuxt-link>
+            </li>
+            <!-- <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" :class="activeMenu == '/data_satuan'?'active':''" >
               <nuxt-link to="/data_satuan"  class="cursor-pointer" @click="goTo('/data_satuan')">
                 <IconsScale class="mr-1"/>
                 Satuan
               </nuxt-link>
-            </li>
+            </li> -->
             <!-- <li :class="activeMenu == '/data_gudang'?'active':''" >
               <nuxt-link class="cursor-pointer" to="/data_gudang" @click="goTo('/data_gudang')">Gudang
               </nuxt-link>
@@ -117,7 +123,6 @@ const logout = async() => {
     return;
   }else{
     logUserOut();
-    router.push('/login');
   }
 
 };
@@ -147,7 +152,7 @@ const goTo=(url:any)=>{
   if(activeMenu.value == url) return;
   activeMenu.value = url;
   is_sidebar_open.value=false;
-  // router.push(url);
+  router.push(url);
 }
 
 
