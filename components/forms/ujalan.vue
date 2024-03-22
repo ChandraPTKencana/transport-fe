@@ -383,7 +383,6 @@ const doSave = async () => {
 
     let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
     if(idx>=-1){
-      console.log("Change");
       props.p_data.splice(idx,1,{...ujalan.value});    
     }
   }
