@@ -8,7 +8,7 @@
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-full flex flex-col flex-wrap p-1">
                 <label for="">Tanggal</label>
                 <div class="grow" >
                   <ClientOnly>
@@ -22,56 +22,94 @@
                 </div>
                 <p class="text-red-500">{{ field_errors.tanggal }}</p>
               </div>
-              
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">To</label>
-                <select v-model="trx_cpo.xto">
-                  <option v-for="lt in list_to">{{lt}}</option>
-                </select>
-                <p class="text-red-500">{{ field_errors.xto }}</p>
-              </div>
+              <div class="w-full flex pt-5">
+                <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">To</label>
+                  <select v-model="trx_cpo.xto">
+                    <option v-for="lt in list_to">{{lt}}</option>
+                  </select>
+                  <p class="text-red-500">{{ field_errors.xto }}</p>
+                </div>
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Tipe</label>
-                <select v-model="trx_cpo.tipe">
-                  <option v-for="lt in list_tipe">{{lt}}</option>
-                </select>
-                <p class="text-red-500">{{ field_errors.tipe }}</p>
-              </div>
+                <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">Tipe</label>
+                  <select v-model="trx_cpo.tipe">
+                    <option v-for="lt in list_tipe">{{lt}}</option>
+                  </select>
+                  <p class="text-red-500">{{ field_errors.tipe }}</p>
+                </div>
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Harga</label>
-                <div class="card-border">
-                  {{ pointFormat(harga_dr_list) }}
+                <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">Total Dari U.Jalan</label>
+                  <div class="card-border disabled">
+                    {{ trx_cpo.amount ? pointFormat(trx_cpo.amount) : pointFormat(harga_dr_list) }}
+                  </div>
                 </div>
               </div>
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-full flex pb-5">
+                <div class="w-full sm:w-8/12 md:w-9/12 lg:w-9/12 flex flex-col flex-wrap p-1">
+                  <label for="">PV</label>
+                  <input type="text" list="pv"  v-model="trx_cpo.pv_no"/>
+                  <datalist id="pv">
+                    <option v-for="lp in list_pv">{{lp.VoucherNo}}</option>
+                  </datalist>
+                  <p class="text-red-500">{{ field_errors.pv }}</p>
+                </div>
+  
+                <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">Total Dari PV</label>
+                  <div class="card-border disabled">
+                    {{ trx_cpo.pv_total ? pointFormat(trx_cpo.pv_total) : pointFormat(harga_dr_pv) }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="w-full flex flex-col flex-wrap p-1">
                 <label for="">Tiket</label>
-                <input type="text" list="ticket"  v-model="trx_cpo.ticket"/>
+                <input type="text" list="ticket"  v-model="trx_cpo.ticket_no"/>
                 <datalist id="ticket">
-                  <option>Volvo</option>
-                  <option>Saab</option>
-                  <option>Mercedes</option>
-                  <option>Audi</option>
+                  <option v-for="lt1 in list_ticket">{{lt1.TicketNo}}</option>
                 </datalist>
                 <p class="text-red-500">{{ field_errors.ticket }}</p>
               </div>
+              <div class="w-full flex flex-wrap">
+                <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">Bruto dari Tiket</label>
+                  <div class="card-border disabled">
+                    {{ trx_cpo.ticket_bruto ? pointFormat(trx_cpo.ticket_bruto): 0 }}
+                  </div>
+                </div>
+                <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">Tara dari Tiket</label>
+                  <div class="card-border disabled">
+                    {{ trx_cpo.ticket_tara ? pointFormat(trx_cpo.ticket_tara): 0 }}
+                  </div>
+                </div>
+                <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">Netto dari Tiket</label>
+                  <div class="card-border disabled">
+                    {{ trx_cpo.ticket_netto ? pointFormat(trx_cpo.ticket_netto): 0 }}
+                  </div>
+                </div>
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">PV</label>
-                <input type="text" list="pv"  v-model="trx_cpo.pv"/>
-                <datalist id="pv">
-                  <option>Volvo</option>
-                  <option>Saab</option>
-                  <option>Mercedes</option>
-                  <option>Audi</option>
-                </datalist>
-                <p class="text-red-500">{{ field_errors.pv }}</p>
+                <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">Supir</label>
+                  <div class="card-border disabled">
+                    {{ trx_cpo.ticket_supir }}
+                  </div>
+                </div>
+                <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">No Pol</label>
+                  <div class="card-border disabled">
+                    {{ trx_cpo.ticket_no_pol }}
+                  </div>
+                </div>
+                
               </div>
-
               
-
+              
+                     
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Bruto</label>
                 <input v-model="trx_cpo.bruto">
@@ -89,6 +127,20 @@
                 <input v-model="trx_cpo.netto">
                 <p class="text-red-500">{{ field_errors.netto }}</p>
               </div>
+
+
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">Supir</label>
+                <input v-model="trx_cpo.supir">
+                <p class="text-red-500">{{ field_errors.supir }}</p>
+              </div>
+
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">No Pol</label>
+                <input v-model="trx_cpo.no_pol">
+                <p class="text-red-500">{{ field_errors.no_pol }}</p>
+              </div>
+
             </div>
           </div>
           
@@ -156,25 +208,44 @@ const props = defineProps({
     required:true,
     default:[]
   },
+  list_ticket:{
+    type:Array,
+    required:true,
+    default:[]
+  },
+  list_pv:{
+    type:Array,
+    required:true,
+    default:[]
+  },
   
 })
 
 const trx_cpo_temp = {
     id: -1,
     tanggal: new Date(),
+    id_uj: -1,
     xto: "",
     tipe: "",
-    ticket: "",
-    pv:"",
+    amount: 0,
+    pv_id: -1,
+    pv_no:"",
+    pv_total:0,
+    ticket_id: -1,
+    ticket_bruto:0,
+    ticket_tara:0,
+    ticket_netto:0,
+    ticket_supir:"",
+    ticket_no_pol:"",
+
+    supir: "",
+    no_pol: '',
     bruto: 0,
     tara: 0,
     netto: 0,
 };
 
 const trx_cpo = ref({...trx_cpo_temp});
-
-
-
 
 const token = useCookie('token');
 const field_errors = ref({})
@@ -184,14 +255,37 @@ const doSave = async () => {
   field_errors.value = {};
 
   const data_in = new FormData();
-  data_in.append("tanggal", trx_cpo.value.tanggal);
+  data_in.append("tanggal", $moment(trx_cpo.value.tanggal).format("Y-MM-DD"));
+  // data_in.append("tanggalx", $moment(trx_cpo.value.tanggal).format("Y-MM-DD HH:mm:ss"));
+  // data_in.append("tanggaly", trx_cpo.value.tanggal);
+  
   data_in.append("xto", trx_cpo.value.xto);
   data_in.append("tipe", trx_cpo.value.tipe);
-  data_in.append("ticket", trx_cpo.value.ticket);
-  data_in.append("pv", trx_cpo.value.pv);
+
+  // data_in.append("amount", trx_cpo.value.amount);
+
+
+  if(trx_cpo.value.pv_no){
+    let pv = props.list_pv.filter(
+      (x)=>x.VoucherNo == trx_cpo.value.pv_no
+    );
+    data_in.append("pv_id", pv[0].VoucherID);
+  }
+
+  if(trx_cpo.value.ticket_no){
+    let ticket = props.list_ticket.filter(
+      (x)=>x.TicketNo == trx_cpo.value.ticket_no
+    );
+    data_in.append("ticket_id", ticket[0].TicketID);
+  }
+
+
   data_in.append("bruto", trx_cpo.value.bruto);
   data_in.append("tara", trx_cpo.value.tara);
   data_in.append("netto", trx_cpo.value.netto);
+
+  data_in.append("supir", trx_cpo.value.supir);
+  data_in.append("no_pol", trx_cpo.value.no_pol);
   
   let $method = "post";
 
@@ -258,16 +352,29 @@ const list_tipe = computed(()=>{
 })
 
 const harga_dr_list = computed(()=>{
+  let amount = 0;
+
   let hrg = props.list_ujalan.filter(
     (x)=>x.xto == trx_cpo.value.xto && x.tipe == trx_cpo.value.tipe
   );
   if(hrg.length  > 0) 
-  return hrg[0].harga;
-  else 
-  return 0;
+  amount=hrg[0].harga;
+
+  trx_cpo.value.amount=amount;
+  return amount;
 })
 
-
+const harga_dr_pv = computed(()=>{
+  let total_amount = 0;
+  let hrg = props.list_pv.filter(
+    (x)=>x.VoucherNo == trx_cpo.value.pv_no
+  );
+  if(hrg.length  > 0) 
+  total_amount = hrg[0].total_amount;
+   
+  trx_cpo.value.pv_total = total_amount;
+  return total_amount;
+})
 
 const row = ref(-1);
 const tools_popup = ref(false);
@@ -293,7 +400,7 @@ const disabled = computed(()=>{
 
 const callData = async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/api/trx_cpo_", {
+  const { data, error, status } = await useMyFetch("/api/trx_cpo", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -328,6 +435,41 @@ watch(() => props.show, (newVal, oldVal) => {
     callData();
   }
 }, {
+  immediate: true
+});
+
+let $return_ticket = {bruto:0,tara:0,netto:0,supir:"-",no_pol:"-"}; 
+watch(()=>trx_cpo.value.ticket_no, (newVal, oldVal) => {
+  if (newVal=="" || newVal){
+    if(newVal){
+      let hrg = props.list_ticket.filter(
+        (x)=>x.TicketNo == trx_cpo.value.ticket_no
+      );
+      if(hrg.length  > 0)  
+      $return_ticket = {
+        bruto:hrg[0].Bruto,
+        tara:hrg[0].Tara,
+        netto:hrg[0].Netto,
+        supir:hrg[0].NamaSupir,
+        no_pol:hrg[0].VehicleNo
+      };
+    }
+
+    if(newVal==""){
+      $return_ticket = {bruto:0,tara:0,netto:0,supir:"-",no_pol:"-"}; 
+    }
+
+    trx_cpo.value.ticket_bruto = $return_ticket.bruto;
+    trx_cpo.value.ticket_tara = $return_ticket.tara;
+    trx_cpo.value.ticket_netto = $return_ticket.netto;
+
+    trx_cpo.value.ticket_supir = $return_ticket.supir;
+    trx_cpo.value.ticket_no_pol = $return_ticket.no_pol;
+
+  }
+
+}, {
+  deep:true,
   immediate: true
 });
 

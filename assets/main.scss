@@ -119,6 +119,11 @@ td.cell {
     @apply w-full;
 }
 
+.card-border.disabled{
+    @apply  cursor-not-allowed;
+    @apply bg-gray-400 #{!important};
+}
+
 button{
     @apply text-center;
 }

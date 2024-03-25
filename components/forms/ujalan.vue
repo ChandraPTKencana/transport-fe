@@ -31,7 +31,10 @@
 
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Jenis</label>
-                <input v-model="ujalan.jenis">
+                <select v-model="ujalan.jenis">
+                  <option value="CPO">CPO</option>
+                  <option value="TBS">TBS</option>
+                </select>
                 <p class="text-red-500">{{ field_errors.jenis }}</p>
               </div>
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">

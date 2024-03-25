@@ -59,11 +59,23 @@
                 <!-- <th>No.</th> -->
                 <!-- <th>Updated At</th> -->
                 <th>ID</th>
+                <th>Tanggal</th>
                 <th>To</th>
                 <th>Tipe</th>
-                <th>Status</th>
-                <th>Jenis</th>
-                <th>Harga</th>
+                <th>Amount</th>
+                <th>PV No</th>
+                <th>PV Total</th>
+                <th>Ticket No</th>
+                <th>Ticket Bruto</th>
+                <th>Ticket Tara</th>
+                <th>Ticket Netto</th>
+                <th>Ticket Supir</th>
+                <th>Ticket No Pol</th>
+                <th>Bruto</th>
+                <th>Tara</th>
+                <th>Netto</th>
+                <th>Supir</th>
+                <th>No Pol</th>
                 <!-- <th>Created User</th> -->
                 <th>Created At</th>
                 <th>Updated At</th>
@@ -73,11 +85,23 @@
               <tr v-for="(trx_cpo, index) in trx_cpos" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
                 <td class="bold">{{ trx_cpo.id }}</td>
+                <td>{{ trx_cpo.tanggal ? $moment(trx_cpo.tanggal).format("DD-MM-Y") : "" }}</td>
                 <td>{{ trx_cpo.xto }}</td>
                 <td>{{ trx_cpo.tipe }}</td>
-                <td>{{ trx_cpo.status }}</td>
-                <td>{{ trx_cpo.jenis }}</td>
-                <td>{{ pointFormat(trx_cpo.harga) }}</td>
+                <td>{{ pointFormat(trx_cpo.amount) }}</td>
+                <td>{{ trx_cpo.pv_no }}</td>
+                <td>{{ pointFormat(trx_cpo.pv_total) }}</td>
+                <td>{{ trx_cpo.ticket_no }}</td>
+                <td>{{ pointFormat(trx_cpo.ticket_bruto) }}</td>
+                <td>{{ pointFormat(trx_cpo.ticket_tara) }}</td>
+                <td>{{ pointFormat(trx_cpo.ticket_netto) }}</td>
+                <td>{{ trx_cpo.ticket_supir }}</td>
+                <td>{{ trx_cpo.ticket_no_pol }}</td>
+                <td>{{ pointFormat(trx_cpo.bruto) }}</td>
+                <td>{{ pointFormat(trx_cpo.tara) }}</td>
+                <td>{{ pointFormat(trx_cpo.netto) }}</td>
+                <td>{{ trx_cpo.supir }}</td>
+                <td>{{ trx_cpo.no_pol }}</td>
                 <td>{{ trx_cpo.created_at ? $moment(trx_cpo.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <td>{{ trx_cpo.updated_at ? $moment(trx_cpo.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
               </tr>
@@ -89,7 +113,7 @@
 
     <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
     <!-- <trx_cposRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
-    <FormsTrxCpo :show="forms_trx_cpo_show" :fnClose="()=>{forms_trx_cpo_show=false}" :id="forms_trx_cpo_id" :p_data="trx_cpos" :list_ujalan="list_ujalan"/>
+    <FormsTrxCpo :show="forms_trx_cpo_show" :fnClose="()=>{forms_trx_cpo_show=false}" :id="forms_trx_cpo_id" :p_data="trx_cpos" :list_ujalan="list_ujalan" :list_ticket="list_ticket" :list_pv="list_pv"/>
   </div>
 </template>
 
@@ -142,7 +166,7 @@ const { data: dt_async } = await useAsyncData(async () => {
       },
       retry: 0,
     }),
-    useMyFetch("/api/trx_load_data", {
+    useMyFetch("/api/trx_load_for_cpo", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -176,9 +200,8 @@ const { data: dt_async } = await useAsyncData(async () => {
 
 const trx_cpos = ref(dt_async.value.trx_cpos || []);
 const list_ujalan = ref(dt_async.value.list_ujalan);
-// const list_tipe = ref(dt_async.value.list_tipe);
-// const list_ticket = ref(dt_async.value.list_ticket);
-// const list_pv = ref(dt_async.value.list_pv);
+const list_ticket = ref(dt_async.value.list_ticket);
+const list_pv = ref(dt_async.value.list_pv);
 
 
 const search = ref("");
