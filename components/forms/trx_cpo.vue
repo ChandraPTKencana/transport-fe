@@ -42,7 +42,7 @@
                 <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">Total Dari U.Jalan</label>
                   <div class="card-border disabled">
-                    {{ trx_cpo.amount ? pointFormat(trx_cpo.amount) : pointFormat(harga_dr_list) }}
+                    {{pointFormat(trx_cpo.amount) }}
                   </div>
                 </div>
               </div>
@@ -60,7 +60,7 @@
                 <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">Total Dari PV</label>
                   <div class="card-border disabled">
-                    {{ trx_cpo.pv_total ? pointFormat(trx_cpo.pv_total) : pointFormat(harga_dr_pv) }}
+                    {{  pointFormat(trx_cpo.pv_total) }}
                   </div>
                 </div>
               </div>
@@ -351,31 +351,6 @@ const list_tipe = computed(()=>{
   return [...new Set(props.list_ujalan.filter((x)=>x.xto == trx_cpo.value.xto).map((x)=>x.tipe))];
 })
 
-const harga_dr_list = computed(()=>{
-  let amount = 0;
-
-  let hrg = props.list_ujalan.filter(
-    (x)=>x.xto == trx_cpo.value.xto && x.tipe == trx_cpo.value.tipe
-  );
-  if(hrg.length  > 0) 
-  amount=hrg[0].harga;
-
-  trx_cpo.value.amount=amount;
-  return amount;
-})
-
-const harga_dr_pv = computed(()=>{
-  let total_amount = 0;
-  let hrg = props.list_pv.filter(
-    (x)=>x.VoucherNo == trx_cpo.value.pv_no
-  );
-  if(hrg.length  > 0) 
-  total_amount = hrg[0].total_amount;
-   
-  trx_cpo.value.pv_total = total_amount;
-  return total_amount;
-})
-
 const row = ref(-1);
 const tools_popup = ref(false);
 const coor = ref({
@@ -383,15 +358,11 @@ const coor = ref({
   top:0
 });
 
-
 const showAction=(e, index)=>{
   row.value = index;
   tools_popup.value = true;
   coor.value = { left: e.clientX, top: e.clientY };
 };
-
-
-
 
 const disabled = computed(()=>{
   return false;
@@ -465,9 +436,48 @@ watch(()=>trx_cpo.value.ticket_no, (newVal, oldVal) => {
 
     trx_cpo.value.ticket_supir = $return_ticket.supir;
     trx_cpo.value.ticket_no_pol = $return_ticket.no_pol;
-
   }
 
+}, {
+  deep:true,
+  immediate: true
+});
+
+
+watch(()=>trx_cpo.value.pv_no, (newVal, oldVal) => {
+  if (newVal=="" || newVal){
+    let hrg = props.list_pv.filter(
+      (x)=>x.VoucherNo == trx_cpo.value.pv_no
+    );
+    if(hrg.length  > 0) 
+    trx_cpo.value.pv_total = hrg[0].total_amount;
+    else
+    trx_cpo.value.pv_total = 0;
+  }
+}, {
+  deep:true,
+  immediate: true
+});
+
+watch(()=>trx_cpo.value.xto, (newVal, oldVal) => {
+  if (newVal=="" || newVal){
+    let hrg = props.list_ujalan.filter(
+      (x)=>x.xto == trx_cpo.value.xto && x.tipe == trx_cpo.value.tipe
+    );
+    trx_cpo.value.amount=(hrg.length  > 0) ? hrg[0].harga : 0;
+  }
+}, {
+  deep:true,
+  immediate: true
+});
+
+watch(()=>trx_cpo.value.tipe, (newVal, oldVal) => {
+  if (newVal=="" || newVal){
+    let hrg = props.list_ujalan.filter(
+      (x)=>x.xto == trx_cpo.value.xto && x.tipe == trx_cpo.value.tipe
+    );
+    trx_cpo.value.amount=(hrg.length  > 0) ? hrg[0].harga : 0;
+  }
 }, {
   deep:true,
   immediate: true
