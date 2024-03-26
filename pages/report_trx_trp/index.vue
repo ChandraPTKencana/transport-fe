@@ -4,24 +4,38 @@
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
         <button type="button" name="button" class="m-1 text-2xl "
-          @click="form_add()">
-          <IconsPlus />
-        </button>
-        <button type="button" name="button" class="m-1 text-2xl "
-          @click="form_edit()">
-          <IconsEdit/>
-        </button>
-        <button type="button" name="button" class="m-1 text-2xl "
-          @click="remove()">
-          <IconsDelete />
-        </button>
-        <button type="button" name="button" class="m-1 text-2xl "
           @click="printPreview()">
           <IconsPrinterEye />
         </button>
       </div>
 
       <form action="#" class="w-full flex p-1">
+        <div >
+          <div class="font-bold"> Tgl Dari </div>
+          <ClientOnly>
+            <vue-date-picker  v-model="date.from" 
+            type="datetime" 
+            format="dd-MM-yyyy" 
+            :enable-time-picker = "false" 
+            text-input
+            teleport-center></vue-date-picker>
+          </ClientOnly>
+          <!-- <p class="text-red-500">{{ field_errors.date_from }}</p> -->
+        </div>
+
+        <div >
+          <div class="font-bold"> Tgl Sampai </div>
+          <ClientOnly>
+            <vue-date-picker  v-model="date.to" 
+            type="datetime" 
+            format="dd-MM-yyyy" 
+            :enable-time-picker = "false" 
+            text-input
+            teleport-center></vue-date-picker>
+          </ClientOnly>
+          <!-- <p class="text-red-500">{{ field_errors.date_to }}</p> -->
+        </div>
+
         <div class="grow">
           <div class="font-bold"> Keyword </div>
           <input class="" type="text" v-model="search" name="search"
@@ -179,8 +193,13 @@ const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
 params.sort ="created_at:desc";
 
+const field_errors = ref({})
 
 const token = useCookie('token');
+const date = ref({
+  from: new Date(),
+  to: new Date(),
+});
 
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
@@ -264,13 +283,15 @@ const inject_params = () => {
   //getTimezoneOffset
   params._TimeZoneOffset = new Date().getTimezoneOffset();
   //inject filter
-  // params.date_from = this.date_from ? this.$moment(this.date_from).format("YYYY-MM-DD HH:mm:ss") : "";
+  params.date_from = date.value.from ? $moment(date.value.from).format("YYYY-MM-DD") : "";
+  params.date_to = date.value.to ? $moment(date.value.to).format("YYYY-MM-DD") : "";
 };
 
 const loadRef = ref(null);
 
 const callData = async () => {
   useCommonStore().loading_full = true;
+  field_errors.value = {};
   scrolling.value.may_get_data = false;
   params.page = scrolling.value.page;
   if (params.page == 1) trx_trps.value = [];
@@ -278,7 +299,7 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(trx_trps.value[0]);
   }
-  const { data, error, status } = await useMyFetch("/api/trx_trp", {
+  const { data, error, status } = await useMyFetch("/api/trx_trps", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -291,7 +312,7 @@ const callData = async () => {
   scrolling.value.may_get_data = true;
 
   if (status.value === 'error') {
-    useErrorStore().trigger(error);
+    useErrorStore().trigger(error, field_errors);
     return;
   }
 

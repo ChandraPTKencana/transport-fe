@@ -117,6 +117,18 @@
                     {{ trx_trp.ticket_a_no_pol }}
                   </div>
                 </div>
+                <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">In At</label>
+                  <div class="card-border disabled">
+                    {{ $moment(trx_trp.ticket_a_in_at).format("DD-MM-Y HH:mm:ss") }}
+                  </div>
+                </div>
+                <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">Out At</label>
+                  <div class="card-border disabled">
+                    {{ $moment(trx_trp.ticket_a_out_at).format("DD-MM-Y HH:mm:ss") }}
+                  </div>
+                </div>
                 
               </div>
               
@@ -161,7 +173,18 @@
                     {{ trx_trp.ticket_b_no_pol }}
                   </div>
                 </div>
-                
+                <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">In At</label>
+                  <div class="card-border disabled">
+                    {{ $moment(trx_trp.ticket_b_in_at).format("DD-MM-Y HH:mm:ss") }}
+                  </div>
+                </div>
+                <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">Out At</label>
+                  <div class="card-border disabled">
+                    {{ $moment(trx_trp.ticket_b_out_at).format("DD-MM-Y HH:mm:ss") }}
+                  </div>
+                </div>
               </div>
               
                      
@@ -181,6 +204,32 @@
                 <label for="">Netto</label>
                 <input v-model="trx_trp.ticket_b_netto">
                 <p class="text-red-500">{{ field_errors.ticket_b_netto }}</p>
+              </div>
+
+              <div v-if="trx_trp.jenis=='CPO'" class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">In At</label>
+                <ClientOnly>
+                  <vue-date-picker  v-model="trx_trp.ticket_b_in_at" 
+                  type="datetime" 
+                  format="dd-MM-yyyy HH:mm" 
+                  :enable-time-picker = "true" 
+                  text-input
+                  teleport-center></vue-date-picker>
+                </ClientOnly>
+                <p class="text-red-500">{{ field_errors.ticket_b_in_at }}</p>
+              </div>
+
+              <div v-if="trx_trp.jenis=='CPO'" class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">Out At</label>
+                <ClientOnly>
+                  <vue-date-picker  v-model="trx_trp.ticket_b_out_at" 
+                  type="datetime" 
+                  format="dd-MM-yyyy HH:mm" 
+                  :enable-time-picker = "true" 
+                  text-input
+                  teleport-center></vue-date-picker>
+                </ClientOnly>
+                <p class="text-red-500">{{ field_errors.ticket_b_out_at }}</p>
               </div>
 
 
@@ -294,6 +343,8 @@ const trx_trp_temp = {
     ticket_a_netto:0,
     ticket_a_supir:"",
     ticket_a_no_pol:"",
+    ticket_a_in_at:"",
+    ticket_a_out_at:"",
 
     ticket_b_id: -1,
     ticket_b_no: "",
@@ -302,6 +353,8 @@ const trx_trp_temp = {
     ticket_b_netto:0,
     ticket_b_supir:"",
     ticket_b_no_pol:"",
+    ticket_b_in_at:"",
+    ticket_b_out_at:"",
 
     supir: "",
     no_pol: '',
@@ -357,6 +410,8 @@ const doSave = async () => {
   data_in.append("ticket_b_bruto", trx_trp.value.ticket_b_bruto);
   data_in.append("ticket_b_tara", trx_trp.value.ticket_b_tara);
   data_in.append("ticket_b_netto", trx_trp.value.ticket_b_netto);
+  data_in.append("ticket_b_in_at", trx_trp.value.ticket_b_in_at);
+  data_in.append("ticket_b_out_at", trx_trp.value.ticket_b_out_at);
 
   data_in.append("supir", trx_trp.value.supir);
   data_in.append("no_pol", trx_trp.value.no_pol);
@@ -432,13 +487,13 @@ const list_a_ticket = computed(()=>{
   if(trx_trp.value.jenis=="CPO"){
     jenis=["CPO","PK"];
   }else{
-    jenis=["RTBS"];
+    jenis=["MTBS"];
   }
   return props.list_ticket.filter((x)=>jenis.indexOf(x.ProductName)>-1);
 })
 
 const list_b_ticket = computed(()=>{
-  return props.list_ticket.filter((x)=>["MTBS"].indexOf(x.ProductName)>-1);
+  return props.list_ticket.filter((x)=>["RTBS"].indexOf(x.ProductName)>-1);
 })
 
 const row = ref(-1);
@@ -512,17 +567,21 @@ watch(()=>trx_trp.value.ticket_a_no, (newVal, oldVal) => {
         tara:hrg[0].Tara,
         netto:hrg[0].Netto,
         supir:hrg[0].NamaSupir,
-        no_pol:hrg[0].VehicleNo
+        no_pol:hrg[0].VehicleNo,
+        in_at:hrg[0].DateTimeIn,
+        out_at:hrg[0].DateTimeOut,
       };
     }
 
     if(newVal==""){
-      $return_ticket = {bruto:0,tara:0,netto:0,supir:"-",no_pol:"-"}; 
+      $return_ticket = {bruto:0,tara:0,netto:0,supir:"-",no_pol:"-",in_at:"",out_at:""}; 
     }
 
     trx_trp.value.ticket_a_bruto = $return_ticket.bruto;
     trx_trp.value.ticket_a_tara = $return_ticket.tara;
     trx_trp.value.ticket_a_netto = $return_ticket.netto;
+    trx_trp.value.ticket_a_in_at = $return_ticket.in_at;
+    trx_trp.value.ticket_a_out_at = $return_ticket.out_at;
 
     trx_trp.value.ticket_a_supir = $return_ticket.supir;
     trx_trp.value.ticket_a_no_pol = $return_ticket.no_pol;
@@ -545,17 +604,21 @@ watch(()=>trx_trp.value.ticket_b_no, (newVal, oldVal) => {
         tara:hrg[0].Tara,
         netto:hrg[0].Netto,
         supir:hrg[0].NamaSupir,
-        no_pol:hrg[0].VehicleNo
+        no_pol:hrg[0].VehicleNo,
+        in_at:hrg[0].DateTimeIn,
+        out_at:hrg[0].DateTimeOut,
       };
     }
 
     if(newVal==""){
-      $return_ticket = {bruto:0,tara:0,netto:0,supir:"-",no_pol:"-"}; 
+      $return_ticket = {bruto:0,tara:0,netto:0,supir:"-",no_pol:"-",in_at:"",out_at:""}; 
     }
 
     trx_trp.value.ticket_b_bruto = $return_ticket.bruto;
     trx_trp.value.ticket_b_tara = $return_ticket.tara;
     trx_trp.value.ticket_b_netto = $return_ticket.netto;
+    trx_trp.value.ticket_b_in_at = $return_ticket.in_at;
+    trx_trp.value.ticket_b_out_at = $return_ticket.out_at;
 
     trx_trp.value.ticket_b_supir = $return_ticket.supir;
     trx_trp.value.ticket_b_no_pol = $return_ticket.no_pol;

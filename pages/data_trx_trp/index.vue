@@ -72,6 +72,8 @@
                 <th>Ticket A Netto</th>
                 <th>Ticket A Supir</th>
                 <th>Ticket A No Pol</th>
+                <th>Ticket A In At</th>
+                <th>Ticket A Out At</th>
 
                 <th>Ticket B No</th>
                 <th>Ticket B Bruto</th>
@@ -79,6 +81,8 @@
                 <th>Ticket B Netto</th>
                 <th>Ticket B Supir</th>
                 <th>Ticket B No Pol</th>
+                <th>Ticket B In At</th>
+                <th>Ticket B Out At</th>
 
                 <th>Supir</th>
                 <th>No Pol</th>
@@ -104,6 +108,8 @@
                 <td>{{ pointFormat(trx_trp.ticket_a_netto) }}</td>
                 <td>{{ trx_trp.ticket_a_supir }}</td>
                 <td>{{ trx_trp.ticket_a_no_pol }}</td>
+                <td>{{ $moment(trx_trp.ticket_a_in_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ $moment(trx_trp.ticket_a_out_at).format("DD-MM-Y HH:mm:ss") }}</td>
 
                 <td>{{ trx_trp.ticket_b_no }}</td>
                 <td>{{ pointFormat(trx_trp.ticket_b_bruto) }}</td>
@@ -111,6 +117,8 @@
                 <td>{{ pointFormat(trx_trp.ticket_b_netto) }}</td>
                 <td>{{ trx_trp.ticket_b_supir }}</td>
                 <td>{{ trx_trp.ticket_b_no_pol }}</td>
+                <td>{{ $moment(trx_trp.ticket_b_in_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ $moment(trx_trp.ticket_b_out_at).format("DD-MM-Y HH:mm:ss") }}</td>
 
                 <td>{{ trx_trp.supir }}</td>
                 <td>{{ trx_trp.no_pol }}</td>
@@ -251,7 +259,7 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(trx_trps.value[0]);
   }
-  const { data, error, status } = await useMyFetch("/api/trx_trp", {
+  const { data, error, status } = await useMyFetch("/api/trx_trps", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
