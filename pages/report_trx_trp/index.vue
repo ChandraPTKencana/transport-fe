@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full flex flex-col">
-    <Header :title="'List Transaction CPO/PK'" />
+    <Header :title="'Report Transaction'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
         <button type="button" name="button" class="m-1 text-2xl "
@@ -14,6 +14,10 @@
         <button type="button" name="button" class="m-1 text-2xl "
           @click="remove()">
           <IconsDelete />
+        </button>
+        <button type="button" name="button" class="m-1 text-2xl "
+          @click="printPreview()">
+          <IconsPrinterEye />
         </button>
       </div>
 
@@ -48,7 +52,7 @@
       </form>
       <div class="w-full flex justify-center items-center grow h-0 p-1">
 
-        <div v-if="trx_cpos.length == 0" class="">
+        <div v-if="trx_trps.length == 0" class="">
           Maaf Tidak Ada Record
         </div>
 
@@ -65,15 +69,21 @@
                 <th>Amount</th>
                 <th>PV No</th>
                 <th>PV Total</th>
-                <th>Ticket No</th>
-                <th>Ticket Bruto</th>
-                <th>Ticket Tara</th>
-                <th>Ticket Netto</th>
-                <th>Ticket Supir</th>
-                <th>Ticket No Pol</th>
-                <th>Bruto</th>
-                <th>Tara</th>
-                <th>Netto</th>
+
+                <th>Ticket A No</th>
+                <th>Ticket A Bruto</th>
+                <th>Ticket A Tara</th>
+                <th>Ticket A Netto</th>
+                <th>Ticket A Supir</th>
+                <th>Ticket A No Pol</th>
+
+                <th>Ticket B No</th>
+                <th>Ticket B Bruto</th>
+                <th>Ticket B Tara</th>
+                <th>Ticket B Netto</th>
+                <th>Ticket B Supir</th>
+                <th>Ticket B No Pol</th>
+
                 <th>Supir</th>
                 <th>No Pol</th>
                 <!-- <th>Created User</th> -->
@@ -82,28 +92,34 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(trx_cpo, index) in trx_cpos" :key="index" @click="selected = index"
+              <tr v-for="(trx_trp, index) in trx_trps" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
-                <td class="bold">{{ trx_cpo.id }}</td>
-                <td>{{ trx_cpo.tanggal ? $moment(trx_cpo.tanggal).format("DD-MM-Y") : "" }}</td>
-                <td>{{ trx_cpo.xto }}</td>
-                <td>{{ trx_cpo.tipe }}</td>
-                <td>{{ pointFormat(trx_cpo.amount) }}</td>
-                <td>{{ trx_cpo.pv_no }}</td>
-                <td>{{ pointFormat(trx_cpo.pv_total) }}</td>
-                <td>{{ trx_cpo.ticket_no }}</td>
-                <td>{{ pointFormat(trx_cpo.ticket_bruto) }}</td>
-                <td>{{ pointFormat(trx_cpo.ticket_tara) }}</td>
-                <td>{{ pointFormat(trx_cpo.ticket_netto) }}</td>
-                <td>{{ trx_cpo.ticket_supir }}</td>
-                <td>{{ trx_cpo.ticket_no_pol }}</td>
-                <td>{{ pointFormat(trx_cpo.bruto) }}</td>
-                <td>{{ pointFormat(trx_cpo.tara) }}</td>
-                <td>{{ pointFormat(trx_cpo.netto) }}</td>
-                <td>{{ trx_cpo.supir }}</td>
-                <td>{{ trx_cpo.no_pol }}</td>
-                <td>{{ trx_cpo.created_at ? $moment(trx_cpo.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
-                <td>{{ trx_cpo.updated_at ? $moment(trx_cpo.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
+                <td class="bold">{{ trx_trp.id }}</td>
+                <td>{{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-Y") : "" }}</td>
+                <td>{{ trx_trp.xto }}</td>
+                <td>{{ trx_trp.tipe }}</td>
+                <td>{{ pointFormat(trx_trp.amount) }}</td>
+                <td>{{ trx_trp.pv_no }}</td>
+                <td>{{ pointFormat(trx_trp.pv_total) }}</td>
+
+                <td>{{ trx_trp.ticket_a_no }}</td>
+                <td>{{ pointFormat(trx_trp.ticket_a_bruto) }}</td>
+                <td>{{ pointFormat(trx_trp.ticket_a_tara) }}</td>
+                <td>{{ pointFormat(trx_trp.ticket_a_netto) }}</td>
+                <td>{{ trx_trp.ticket_a_supir }}</td>
+                <td>{{ trx_trp.ticket_a_no_pol }}</td>
+
+                <td>{{ trx_trp.ticket_b_no }}</td>
+                <td>{{ pointFormat(trx_trp.ticket_b_bruto) }}</td>
+                <td>{{ pointFormat(trx_trp.ticket_b_tara) }}</td>
+                <td>{{ pointFormat(trx_trp.ticket_b_netto) }}</td>
+                <td>{{ trx_trp.ticket_b_supir }}</td>
+                <td>{{ trx_trp.ticket_b_no_pol }}</td>
+
+                <td>{{ trx_trp.supir }}</td>
+                <td>{{ trx_trp.no_pol }}</td>
+                <td>{{ trx_trp.created_at ? $moment(trx_trp.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
+                <td>{{ trx_trp.updated_at ? $moment(trx_trp.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
               </tr>
             </tbody>
           </table>
@@ -112,8 +128,24 @@
     </div>
 
     <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
-    <!-- <trx_cposRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
-    <FormsTrxCpo :show="forms_trx_cpo_show" :fnClose="()=>{forms_trx_cpo_show=false}" :id="forms_trx_cpo_id" :p_data="trx_cpos" :list_ujalan="list_ujalan" :list_ticket="list_ticket" :list_pv="list_pv"/>
+    <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
+    <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ujalan="list_ujalan" :list_ticket="list_ticket" :list_pv="list_pv"/>
+  
+    <div v-if="prtView" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
+      style="background-color: rgba(255,255,255,0.9);">
+      <div class="relative" style="width:95%; height: 90%;">
+        <div class="absolute -top-7 right-0 bg-white"
+          style="position: absolute; padding:5px 10px; border: solid 1px #ccc; border-bottom: none; border-top-right-radius: 5px;  border-top-left-radius: 5px;">
+          <IconsTimes  style="color:black; cursor:pointer;" @click="printPreview()"/>
+        </div>
+        <iframe ref="iframe" width='100%' height='100%' :src='pdfContent.dataBase64'></iframe>
+        <div
+          style="position: absolute; top: 12px; right: 98px; background-color: rgba(255,255,255,0); width: 37px; height: 36px; z-index:1; cursor: pointer;"
+          @click="download()">
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -127,12 +159,13 @@ import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
 
 const { pointFormat } = useUtils();
+const { downloadFile, viewFile } = useDownload();
 
 // definePageMeta({
 //   // layout: "clear",
 //   middleware: [
 //     function (to, from) {
-//       // if (!useAuthStore().checkScopes(['ap-trx_cpo-view']))
+//       // if (!useAuthStore().checkScopes(['ap-trx_trp-view']))
 //       //   return navigateTo('/');
 //       if (!useAuthStore().checkRole(["Super Admin","ClientPabrik",'KTU', 'User']))
 //       return navigateTo('/');
@@ -151,14 +184,14 @@ const token = useCookie('token');
 
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  let trx_cpos = [];
+  let trx_trps = [];
   let list_ujalan = [];
   let list_tipe = [];
   let list_ticket = [];
   let list_pv = [];
 
   const [data1, data2] = await Promise.all([
-    useMyFetch("/api/trx_cpos", {
+    useMyFetch("/api/trx_trps", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -166,7 +199,7 @@ const { data: dt_async } = await useAsyncData(async () => {
       },
       retry: 0,
     }),
-    useMyFetch("/api/trx_load_for_cpo", {
+    useMyFetch("/api/trx_load_for_trp", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -179,7 +212,7 @@ const { data: dt_async } = await useAsyncData(async () => {
   
 
   if (data1.status.value !== 'error') {
-    trx_cpos = data1.data.value.data;
+    trx_trps = data1.data.value.data;
   }
 
   if (data1.status.value === 'error') {
@@ -195,10 +228,10 @@ const { data: dt_async } = await useAsyncData(async () => {
   }
   useCommonStore().loading_full = false;
 
-  return { trx_cpos, list_ujalan, list_tipe, list_ticket, list_pv };
+  return { trx_trps, list_ujalan, list_tipe, list_ticket, list_pv };
 });
 
-const trx_cpos = ref(dt_async.value.trx_cpos || []);
+const trx_trps = ref(dt_async.value.trx_trps || []);
 const list_ujalan = ref(dt_async.value.list_ujalan);
 const list_ticket = ref(dt_async.value.list_ticket);
 const list_pv = ref(dt_async.value.list_pv);
@@ -226,6 +259,12 @@ const inject_params = () => {
   if (sort.value.field) {
     params.sort = sort.value.field + ":" + sort.value.by;
   }
+
+  // params.location_id = this.data.location_id;
+  //getTimezoneOffset
+  params._TimeZoneOffset = new Date().getTimezoneOffset();
+  //inject filter
+  // params.date_from = this.date_from ? this.$moment(this.date_from).format("YYYY-MM-DD HH:mm:ss") : "";
 };
 
 const loadRef = ref(null);
@@ -234,12 +273,12 @@ const callData = async () => {
   useCommonStore().loading_full = true;
   scrolling.value.may_get_data = false;
   params.page = scrolling.value.page;
-  if (params.page == 1) trx_cpos.value = [];
+  if (params.page == 1) trx_trps.value = [];
   if(params.first_row) delete params.first_row;
   if(params.page > 1){
-    params.first_row = JSON.stringify(trx_cpos.value[0]);
+    params.first_row = JSON.stringify(trx_trps.value[0]);
   }
-  const { data, error, status } = await useMyFetch("/api/trx_cpo", {
+  const { data, error, status } = await useMyFetch("/api/trx_trp", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -257,10 +296,10 @@ const callData = async () => {
   }
 
   if (scrolling.value.page == 1) {
-    trx_cpos.value = data.value.data;
+    trx_trps.value = data.value.data;
     if (loadRef.value) loadRef.value.scrollTop = 0;
   } else if (scrolling.value.page > 1) {
-    trx_cpos.value = [...trx_cpos.value, ...data.value.data];
+    trx_trps.value = [...trx_trps.value, ...data.value.data];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
@@ -296,12 +335,12 @@ const searching = () => {
 
 const router = useRouter();
 
-const forms_trx_cpo_show =  ref(false);
-const forms_trx_cpo_id = ref(0);
+const forms_trx_trp_show =  ref(false);
+const forms_trx_trp_id = ref(0);
 const form_add = () => {
-  forms_trx_cpo_id.value = 0;
-  forms_trx_cpo_show.value = true;
-  // router.push({ name: 'data_trx_cpo-form', query: { id: "" } });
+  forms_trx_trp_id.value = 0;
+  forms_trx_trp_show.value = true;
+  // router.push({ name: 'data_trx_trp-form', query: { id: "" } });
 }
 
 const { display } = useAlertStore();
@@ -311,9 +350,9 @@ const form_edit = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    forms_trx_cpo_id.value = trx_cpos.value[selected.value].id;
-    forms_trx_cpo_show.value = true;
-    // router.push({ name: 'data_trx_cpo-form', query: { id: trx_cpos.value[selected.value].id } });
+    forms_trx_trp_id.value = trx_trps.value[selected.value].id;
+    forms_trx_trp_show.value = true;
+    // router.push({ name: 'data_trx_trp-form', query: { id: trx_trps.value[selected.value].id } });
   }
 };
 
@@ -330,7 +369,7 @@ const remove = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    delete_data.value = {id : trx_cpos.value[selected.value].id};
+    delete_data.value = {id : trx_trps.value[selected.value].id};
     delete_box.value = true;
   }
 };
@@ -339,10 +378,10 @@ const confirmed_delete = async() => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
-  data_in.append("id", trx_cpos.value[selected.value].id);  
+  data_in.append("id", trx_trps.value[selected.value].id);  
   data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useMyFetch("/api/trx_cpo", {
+  const { data, error, status } = await useMyFetch("/api/trx_trp", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -356,8 +395,42 @@ const confirmed_delete = async() => {
     useErrorStore().trigger(error);
     return;
   }
-  trx_cpos.value.splice(selected.value,1);
+  trx_trps.value.splice(selected.value,1);
   selected.value = -1;
   delete_box.value = false;
+}
+
+
+const prtView = ref(false);
+const pdfContent = ref("");
+
+const printPreview = async()=>{
+  if (prtView.value==true) {
+    prtView.value = false;
+    return;
+  }
+  inject_params();
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/api/trx_trp_preview_file", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json'
+    },
+    params: params,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  pdfContent.value = data.value;
+  prtView.value = true;
+}
+
+const download = ()=>{
+  downloadFile(pdfContent.value);
 }
 </script>

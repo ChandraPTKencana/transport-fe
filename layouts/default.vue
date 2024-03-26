@@ -24,18 +24,19 @@
                 U.Jalan
               </nuxt-link>
             </li>
-            <li :class="activeMenu == '/data_trx_cpo'?'active':''" >
-              <nuxt-link to="/data_trx_cpo"  class="cursor-pointer" @click="goTo('/data_trx_cpo')">
-                <IconsScale class="mr-1"/>
-                Trx CPO
-              </nuxt-link>
-            </li>
             <li :class="activeMenu == '/data_trx_trp'?'active':''" >
               <nuxt-link to="/data_trx_trp"  class="cursor-pointer" @click="goTo('/data_trx_trp')">
                 <IconsScale class="mr-1"/>
                 Trx Trp
               </nuxt-link>
             </li>
+            <li :class="activeMenu == '/report_trx_trp'?'active':''" >
+              <nuxt-link to="/report_trx_trp"  class="cursor-pointer" @click="goTo('/report_trx_trp')">
+                <IconsScale class="mr-1"/>
+                Report Trp
+              </nuxt-link>
+            </li>
+
             <!-- <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" :class="activeMenu == '/data_satuan'?'active':''" >
               <nuxt-link to="/data_satuan"  class="cursor-pointer" @click="goTo('/data_satuan')">
                 <IconsScale class="mr-1"/>
