@@ -62,7 +62,7 @@
                 <th>ID</th>
                 <th>To</th>
                 <th>Tipe</th>
-                <th>Status</th>
+                <!-- <th>Status</th> -->
                 <th>Jenis</th>
                 <th>Harga</th>
                 <!-- <th>Created User</th> -->
@@ -76,7 +76,7 @@
                 <td class="bold">{{ ujalan.id }}</td>
                 <td>{{ ujalan.xto }}</td>
                 <td>{{ ujalan.tipe }}</td>
-                <td>{{ ujalan.status }}</td>
+                <!-- <td>{{ ujalan.status }}</td> -->
                 <td>{{ ujalan.jenis }}</td>
                 <td>{{ pointFormat(ujalan.harga) }}</td>
                 <td>{{ ujalan.created_at ? $moment(ujalan.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>

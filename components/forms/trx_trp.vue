@@ -63,8 +63,19 @@
                   <label for="">PV</label>
                   <input type="text" list="pv"  v-model="trx_trp.pv_no"/>
                   <datalist id="pv">
-                    <option v-for="lp in list_pv">{{lp.VoucherNo}}</option>
+                    <option v-for="lp in list_pv" :value="lp.VoucherNo" >{{lp.VoucherNo +'-'+ lp.AssociateName}}</option>
                   </datalist>
+                  <!-- {{list_pv_to_minilist}} -->
+                  <div>
+                    <!-- <MiniList  
+                    class="w-full h-full p-1" 
+                    type="text" 
+                    :value="trx_trp.pv_no" 
+                    @input="trx_trp.pv_no = $event"
+                    :lists="list_pv_to_minilist"
+                    /> -->
+                    
+                  </div>
                   <p class="text-red-500">{{ field_errors.pv }}</p>
                 </div>
   
@@ -80,7 +91,7 @@
                 <label for="">Tiket A</label>
                 <input type="text" list="ticket_a"  v-model="trx_trp.ticket_a_no"/>
                 <datalist id="ticket_a">
-                  <option v-for="lat1 in list_a_ticket">{{lat1.TicketNo}}</option>
+                  <option v-for="lat1 in list_a_ticket" :value="lat1.TicketNo">{{lat1.TicketNo + "-" + lat1.VehicleNo + "-" + lat1.NamaSupir}}</option>
                 </datalist>
                 <p class="text-red-500">{{ field_errors.ticket }}</p>
               </div>
@@ -137,7 +148,7 @@
                 <label for="">Tiket B</label>
                 <input type="text" list="ticket_b"  v-model="trx_trp.ticket_b_no"/>
                 <datalist id="ticket_b">
-                  <option v-for="lbt1 in list_b_ticket">{{lbt1.TicketNo}}</option>
+                  <option v-for="lbt1 in list_b_ticket" :value="lbt1.TicketNo">{{lbt1.TicketNo + "-" + lbt1.VehicleNo + "-" + lbt1.NamaSupir}}</option>
                 </datalist>
                 <p class="text-red-500">{{ field_errors.ticket }}</p>
               </div>
@@ -410,8 +421,10 @@ const doSave = async () => {
   data_in.append("ticket_b_bruto", trx_trp.value.ticket_b_bruto);
   data_in.append("ticket_b_tara", trx_trp.value.ticket_b_tara);
   data_in.append("ticket_b_netto", trx_trp.value.ticket_b_netto);
-  data_in.append("ticket_b_in_at", trx_trp.value.ticket_b_in_at);
-  data_in.append("ticket_b_out_at", trx_trp.value.ticket_b_out_at);
+  if(trx_trp.value.ticket_b_in_at)
+  data_in.append("ticket_b_in_at", $moment(trx_trp.value.ticket_b_in_at).format("Y-MM-DD HH:mm:ss"));
+  if(trx_trp.value.ticket_b_out_at)
+  data_in.append("ticket_b_out_at", $moment(trx_trp.value.ticket_b_out_at).format("Y-MM-DD HH:mm:ss"));
 
   data_in.append("supir", trx_trp.value.supir);
   data_in.append("no_pol", trx_trp.value.no_pol);
@@ -479,6 +492,11 @@ const list_to = computed(()=>{
 const list_tipe = computed(()=>{
   return [...new Set(props.list_ujalan.filter((x)=>x.xto == trx_trp.value.xto && x.jenis==trx_trp.value.jenis).map((x)=>x.tipe))];
 })
+
+// const list_pv_to_minilist = computed(()=>{
+//   // return props.list_ujalan.map((x)=>{return {get:x.TicketNo,show:x.TicketNo + "-" + x.AssociateName}});
+//   return props.list_pv.map((x)=>{return {get:x.TicketNo,show:x.TicketNo + "-" + x.AssociateName}});
+// })
 
 
 

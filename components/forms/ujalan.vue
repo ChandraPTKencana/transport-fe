@@ -20,14 +20,14 @@
                 <p class="text-red-500">{{ field_errors.tipe }}</p>
               </div>
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <!-- <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Status</label>
                 <select v-model="ujalan.status">
                   <option value="Y">Y</option>
                   <option value="N">N</option>
                 </select>
                 <p class="text-red-500">{{ field_errors.status }}</p>
-              </div>
+              </div> -->
 
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Jenis</label>
@@ -58,7 +58,7 @@
                       <th>Desc</th>
                       <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Qty</th>
                       <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Harga</th>
-                      <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Status</th>
+                      <!-- <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Status</th> -->
                     </tr>
                   </thead>
                   <tbody ref="to_move">
@@ -104,14 +104,14 @@
 
                           </div>
                         </td>
-                        <td class="cell">
+                        <!-- <td class="cell">
                           <div class="w-full h-full flex items-center justify-center">                       
                             <select v-model="detail.status">
                               <option value="Y">Y</option>
                               <option value="N">N</option>
                             </select>   
                           </div>
-                        </td>
+                        </td> -->
                       </tr>
                     </template>
                     
@@ -197,7 +197,7 @@ const ujalan_temp = {
     id: -1,
     xto: "",
     tipe: "",
-    status: "Y",
+    // status: "Y",
     jenis: "",
     harga:0,
     details: []
@@ -231,7 +231,7 @@ const detail = ref({
   xdesc:"",
   qty:0,
   harga:0,
-  status:"",
+  // status:"",
   p_status:""
 });
 
@@ -333,7 +333,7 @@ const doSave = async () => {
   const data_in = new FormData();
   data_in.append("xto", ujalan.value.xto);
   data_in.append("tipe", ujalan.value.tipe);
-  data_in.append("status", ujalan.value.status);
+  // data_in.append("status", ujalan.value.status);
   data_in.append("jenis", ujalan.value.jenis);
   data_in.append("harga", ujalan.value.harga);
   data_in.append("details", JSON.stringify(details.value));
