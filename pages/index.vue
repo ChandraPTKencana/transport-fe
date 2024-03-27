@@ -1,4 +1,8 @@
+<script lang="ts" setup>
+import { useCommonStore } from '~/store/common';
+useCommonStore().loading_full = false;
 
+</script>
 <template>
     <Header :title="'Dashboard'" />
 

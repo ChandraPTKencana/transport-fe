@@ -224,8 +224,8 @@ const { data: dt_async } = await useAsyncData(async () => {
   }
 
   if (data1.status.value === 'error') {
-    useErrorStore().trigger(error);
-    return [];
+    useErrorStore().trigger(data1.error);
+    return { trx_trps, list_ujalan, list_tipe, list_ticket, list_pv };
   }
 
   if (data2.status.value !== 'error') {

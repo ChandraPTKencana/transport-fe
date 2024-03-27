@@ -125,6 +125,8 @@ params.sort ="created_at:desc";
 
 const token = useCookie('token');
 const { data: dt_async } = await useAsyncData(async () => {
+  let ujalans = [];
+
   useCommonStore().loading_full = true;
   const { data, error, status } = await useMyFetch("/ujalan", {
     method: 'get',
@@ -138,15 +140,13 @@ const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = false;
   if (status.value === 'error') {
     useErrorStore().trigger(error);
-    return [];
+    return {ujalans};
   }
-  let ujalans = data.value.data;
-  let request_notif = data.value.request_notif;
-  return {ujalans,request_notif};
+  ujalans = data.value.data;
+  return {ujalans};
 });
 
 const ujalans = ref(dt_async.value.ujalans);
-const request_notif = ref(dt_async.value.request_notif);
 // const popup_request = ref(false);
 
 const search = ref("");
