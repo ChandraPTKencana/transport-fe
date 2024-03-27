@@ -402,7 +402,7 @@ const confirmed_delete = async() => {
   delete_box.value = false;
 }
 
-const { downloadFile, viewFile } = useDownload();
+const { downloadFile, printHtml } = useDownload();
 
 const prtView = ref(false);
 const pdfContent = ref("");
@@ -435,8 +435,10 @@ const printPreview = async()=>{
     useErrorStore().trigger(error);
     return;
   }
-  pdfContent.value = data.value;
-  prtView.value = true;
+  // pdfContent.value = data.value;
+  // prtView.value = true;
+
+  printHtml(data.value.html,318);
 }
 
 const download = ()=>{

@@ -396,7 +396,7 @@ const { display } = useAlertStore();
 
 const doSave = async () => {
 
-  if(trx_trp.value.pv_no && trx_trp.value.pv_total != trx_trp.value.amount)
+  if(trx_trp.value.pv_no && parseInt(trx_trp.value.pv_total) != parseInt(trx_trp.value.amount))
   {
     display({ show: true, status: "Failed", message: "Total dari Ujalan dan PV tidak cocok" });
     return;

@@ -143,3 +143,27 @@ table button{
     @apply ring-0;
 
 }
+
+#print_target{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+@media screen { 
+    * div {
+        display: block;
+    }
+    #print_target { display: none; }
+}
+
+@media print { 
+    * div {
+        display: none;
+    }
+
+    #print_target html, #print_target body {
+        margin: 0;
+    }
+    #print_target , #print_target > * { display: block; }
+}
