@@ -20,7 +20,7 @@
             text-input
             teleport-center></vue-date-picker>
           </ClientOnly>
-          <!-- <p class="text-red-500">{{ field_errors.date_from }}</p> -->
+          <p class="text-red-500">{{ field_errors.date_from }}</p>
         </div>
 
         <div >
@@ -33,7 +33,7 @@
             text-input
             teleport-center></vue-date-picker>
           </ClientOnly>
-          <!-- <p class="text-red-500">{{ field_errors.date_to }}</p> -->
+          <p class="text-red-500">{{ field_errors.date_to }}</p>
         </div>
 
         <div class="grow">
@@ -49,6 +49,9 @@
             <option value="xto">To</option>
             <option value="jenis">Jenis</option>
             <option value="tipe">Tipe</option>
+            <option value="pv_no">PV No</option>
+            <option value="ticket_a_no">Ticket A No</option>
+            <option value="ticket_b_no">Ticket B No</option>
           </select>
         </div>
         <div class="pl-1">
@@ -80,6 +83,7 @@
                 <th>Tanggal</th>
                 <th>To</th>
                 <th>Tipe</th>
+                <th>Jenis</th>
                 <th>Amount</th>
                 <th>PV No</th>
                 <th>PV Total</th>
@@ -112,6 +116,7 @@
                 <td>{{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-Y") : "" }}</td>
                 <td>{{ trx_trp.xto }}</td>
                 <td>{{ trx_trp.tipe }}</td>
+                <td>{{ trx_trp.jenis }}</td>
                 <td>{{ pointFormat(trx_trp.amount) }}</td>
                 <td>{{ trx_trp.pv_no }}</td>
                 <td>{{ pointFormat(trx_trp.pv_total) }}</td>
@@ -173,7 +178,6 @@ import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
 
 const { pointFormat } = useUtils();
-const { downloadFile, viewFile } = useDownload();
 
 // definePageMeta({
 //   // layout: "clear",
@@ -197,8 +201,8 @@ const field_errors = ref({})
 
 const token = useCookie('token');
 const date = ref({
-  from: new Date(),
-  to: new Date(),
+  from: "",
+  to: "",
 });
 
 const { data: dt_async } = await useAsyncData(async () => {
@@ -210,7 +214,7 @@ const { data: dt_async } = await useAsyncData(async () => {
   let list_pv = [];
 
   const [data1, data2] = await Promise.all([
-    useMyFetch("/api/trx_trps", {
+    useMyFetch("/trx_trps", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -218,7 +222,7 @@ const { data: dt_async } = await useAsyncData(async () => {
       },
       retry: 0,
     }),
-    useMyFetch("/api/trx_load_for_trp", {
+    useMyFetch("/trx_load_for_trp", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -299,7 +303,7 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(trx_trps.value[0]);
   }
-  const { data, error, status } = await useMyFetch("/api/trx_trps", {
+  const { data, error, status } = await useMyFetch("/trx_trps", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -402,7 +406,7 @@ const confirmed_delete = async() => {
   data_in.append("id", trx_trps.value[selected.value].id);  
   data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useMyFetch("/api/trx_trp", {
+  const { data, error, status } = await useMyFetch("/trx_trp", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -421,6 +425,7 @@ const confirmed_delete = async() => {
   delete_box.value = false;
 }
 
+const { downloadFile, viewFile } = useDownload();
 
 const prtView = ref(false);
 const pdfContent = ref("");
@@ -432,7 +437,7 @@ const printPreview = async()=>{
   }
   inject_params();
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/api/trx_trp_preview_file", {
+  const { data, error, status } = await useMyFetch("/trx_trps_preview_file", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

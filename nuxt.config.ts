@@ -4,11 +4,11 @@ export default defineNuxtConfig({
   // rootDir : "",
   runtimeConfig: {
     public: {
-      // baseURL: process.env.MY_API_ADDR,
+      baseURL: process.env.MY_API_ADDR,
     },
   },
   app:{
-    baseURL:process.env.MY_NODE_ENV === 'production' ? '/stok' : '/stok/dist',
+    baseURL:process.env.MY_NODE_ENV === 'production' ? '/logistik' : '/logistik/dist',
     head: {
       title: "App-Genkagromas",
       meta: [
@@ -21,7 +21,7 @@ export default defineNuxtConfig({
         {
           rel: "icon",
           type: "image/png",
-          href: "/stok/favicon.png"
+          href: "/logistik/favicon.png"
         }
       ]
     }

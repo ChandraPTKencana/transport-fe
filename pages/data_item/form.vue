@@ -6,7 +6,7 @@
         <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">Foto</label>
             <div  class="flex justify-center items-center w-24 h-24">
-                <img :src="item.photo || '/stok/user-default.png'" alt="" class=" max-w-full max-h-full">
+                <img :src="item.photo || '/logistik/user-default.png'" alt="" class=" max-w-full max-h-full">
             </div>
             <button type="button" v-show="photo" class="bg-gray-600 w-24 text-white" @click="resetPhoto()">Remove</button>
             <input v-show="!photo" @change="changePhoto($event)" ref="photo_input" type="file" name="photo" value="">
@@ -120,7 +120,7 @@ const { data: item } = await useAsyncData(async () => {
   const id = route.query.id;
   if (id !== undefined && id !== "") {
     useCommonStore().loading_full = true;
-    const { data, error, status }: any = await useMyFetch("/api/item", {
+    const { data, error, status }: any = await useMyFetch("/item", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -211,7 +211,7 @@ const doSave = async () => {
     data_in.append("_method", "PUT");
   }
 
-  const { data, error, status }: any = await useMyFetch("/api/item", {
+  const { data, error, status }: any = await useMyFetch("/item", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,

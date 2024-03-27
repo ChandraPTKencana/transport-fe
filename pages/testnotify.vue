@@ -80,7 +80,7 @@ const callNotif = (timeout)=>{
 //         });
 
 
-//         navigator.serviceWorker.register('/stok/sw.js').then((registration) => {
+//         navigator.serviceWorker.register('/logistik/sw.js').then((registration) => {
 //             console.log('Service Worker registered:', registration);
 //         }).catch((error) => {
 //             console.log('Service Worker registration failed:', error);

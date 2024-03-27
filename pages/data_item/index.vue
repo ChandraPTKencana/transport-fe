@@ -74,7 +74,7 @@
                 <td class="bold">{{ item.id }}</td>
                 <td class="p-0"> 
                   <div v-if="item.photo" class="absolute w-full h-full flex items-center justify-center cursor-pointer" @click="openBox(item.photo)">
-                    <img :src="item.photo || '/stok/user-default.png'" alt="" class=" max-w-full max-h-full">  
+                    <img :src="item.photo || '/logistik/user-default.png'" alt="" class=" max-w-full max-h-full">  
                   </div>
                 </td>
                 <td>{{ item.name }}</td>
@@ -129,7 +129,7 @@ params.sort ="created_at:desc";
 const token = useCookie('token');
 const { data: items } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/api/items", {
+  const { data, error, status } = await useMyFetch("/items", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -182,7 +182,7 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(items.value[0]);
   }
-  const { data, error, status } = await useMyFetch("/api/items", {
+  const { data, error, status } = await useMyFetch("/items", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -280,7 +280,7 @@ const confirmed_delete = async() => {
   data_in.append("id", items.value[selected.value].id);  
   data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useMyFetch("/api/item", {
+  const { data, error, status } = await useMyFetch("/item", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,

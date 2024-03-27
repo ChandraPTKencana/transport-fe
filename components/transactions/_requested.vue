@@ -190,7 +190,7 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(transactions.value[0]);
   }
-  const { data, error, status } = await useMyFetch("/api/request_transactions", {
+  const { data, error, status } = await useMyFetch("/request_transactions", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -300,7 +300,7 @@ const confirmOk = async() => {
   data_in.append("id", transactions.value[selected.value].id);  
   // data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useMyFetch("/api/request_transaction_confirm", {
+  const { data, error, status } = await useMyFetch("/request_transaction_confirm", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,

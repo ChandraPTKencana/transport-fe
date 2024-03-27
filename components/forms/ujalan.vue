@@ -39,7 +39,13 @@
               </div>
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Harga</label>
-                <input v-model="ujalan.harga">
+                <div>
+                  <InputPointFormat
+                  class="w-full h-full p-1" 
+                  type="text" 
+                  :value="ujalan.harga || 0" 
+                  @input="ujalan.harga = $event"/>
+                </div>
                 <p class="text-red-500">{{ field_errors.harga }}</p>
               </div>
             </div>
@@ -56,8 +62,8 @@
                       </th>
                       <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
                       <th>Desc</th>
+                      <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Harga @</th>
                       <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Qty</th>
-                      <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Harga</th>
                       <!-- <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Status</th> -->
                     </tr>
                   </thead>
@@ -81,27 +87,22 @@
                         </td>
                         <td class="cell bold" :class="disabled ? 'unselectable' : ''">
                           <div class="w-full h-full flex items-center justify-center">
-                            <!-- <InputPointFormat
+                            <InputPointFormat
+                            :key="index" 
+                            class="w-full h-full p-1" 
+                            type="text" 
+                            :value="detail.harga || 0" 
+                            @input="detail.harga = $event"/>
+                          </div>
+                        </td>
+                        <td class="cell" :class="disabled ? 'unselectable' : ''">
+                          <div class="w-full h-full flex items-center justify-center">
+                            <InputPointFormat
                             :key="index" 
                             class="w-full h-full p-1" 
                             type="text" 
                             :value="detail.qty || 0" 
                             @input="detail.qty = $event"/>
-                           -->
-
-                           <input type="number" v-model="detail.qty"/>
-                          </div>
-                        </td>
-                        <td class="cell" :class="disabled ? 'unselectable' : ''">
-                          <div class="w-full h-full flex items-center justify-center">
-                            <!-- <InputPointFormat
-                            :key="index" 
-                            class="w-full h-full p-1" 
-                            type="text" 
-                            :value="detail.harga || 0" 
-                            @input="detail.harga = $event"/> -->
-                            <input type="number" v-model="detail.harga"/>
-
                           </div>
                         </td>
                         <!-- <td class="cell">
@@ -229,7 +230,7 @@ const detail = ref({
   ordinal:0,
   id:-1,
   xdesc:"",
-  qty:0,
+  qty:1,
   harga:0,
   // status:"",
   p_status:""
@@ -357,7 +358,7 @@ const doSave = async () => {
     data_in.append("_method", "PUT");
   }
 
-  const { data, error, status } = await useMyFetch("/api/ujalan", {
+  const { data, error, status } = await useMyFetch("/ujalan", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -522,7 +523,7 @@ const disabled = computed(()=>{
 
 const callData = async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/api/ujalan_", {
+  const { data, error, status } = await useMyFetch("/ujalan_", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

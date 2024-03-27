@@ -72,7 +72,7 @@
 
     let req_method: any = "post";
   
-    const { data, error, status }: any = await useMyFetch("/api/change_password", {
+    const { data, error, status }: any = await useMyFetch("/change_password", {
       method: req_method,
       headers: {
         'Authorization': `Bearer ${token.value}`,

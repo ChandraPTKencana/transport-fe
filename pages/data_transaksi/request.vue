@@ -118,7 +118,7 @@ params._TimeZoneOffset = new Date().getTimezoneOffset();
 const token = useCookie('token');
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/api/request_transactions", {
+  const { data, error, status } = await useMyFetch("/request_transactions", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -180,7 +180,7 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(transactions.value[0]);
   }
-  const { data, error, status } = await useMyFetch("/api/request_transactions", {
+  const { data, error, status } = await useMyFetch("/request_transactions", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

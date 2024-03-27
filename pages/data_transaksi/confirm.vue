@@ -198,7 +198,7 @@ const { data: dt_async } = await useAsyncData(async () => {
 
   if (id !== undefined && id !== "") {
     useCommonStore().loading_full = true;
-    const { data, error, status }: any = await useMyFetch("/api/transaction", {
+    const { data, error, status }: any = await useMyFetch("/transaction", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -313,7 +313,7 @@ const confirmOk = async () => {
     // data_in.append("_method", "PUT");
   }
 
-  const { data, error, status }: any = await useMyFetch("/api/confirm_transaction", {
+  const { data, error, status }: any = await useMyFetch("/confirm_transaction", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,

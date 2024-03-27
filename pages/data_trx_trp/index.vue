@@ -15,6 +15,10 @@
           @click="remove()">
           <IconsDelete />
         </button>
+        <button type="button" name="button" class="m-1 text-2xl "
+          @click="printPreview()">
+          <IconsPrinterEye />
+        </button>
       </div>
 
       <form action="#" class="w-full flex p-1">
@@ -62,6 +66,7 @@
                 <th>Tanggal</th>
                 <th>To</th>
                 <th>Tipe</th>
+                <th>Jenis</th>
                 <th>Amount</th>
                 <th>PV No</th>
                 <th>PV Total</th>
@@ -98,6 +103,7 @@
                 <td>{{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-Y") : "" }}</td>
                 <td>{{ trx_trp.xto }}</td>
                 <td>{{ trx_trp.tipe }}</td>
+                <td>{{ trx_trp.jenis }}</td>
                 <td>{{ pointFormat(trx_trp.amount) }}</td>
                 <td>{{ trx_trp.pv_no }}</td>
                 <td>{{ pointFormat(trx_trp.pv_total) }}</td>
@@ -134,6 +140,21 @@
     <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
     <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
     <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ujalan="list_ujalan" :list_ticket="list_ticket" :list_pv="list_pv"/>
+  
+    <div v-if="prtView" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
+    style="background-color: rgba(255,255,255,0.9);">
+      <div class="relative" style="width:95%; height: 90%;">
+        <div class="absolute -top-7 right-0 bg-white"
+          style="position: absolute; padding:5px 10px; border: solid 1px #ccc; border-bottom: none; border-top-right-radius: 5px;  border-top-left-radius: 5px;">
+          <IconsTimes  style="color:black; cursor:pointer;" @click="printPreview()"/>
+        </div>
+        <iframe ref="iframe" width='100%' height='100%' :src='pdfContent.dataBase64'></iframe>
+        <div
+          style="position: absolute; top: 12px; right: 98px; background-color: rgba(255,255,255,0); width: 37px; height: 36px; z-index:1; cursor: pointer;"
+          @click="download()">
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -178,7 +199,7 @@ const { data: dt_async } = await useAsyncData(async () => {
   let list_pv = [];
 
   const [data1, data2] = await Promise.all([
-    useMyFetch("/api/trx_trps", {
+    useMyFetch("/trx_trps", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -186,7 +207,7 @@ const { data: dt_async } = await useAsyncData(async () => {
       },
       retry: 0,
     }),
-    useMyFetch("/api/trx_load_for_trp", {
+    useMyFetch("/trx_load_for_trp", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -259,7 +280,7 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(trx_trps.value[0]);
   }
-  const { data, error, status } = await useMyFetch("/api/trx_trps", {
+  const { data, error, status } = await useMyFetch("/trx_trps", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -362,7 +383,7 @@ const confirmed_delete = async() => {
   data_in.append("id", trx_trps.value[selected.value].id);  
   data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useMyFetch("/api/trx_trp", {
+  const { data, error, status } = await useMyFetch("/trx_trp", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -379,5 +400,46 @@ const confirmed_delete = async() => {
   trx_trps.value.splice(selected.value,1);
   selected.value = -1;
   delete_box.value = false;
+}
+
+const { downloadFile, viewFile } = useDownload();
+
+const prtView = ref(false);
+const pdfContent = ref("");
+
+const printPreview = async()=>{
+  
+  if (prtView.value==true) {
+    prtView.value = false;
+    return;
+  }
+
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+    return;
+  } 
+  
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/trx_trp_preview_file", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json'
+    },
+    params: {id : trx_trps.value[selected.value].id},
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  pdfContent.value = data.value;
+  prtView.value = true;
+}
+
+const download = ()=>{
+  downloadFile(pdfContent.value);
 }
 </script>

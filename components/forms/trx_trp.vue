@@ -112,7 +112,7 @@
                 <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">Netto dari Tiket</label>
                   <div class="card-border disabled">
-                    {{ trx_trp.ticket_a_netto ? pointFormat(trx_trp.ticket_a_netto): 0 }}
+                    {{ trx_trp.ticket_a_bruto ? pointFormat(trx_trp.ticket_a_bruto - trx_trp.ticket_a_tara): 0 }}
                   </div>
                 </div>
 
@@ -168,7 +168,7 @@
                 <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">Netto dari Tiket</label>
                   <div class="card-border disabled">
-                    {{ trx_trp.ticket_b_netto ? pointFormat(trx_trp.ticket_b_netto): 0 }}
+                    {{ trx_trp.ticket_b_bruto ? pointFormat(trx_trp.ticket_b_bruto - trx_trp.ticket_b_tara): 0 }}
                   </div>
                 </div>
 
@@ -201,20 +201,33 @@
                      
               <div v-if="trx_trp.jenis=='CPO'" class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Bruto</label>
-                <input v-model="trx_trp.ticket_b_bruto">
+                <div>
+                  <InputPointFormat
+                    class="w-full h-full p-1" 
+                    type="text" 
+                    :value="trx_trp.ticket_b_bruto || 0" 
+                    @input="trx_trp.ticket_b_bruto = $event"/>
+                </div>
                 <p class="text-red-500">{{ field_errors.ticket_b_bruto }}</p>
               </div>
 
               <div v-if="trx_trp.jenis=='CPO'" class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Tara</label>
-                <input v-model="trx_trp.ticket_b_tara">
+                <div>
+                  <InputPointFormat
+                    class="w-full h-full p-1" 
+                    type="text" 
+                    :value="trx_trp.ticket_b_tara || 0" 
+                    @input="trx_trp.ticket_b_tara = $event"/>
+                </div>
                 <p class="text-red-500">{{ field_errors.ticket_b_tara }}</p>
               </div>
 
               <div v-if="trx_trp.jenis=='CPO'" class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Netto</label>
-                <input v-model="trx_trp.ticket_b_netto">
-                <p class="text-red-500">{{ field_errors.ticket_b_netto }}</p>
+                <div class="card-border disabled">
+                    {{ trx_trp.ticket_b_bruto ? pointFormat(trx_trp.ticket_b_bruto - trx_trp.ticket_b_tara): 0 }}
+                </div>
               </div>
 
               <div v-if="trx_trp.jenis=='CPO'" class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
@@ -420,7 +433,7 @@ const doSave = async () => {
 
   data_in.append("ticket_b_bruto", trx_trp.value.ticket_b_bruto);
   data_in.append("ticket_b_tara", trx_trp.value.ticket_b_tara);
-  data_in.append("ticket_b_netto", trx_trp.value.ticket_b_netto);
+  // data_in.append("ticket_b_netto", trx_trp.value.ticket_b_netto);
   if(trx_trp.value.ticket_b_in_at)
   data_in.append("ticket_b_in_at", $moment(trx_trp.value.ticket_b_in_at).format("Y-MM-DD HH:mm:ss"));
   if(trx_trp.value.ticket_b_out_at)
@@ -440,7 +453,7 @@ const doSave = async () => {
     data_in.append("_method", "PUT");
   }
 
-  const { data, error, status } = await useMyFetch("/api/trx_trp", {
+  const { data, error, status } = await useMyFetch("/trx_trp", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -534,7 +547,7 @@ const disabled = computed(()=>{
 
 const callData = async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/api/trx_trp", {
+  const { data, error, status } = await useMyFetch("/trx_trp", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

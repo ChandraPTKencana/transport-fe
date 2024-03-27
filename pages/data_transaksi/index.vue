@@ -153,7 +153,7 @@ params._TimeZoneOffset = new Date().getTimezoneOffset();
 const token = useCookie('token');
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/api/transactions", {
+  const { data, error, status } = await useMyFetch("/transactions", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -211,7 +211,7 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(transactions.value[0]);
   }
-  const { data, error, status } = await useMyFetch("/api/transactions", {
+  const { data, error, status } = await useMyFetch("/transactions", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -320,7 +320,7 @@ const confirmed_delete = async() => {
   data_in.append("id", transactions.value[selected.value].id);  
   data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useMyFetch("/api/transaction", {
+  const { data, error, status } = await useMyFetch("/transaction", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,

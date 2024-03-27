@@ -11,7 +11,7 @@
 
 const props = defineProps({
   value: {
-    type: Number,
+    type: [Number,String],
     required: true,
     default: 0,
   },
@@ -69,7 +69,7 @@ const blur=(val:any)=>{
 }
 
 onMounted(() => {
-  change(props.value)
+  change(parseInt(props.value))
 });
 
 const point = computed((value) =>{
@@ -117,7 +117,7 @@ const blockAll=(e)=>{
 // });
 
 watch(() => props.value, (newVal, oldVal) => {
-  change(newVal);
+  change(parseInt(newVal));
 }, {
   immediate: true,
   deep:true
