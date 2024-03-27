@@ -383,7 +383,7 @@ const trx_trp_temp = {
     supir: "",
     no_pol: '',
 };
-
+let trx_trp_loaded = {...trx_trp_temp};
 const trx_trp = ref({...trx_trp_temp});
 
 const token = useCookie('token');
@@ -392,8 +392,16 @@ const field_errors = ref({})
 const changeJenis=()=>{
   trx_trp.value.ticket_a_no = "";
 }
+const { display } = useAlertStore();
 
 const doSave = async () => {
+
+  if(trx_trp.value.pv_no && trx_trp.value.pv_total != trx_trp.value.amount)
+  {
+    display({ show: true, status: "Failed", message: "Total dari Ujalan dan PV tidak cocok" });
+    return;
+  }
+  
   useCommonStore().loading_full = true;
   field_errors.value = {};
 
@@ -413,6 +421,9 @@ const doSave = async () => {
     let pv = props.list_pv.filter(
       (x)=>x.VoucherNo == trx_trp.value.pv_no
     );
+    if(pv.length == 0 && trx_trp.value.pv_no == trx_trp_loaded.pv_no)
+    data_in.append("pv_id", trx_trp_loaded.pv_id);
+    else
     data_in.append("pv_id", pv[0].VoucherID);
   }
 
@@ -420,6 +431,9 @@ const doSave = async () => {
     let ticket = list_a_ticket.value.filter(
       (x)=>x.TicketNo == trx_trp.value.ticket_a_no
     );
+    if(ticket.length == 0 && trx_trp.value.ticket_a_no == trx_trp_loaded.ticket_a_no)
+    data_in.append("ticket_a_id", trx_trp_loaded.ticket_a_id);
+    else
     data_in.append("ticket_a_id", ticket[0].TicketID);
   }
 
@@ -427,6 +441,9 @@ const doSave = async () => {
     let ticket = list_b_ticket.value.filter(
       (x)=>x.TicketNo == trx_trp.value.ticket_b_no
     );
+    if(ticket.length == 0 && trx_trp.value.ticket_b_no == trx_trp_loaded.ticket_b_no)
+    data_in.append("ticket_b_id", trx_trp_loaded.ticket_b_id);
+    else
     data_in.append("ticket_b_id", ticket[0].TicketID);
   }
 
@@ -569,6 +586,7 @@ const callData = async () => {
   }
 
   trx_trp.value = data.value.data;
+  trx_trp_loaded = {...data.value.data};
 }
 
 
@@ -577,7 +595,7 @@ const callData = async () => {
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
     trx_trp.value = {...trx_trp_temp};
-
+    field_errors.value = {};
     if(props.id!=0)
     callData();
   }
@@ -601,6 +619,16 @@ watch(()=>trx_trp.value.ticket_a_no, (newVal, oldVal) => {
         no_pol:hrg[0].VehicleNo,
         in_at:hrg[0].DateTimeIn,
         out_at:hrg[0].DateTimeOut,
+      };
+      else if(trx_trp.value.ticket_a_no == trx_trp_loaded.ticket_a_no)
+      $return_ticket = {
+        bruto:trx_trp_loaded.ticket_a_bruto,
+        tara:trx_trp_loaded.ticket_a_tara,
+        netto:trx_trp_loaded.ticket_a_netto,
+        supir:trx_trp_loaded.ticket_a_supir,
+        no_pol:trx_trp_loaded.ticket_a_no_pol,
+        in_at:trx_trp_loaded.ticket_a_in_at,
+        out_at:trx_trp_loaded.ticket_a_out_at,
       };
     }
 
@@ -639,6 +667,16 @@ watch(()=>trx_trp.value.ticket_b_no, (newVal, oldVal) => {
         in_at:hrg[0].DateTimeIn,
         out_at:hrg[0].DateTimeOut,
       };
+      else if(trx_trp.value.ticket_b_no == trx_trp_loaded.ticket_b_no)
+      $return_ticket = {
+        bruto:trx_trp_loaded.ticket_b_bruto,
+        tara:trx_trp_loaded.ticket_b_tara,
+        netto:trx_trp_loaded.ticket_b_netto,
+        supir:trx_trp_loaded.ticket_b_supir,
+        no_pol:trx_trp_loaded.ticket_b_no_pol,
+        in_at:trx_trp_loaded.ticket_b_in_at,
+        out_at:trx_trp_loaded.ticket_b_out_at,
+      };
     }
 
     if(newVal==""){
@@ -662,39 +700,50 @@ watch(()=>trx_trp.value.ticket_b_no, (newVal, oldVal) => {
 
 
 watch(()=>trx_trp.value.pv_no, (newVal, oldVal) => {
+  let $total = 0;
   if (newVal=="" || newVal){
     let hrg = props.list_pv.filter(
       (x)=>x.VoucherNo == trx_trp.value.pv_no
     );
+
     if(hrg.length  > 0) 
-    trx_trp.value.pv_total = hrg[0].total_amount;
-    else
-    trx_trp.value.pv_total = 0;
+    $total = hrg[0].total_amount;
+    else if(trx_trp.value.pv_no == trx_trp_loaded.pv_no) 
+    $total = trx_trp_loaded.pv_total;
+
+    trx_trp.value.pv_total = $total;
   }
 }, {
   deep:true,
   immediate: true
 });
 
-watch(()=>trx_trp.value.xto, (newVal, oldVal) => {
+
+const checkAmount = (newVal, oldVal)=>{
+  let $total=0;
   if (newVal=="" || newVal){
     let hrg = props.list_ujalan.filter(
       (x)=>x.xto == trx_trp.value.xto && x.tipe == trx_trp.value.tipe
     );
-    trx_trp.value.amount=(hrg.length  > 0) ? hrg[0].harga : 0;
+
+    if(hrg.length  > 0)
+    $total = hrg[0].harga;
+    else if(trx_trp.value.xto == trx_trp_loaded.xto && trx_trp.value.tipe == trx_trp_loaded.tipe) 
+    $total = trx_trp_loaded.amount;
+    
+    trx_trp.value.amount=$total;
   }
+}
+
+watch(()=>trx_trp.value.xto, (newVal, oldVal) => {
+  checkAmount(newVal, oldVal);
 }, {
   deep:true,
   immediate: true
 });
 
 watch(()=>trx_trp.value.tipe, (newVal, oldVal) => {
-  if (newVal=="" || newVal){
-    let hrg = props.list_ujalan.filter(
-      (x)=>x.xto == trx_trp.value.xto && x.tipe == trx_trp.value.tipe
-    );
-    trx_trp.value.amount=(hrg.length  > 0) ? hrg[0].harga : 0;
-  }
+  checkAmount(newVal, oldVal);
 }, {
   deep:true,
   immediate: true
