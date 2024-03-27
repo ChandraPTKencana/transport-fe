@@ -56,9 +56,9 @@
                   <thead >
                     <tr class="sticky top-0 !z-[2]">
                       <th v-if="!disabled" class="min-w-[50px] !w-[50px] max-w-[50px] ">
-                        <button type="button" name="button" class="bg-yellow-600" @click="insertDefault()">
-                          Default In
-                        </button>
+                        <!-- <button type="button" name="button" class="bg-yellow-600" @click="showSNSMultiItem()">
+                          Bulk Add
+                        </button> -->
                       </th>
                       <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
                       <th>Desc</th>
@@ -229,9 +229,11 @@ const details_temp = ref([
   {xdesc:"Ikas Danau", qty:1, harga:10000},
   {xdesc:"U.Bongkar + Ambil surat", qty:1, harga:35000},
   {xdesc:"Perbaikan Jalan Pujut", qty:1, harga:10000},
-  {xdesc:"Gaji Supir", qty:1, harga:0},
+  {xdesc:"Gaji Supir", qty:1, harga:200000},
   {xdesc:"Gaji Kernet", qty:1, harga:0},
   {xdesc:"U.Extrafooding", qty:1, harga:20000},
+  {xdesc:"Tangki", qty:1, harga:2868000},
+  {xdesc:"Tamb Muat CPO", qty:1, harga:30000},
 ]);
 const details = ref([]);
 
@@ -247,16 +249,6 @@ const detail = ref({
   // status:"",
   p_status:""
 });
-
-const insertDefault = ()=>{
-  
-  details_temp.value.forEach(e => {
-    if(details.value.filter((x)=>x.xdesc == e.xdesc).length == 0){
-      details.value.push({...e,ordinal:0,id:-1,p_status: "Add",})
-    }       
-  });
-  
-}
 
 // const show_item = ref(false);
 
