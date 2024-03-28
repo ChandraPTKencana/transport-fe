@@ -9,7 +9,7 @@
             <div class="w-full flex flex-row flex-wrap">
 
               <div class="w-full flex flex-col flex-wrap p-1">
-                <label for="">Tanggal</label>
+                <label for="">U.Jalan Per</label>
                 <div class="grow" >
                   <ClientOnly>
                     <vue-date-picker  v-model="trx_trp.tanggal" 
@@ -35,7 +35,7 @@
 
               <div v-if="trx_trp.jenis!=''" class="w-full flex pt-5">
                 <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                  <label for="">To</label>
+                  <label for="">Tujuan</label>
                   <select v-model="trx_trp.xto">
                     <option v-for="lt in list_to">{{lt}}</option>
                   </select>

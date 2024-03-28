@@ -90,6 +90,13 @@
 </template>
 
 <script setup>
+const { $moment } = useNuxtApp()
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '~/store/auth';
+import { useErrorStore } from '~/store/error';
+import { useCommonStore } from '~/store/common';
+import { useAlertStore } from '~/store/alert';
+
 definePageMeta({
   // layout: "clear",
   middleware: [
@@ -103,11 +110,6 @@ definePageMeta({
   ],
 });
 
-const { $moment } = useNuxtApp()
-import { storeToRefs } from 'pinia';
-import { useErrorStore } from '~/store/error';
-import { useCommonStore } from '~/store/common';
-import { useAlertStore } from '~/store/alert';
 
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();

@@ -16,6 +16,10 @@
           @click="remove()">
           <IconsDelete />
         </button>
+        <button type="button" name="button" class="m-1 text-2xl "
+          @click="validasi()">
+          <IconsSignature />
+        </button>
       </div>
 
       <form action="#" class="w-full flex p-1">
@@ -59,6 +63,7 @@
               <tr class="sticky top-0 !z-[2]">
                 <!-- <th>No.</th> -->
                 <!-- <th>Updated At</th> -->
+                <th>App 1</th>
                 <th>ID</th>
                 <th>To</th>
                 <th>Tipe</th>
@@ -73,6 +78,12 @@
             <tbody>
               <tr v-for="(ujalan, index) in ujalans" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
+                <td>
+                  <div class="flex items-center justify-center">
+                    <IconsLine v-if="!ujalan.val"/>
+                    <IconsCheck v-else/>
+                  </div>
+                </td>
                 <td class="bold">{{ ujalan.id }}</td>
                 <td>{{ ujalan.xto }}</td>
                 <td>{{ ujalan.tipe }}</td>
@@ -91,6 +102,8 @@
     <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
     <!-- <ujalansRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
     <FormsUjalan :show="forms_ujalan_show" :fnClose="()=>{forms_ujalan_show=false}" :id="forms_ujalan_id" :p_data="ujalans"/>
+    <FormsUjalanValidasi :show="forms_ujalan_valid_show" :fnClose="()=>{forms_ujalan_valid_show=false}" :id="forms_ujalan_valid_id" :p_data="ujalans"/>
+  
   </div>
 </template>
 
@@ -259,6 +272,17 @@ const form_edit = () => {
     forms_ujalan_id.value = ujalans.value[selected.value].id;
     forms_ujalan_show.value = true;
     // router.push({ name: 'data_ujalan-form', query: { id: ujalans.value[selected.value].id } });
+  }
+};
+
+const forms_ujalan_valid_show =  ref(false);
+const forms_ujalan_valid_id = ref(0);
+const validasi = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_ujalan_valid_id.value = ujalans.value[selected.value].id;
+    forms_ujalan_valid_show.value = true;
   }
 };
 

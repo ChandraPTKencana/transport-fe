@@ -16,6 +16,10 @@
           <IconsDelete />
         </button>
         <button type="button" name="button" class="m-1 text-2xl "
+          @click="validasi()">
+          <IconsSignature />
+        </button>
+        <button type="button" name="button" class="m-1 text-2xl "
           @click="printPreview()">
           <IconsPrinterEye />
         </button>
@@ -62,9 +66,11 @@
               <tr class="sticky top-0 !z-[2]">
                 <!-- <th>No.</th> -->
                 <!-- <th>Updated At</th> -->
+                <th>App 1</th>
+                <th>App 2</th>
                 <th>ID</th>
-                <th>Tanggal</th>
-                <th>To</th>
+                <th>U.Jalan Per</th>
+                <th>Tujuan</th>
                 <th>Tipe</th>
                 <th>Jenis</th>
                 <th>Amount</th>
@@ -99,6 +105,18 @@
             <tbody>
               <tr v-for="(trx_trp, index) in trx_trps" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
+                <td>
+                  <div class="flex items-center justify-center">
+                    <IconsLine v-if="!trx_trp.val"/>
+                    <IconsCheck v-else/>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex items-center justify-center">
+                    <IconsLine v-if="!trx_trp.val1"/>
+                    <IconsCheck v-else/>
+                  </div>
+                </td>
                 <td class="bold">{{ trx_trp.id }}</td>
                 <td>{{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-Y") : "" }}</td>
                 <td>{{ trx_trp.xto }}</td>
@@ -114,8 +132,8 @@
                 <td>{{ pointFormat(trx_trp.ticket_a_netto) }}</td>
                 <td>{{ trx_trp.ticket_a_supir }}</td>
                 <td>{{ trx_trp.ticket_a_no_pol }}</td>
-                <td>{{ $moment(trx_trp.ticket_a_in_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ $moment(trx_trp.ticket_a_out_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ trx_trp.ticket_a_in_at ? $moment(trx_trp.ticket_a_in_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
+                <td>{{ trx_trp.ticket_a_out_at ? $moment(trx_trp.ticket_a_out_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
 
                 <td>{{ trx_trp.ticket_b_no }}</td>
                 <td>{{ pointFormat(trx_trp.ticket_b_bruto) }}</td>
@@ -123,8 +141,8 @@
                 <td>{{ pointFormat(trx_trp.ticket_b_netto) }}</td>
                 <td>{{ trx_trp.ticket_b_supir }}</td>
                 <td>{{ trx_trp.ticket_b_no_pol }}</td>
-                <td>{{ $moment(trx_trp.ticket_b_in_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ $moment(trx_trp.ticket_b_out_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ trx_trp.ticket_b_in_at ? $moment(trx_trp.ticket_b_in_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
+                <td>{{ trx_trp.ticket_b_out_at ? $moment(trx_trp.ticket_b_out_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
 
                 <td>{{ trx_trp.supir }}</td>
                 <td>{{ trx_trp.no_pol }}</td>
@@ -140,6 +158,7 @@
     <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
     <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
     <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ujalan="list_ujalan" :list_ticket="list_ticket" :list_pv="list_pv"/>
+    <FormsTrxTrpValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps"/>
   
     <div v-if="prtView" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
     style="background-color: rgba(255,255,255,0.9);">
@@ -355,6 +374,17 @@ const form_edit = () => {
     forms_trx_trp_id.value = trx_trps.value[selected.value].id;
     forms_trx_trp_show.value = true;
     // router.push({ name: 'data_trx_trp-form', query: { id: trx_trps.value[selected.value].id } });
+  }
+};
+
+const forms_trx_trp_valid_show =  ref(false);
+const forms_trx_trp_valid_id = ref(0);
+const validasi = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_trx_trp_valid_id.value = trx_trps.value[selected.value].id;
+    forms_trx_trp_valid_show.value = true;
   }
 };
 
