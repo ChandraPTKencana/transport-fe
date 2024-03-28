@@ -105,19 +105,19 @@ import { useAlertStore } from '~/store/alert';
 
 const { pointFormat } = useUtils();
 
-// definePageMeta({
-//   // layout: "clear",
-//   middleware: [
-//     function (to, from) {
-//       // if (!useAuthStore().checkScopes(['ap-ujalan-view']))
-//       //   return navigateTo('/');
-//       if (!useAuthStore().checkRole(["Super Admin","ClientPabrik",'KTU', 'User']))
-//       return navigateTo('/');
+definePageMeta({
+  // layout: "clear",
+  middleware: [
+    function (to, from) {
+      // if (!useAuthStore().checkScopes(['ap-ujalan-view']))
+      //   return navigateTo('/');
+      if (!useAuthStore().checkRole(["SuperAdmin","Logistic"]))
+      return navigateTo('/');
 
-//     },
-//     // 'auth',
-//   ],
-// });
+    },
+    // 'auth',
+  ],
+});
 
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();

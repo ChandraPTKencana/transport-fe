@@ -90,6 +90,19 @@
 </template>
 
 <script setup>
+definePageMeta({
+  // layout: "clear",
+  middleware: [
+    function (to, from) {
+      // if (!useAuthStore().checkScopes(['ap-trx_trp-view']))
+      //   return navigateTo('/');
+      if (!useAuthStore().checkRole(["SuperAdmin"]))
+      return navigateTo('/');
+    },
+    // 'auth',
+  ],
+});
+
 const { $moment } = useNuxtApp()
 import { storeToRefs } from 'pinia';
 import { useErrorStore } from '~/store/error';

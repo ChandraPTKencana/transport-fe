@@ -18,64 +18,30 @@
                 Dashboard
               </nuxt-link>
             </li>
-            <li :class="activeMenu == '/data_ujalan'?'active':''" >
+            <li v-if="checkRole(['SuperAdmin','Logistic'])"  :class="activeMenu == '/data_ujalan'?'active':''" >
               <nuxt-link to="/data_ujalan"  class="cursor-pointer" @click="goTo('/data_ujalan')">
                 <IconsMoney class="mr-1"/>
                 U.Jalan
               </nuxt-link>
             </li>
-            <li :class="activeMenu == '/data_trx_trp'?'active':''" >
+            <li v-if="checkRole(['SuperAdmin','Logistic','PabrikTransport'])" :class="activeMenu == '/data_trx_trp'?'active':''" >
               <nuxt-link to="/data_trx_trp"  class="cursor-pointer" @click="goTo('/data_trx_trp')">
                 <IconsProduct class="mr-1"/>
                 Trx Trp
               </nuxt-link>
             </li>
-            <li :class="activeMenu == '/report_trx_trp'?'active':''" >
+            <li v-if="checkRole(['SuperAdmin','Logistic','Finance','MIS'])" :class="activeMenu == '/report_trx_trp'?'active':''" >
               <nuxt-link to="/report_trx_trp"  class="cursor-pointer" @click="goTo('/report_trx_trp')">
                 <IconsFileCopy class="mr-1"/>
                 Report Trp
               </nuxt-link>
             </li>
-
-            <!-- <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" :class="activeMenu == '/data_satuan'?'active':''" >
-              <nuxt-link to="/data_satuan"  class="cursor-pointer" @click="goTo('/data_satuan')">
-                <IconsScale class="mr-1"/>
-                Satuan
-              </nuxt-link>
-            </li> -->
-            <!-- <li :class="activeMenu == '/data_gudang'?'active':''" >
-              <nuxt-link class="cursor-pointer" to="/data_gudang" @click="goTo('/data_gudang')">Gudang
-              </nuxt-link>
-            </li> -->
-            <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" :class="activeMenu == '/data_item'?'active':''" >
-              <nuxt-link to="/data_item"  class="cursor-pointer" @click="goTo('/data_item')">
-                <IconsProduct class="mr-1"/>
-                Item
-              </nuxt-link>
-            </li>
-            <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" :class="activeMenu == '/data_transaksi'?'active':''" >
-              <nuxt-link to="/data_transaksi"  class="cursor-pointer" @click="goTo('/data_transaksi')">
-                <IconsCreditCard class="mr-1"/>
-                Transaksi
-              </nuxt-link>
-            </li>
-
-            <li :class="activeMenu == '/user'?'active':''" >
+            <li v-if="checkRole(['SuperAdmin'])" :class="activeMenu == '/user'?'active':''" >
               <nuxt-link to="/user"  class="cursor-pointer" @click="goTo('/user')">
                 <IconsPerson class="mr-1"/>
                 User
               </nuxt-link>
             </li>
-            <!-- <li><nuxt-link to="/events">Events</nuxt-link></li>
-            <li><nuxt-link to="/user">User</nuxt-link></li>
-            <li><nuxt-link to="/institute">Institute</nuxt-link></li>
-            <li><nuxt-link to="/member">Member</nuxt-link></li> -->
-            <!-- <li v-if="!authenticated" class="loginBtn" style="float: right">
-              <nuxt-link to="/login">Login</nuxt-link>
-            </li> -->
-            <!-- <li v-if="authenticated" class="loginBtn" style="float: right">
-              <nuxt-link @click="logout">Logout</nuxt-link>
-            </li> -->
           </ul>
           <div id="panel" class="h-7 text-xs relative">
             <div v-show="is_panel_open"

@@ -169,19 +169,19 @@ import { useAlertStore } from '~/store/alert';
 
 const { pointFormat } = useUtils();
 
-// definePageMeta({
-//   // layout: "clear",
-//   middleware: [
-//     function (to, from) {
-//       // if (!useAuthStore().checkScopes(['ap-trx_trp-view']))
-//       //   return navigateTo('/');
-//       if (!useAuthStore().checkRole(["Super Admin","ClientPabrik",'KTU', 'User']))
-//       return navigateTo('/');
+definePageMeta({
+  // layout: "clear",
+  middleware: [
+    function (to, from) {
+      // if (!useAuthStore().checkScopes(['ap-trx_trp-view']))
+      //   return navigateTo('/');
+      if (!useAuthStore().checkRole(["SuperAdmin","Logistic",'PabrikTransport']))
+      return navigateTo('/');
 
-//     },
-//     // 'auth',
-//   ],
-// });
+    },
+    // 'auth',
+  ],
+});
 
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
