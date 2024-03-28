@@ -123,6 +123,12 @@
                   </div>
                 </div>
                 <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">Kernet</label>
+                  <div class="card-border disabled">
+                    {{ trx_trp.ticket_a_kernet }}
+                  </div>
+                </div>
+                <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">No Pol</label>
                   <div class="card-border disabled">
                     {{ trx_trp.ticket_a_no_pol }}
@@ -264,6 +270,12 @@
               </div>
 
               <div v-if="trx_trp.jenis!=''" class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">Kernet</label>
+                <input v-model="trx_trp.kernet">
+                <p class="text-red-500">{{ field_errors.kernet }}</p>
+              </div>
+
+              <div v-if="trx_trp.jenis!=''" class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">No Pol</label>
                 <input v-model="trx_trp.no_pol">
                 <p class="text-red-500">{{ field_errors.no_pol }}</p>
@@ -381,6 +393,7 @@ const trx_trp_temp = {
     ticket_b_out_at:"",
 
     supir: "",
+    kernet: "",
     no_pol: '',
 };
 let trx_trp_loaded = {...trx_trp_temp};
@@ -457,6 +470,7 @@ const doSave = async () => {
   data_in.append("ticket_b_out_at", $moment(trx_trp.value.ticket_b_out_at).format("Y-MM-DD HH:mm:ss"));
 
   data_in.append("supir", trx_trp.value.supir);
+  data_in.append("kernet", trx_trp.value.kernet);
   data_in.append("no_pol", trx_trp.value.no_pol);
   
   let $method = "post";

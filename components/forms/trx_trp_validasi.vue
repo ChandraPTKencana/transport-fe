@@ -213,6 +213,13 @@
               </div>
 
               <div v-if="trx_trp.jenis!=''" class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">Kernet</label>
+                <div class="card-border">
+                  {{ trx_trp.kernet }}
+                </div>
+              </div>
+
+              <div v-if="trx_trp.jenis!=''" class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">No Pol</label>
                 <div class="card-border">
                   {{ trx_trp.no_pol }}
@@ -315,6 +322,7 @@ const trx_trp_temp = {
     ticket_b_out_at:"",
 
     supir: "",
+    kernet: "",
     no_pol: '',
     val:0,
     val_by:{ username:"" },

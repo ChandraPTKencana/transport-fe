@@ -96,6 +96,7 @@
                 <th>Ticket B Out At</th>
 
                 <th>Supir</th>
+                <th>Kernet</th>
                 <th>No Pol</th>
                 <!-- <th>Created User</th> -->
                 <th>Created At</th>
@@ -145,6 +146,7 @@
                 <td>{{ trx_trp.ticket_b_out_at ? $moment(trx_trp.ticket_b_out_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
 
                 <td>{{ trx_trp.supir }}</td>
+                <td>{{ trx_trp.kernet }}</td>
                 <td>{{ trx_trp.no_pol }}</td>
                 <td>{{ trx_trp.created_at ? $moment(trx_trp.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <td>{{ trx_trp.updated_at ? $moment(trx_trp.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
