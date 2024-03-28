@@ -12,8 +12,8 @@
           <IconsEdit />
         </button>
         <button type="button" name="button" class="m-1 text-2xl "
-          @click="form_permission()">
-          <IconsEdit />
+          @click="remove()">
+          <IconsDelete />
         </button>
         <!-- <button type="button" name="button" style="margin:4px; " @click="cetak()">
           <fa :icon="['fas','print']"/>
@@ -29,8 +29,9 @@
           <div class="font-bold"> Sort By </div>
           <select class="" v-model="sort.field">
             <option value=""></option>
-            <option value="email">Email</option>
-            <option value="fullname">Fullname</option>
+            <option value="username">Username</option>
+            <option value="hak_akses">Hak Akses</option>
+            <option value="is_active">Status</option>
           </select>
         </div>
         <div class="pl-1">
@@ -57,9 +58,9 @@
             <thead>
               <tr class="sticky top-0 !z-[2]">
                 <th>No.</th>
-                <th>Email</th>
-                <th>Fullname</th>
-                <th>Role</th>
+                <th>Username</th>
+                <th>Hak Akses</th>
+                <th>Status</th>
                 <th>Tanggal Dibuat</th>
                 <th>Tanggal Diubah</th>
               </tr>
@@ -68,11 +69,11 @@
               <tr v-for="(user, index) in users" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
                 <td>{{ index + 1 }}.</td>
-                <td class="bold">{{ user.email }}</td>
-                <td>{{ user.fullname }}</td>
-                <td>{{ user.role }}</td>
-                <td>{{ $moment(user.internal_created_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ $moment(user.internal_updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td class="bold">{{ user.username }}</td>
+                <td>{{ user.hak_akses }}</td>
+                <td>{{ user.is_active ? 'Aktif' : 'Nonaktif' }}</td>
+                <td>{{ $moment(user.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ $moment(user.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
               </tr>
             </tbody>
           </table>
@@ -83,6 +84,9 @@
       <!-- {{ users }} -->
     </div>
   </div>
+  <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
+  <FormsUser :show="forms_user_show" :fnClose="()=>{forms_user_show=false}" :id="forms_user_id" :p_data="users"/>
+
 </template>
 
 <script setup>
@@ -91,9 +95,6 @@ import { storeToRefs } from 'pinia';
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
-
-const { sayHello } = useUtils();
-sayHello();
 
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
@@ -138,7 +139,7 @@ const scrolling = ref({
 const inject_params = () => {
   params.like = "";
   if (search.value != "") {
-    params.like = `id:%${search.value}%,email:%${search.value}%,fullname:%${search.value}%`;
+    params.like = `id:%${search.value}%,username:%${search.value}%`;
   }
   params.sort = "";
   if (sort.value.field) {
@@ -216,8 +217,11 @@ const searching = () => {
 
 const router = useRouter();
 
+const forms_user_show =  ref(false);
+const forms_user_id = ref(0);
 const form_add = () => {
-  router.push({ name: 'user-form', query: { id: "" } });
+  forms_user_id.value = 0;
+  forms_user_show.value = true;
 }
 
 const { display } = useAlertStore();
@@ -225,21 +229,66 @@ const { show, status, message } = storeToRefs(useAlertStore());
 
 const form_edit = () => {
   if (selected.value == -1) {
-
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    router.push({ name: 'user-form', query: { id: users.value[selected.value].id } });
+    forms_user_id.value = users.value[selected.value].id;
+    forms_user_show.value = true;
   }
 };
 
-const form_permission = () => {
+
+const delete_data = ref({});
+const delete_box = ref(false);
+
+const toggleDeleteBox = async()=>{  
+  if (delete_box.value) {
+    delete_box.value = false;
+  }
+};
+
+const remove = () => {
   if (selected.value == -1) {
-
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    router.push({ name: 'user-permission', query: { id: users.value[selected.value].id } });
+    delete_data.value = {id : users.value[selected.value].id};
+    delete_box.value = true;
   }
 };
+
+const confirmed_delete = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("id", users.value[selected.value].id);  
+  data_in.append("_method", "DELETE");
+
+  const { data, error, status } = await useMyFetch("/user", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  users.value.splice(selected.value,1);
+  selected.value = -1;
+  delete_box.value = false;
+}
+
+// const form_permission = () => {
+//   if (selected.value == -1) {
+
+//     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+//   } else {
+//     router.push({ name: 'user-permission', query: { id: users.value[selected.value].id } });
+//   }
+// };
 //     // form_inject(){
 //     //   if (selected==-1) {
 //     //     this.$store.commit('alert/SET_ALERT',{

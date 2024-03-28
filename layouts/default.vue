@@ -20,19 +20,19 @@
             </li>
             <li :class="activeMenu == '/data_ujalan'?'active':''" >
               <nuxt-link to="/data_ujalan"  class="cursor-pointer" @click="goTo('/data_ujalan')">
-                <IconsScale class="mr-1"/>
+                <IconsMoney class="mr-1"/>
                 U.Jalan
               </nuxt-link>
             </li>
             <li :class="activeMenu == '/data_trx_trp'?'active':''" >
               <nuxt-link to="/data_trx_trp"  class="cursor-pointer" @click="goTo('/data_trx_trp')">
-                <IconsScale class="mr-1"/>
+                <IconsProduct class="mr-1"/>
                 Trx Trp
               </nuxt-link>
             </li>
             <li :class="activeMenu == '/report_trx_trp'?'active':''" >
               <nuxt-link to="/report_trx_trp"  class="cursor-pointer" @click="goTo('/report_trx_trp')">
-                <IconsScale class="mr-1"/>
+                <IconsFileCopy class="mr-1"/>
                 Report Trp
               </nuxt-link>
             </li>
@@ -57,6 +57,13 @@
               <nuxt-link to="/data_transaksi"  class="cursor-pointer" @click="goTo('/data_transaksi')">
                 <IconsCreditCard class="mr-1"/>
                 Transaksi
+              </nuxt-link>
+            </li>
+
+            <li :class="activeMenu == '/user'?'active':''" >
+              <nuxt-link to="/user"  class="cursor-pointer" @click="goTo('/user')">
+                <IconsPerson class="mr-1"/>
+                User
               </nuxt-link>
             </li>
             <!-- <li><nuxt-link to="/events">Events</nuxt-link></li>
