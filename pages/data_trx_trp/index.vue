@@ -159,7 +159,7 @@
 
     <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
     <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
-    <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ujalan="list_ujalan" :list_ticket="list_ticket" :list_pv="list_pv"/>
+    <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ujalan="list_ujalan" :list_ticket="list_ticket" :list_pv="list_pv"/>
     <FormsTrxTrpValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps"/>
   
     <div v-if="prtView" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
@@ -215,7 +215,6 @@ const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
   let trx_trps = [];
   let list_ujalan = [];
-  let list_tipe = [];
   let list_ticket = [];
   let list_pv = [];
 
@@ -246,18 +245,17 @@ const { data: dt_async } = await useAsyncData(async () => {
 
   if (data1.status.value === 'error') {
     useErrorStore().trigger(data1.error);
-    return { trx_trps, list_ujalan, list_tipe, list_ticket, list_pv };
+    return { trx_trps, list_ujalan, list_ticket, list_pv };
   }
 
   if (data2.status.value !== 'error') {
     list_ujalan = data2.data.value.list_ujalan;
-    list_tipe = data2.data.value.list_tipe;
     list_ticket = data2.data.value.list_ticket;
     list_pv = data2.data.value.list_pv;
   }
   useCommonStore().loading_full = false;
 
-  return { trx_trps, list_ujalan, list_tipe, list_ticket, list_pv };
+  return { trx_trps, list_ujalan, list_ticket, list_pv };
 });
 
 const trx_trps = ref(dt_async.value.trx_trps || []);
@@ -265,6 +263,29 @@ const list_ujalan = ref(dt_async.value.list_ujalan);
 const list_ticket = ref(dt_async.value.list_ticket);
 const list_pv = ref(dt_async.value.list_pv);
 
+const fnLoadDBData = async () => {
+  useCommonStore().loading_full = true;
+
+  const { data, error, status } = await useMyFetch("/trx_load_for_trp", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json'
+    },
+    params: params,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  list_ujalan.value = data.value.list_ujalan;
+  list_ticket.value = data.value.list_ticket;
+  list_pv.value = data.value.list_pv;
+}
 
 const search = ref("");
 const sort = ref({

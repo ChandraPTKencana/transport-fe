@@ -8,7 +8,7 @@
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
 
-              <div class="w-full flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">U.Jalan Per</label>
                 <div class="grow" >
                   <ClientOnly>
@@ -23,15 +23,15 @@
                 <p class="text-red-500">{{ field_errors.tanggal }}</p>
               </div>
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                  <label for="">Jenis</label>
-                  <select v-model="trx_trp.jenis" @change="changeJenis()">
-                    <option value="TBS">TBS</option>
-                    <option value="CPO">CPO</option>
-                  </select>
-                  <p class="text-red-500">{{ field_errors.jenis }}</p>
-                </div>
-            
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <label for="">Jenis</label>
+                <select v-model="trx_trp.jenis" @change="changeJenis()">
+                  <option value="TBS">TBS</option>
+                  <option value="CPO">CPO</option>
+                </select>
+                <p class="text-red-500">{{ field_errors.jenis }}</p>
+              </div>
+          
 
               <div v-if="trx_trp.jenis!=''" class="w-full flex pt-5">
                 <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
@@ -285,6 +285,9 @@
           </div>
           
           <div class="w-full flex items-center justify-end">
+            <button type="button" name="button" class="w-36 m-1 bg-yellow-600 text-white" @click="fnLoadDBData()">
+              Load DB Data
+            </button>
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
@@ -319,19 +322,9 @@ const props = defineProps({
     type: Function,
     required: false,
   },
-  fnSelect: {
+  fnLoadDBData: {
     type: Function,
     required: false,
-  },
-  excludes: {
-    type: String,
-    required: false,
-    // default: '',
-  },
-  exclude_lists: {
-    type: Array,
-    required: false,
-    // default: '',
   },
   id:{
     type: Number,
