@@ -62,29 +62,14 @@ const oriIDFormat=(m:any)=>{
 // }
 
 const blur=(val:any)=>{
-  
   let result = typeof val == 'object' ? val.target.value : val;
   result = result || props.value;
-  // console.log("b",parseInt(result),result);
-  
-  if(parseInt(result) < 0){
-    inputVal.value = "-"+blurIDFormat(result);  
-    emit('input',Number(oriIDFormat(result)) * -1); 
-  }else{
-    inputVal.value = blurIDFormat(result);  
-    emit('input',Number(oriIDFormat(result))); 
-  }
-
-
-  // console.log("bx",blurIDFormat(result),Number(oriIDFormat(result)));
-
+  inputVal.value = blurIDFormat(result);  
+  emit('input',Number(oriIDFormat(result))); 
 }
 
 onMounted(() => {
-  // console.log("m",parseInt(props.value),props.value);
-
-  // change(parseInt(props.value))
-  change(props.value,true)
+  change(parseInt(props.value))
 });
 
 const point = computed((value) =>{
@@ -93,38 +78,16 @@ const point = computed((value) =>{
 });
 
 
-// const reAbj = /[a-zA-Z .,<>?/\\|:;'"\[\]{}=+=_()*&^%$#@!~`]/;
-const reAbj = /[a-zA-Z <>?/\\|:;'"\[\]{}=+=_()*&^%$#@!~`]/;
+const reAbj = /[a-zA-Z .,<>?/\\|:;'"\[\]{}=+=_()*&^%$#@!~`]/;
 // let full = before.replace(/([.?*+^$[\]\\/(){}|-])/g, "");
-const clearNumber = (val)=>{
 
-  val = val.toString().replace(/^[a-zA-Z .,<>?/\\|:;'"\[\]{}=+=_()*&^%$#@!~`0]/g, "");
-
-
-}
-let isNegative = false;
-const change=(val,outsider=false)=>{
-  // console.log("ch",parseInt(val),val);
-  if(val=="-") {
-    inputVal.value = "-";
-    return;
-  }
-
-  if(parseInt(val)<0) isNegative = true;
-  else isNegative = false;
-
+const change=(val)=>{
+  let newVal = val;
   
-  let newVal = outsider ? parseInt(val):val;
-  // console.log("newval1",newVal);
-  
-
   if(val.toString().length > 1)
-  newVal = newVal.toString().replace(/^0/g, "");
-  // newVal = val.toString().replace(/^0/g, "");
-
-  // console.log("newval2",newVal);
+  newVal = val.toString().replace(/^0/g, "");
   
-  inputVal.value = (isNegative ? "-" : "")+writeIDFormat(newVal);
+  inputVal.value = writeIDFormat(newVal);
 }
 
 const excludeList=["Backspace","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Delete","Tab"];
@@ -154,9 +117,7 @@ const blockAll=(e)=>{
 // });
 
 watch(() => props.value, (newVal, oldVal) => {
-  // console.log("w",parseInt(newVal),newVal);
-  // change(parseInt(newVal));
-  change(newVal,true);
+  change(parseInt(newVal));
 }, {
   immediate: true,
   deep:true

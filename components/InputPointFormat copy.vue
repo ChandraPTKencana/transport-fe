@@ -65,7 +65,7 @@ const blur=(val:any)=>{
   
   let result = typeof val == 'object' ? val.target.value : val;
   result = result || props.value;
-  // console.log("b",parseInt(result),result);
+  console.log("b",parseInt(result),result);
   
   if(parseInt(result) < 0){
     inputVal.value = "-"+blurIDFormat(result);  
@@ -76,15 +76,15 @@ const blur=(val:any)=>{
   }
 
 
-  // console.log("bx",blurIDFormat(result),Number(oriIDFormat(result)));
+  console.log("bx",blurIDFormat(result),Number(oriIDFormat(result)));
 
 }
 
 onMounted(() => {
-  // console.log("m",parseInt(props.value),props.value);
+  console.log("m",parseInt(props.value),props.value);
 
   // change(parseInt(props.value))
-  change(props.value,true)
+  change(props.value)
 });
 
 const point = computed((value) =>{
@@ -103,21 +103,18 @@ const clearNumber = (val)=>{
 
 }
 let isNegative = false;
-const change=(val,outsider=false)=>{
-  // console.log("ch",parseInt(val),val);
+const change=(val)=>{
+  console.log("ch",parseInt(val),val);
   if(val=="-") {
     inputVal.value = "-";
     return;
   }
 
   if(parseInt(val)<0) isNegative = true;
-  else isNegative = false;
 
-  
-  let newVal = outsider ? parseInt(val):val;
+  let newVal = parseInt(val);
   // console.log("newval1",newVal);
   
-
   if(val.toString().length > 1)
   newVal = newVal.toString().replace(/^0/g, "");
   // newVal = val.toString().replace(/^0/g, "");
@@ -156,7 +153,7 @@ const blockAll=(e)=>{
 watch(() => props.value, (newVal, oldVal) => {
   // console.log("w",parseInt(newVal),newVal);
   // change(parseInt(newVal));
-  change(newVal,true);
+  change(newVal);
 }, {
   immediate: true,
   deep:true

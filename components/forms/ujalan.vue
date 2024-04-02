@@ -68,7 +68,7 @@
                       <th>Desc</th>
                       <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Harga @</th>
                       <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Qty</th>
-                      <!-- <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Status</th> -->
+                      <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Total</th>
                     </tr>
                   </thead>
                   <tbody ref="to_move">
@@ -109,14 +109,11 @@
                             @input="detail.qty = $event"/>
                           </div>
                         </td>
-                        <!-- <td class="cell">
+                        <td class="cell">
                           <div class="w-full h-full flex items-center justify-center">                       
-                            <select v-model="detail.status">
-                              <option value="Y">Y</option>
-                              <option value="N">N</option>
-                            </select>   
+                            {{ pointFormat(detail.qty * detail.harga || 0) }}   
                           </div>
-                        </td> -->
+                        </td>
                       </tr>
                     </template>
                     
@@ -443,6 +440,7 @@ const total_harga = computed(()=>{
   let temp = 0;
 
   details.value.forEach(e => {
+    if(e.p_status!="Remove")
     temp += e.qty * e.harga; 
   });
   ujalan.value.harga = total_harga;
@@ -587,11 +585,18 @@ const callData = async () => {
   }
 
   ujalan.value = data.value.data;
+
+  let p_status = "Edit";
+  if(props.is_copy){
+    p_status = "Add";
+  }
+
   details.value = data.value.data.details.map((x)=>{
-    x["p_status"]= "Edit";
+    x["p_status"]= p_status;
     x["key"] = x["ordinal"];
     return x;
   });
+  
 }
 
 
