@@ -4,6 +4,10 @@
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
         <button type="button" name="button" class="m-1 text-2xl "
+          @click="form_copy()">
+          <IconsCopy />
+        </button>
+        <button type="button" name="button" class="m-1 text-2xl "
           @click="form_add()">
           <IconsPlus />
         </button>
@@ -101,7 +105,7 @@
 
     <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
     <!-- <ujalansRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
-    <FormsUjalan :show="forms_ujalan_show" :fnClose="()=>{forms_ujalan_show=false}" :id="forms_ujalan_id" :p_data="ujalans"/>
+    <FormsUjalan :show="forms_ujalan_show" :fnClose="()=>{forms_ujalan_show=false}" :id="forms_ujalan_id" :p_data="ujalans" :is_copy="forms_ujalan_copy"/>
     <FormsUjalanValidasi :show="forms_ujalan_valid_show" :fnClose="()=>{forms_ujalan_valid_show=false}" :id="forms_ujalan_valid_id" :p_data="ujalans"/>
   
   </div>
@@ -178,7 +182,7 @@ const scrolling = ref({
 const inject_params = () => {
   params.like = "";
   if (search.value != "") {
-    params.like = `id:%${search.value}%,warehouse_name:%${search.value}%,warehouse_source_name:%${search.value}%,warehouse_target_name:%${search.value}%,item_name:%${search.value}%,status:%${search.value}%,type:%${search.value}%`;
+    params.like = `id:%${search.value}%,xto:%${search.value}%,tipe:%${search.value}%,jenis:%${search.value}%,harga:%${search.value}%`;
   }
   params.sort = "";
   if (sort.value.field) {
@@ -256,9 +260,11 @@ const router = useRouter();
 
 const forms_ujalan_show =  ref(false);
 const forms_ujalan_id = ref(0);
+const forms_ujalan_copy = ref(0);
 const form_add = () => {
   forms_ujalan_id.value = 0;
   forms_ujalan_show.value = true;
+  forms_ujalan_copy.value = false;
   // router.push({ name: 'data_ujalan-form', query: { id: "" } });
 }
 
@@ -271,7 +277,19 @@ const form_edit = () => {
   } else {
     forms_ujalan_id.value = ujalans.value[selected.value].id;
     forms_ujalan_show.value = true;
+    forms_ujalan_copy.value = false;
     // router.push({ name: 'data_ujalan-form', query: { id: ujalans.value[selected.value].id } });
+  }
+};
+
+const form_copy = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_ujalan_id.value = ujalans.value[selected.value].id;
+    forms_ujalan_show.value = true;
+    forms_ujalan_copy.value = true;
+    // router.push({ name: 'data_trx_trp-form', query: { id: trx_trps.value[selected.value].id } });
   }
 };
 

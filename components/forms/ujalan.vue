@@ -32,6 +32,7 @@
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Jenis</label>
                 <select v-model="ujalan.jenis">
+                  <option value="PK">PK</option>
                   <option value="CPO">CPO</option>
                   <option value="TBS">TBS</option>
                 </select>
@@ -39,12 +40,15 @@
               </div>
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Harga</label>
-                <div>
+                <!-- <div class="card-bor">
                   <InputPointFormat
                   class="w-full h-full p-1" 
                   type="text" 
                   :value="ujalan.harga || 0" 
                   @input="ujalan.harga = $event"/>
+                </div> -->
+                <div class="card-border disabled">
+                  {{pointFormat(total_harga) }}
                 </div>
                 <p class="text-red-500">{{ field_errors.harga }}</p>
               </div>
@@ -157,6 +161,7 @@ import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
 
+const { pointFormat } = useUtils();
 
 const props = defineProps({
   show: {
@@ -190,7 +195,12 @@ const props = defineProps({
     type:Array,
     required:true,
     default:[]
-  }
+  },
+  is_copy: {
+    type: [Boolean,Number],
+    required: true,
+    default: false,
+  },
   
 })
 
@@ -371,7 +381,7 @@ const doSave = async () => {
   
   let $method = "post";
 
-  let id = props.id;
+  let id = props.is_copy ? 0 : props.id;
   if (id == 0) {
   } else {
     // $method = "put";
@@ -399,7 +409,7 @@ const doSave = async () => {
   }
 
   
-  if(props.id<=0){
+  if(id<=0){
     ujalan.value.id = data.value.id;
     ujalan.value.created_at = data.value.created_at;
     ujalan.value.updated_at = data.value.updated_at;
@@ -407,7 +417,7 @@ const doSave = async () => {
   }else{
     ujalan.value.updated_at = data.value.updated_at;
 
-    let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
+    let idx= props.p_data.map((x)=>x.id).indexOf(id);
     if(idx>=-1){
       props.p_data.splice(idx,1,{...ujalan.value});    
     }
@@ -428,6 +438,16 @@ const doSave = async () => {
 // const exclude_id = computed(()=>{
 //   return ujalan.value.warehouse?.id || ujalan.value.warehouse_target?.id || 0;
 // })
+
+const total_harga = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += e.qty * e.harga; 
+  });
+  ujalan.value.harga = total_harga;
+  return temp;
+})
 
 
 const row = ref(-1);
