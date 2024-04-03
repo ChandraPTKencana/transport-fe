@@ -96,7 +96,8 @@
                             class="w-full h-full p-1" 
                             type="text" 
                             :value="detail.harga || 0" 
-                            @input="detail.harga = $event"/>
+                            @input="detail.harga = $event"
+                            :show="show"/>
                           </div>
                         </td>
                         <td class="cell" :class="disabled ? 'unselectable' : ''">
@@ -106,7 +107,8 @@
                             class="w-full h-full p-1" 
                             type="text" 
                             :value="detail.qty || 0" 
-                            @input="detail.qty = $event"/>
+                            @input="detail.qty = $event"
+                            :show="show"/>
                           </div>
                         </td>
                         <td class="cell">
@@ -443,7 +445,7 @@ const total_harga = computed(()=>{
     if(e.p_status!="Remove")
     temp += e.qty * e.harga; 
   });
-  ujalan.value.harga = total_harga;
+  ujalan.value.harga = temp;
   return temp;
 })
 

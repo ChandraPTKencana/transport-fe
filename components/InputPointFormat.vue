@@ -1,24 +1,26 @@
 <template>
     <input type="text" :value="inputVal"
       @keydown ="checkKey($event)"
-      @keyup="change($event.target.value)" 
+      @keyup="inputChange($event.target.value)" 
       @blur="blur($event),$emit('nextBlur',$event)"
       @focus="blockAll($event)"
     >
 </template>
 
 <script lang="ts" setup>
-
+let countWatch = -1;
+let decimal
 const props = defineProps({
   value: {
     type: [Number,String],
     required: true,
     default: 0,
   },
-  // show: {
-  //   type: Boolean,
-  //   required: true,
-  // },
+  show: {
+    type: Boolean,
+    required: false,
+    default:true
+  },
   // fn: {
   //   type: Function,
   //   required: false,
@@ -65,27 +67,34 @@ const blur=(val:any)=>{
   
   let result = typeof val == 'object' ? val.target.value : val;
   result = result || props.value;
-  // console.log("b",parseInt(result),result);
+  let [rn,hn] = humanNumber(result);
+
+  // console.log("rn",rn,"hn",hn);
+
+  inputVal.value = hn;
+  emit('input',rn);
   
-  if(parseInt(result) < 0){
-    inputVal.value = "-"+blurIDFormat(result);  
-    emit('input',Number(oriIDFormat(result)) * -1); 
-  }else{
-    inputVal.value = blurIDFormat(result);  
-    emit('input',Number(oriIDFormat(result))); 
-  }
+  // console.log("b",result);
+  
+  // if(parseInt(result) < 0){
+  //   inputVal.value = "-"+blurIDFormat(result);  
+  //   emit('input',Number(oriIDFormat(result)) * -1); 
+  // }else{
+  //   inputVal.value = blurIDFormat(result);  
+  //   emit('input',Number(oriIDFormat(result))); 
+  // }
 
 
   // console.log("bx",blurIDFormat(result),Number(oriIDFormat(result)));
 
 }
 
-onMounted(() => {
-  // console.log("m",parseInt(props.value),props.value);
+// onMounted(() => {
+//   console.log("m",parseInt(props.value),props.value);
 
-  // change(parseInt(props.value))
-  change(props.value,true)
-});
+//   // change(parseInt(props.value))
+//   change(props.value,true)
+// });
 
 const point = computed((value) =>{
   if (!value) return 0
@@ -94,37 +103,75 @@ const point = computed((value) =>{
 
 
 // const reAbj = /[a-zA-Z .,<>?/\\|:;'"\[\]{}=+=_()*&^%$#@!~`]/;
-const reAbj = /[a-zA-Z <>?/\\|:;'"\[\]{}=+=_()*&^%$#@!~`]/;
+const reAbj = /[a-zA-Z .<>?/\\|:;'"\[\]{}=+=_()*&^%$#@!~`]/;
 // let full = before.replace(/([.?*+^$[\]\\/(){}|-])/g, "");
 const clearNumber = (val)=>{
 
   val = val.toString().replace(/^[a-zA-Z .,<>?/\\|:;'"\[\]{}=+=_()*&^%$#@!~`0]/g, "");
 
-
 }
 let isNegative = false;
+
+const inputChange=(val)=>{
+  countWatch+=1;
+  change(val);
+}
+
+const humanNumber=(val)=>{
+  let temp = val.toString().replace(/(?!^-)[^,0-9]/g, "");
+  if(temp=="") return [0,0];
+  let tempArr = temp.split(",");
+  let shift = tempArr.shift();
+  let realNumber = shift+(tempArr.length == 0 ? "" :  ("." + tempArr.join("")));
+  let newVal = shift.replace(/\B(?=(\d{3})+(?!\d))/g, ".")+ (tempArr.length == 0 ? "" :  ("," + tempArr.join("")));
+  return [realNumber, newVal];
+}
+
+const fromDBToHuman=(val)=>{
+  let temp = val.toString().replace(/\./g, ",");
+  if(temp=="") return 0;
+  let tempArr = temp.split(",");
+  let newVal = tempArr.shift().replace(/\B(?=(\d{3})+(?!\d))/g, ".")+(tempArr.length == 0 ? "" :  ("," + tempArr.join(""))) ;
+  return newVal;
+}
+
+
 const change=(val,outsider=false)=>{
-  // console.log("ch",parseInt(val),val);
-  if(val=="-") {
-    inputVal.value = "-";
-    return;
+  // if(val=="-") {
+  //   inputVal.value = "-";
+  //   return;
+  // }
+  // console.log("val",val);
+
+  let rn=0;
+  let hn="";
+  if(countWatch==0 || outsider){
+    rn = val;
+    hn = fromDBToHuman(val);
+  }else{
+    [rn,hn] = humanNumber(val);
   }
+  // console.log("vrn",rn,"vhn",hn);
 
-  if(parseInt(val)<0) isNegative = true;
-  else isNegative = false;
+  inputVal.value = hn;
+
+ 
+
+  // if(parseInt(val)<0) isNegative = true;
+  // else isNegative = false;
 
   
-  let newVal = outsider ? parseInt(val):val;
-  // console.log("newval1",newVal);
+  // let newVal = outsider ? parseInt(val):val;
+  // // console.log("newval1",newVal);
   
 
-  if(val.toString().length > 1)
-  newVal = newVal.toString().replace(/^0/g, "");
-  // newVal = val.toString().replace(/^0/g, "");
+  // if(val.toString().length > 1)
+  // newVal = newVal.toString().replace(/^0/g, "");
+  // // newVal = val.toString().replace(/^0/g, "");
 
-  // console.log("newval2",newVal);
+  // // console.log("newval2",newVal);
   
-  inputVal.value = (isNegative ? "-" : "")+writeIDFormat(newVal);
+  // inputVal.value = (isNegative ? "-" : "")+writeIDFormat(newVal);
 }
 
 const excludeList=["Backspace","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Delete","Tab"];
@@ -152,6 +199,14 @@ const blockAll=(e)=>{
 //   immediate: true,
 //   deep:true
 // });
+
+watch(() => props.show, (newVal, oldVal) => {
+  countWatch = 0;
+  // console.log(newVal);
+}, {
+  immediate: true
+});
+
 
 watch(() => props.value, (newVal, oldVal) => {
   // console.log("w",parseInt(newVal),newVal);

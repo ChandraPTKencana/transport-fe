@@ -254,7 +254,8 @@
                     class="card-border p-1" 
                     type="text" 
                     :value="trx_trp.ticket_b_bruto || 0" 
-                    @input="trx_trp.ticket_b_bruto = $event"/>
+                    @input="trx_trp.ticket_b_bruto = $event"
+                    :show="show"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.ticket_b_bruto }}</p>
               </div>
@@ -266,7 +267,8 @@
                     class="card-border p-1" 
                     type="text" 
                     :value="trx_trp.ticket_b_tara || 0" 
-                    @input="trx_trp.ticket_b_tara = $event"/>
+                    @input="trx_trp.ticket_b_tara = $event"
+                    :show="show"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.ticket_b_tara }}</p>
               </div>
