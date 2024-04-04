@@ -66,6 +66,7 @@
               <tr class="sticky top-0 !z-[2]">
                 <!-- <th>No.</th> -->
                 <!-- <th>Updated At</th> -->
+                <th>Status</th>
                 <th>App 1</th>
                 <th>App 2</th>
                 <th>ID</th>
@@ -106,6 +107,13 @@
             <tbody>
               <tr v-for="(trx_trp, index) in trx_trps" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
+                <td>
+                  <div class="flex items-center justify-center">
+                    <div class="text-white text-xs px-2 py-1 rounded-lg" :class="checkStatus(trx_trp) ? 'bg-green-600' : 'bg-red-600' ">
+                      {{checkStatus(trx_trp) ? "Done" : "Not Done" }}
+                    </div>
+                  </div>
+                </td>
                 <td>
                   <div class="flex items-center justify-center">
                     <IconsLine v-if="!trx_trp.val"/>
@@ -303,7 +311,7 @@ const scrolling = ref({
 const inject_params = () => {
   params.like = "";
   if (search.value != "") {
-    params.like = `id:%${search.value}%,warehouse_name:%${search.value}%,warehouse_source_name:%${search.value}%,warehouse_target_name:%${search.value}%,item_name:%${search.value}%,status:%${search.value}%,type:%${search.value}%`;
+    params.like = `id:%${search.value}%,xto:%${search.value}%,jenis:%${search.value}%,pv_no:%${search.value}%,ticket_a_no:%${search.value}%,ticket_b_no:%${search.value}%,nopol:%${search.value}%,supir:%${search.value}%,kernet:%${search.value}%`;
   }
   params.sort = "";
   if (sort.value.field) {
@@ -496,5 +504,15 @@ const printPreview = async()=>{
 
 const download = ()=>{
   downloadFile(pdfContent.value);
+}
+
+
+const checkStatus=(data)=>{
+  if(
+    data.pv_id=="" || 
+    data.ticket_a_id=="" || 
+    (data.jenis=="TBS" && data.ticket_b_id=="")
+  ) return 0;
+  return 1;
 }
 </script>
