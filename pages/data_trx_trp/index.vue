@@ -509,9 +509,9 @@ const download = ()=>{
 
 const checkStatus=(data)=>{
   if(
-    data.pv_id=="" || 
-    data.ticket_a_id=="" || 
-    (data.jenis=="TBS" && data.ticket_b_id=="")
+    data.pv_id<=0 ||
+    data.ticket_a_id<=0 || 
+    (data.jenis=="TBS" && data.ticket_b_id<=0)
   ) return 0;
   return 1;
 }

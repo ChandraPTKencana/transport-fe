@@ -63,10 +63,10 @@
 
                 <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
                   <label for="">Tipe</label>
-                  <select v-model="trx_trp.tipe">
-                    <option v-for="lt in list_tipe">{{lt}}</option>
+                  <select v-model="trx_trp.id_uj">
+                    <option v-for="lt in list_tipe" :value="lt.id" :selected="lt.id == trx_trp.id_uj">{{lt.tipe}}</option>
                   </select>
-                  <p class="text-red-500">{{ field_errors.tipe }}</p>
+                  <p class="text-red-500">{{ field_errors.id_uj }}</p>
                 </div>
 
                 <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
@@ -416,8 +416,8 @@ const doSave = async () => {
   // data_in.append("tanggaly", trx_trp.value.tanggal);
   
   data_in.append("jenis", trx_trp.value.jenis);
+  data_in.append("id_uj", trx_trp.value.id_uj);
   data_in.append("xto", trx_trp.value.xto);
-  data_in.append("tipe", trx_trp.value.tipe);
 
   // data_in.append("amount", trx_trp.value.amount);
 
@@ -526,7 +526,7 @@ const list_to = computed(()=>{
 })
 
 const list_tipe = computed(()=>{
-  return [...new Set(props.list_ujalan.filter((x)=>x.xto == trx_trp.value.xto && x.jenis==trx_trp.value.jenis).map((x)=>x.tipe))];
+  return props.list_ujalan.filter((x)=>x.xto == trx_trp.value.xto && x.jenis==trx_trp.value.jenis);
 })
 
 // const list_pv_to_minilist = computed(()=>{
@@ -729,16 +729,24 @@ watch(()=>trx_trp.value.pv_no, (newVal, oldVal) => {
 
 const checkAmount = (newVal, oldVal)=>{
   let $total=0;
+  let $tipe = "";
   if (newVal=="" || newVal){
     let hrg = props.list_ujalan.filter(
-      (x)=>x.xto == trx_trp.value.xto && x.tipe == trx_trp.value.tipe
+      (x)=>x.id == trx_trp.value.id_uj
     );
 
     if(hrg.length  > 0)
-    $total = hrg[0].harga;
-    else if(trx_trp.value.xto == trx_trp_loaded.xto && trx_trp.value.tipe == trx_trp_loaded.tipe) 
-    $total = trx_trp_loaded.amount;
+    {
+      $total = hrg[0].harga;
+      $tipe = hrg[0].tipe;
+    }
+    else if(trx_trp.value.id_uj == trx_trp_loaded.id_uj) 
+    {
+      $total = trx_trp_loaded.amount;
+      $tipe = trx_trp_loaded.type;
+    }
     
+    trx_trp.value.tipe = $tipe
     trx_trp.value.amount=$total;
   }
 }
@@ -750,7 +758,7 @@ watch(()=>trx_trp.value.xto, (newVal, oldVal) => {
   immediate: true
 });
 
-watch(()=>trx_trp.value.tipe, (newVal, oldVal) => {
+watch(()=>trx_trp.value.id_uj, (newVal, oldVal) => {
   checkAmount(newVal, oldVal);
 }, {
   deep:true,
