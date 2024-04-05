@@ -510,8 +510,9 @@ const download = ()=>{
 const checkStatus=(data)=>{
   if(
     data.pv_id<=0 ||
-    data.ticket_a_id<=0 || 
-    (data.jenis=="TBS" && data.ticket_b_id<=0)
+    (["CPO","PK"].indexOf(data.jenis)>-1 && (data.ticket_a_id<=0 || data.ticket_b_bruto<=0 || data.ticket_b_tara<=0 || data.ticket_b_netto <=0 || data.ticket_b_in_at==""|| data.ticket_b_out_at=="")) ||
+    (data.jenis=="TBS" && (data.ticket_a_id<=0 || data.ticket_b_id<=0)) ||
+    (data.jenis=="TBSK" && data.ticket_b_id<=0)
   ) return 0;
   return 1;
 }

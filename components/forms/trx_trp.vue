@@ -285,9 +285,9 @@
           </div>
           
           <div class="w-full flex items-center justify-end">
-            <button type="button" name="button" class="w-36 m-1 bg-yellow-600 text-white" @click="fnLoadDBData()">
+            <!-- <button type="button" name="button" class="w-36 m-1 bg-yellow-600 text-white" @click="fnLoadDBData()">
               Load DB Data
-            </button>
+            </button> -->
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
@@ -397,6 +397,15 @@ const field_errors = ref({})
 
 const changeJenis=()=>{
   trx_trp.value.ticket_a_no = "";
+  
+  trx_trp.value.ticket_b_id = "";
+  trx_trp.value.ticket_b_bruto = "";
+  trx_trp.value.ticket_b_tara = "";
+  trx_trp.value.ticket_b_netto = "";
+  trx_trp.value.ticket_b_in_at = "";
+  trx_trp.value.ticket_b_out_at = "";
+  trx_trp.value.ticket_b_supir = "-";
+  trx_trp.value.ticket_b_no_pol = "-";
   trx_trp.value.ticket_b_no = "";
 }
 const { display } = useAlertStore();
@@ -610,12 +619,14 @@ watch(() => props.show, (newVal, oldVal) => {
     field_errors.value = {};
     if(props.id!=0)
     callData();
+
+    props.fnLoadDBData();
   }
 }, {
   immediate: true
 });
 
-let $return_ticket = {bruto:0,tara:0,netto:0,supir:"-",no_pol:"-"}; 
+let $return_ticket = {id:-1,bruto:0,tara:0,netto:0,supir:"-",no_pol:"-",in_at:"",out_at:""}; 
 watch(()=>trx_trp.value.ticket_a_no, (newVal, oldVal) => {
   if (newVal=="" || newVal){
     if(newVal){
@@ -624,6 +635,7 @@ watch(()=>trx_trp.value.ticket_a_no, (newVal, oldVal) => {
       );
       if(hrg.length  > 0)  
       $return_ticket = {
+        id:hrg[0].TicketID,
         bruto:hrg[0].Bruto,
         tara:hrg[0].Tara,
         netto:hrg[0].Netto,
@@ -634,6 +646,7 @@ watch(()=>trx_trp.value.ticket_a_no, (newVal, oldVal) => {
       };
       else if(trx_trp.value.ticket_a_no == trx_trp_loaded.ticket_a_no)
       $return_ticket = {
+        id:trx_trp_loaded.ticket_a_id,
         bruto:trx_trp_loaded.ticket_a_bruto,
         tara:trx_trp_loaded.ticket_a_tara,
         netto:trx_trp_loaded.ticket_a_netto,
@@ -645,9 +658,10 @@ watch(()=>trx_trp.value.ticket_a_no, (newVal, oldVal) => {
     }
 
     if(newVal==""){
-      $return_ticket = {bruto:0,tara:0,netto:0,supir:"-",no_pol:"-",in_at:"",out_at:""}; 
+      $return_ticket = {id:-1,bruto:0,tara:0,netto:0,supir:"-",no_pol:"-",in_at:"",out_at:""}; 
     }
 
+    trx_trp.value.ticket_a_id = $return_ticket.id;
     trx_trp.value.ticket_a_bruto = $return_ticket.bruto;
     trx_trp.value.ticket_a_tara = $return_ticket.tara;
     trx_trp.value.ticket_a_netto = $return_ticket.netto;
@@ -664,13 +678,14 @@ watch(()=>trx_trp.value.ticket_a_no, (newVal, oldVal) => {
 });
 
 watch(()=>trx_trp.value.ticket_b_no, (newVal, oldVal) => {
-  if (newVal=="" || newVal){
+  if (["TBS","TBSK"].indexOf(trx_trp.value.jenis) > -1 && (newVal=="" || newVal)){
     if(newVal){
       let hrg = list_b_ticket.value.filter(
         (x)=>x.TicketNo == trx_trp.value.ticket_b_no
       );
       if(hrg.length  > 0)  
       $return_ticket = {
+        id:hrg[0].TicketID,
         bruto:hrg[0].Bruto,
         tara:hrg[0].Tara,
         netto:hrg[0].Netto,
@@ -681,6 +696,7 @@ watch(()=>trx_trp.value.ticket_b_no, (newVal, oldVal) => {
       };
       else if(trx_trp.value.ticket_b_no == trx_trp_loaded.ticket_b_no)
       $return_ticket = {
+        id:trx_trp_loaded.ticket_b_id,
         bruto:trx_trp_loaded.ticket_b_bruto,
         tara:trx_trp_loaded.ticket_b_tara,
         netto:trx_trp_loaded.ticket_b_netto,
@@ -692,9 +708,10 @@ watch(()=>trx_trp.value.ticket_b_no, (newVal, oldVal) => {
     }
 
     if(newVal==""){
-      $return_ticket = {bruto:0,tara:0,netto:0,supir:"-",no_pol:"-",in_at:"",out_at:""}; 
+      $return_ticket = {id:-1,bruto:0,tara:0,netto:0,supir:"-",no_pol:"-",in_at:"",out_at:""}; 
     }
 
+    trx_trp.value.ticket_b_id = $return_ticket.id;
     trx_trp.value.ticket_b_bruto = $return_ticket.bruto;
     trx_trp.value.ticket_b_tara = $return_ticket.tara;
     trx_trp.value.ticket_b_netto = $return_ticket.netto;
