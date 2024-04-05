@@ -27,6 +27,7 @@
                 <label for="">Jenis</label>
                 <select v-model="trx_trp.jenis" @change="changeJenis()">
                   <option value="TBS">TBS</option>
+                  <option value="TBSK">TBSK</option>
                   <option value="CPO">CPO</option>
                   <option value="PK">PK</option>
                 </select>
@@ -106,7 +107,7 @@
                 </div>
               </div>
 
-              <div v-if="trx_trp.jenis!=''" class="w-full flex flex-col flex-wrap p-1">
+              <div v-if="trx_trp.jenis!='' && trx_trp.jenis!='TBSK'" class="w-full flex flex-col flex-wrap p-1">
                 <label for="">Tiket A</label>
                 <input type="text" list="ticket_a"  v-model="trx_trp.ticket_a_no"/>
                 <datalist id="ticket_a">
@@ -115,7 +116,7 @@
                 <p class="text-red-500">{{ field_errors.ticket }}</p>
               </div>
               
-              <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
+              <div v-if="trx_trp.jenis!='' && trx_trp.jenis!='TBSK'" class="w-full flex flex-wrap">
                 <div class="w-6/12 sm:w-6/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                   <label for="">In At</label>
                   <div class="card-border disabled">
@@ -165,7 +166,7 @@
               </div>
               
 
-              <div v-if="trx_trp.jenis=='TBS'" class="w-full flex flex-col flex-wrap p-1">
+              <div v-if="['TBS','TBSK'].indexOf(trx_trp.jenis) > -1" class="w-full flex flex-col flex-wrap p-1">
                 <label for="">Tiket B</label>
                 <input type="text" list="ticket_b"  v-model="trx_trp.ticket_b_no"/>
                 <datalist id="ticket_b">
@@ -173,7 +174,7 @@
                 </datalist>
                 <p class="text-red-500">{{ field_errors.ticket }}</p>
               </div>
-              <div v-if="trx_trp.jenis=='TBS'" class="w-full flex flex-wrap">
+              <div v-if="['TBS','TBSK'].indexOf(trx_trp.jenis) > -1" class="w-full flex flex-wrap">
                 <div class="w-6/12 sm:w-6/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                   <label for="">In At</label>
                   <div class="card-border disabled">
@@ -396,6 +397,7 @@ const field_errors = ref({})
 
 const changeJenis=()=>{
   trx_trp.value.ticket_a_no = "";
+  trx_trp.value.ticket_b_no = "";
 }
 const { display } = useAlertStore();
 
@@ -522,11 +524,13 @@ const doSave = async () => {
 // // })
 
 const list_to = computed(()=>{
-  return [...new Set(props.list_ujalan.filter((x)=>x.jenis==trx_trp.value.jenis).map((x)=>x.xto))];
+  let jenisF = trx_trp.value.jenis == 'TBSK' ? 'TBS' : trx_trp.value.jenis;
+  return [...new Set(props.list_ujalan.filter((x)=>x.jenis==jenisF).map((x)=>x.xto))];
 })
 
 const list_tipe = computed(()=>{
-  return props.list_ujalan.filter((x)=>x.xto == trx_trp.value.xto && x.jenis==trx_trp.value.jenis);
+  let jenisF = trx_trp.value.jenis == 'TBSK' ? 'TBS' : trx_trp.value.jenis;
+  return props.list_ujalan.filter((x)=>x.xto == trx_trp.value.xto && x.jenis==jenisF);
 })
 
 // const list_pv_to_minilist = computed(()=>{
