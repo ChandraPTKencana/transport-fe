@@ -11,7 +11,7 @@
           @click="form_edit()">
           <IconsEdit/>
         </button>
-        <button type="button" name="button" class="m-1 text-2xl "
+        <button  v-if="!checkRole(['PabrikTransport'])" type="button" name="button" class="m-1 text-2xl "
           @click="remove()">
           <IconsDelete />
         </button>
@@ -71,6 +71,7 @@
                 <th>App 2</th>
                 <th>ID</th>
                 <th>U.Jalan Per</th>
+                <th>No Pol</th>
                 <th>Tujuan</th>
                 <th>Tipe</th>
                 <th>Jenis</th>
@@ -98,7 +99,6 @@
 
                 <th>Supir</th>
                 <th>Kernet</th>
-                <th>No Pol</th>
                 <!-- <th>Created User</th> -->
                 <th>Created At</th>
                 <th>Updated At</th>
@@ -128,6 +128,7 @@
                 </td>
                 <td class="bold">{{ trx_trp.id }}</td>
                 <td>{{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-Y") : "" }}</td>
+                <td>{{ trx_trp.no_pol }}</td>
                 <td>{{ trx_trp.xto }}</td>
                 <td>{{ trx_trp.tipe }}</td>
                 <td>{{ trx_trp.jenis }}</td>
@@ -155,7 +156,6 @@
 
                 <td>{{ trx_trp.supir }}</td>
                 <td>{{ trx_trp.kernet }}</td>
-                <td>{{ trx_trp.no_pol }}</td>
                 <td>{{ trx_trp.created_at ? $moment(trx_trp.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <td>{{ trx_trp.updated_at ? $moment(trx_trp.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
               </tr>
@@ -214,17 +214,20 @@ definePageMeta({
 
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
-params.sort ="created_at:desc";
+params.sort ="tanggal:desc";
 
 
 const token = useCookie('token');
-
+const role = useCookie('role'); // useCookie new hook in nuxt 3
+const checkRole=(list)=>{
+  return (list).includes(role.value);
+};
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
   let trx_trps = [];
-  let list_ujalan = [];
-  let list_ticket = [];
-  let list_pv = [];
+  // let list_ujalan = [];
+  // let list_ticket = [];
+  // let list_pv = [];
 
   const [data1, data2] = await Promise.all([
     useMyFetch("/trx_trps", {
@@ -235,14 +238,14 @@ const { data: dt_async } = await useAsyncData(async () => {
       },
       retry: 0,
     }),
-    useMyFetch("/trx_load_for_trp", {
-      method: 'get',
-      headers: {
-        'Authorization': `Bearer ${token.value}`,
-        'Accept': 'application/json'
-      },
-      retry: 0,
-    }),
+    // useMyFetch("/trx_load_for_trp", {
+    //   method: 'get',
+    //   headers: {
+    //     'Authorization': `Bearer ${token.value}`,
+    //     'Accept': 'application/json'
+    //   },
+    //   retry: 0,
+    // }),
   ]);
 
   
@@ -253,25 +256,30 @@ const { data: dt_async } = await useAsyncData(async () => {
 
   if (data1.status.value === 'error') {
     useErrorStore().trigger(data1.error);
-    return { trx_trps, list_ujalan, list_ticket, list_pv };
+    // return { trx_trps, list_ujalan, list_ticket, list_pv };
+    return { trx_trps };
   }
 
-  if (data2.status.value !== 'error') {
-    list_ujalan = data2.data.value.list_ujalan;
-    list_ticket = data2.data.value.list_ticket;
-    list_pv = data2.data.value.list_pv;
-  }
+  // if (data2.status.value !== 'error') {
+  //   list_ujalan = data2.data.value.list_ujalan;
+  //   list_ticket = data2.data.value.list_ticket;
+  //   list_pv = data2.data.value.list_pv;
+  // }
   useCommonStore().loading_full = false;
 
-  return { trx_trps, list_ujalan, list_ticket, list_pv };
+  // return { trx_trps, list_ujalan, list_ticket, list_pv };
+  return { trx_trps };
 });
 
 const trx_trps = ref(dt_async.value.trx_trps || []);
-const list_ujalan = ref(dt_async.value.list_ujalan);
-const list_ticket = ref(dt_async.value.list_ticket);
-const list_pv = ref(dt_async.value.list_pv);
+// const list_ujalan = ref(dt_async.value.list_ujalan);
+// const list_ticket = ref(dt_async.value.list_ticket);
+// const list_pv = ref(dt_async.value.list_pv);
+const list_ujalan = ref([]);
+const list_ticket = ref([]);
+const list_pv = ref([]);
 
-const fnLoadDBData = async () => {
+const fnLoadDBData = async (jenis) => {
   useCommonStore().loading_full = true;
 
   const { data, error, status } = await useMyFetch("/trx_load_for_trp", {
@@ -280,7 +288,7 @@ const fnLoadDBData = async () => {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
-    params: params,
+    params: {jenis},
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -297,7 +305,7 @@ const fnLoadDBData = async () => {
 
 const search = ref("");
 const sort = ref({
-  field: "created_at",
+  field: "tanggal",
   by: "desc"
 });
 const selected = ref(-1);

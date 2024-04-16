@@ -1,19 +1,26 @@
 
-echo %1
-set arg1= %1
-if "%1"=="kpn" (
-  xcopy /y .env-kpn-ksr .env
-) else if "%1"=="local" (
-  xcopy /y .env-local .env
-)
+@REM echo %1
+@REM set arg1= %1
+@REM if "%1"=="kpn" (
+@REM   xcopy /y .env-kpn-ksr .env
+@REM ) else if "%1"=="local" (
+@REM   xcopy /y .env-local .env
+@REM )
 
+xcopy /y .env-prod .env
+
+SET HOUR=%time:~0,2%
+SET dtStamp9=%date:~-4%%date:~4,2%%date:~7,2%_0%time:~1,1%%time:~3,2%%time:~6,2% 
+SET dtStamp24=%date:~-4%%date:~4,2%%date:~7,2%_%time:~0,2%%time:~3,2%%time:~6,2%
+
+if "%HOUR:~0,1%" == " " (SET dtStamp=%dtStamp9%) else (SET dtStamp=%dtStamp24%)
 
 call npm run generate
 xcopy /s /y .\dist\* ..\logistik\
 cd ..
 cd logistik
 git add .
-git commit -m "update"
+git commit -m "update%dtStamp%"
 git push origin main
 pause
 

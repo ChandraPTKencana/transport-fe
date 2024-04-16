@@ -25,7 +25,7 @@
 
               <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Jenis</label>
-                <select v-model="trx_trp.jenis" @change="changeJenis()">
+                <select v-model="trx_trp.jenis" @change="changeJenis($event)">
                   <option value="TBS">TBS</option>
                   <option value="TBSK">TBSK</option>
                   <option value="CPO">CPO</option>
@@ -395,7 +395,7 @@ const trx_trp = ref({...trx_trp_temp});
 const token = useCookie('token');
 const field_errors = ref({})
 
-const changeJenis=()=>{
+const changeJenis=($e)=>{
   trx_trp.value.ticket_a_no = "";
   
   trx_trp.value.ticket_b_id = "";
@@ -407,6 +407,7 @@ const changeJenis=()=>{
   trx_trp.value.ticket_b_supir = "-";
   trx_trp.value.ticket_b_no_pol = "-";
   trx_trp.value.ticket_b_no = "";
+  props.fnLoadDBData($e.target.value);
 }
 const { display } = useAlertStore();
 
@@ -552,17 +553,24 @@ const list_tipe = computed(()=>{
 const list_a_ticket = computed(()=>{
   let jenis = [];
   if(trx_trp.value.jenis == "CPO"){
-    jenis=["CPO"];
+    jenis=["cpo"];
   }else if(trx_trp.value.jenis == "PK"){
-    jenis=["KERNEL"];
+    jenis=["kernel"];
   }else{
-    jenis=["MTBS"];
+    jenis=["mtbs"];
   }
-  return props.list_ticket.filter((x)=>jenis.indexOf(x.ProductName)>-1);
+  return props.list_ticket.filter((x)=>jenis.indexOf(x.ProductName.toLowerCase())>-1);
 })
 
 const list_b_ticket = computed(()=>{
-  return props.list_ticket.filter((x)=>["RTBS"].indexOf(x.ProductName)>-1);
+  let jenis = [];
+  if(trx_trp.value.jenis == "TBS"){
+    jenis=["rtbs"];
+  }else if(trx_trp.value.jenis == "TBSK"){
+    jenis=["tbs"];
+  }
+  return props.list_ticket.filter((x)=>jenis.indexOf(x.ProductName.toLowerCase())>-1);
+  // return props.list_ticket.filter((x)=>["RTBS"].indexOf(x.ProductName)>-1);
 })
 
 const row = ref(-1);
@@ -608,6 +616,8 @@ const callData = async () => {
 
   trx_trp.value = data.value.data;
   trx_trp_loaded = {...data.value.data};
+
+  props.fnLoadDBData(trx_trp.value.jenis);
 }
 
 
@@ -619,8 +629,6 @@ watch(() => props.show, (newVal, oldVal) => {
     field_errors.value = {};
     if(props.id!=0)
     callData();
-
-    props.fnLoadDBData();
   }
 }, {
   immediate: true
