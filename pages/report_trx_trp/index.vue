@@ -7,6 +7,10 @@
           @click="printPreview()">
           <IconsPrinterEye />
         </button>
+        <button type="button" name="button" class="m-1 text-2xl "
+          @click="downloadExcel()">
+          <IconsTable2Column />
+        </button>
       </div>
 
       <form action="#" class="w-full flex p-1">
@@ -197,7 +201,7 @@ definePageMeta({
 
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
-params.sort ="created_at:desc";
+params.sort ="tanggal:desc";
 
 const field_errors = ref({})
 
@@ -264,7 +268,7 @@ const list_pv = ref(dt_async.value.list_pv);
 
 const search = ref("");
 const sort = ref({
-  field: "created_at",
+  field: "tanggal",
   by: "desc"
 });
 const selected = ref(-1);
@@ -456,6 +460,27 @@ const printPreview = async()=>{
   }
   pdfContent.value = data.value;
   prtView.value = true;
+}
+
+const downloadExcel = async()=>{  
+  inject_params();
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/trx_trps_download_excel", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json'
+    },
+    params: params,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  downloadFile(data.value);
 }
 
 const download = ()=>{
