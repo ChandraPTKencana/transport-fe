@@ -2,8 +2,9 @@
   <div class="w-full h-full flex flex-col">
     <Header :title="'List Transaction'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
-      <div class="w-full flex">
-        <button type="button" name="button" class="m-1 text-2xl "
+      <div class="w-full flex justify-between">
+        <div class="grow flex">
+          <button type="button" name="button" class="m-1 text-2xl "
           @click="form_add()">
           <IconsPlus />
         </button>
@@ -23,6 +24,12 @@
           @click="printPreview()">
           <IconsPrinterEye />
         </button>
+        </div>
+        <div class="flex">
+          <div class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
+            <span class="text-xs">Mode</span> : <span class="font-bold" :class="online_status?'text-green-600' : 'text-red-600'">{{ online_status ? "ONLINE" : "OFFLINE" }} </span>
+          </div>
+        </div>
       </div>
 
       <form action="#" class="w-full flex p-1">
@@ -278,7 +285,7 @@ const trx_trps = ref(dt_async.value.trx_trps || []);
 const list_ujalan = ref([]);
 const list_ticket = ref([]);
 const list_pv = ref([]);
-
+const online_status=ref(false);
 const fnLoadDBData = async (jenis) => {
   useCommonStore().loading_full = true;
 
@@ -288,7 +295,7 @@ const fnLoadDBData = async (jenis) => {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
-    params: {jenis},
+    params: {jenis,"online_status":online_status.value},
     retry: 0,
   });
   useCommonStore().loading_full = false;
