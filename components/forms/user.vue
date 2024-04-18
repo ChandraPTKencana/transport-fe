@@ -26,6 +26,7 @@
                   <option value="PabrikTransport">Pabrik Transport</option>
                   <option value="Logistic">Logisitic</option>
                   <option value="Finance">Finance</option>
+                  <option value="Marketing">Marketing</option>
                   <option value="MIS">MIS</option>
                   <option value="SuperAdmin">SuperAdmin</option>
                 </select>
