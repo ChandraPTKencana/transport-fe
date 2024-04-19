@@ -165,7 +165,7 @@
         </div>
         <iframe ref="iframe" width='100%' height='100%' :src='pdfContent.dataBase64'></iframe>
         <div
-          style="position: absolute; top: 12px; right: 98px; background-color: rgba(255,255,255,0); width: 37px; height: 36px; z-index:1; cursor: pointer;"
+          style="position: absolute; top: 12px; right: 88px; background-color: rgba(255,255,255,0); width: 37px; height: 36px; z-index:1; cursor: pointer;"
           @click="download()">
         </div>
       </div>

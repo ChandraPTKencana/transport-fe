@@ -54,80 +54,197 @@
               </div>
             </div>
 
-            <div class="w-full flex grow p-1 overflow-auto">
-              <div role="sticky" ref="loadRef">
-                <table class="tacky w-full" style="white-space:normal;">
-                  <thead >
-                    <tr class="sticky top-0 !z-[2]">
-                      <th v-if="!disabled" class="min-w-[50px] !w-[50px] max-w-[50px] ">
-                        <button type="button" name="button" class="bg-yellow-600" @click="insertDefault()">
-                          Default In
-                        </button>
-                      </th>
-                      <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
-                      <th>Desc</th>
-                      <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Harga @</th>
-                      <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Qty</th>
-                      <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Total</th>
-                    </tr>
-                  </thead>
-                  <tbody ref="to_move">
-                    <template v-for="(detail, index) in details" :key="index">
-                      <!-- <tr v-if="detail.p_status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)"> -->
-                      <tr v-if="detail.p_status!='Remove'"  :data-index="index">
-                        <td v-if="!disabled" class="tools cell">
-                          <div class="w-full h-full flex items-center justify-center">
-                            <button  type="button" name="button"
-                              @click="showAction($event, index)">
-                              <IconsTools />
-                            </button>
-                          </div>
-                        </td>
-                        <td>{{ index + 1 }}.</td>
-                        <td v-if="!disabled" class="cell">
-                          <div class="w-full h-full flex items-center justify-center">
-                            <textarea :disabled="disabled" class="p-1 w-full" v-model="detail.xdesc" cols="7" rows="2"></textarea>
-                          </div>
-                        </td>
-                        <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                          <div class="w-full h-full flex items-center justify-center">
-                            <InputPointFormat
-                            :key="index" 
-                            class="w-full h-full p-1" 
-                            type="text" 
-                            :value="detail.harga || 0" 
-                            @input="detail.harga = $event"
-                            :show="show"/>
-                          </div>
-                        </td>
-                        <td class="cell" :class="disabled ? 'unselectable' : ''">
-                          <div class="w-full h-full flex items-center justify-center">
-                            <InputPointFormat
-                            :key="index" 
-                            class="w-full h-full p-1" 
-                            type="text" 
-                            :value="detail.qty || 0" 
-                            @input="detail.qty = $event"
-                            :show="show"/>
-                          </div>
-                        </td>
-                        <td class="cell">
-                          <div class="w-full h-full flex items-center justify-center">                       
-                            {{ pointFormat(detail.qty * detail.harga || 0) }}   
-                          </div>
+            <div class="w-full flex grow p-1 overflow-auto 2xl:overflow-hidden justify-between flex-wrap">
+              <div class="p-0 2xl:pr-1 2xl:w-1/2 2xl:h-full  2xl:overflow-auto">
+                <div class="w-full" role="sticky">
+                  <table class="tacky w-full" style="white-space:normal;">
+                    <thead >
+                      <tr class="sticky -top-1 !z-[2]">
+                        <td colspan="6" class="!bg-slate-800 text-white font-bold">
+                          Detail 1
                         </td>
                       </tr>
-                    </template>
-                    
-                    <tr v-if="!disabled">
-                      <td class="tools cell">
-                        <button type="button" name="button" @click="addList()">
-                          <IconsPlus />
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                      <tr class="sticky top-7 !z-[2]">
+                        <th v-if="!disabled" class="min-w-[50px] !w-[50px] max-w-[50px] ">
+                          <button type="button" name="button" class="bg-yellow-600" @click="insertDefault()">
+                            Default In
+                          </button>
+                        </th>
+                        <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
+                        <th>Desc</th>
+                        <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Harga @</th>
+                        <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Qty</th>
+                        <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Total <br> <span class="text-sm">({{pointFormat(total_harga) }})</span>  </th>
+                      </tr>
+                    </thead>
+                    <tbody ref="to_move">
+                      <template v-for="(detail, index) in details" :key="index">
+                        <!-- <tr v-if="detail.p_status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)"> -->
+                        <tr v-if="detail.p_status!='Remove'"  :data-index="index">
+                          <td v-if="!disabled" class="tools cell">
+                            <div class="w-full h-full flex items-center justify-center">
+                              <button  type="button" name="button"
+                                @click="showAction($event, index)">
+                                <IconsTools />
+                              </button>
+                            </div>
+                          </td>
+                          <td>{{ index + 1 }}.</td>
+                          <td v-if="!disabled" class="cell">
+                            <div class="w-full h-full flex items-center justify-center">
+                              <textarea :disabled="disabled" class="p-1 w-full" v-model="detail.xdesc" cols="7" rows="2"></textarea>
+                            </div>
+                          </td>
+                          <td class="cell bold" :class="disabled ? 'unselectable' : ''">
+                            <div class="w-full h-full flex items-center justify-center">
+                              <InputPointFormat
+                              :key="index" 
+                              class="w-full h-full p-1" 
+                              type="text" 
+                              :value="detail.harga || 0" 
+                              @input="detail.harga = $event"
+                              :show="show"/>
+                            </div>
+                          </td>
+                          <td class="cell" :class="disabled ? 'unselectable' : ''">
+                            <div class="w-full h-full flex items-center justify-center">
+                              <InputPointFormat
+                              :key="index" 
+                              class="w-full h-full p-1" 
+                              type="text" 
+                              :value="detail.qty || 0" 
+                              @input="detail.qty = $event"
+                              :show="show"/>
+                            </div>
+                          </td>
+                          <td class="cell">
+                            <div class="w-full h-full flex items-center justify-center">                       
+                              {{ pointFormat(detail.qty * detail.harga || 0) }}   
+                            </div>
+                          </td>
+                        </tr>
+                      </template>
+                      
+                      <tr v-if="!disabled">
+                        <td class="tools cell">
+                          <button type="button" name="button" @click="addList()">
+                            <IconsPlus />
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="px-0 py-2 2xl:pl-1 2xl:py-0 2xl:w-1/2 2xl:h-full  2xl:overflow-auto">
+                <div class="w-full" role="sticky">
+                  <table class="tacky w-full !table-auto" style="white-space:normal;">
+                    <thead >
+                      <tr class="sticky -top-1 !z-[2]">
+                        <td colspan="10" class="!bg-slate-800 text-white font-bold">
+                          Detail 2
+                        </td>
+                      </tr>
+                      <tr class="sticky top-7 !z-[2]">
+                        <th v-if="!disabled" class="min-w-[30px] !w-[30px] max-w-[30px] ">
+                          <!-- <button type="button" name="button" class="bg-yellow-600" @click="insertDefault2()">
+                            In
+                          </button> -->
+                        </th> 
+                        <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
+                        <th v-if="!disabled" class="min-w-[30px] !w-[30px] max-w-[30px] "></th>
+                        <th class="min-w-[40px] !w-[40px] max-w-[40px] ">Acc ID</th>
+                        <th class="!min-w-[100px] !w-[100px] !max-w-[100px] ">Acc Code</th>
+                        <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Acc Name</th>
+                        <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Desc</th>
+                        <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Amount</th>
+                        <th class="min-w-[40px] !w-[40px] max-w-[40px] ">Qty</th>
+                        <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Total <br> <span class="text-sm">({{pointFormat(total_harga2) }})</span></th>
+                      </tr>
+                    </thead>
+                    <tbody ref="to_move">
+                      <template v-for="(detail, index) in details2" :key="index">
+                        <!-- <tr v-if="detail.p_status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)"> -->
+                        <tr v-if="detail.p_status!='Remove'"  :data-index="index">
+                          <td v-if="!disabled" class="tools cell">
+                            <div class="w-full h-full flex items-center justify-center">
+                              <button  type="button" name="button"
+                                @click="showAction2($event, index)">
+                                <IconsTools />
+                              </button>
+                            </div>
+                          </td>
+                          <td>{{ index + 1 }}.</td>
+                          <td v-if="!disabled" class="cell">
+                            <div class="w-full h-full flex items-center justify-center">
+                              <button v-if="!detail.ac_account_id" type="button" name="button" @click="showSNSItem($event, index)">
+                                ...
+                              </button>
+                              <button type="button" v-else @click="deleteSNSItem($event, index)" :disabled="detail.confirm_by">
+                                <IconsTimes class=" font-bold text-2xl"/>
+                              </button>
+                            </div>
+                          </td>
+                          <td class="cell bold" :class="disabled ? 'unselectable' : ''">
+                            <div class="w-full h-full flex items-center justify-center">
+                              {{ detail.ac_account_id }}
+                            </div>
+                          </td>
+                          <td class="cell bold" :class="disabled ? 'unselectable' : ''">
+                            <div class="w-full h-full flex items-center justify-center">
+                              {{ detail.ac_account_code }}
+                            </div>
+                          </td>
+                          <td class="cell bold" :class="disabled ? 'unselectable' : ''">
+                            <div class="w-full h-full flex items-center justify-center">
+                              {{ detail.ac_account_name }}
+                            </div>
+                          </td>
+                          <td v-if="!disabled" class="cell">
+                            <div class="w-full h-full flex items-center justify-center">
+                              <textarea :disabled="disabled" class="p-1 w-full" v-model="detail.description" cols="7" rows="2"></textarea>
+                            </div>
+                          </td>
+                          <td class="cell bold" :class="disabled ? 'unselectable' : ''">
+                            <div class="w-full h-full flex items-center justify-center">
+                              <InputPointFormat
+                              :key="index" 
+                              class="w-full h-full p-1" 
+                              type="text" 
+                              :value="detail.amount || 0" 
+                              @input="detail.amount = $event"
+                              :show="show"/>
+                            </div>
+                          </td>
+                          <td class="cell" :class="disabled ? 'unselectable' : ''">
+                            <div class="w-full h-full flex items-center justify-center">
+                              <InputPointFormat
+                              :key="index" 
+                              class="w-full h-full p-1" 
+                              type="text" 
+                              :value="detail.qty || 0" 
+                              @input="detail.qty = $event"
+                              :show="show"/>
+                            </div>
+                          </td>
+                          <td class="cell">
+                            <div class="w-full h-full flex items-center justify-center">                       
+                              {{ pointFormat(detail.qty * detail.amount || 0) }}   
+                            </div>
+                          </td>
+                        </tr>
+                      </template>
+                      
+                      <tr v-if="!disabled">
+                        <td class="tools cell">
+                          <button type="button" name="button" @click="addList2()">
+                            <IconsPlus />
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
             
@@ -147,6 +264,8 @@
   </section>
 
   <ToolsPopup :show="tools_popup" :coor="coor" :fn="closeToolsPopup" :data="details" :data_index="row" @replyAct="replyAction($event)" />
+  <ToolsPopup :show="tools_popup2" :coor="coor2" :fn="closeToolsPopup2" :data="details2" :data_index="row2" @replyAct="replyAction2($event)" />
+  <SearchSelectAcAccs :show="show_item" :fnClose="closeSNSItem" :fnSelect="selectSNSItem"/>
 
 </template>
 
@@ -210,7 +329,8 @@ const ujalan_temp = {
     // status: "Y",
     jenis: "",
     harga:0,
-    details: []
+    details: [],
+    details2: [],
 };
 
 const ujalan = ref({...ujalan_temp});
@@ -242,7 +362,22 @@ const details_temp = ref([
   {xdesc:"Gaji Kernet", qty:1, harga:0},
   {xdesc:"U.Extrafooding", qty:1, harga:20000},
 ]);
+
+const details_temp2 = ref([
+  // {xdesc:"Timbangan", qty:1, harga:55000},
+  // {xdesc:"Retribusi TPR", qty:1, harga:23000},
+  // {xdesc:"Parkir & Nginap", qty:1, harga:10000},
+  // {xdesc:"Penitipan Alat (Dongkrak)", qty:1, harga:5000},
+  // {xdesc:"Ikas Danau", qty:1, harga:10000},
+  // {xdesc:"U.Bongkar + Ambil surat", qty:1, harga:35000},
+  // {xdesc:"Perbaikan Jalan Pujut", qty:1, harga:10000},
+  // {xdesc:"Gaji Supir", qty:1, harga:0},
+  // {xdesc:"Gaji Kernet", qty:1, harga:0},
+  // {xdesc:"U.Extrafooding", qty:1, harga:20000},
+]);
+
 const details = ref([]);
+const details2 = ref([]);
 
 
 // const details = ref<Record<any, any>>([]);
@@ -253,6 +388,18 @@ const detail = ref({
   xdesc:"",
   qty:1,
   harga:0,
+  // status:"",
+  p_status:""
+});
+const detail2 = ref({
+  ordinal:0,
+  id:-1,
+  ac_account_id:"",
+  ac_account_name:"",
+  ac_account_code:"",
+  description:"",
+  qty:1,
+  amount:0,
   // status:"",
   p_status:""
 });
@@ -267,66 +414,60 @@ const insertDefault = ()=>{
   
 }
 
-// const show_item = ref(false);
-
-// const closeSNSItem = () => {
-//   show_item.value = false;
-// };
-
-// const selectSNSItem = (item: any) => {
-//   details.value[row.value].item = item;
-//   details.value[row.value].item_id = item.id;
-//   exclude_lists.value.push(item.id);
-//   show_item.value = false;
-// }
-
-// const selectMultiSNSItem = (items: any) => {
-//   items.forEach(v => {
-//     let insert_dt ={
-//       ...detail.value,
-//       p_status: "Add",
-//     };
-//     insert_dt.item = v;
-//     insert_dt.item_id = v.id;
-//     exclude_lists.value.push(v.id);
-//     details.value.push(insert_dt);
-//   });
-//   show_item.value = false;
-// };
-
-// const item_multi_enabled = ref(false);
-
-// const showSNSItem=(e, index)=>{
-//   // console.log(details.value);
-//   row.value = index;
-//   // console.log(row.value,"row");
+const insertDefault2 = ()=>{
   
-//   item_multi_enabled.value = false;
-//   show_item.value = true;
-// };
+  details_temp2.value.forEach(e => {
+    if(details2.value.filter((x)=>x.ac_account_id == e.ac_account_id).length == 0){
+      details2.value.push({...e,ordinal:0,id:-1,p_status: "Add",})
+    }       
+  });
+  
+}
 
-// const showSNSMultiItem=(e, index)=>{
-//   item_multi_enabled.value = true;
-//   show_item.value = true;
-// };
+//Start Select Account Item
+const show_item = ref(false);
+
+const closeSNSItem = () => {
+  show_item.value = false;
+};
+
+const selectSNSItem = (item) => {
+  details2.value[row2.value].ac_account_id = item.ac_account_id;
+  details2.value[row2.value].ac_account_code = item.ac_account_code;
+  details2.value[row2.value].ac_account_name = item.ac_account_name;
+  // exclude_lists.value.push(item.ac_account_id);
+  show_item.value = false;
+}
+
+const showSNSItem=(e, index)=>{
+  // console.log(details.value);
+  row2.value = index;
+  // console.log(row.value,"row");
+  
+  show_item.value = true;
+};
 
 
-// const deleteItem=(e, index)=>{
-//   let item_id = details.value[index].item.id;
-//   let el_index = exclude_lists.value.indexOf(item_id);
-//   if (el_index > -1)
-//     exclude_lists.value.splice(el_index, 1);
 
-//   details.value[index].item_id = "";
-//   details.value[index].item = {
-//     id: "",
-//     name: "",
-//     unit: {
-//       id:"",
-//       name:""
-//     }
-//   };
-// };
+const deleteSNSItem=(e, index)=>{
+  // let item_id = details2.value[index].ac_account_id;
+  // let el_index = exclude_lists.value.indexOf(item_id);
+  // if (el_index > -1)
+  //   exclude_lists.value.splice(el_index, 1);
+
+  details2.value[index].ac_account_id = "";
+  details2.value[index].ac_account_code = "";
+  details2.value[index].ac_account_name = "";
+  // details2.value[index].item = {
+  //   id: "",
+  //   name: "",
+  //   unit: {
+  //     id:"",
+  //     name:""
+  //   }
+  // };
+};
+//End Select Account Item
 
 // let show_warehouse = ref(false);
 // let selected_warehouse = "";
@@ -369,6 +510,7 @@ const doSave = async () => {
   data_in.append("jenis", ujalan.value.jenis);
   data_in.append("harga", ujalan.value.harga);
   data_in.append("details", JSON.stringify(details.value));
+  data_in.append("details2", JSON.stringify(details2.value));
 
   // let data_in = {
   //   "xto": ujalan.value.xto,
@@ -449,19 +591,43 @@ const total_harga = computed(()=>{
   return temp;
 })
 
+const total_harga2 = computed(()=>{
+  let temp = 0;
+
+  details2.value.forEach(e => {
+    if(e.p_status!="Remove")
+    temp += e.qty * e.amount;
+  });
+  return temp;
+})
+
 
 const row = ref(-1);
+const row2 = ref(-1);
 const tools_popup = ref(false);
 const coor = ref({
   left:0,
   top:0
 });
 
+const tools_popup2 = ref(false);
+const coor2 = ref({
+  left:0,
+  top:0
+});
+
+
 
 const showAction=(e, index)=>{
   row.value = index;
   tools_popup.value = true;
   coor.value = { left: e.clientX, top: e.clientY };
+};
+
+const showAction2=(e, index)=>{
+  row2.value = index;
+  tools_popup2.value = true;
+  coor2.value = { left: e.clientX, top: e.clientY };
 };
 
 const addList=()=>{
@@ -474,8 +640,22 @@ const addList=()=>{
     // creator: { ...this.creator }
   });
 };
+
+const addList2=()=>{
+  details2.value.push({
+    ...detail2.value,
+    p_status: "Add",
+
+    // item: { ...this.item },
+    // unit: { ...this.unit },
+    // creator: { ...this.creator }
+  });
+};
 const closeToolsPopup=()=>{
   tools_popup.value = false;
+};
+const closeToolsPopup2=()=>{
+  tools_popup2.value = false;
 };
 const replyAction=(act = "")=>{
   if (act == "insert") {
@@ -508,6 +688,38 @@ const replyAction=(act = "")=>{
     details.value.splice(row.value + 1,0,{...old});
   }
   tools_popup.value = false;
+};
+const replyAction2=(act = "")=>{
+  if (act == "insert") {
+    details2.value.splice(row2.value, 0, {
+      ...detail2.value,
+      p_status: "Add",
+
+      // item: { ...this.item },
+      // unit: { ...this.unit },
+      // creator: { ...this.creator }
+    });
+  } else if (act == "delete") {
+    // let item_id = details.value[row.value].key;
+    // let el_index = exclude_lists.value.indexOf(item_id);
+    // if (el_index > -1)
+    //   exclude_lists.value.splice(el_index, 1);
+
+    if (details2.value[row2.value].p_status == "Edit")
+      details2.value[row2.value].p_status = "Remove";
+    else
+      details2.value.splice(row2.value, 1);
+    
+  } else if(act=="move_top"){
+    let old = details2.value[row2.value];
+    details2.value.splice(row2.value,1);
+    details2.value.splice(row2.value - 1,0,{...old});
+  } else if(act=="move_bottom"){
+    let old = details2.value[row2.value];
+    details2.value.splice(row2.value,1);
+    details2.value.splice(row2.value + 1,0,{...old});
+  }
+  tools_popup2.value = false;
 };
 
 const disabled = computed(()=>{
@@ -598,6 +810,12 @@ const callData = async () => {
     x["key"] = x["ordinal"];
     return x;
   });
+
+  details2.value = data.value.data.details2.map((x)=>{
+    x["p_status"]= p_status;
+    x["key"] = x["ordinal"];
+    return x;
+  });
   
 }
 
@@ -641,10 +859,14 @@ const callData = async () => {
 //   }
 // }
 
+
+
+
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
     ujalan.value = {...ujalan_temp};
     details.value = [];
+    details2.value = [];
 
     if(props.id!=0)
     callData();
