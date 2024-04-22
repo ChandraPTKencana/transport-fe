@@ -1,5 +1,6 @@
 // const route = useRoute();
 // const router = useRouter();
+const role = useCookie('role');
 export const useUtils = () => {
     const sayHello = () => {
         // console.log(route)
@@ -46,9 +47,14 @@ export const useUtils = () => {
 
     };
 
+    const checkRole = (list:any)=>{
+        return (list).includes(role.value);
+    };
+
     return {
         sayHello,
         pointFormat,
-        countClickListFn
+        countClickListFn,
+        checkRole
     }
 }

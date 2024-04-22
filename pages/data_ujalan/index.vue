@@ -3,11 +3,11 @@
     <Header :title="'List Ujalan'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
-        <button type="button" name="button" class="m-1 text-2xl "
+        <button v-if="!useUtils().checkRole(['PabrikTransport'])" type="button" name="button" class="m-1 text-2xl "
           @click="form_copy()">
           <IconsCopy />
         </button>
-        <button type="button" name="button" class="m-1 text-2xl "
+        <button v-if="!useUtils().checkRole(['PabrikTransport'])" type="button" name="button" class="m-1 text-2xl "
           @click="form_add()">
           <IconsPlus />
         </button>
@@ -16,7 +16,7 @@
           <IconsEdit v-if="selected==-1 || ujalans[selected].ref_id == null && ujalans[selected].confirmed_by == null"/>
           <IconsEyes v-else />
         </button>
-        <button type="button" name="button" class="m-1 text-2xl "
+        <button v-if="!useUtils().checkRole(['PabrikTransport'])" type="button" name="button" class="m-1 text-2xl "
           @click="remove()">
           <IconsDelete />
         </button>
@@ -68,6 +68,7 @@
                 <!-- <th>No.</th> -->
                 <!-- <th>Updated At</th> -->
                 <th>App 1</th>
+                <th>App 2</th>
                 <th>ID</th>
                 <th>To</th>
                 <th>Tipe</th>
@@ -85,6 +86,12 @@
                 <td>
                   <div class="flex items-center justify-center">
                     <IconsLine v-if="!ujalan.val"/>
+                    <IconsCheck v-else/>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex items-center justify-center">
+                    <IconsLine v-if="!ujalan.val1"/>
                     <IconsCheck v-else/>
                   </div>
                 </td>
@@ -128,7 +135,7 @@ definePageMeta({
     function (to, from) {
       // if (!useAuthStore().checkScopes(['ap-ujalan-view']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","Logistic"]))
+      if (!useAuthStore().checkRole(["SuperAdmin","Logistic",'PabrikTransport']))
       return navigateTo('/');
 
     },

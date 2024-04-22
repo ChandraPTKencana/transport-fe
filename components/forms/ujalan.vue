@@ -10,13 +10,13 @@
 
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">To</label>
-                <input v-model="ujalan.xto">
+                <input v-model="ujalan.xto" :disabled="role=='PabrikTransport' || disabled">
                 <p class="text-red-500">{{ field_errors.xto }}</p>
               </div>
               
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Tipe</label>
-                <textarea v-model="ujalan.tipe"></textarea>
+                <textarea v-model="ujalan.tipe" :disabled="role=='PabrikTransport' || disabled"></textarea>
                 <p class="text-red-500">{{ field_errors.tipe }}</p>
               </div>
 
@@ -31,7 +31,7 @@
 
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Jenis</label>
-                <select v-model="ujalan.jenis">
+                <select v-model="ujalan.jenis" :disabled="role=='PabrikTransport' || disabled">
                   <option value="PK">PK</option>
                   <option value="CPO">CPO</option>
                   <option value="TBS">TBS</option>
@@ -55,17 +55,17 @@
             </div>
 
             <div class="w-full flex grow p-1 overflow-auto 2xl:overflow-hidden justify-between flex-wrap">
-              <div class="p-0 2xl:pr-1 2xl:w-1/2 2xl:h-full  2xl:overflow-auto">
+              <div class="w-full p-0 2xl:pr-1 2xl:w-1/2 2xl:h-full  2xl:overflow-auto">
                 <div class="w-full" role="sticky">
                   <table class="tacky w-full" style="white-space:normal;">
                     <thead >
                       <tr class="sticky -top-1 !z-[2]">
-                        <td colspan="6" class="!bg-slate-800 text-white font-bold">
-                          Detail 1
+                        <td :colspan="role!='PabrikTransport' && !disabled ? 6 : 5" class="!bg-slate-800 text-white font-bold">
+                          Detail Uang Jalan
                         </td>
                       </tr>
                       <tr class="sticky top-7 !z-[2]">
-                        <th v-if="!disabled" class="min-w-[50px] !w-[50px] max-w-[50px] ">
+                        <th v-if="role!='PabrikTransport' && !disabled" class="min-w-[50px] !w-[50px] max-w-[50px] ">
                           <button type="button" name="button" class="bg-yellow-600" @click="insertDefault()">
                             Default In
                           </button>
@@ -81,7 +81,7 @@
                       <template v-for="(detail, index) in details" :key="index">
                         <!-- <tr v-if="detail.p_status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)"> -->
                         <tr v-if="detail.p_status!='Remove'"  :data-index="index">
-                          <td v-if="!disabled" class="tools cell">
+                          <td v-if="role!='PabrikTransport' && !disabled" class="tools cell">
                             <div class="w-full h-full flex items-center justify-center">
                               <button  type="button" name="button"
                                 @click="showAction($event, index)">
@@ -90,12 +90,12 @@
                             </div>
                           </td>
                           <td>{{ index + 1 }}.</td>
-                          <td v-if="!disabled" class="cell">
+                          <td class="cell">
                             <div class="w-full h-full flex items-center justify-center">
-                              <textarea :disabled="disabled" class="p-1 w-full" v-model="detail.xdesc" cols="7" rows="2"></textarea>
+                              <textarea :disabled="role=='PabrikTransport' || disabled" class="p-1 w-full" v-model="detail.xdesc" cols="7" rows="2"></textarea>
                             </div>
                           </td>
-                          <td class="cell bold" :class="disabled ? 'unselectable' : ''">
+                          <td class="cell bold" :class="role=='PabrikTransport' || disabled ? 'unselectable' : ''">
                             <div class="w-full h-full flex items-center justify-center">
                               <InputPointFormat
                               :key="index" 
@@ -106,7 +106,7 @@
                               :show="show"/>
                             </div>
                           </td>
-                          <td class="cell" :class="disabled ? 'unselectable' : ''">
+                          <td class="cell" :class="role=='PabrikTransport' || disabled ? 'unselectable' : ''">
                             <div class="w-full h-full flex items-center justify-center">
                               <InputPointFormat
                               :key="index" 
@@ -118,14 +118,14 @@
                             </div>
                           </td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center">                       
+                            <div class="w-full h-full flex items-center justify-center unselectable">                       
                               {{ pointFormat(detail.qty * detail.harga || 0) }}   
                             </div>
                           </td>
                         </tr>
                       </template>
                       
-                      <tr v-if="!disabled">
+                      <tr v-if="role!='PabrikTransport' && !disabled">
                         <td class="tools cell">
                           <button type="button" name="button" @click="addList()">
                             <IconsPlus />
@@ -136,13 +136,13 @@
                   </table>
                 </div>
               </div>
-              <div class="px-0 py-2 2xl:pl-1 2xl:py-0 2xl:w-1/2 2xl:h-full  2xl:overflow-auto">
+              <div class="w-full px-0 py-2 2xl:pl-1 2xl:py-0 2xl:w-1/2 2xl:h-full  2xl:overflow-auto">
                 <div class="w-full" role="sticky">
                   <table class="tacky w-full !table-auto" style="white-space:normal;">
                     <thead >
                       <tr class="sticky -top-1 !z-[2]">
-                        <td colspan="10" class="!bg-slate-800 text-white font-bold">
-                          Detail 2
+                        <td :colspan="!disabled  ? 10 : 8" class="!bg-slate-800 text-white font-bold">
+                          Detail PVR
                         </td>
                       </tr>
                       <tr class="sticky top-7 !z-[2]">
@@ -200,7 +200,7 @@
                               {{ detail.ac_account_name }}
                             </div>
                           </td>
-                          <td v-if="!disabled" class="cell">
+                          <td class="cell">
                             <div class="w-full h-full flex items-center justify-center">
                               <textarea :disabled="disabled" class="p-1 w-full" v-model="detail.description" cols="7" rows="2"></textarea>
                             </div>
@@ -228,7 +228,7 @@
                             </div>
                           </td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center">                       
+                            <div class="w-full h-full flex items-center justify-center unselectable">                       
                               {{ pointFormat(detail.qty * detail.amount || 0) }}   
                             </div>
                           </td>
@@ -722,10 +722,11 @@ const replyAction2=(act = "")=>{
   tools_popup2.value = false;
 };
 
+const role = useCookie('role');
 const disabled = computed(()=>{
-  return false;
-  // return ujalan.value.confirmed_by || ujalan.value.ref_id != null;
+  return (ujalan.value.val && ujalan.value.val1) || (role.value == "Logistic" && ujalan.value.val) || (role.value == "PabrikTransport" && ujalan.value.val1);
 });
+
 
 
 // const handleDragStart=(event,key)=>{

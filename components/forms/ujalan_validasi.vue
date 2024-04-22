@@ -36,31 +36,37 @@
               </div>
             </div>
 
-            <div class="w-full flex grow p-1 overflow-auto">
-              <div role="sticky" ref="loadRef">
-                <table class="tacky w-full" style="white-space:normal;">
-                  <thead >
-                    <tr class="sticky top-0 !z-[2]">
-                      <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
-                      <th>Desc</th>
-                      <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Harga @</th>
-                      <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Qty</th>
-                      <!-- <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Status</th> -->
-                    </tr>
-                  </thead>
-                  <tbody ref="to_move">
-                    <template v-for="(detail, index) in details" :key="index">
-                      <tr >
-                        <td>{{ index + 1 }}.</td>
-                        <td class="cell">
-                          <div class="w-full h-full flex items-center justify-center">
-                            {{ detail.xdesc }}
-                          </div>
+            <div class="w-full flex grow p-1 overflow-auto 2xl:overflow-hidden justify-between flex-wrap">
+              <div class="w-full p-0 2xl:pr-1 2xl:w-1/2 2xl:h-full  2xl:overflow-auto">
+                <div class="w-full" role="sticky">
+                  <table class="tacky w-full" style="white-space:normal;">
+                    <thead >
+                      <tr class="sticky top-0 !z-[2]">
+                        <td colspan="5" class="!bg-slate-800 text-white font-bold">
+                          Detail Uang Jalan
                         </td>
-                        <td class="cell bold">
+                      </tr>
+                      <tr class="sticky top-8 !z-[2]">
+                        <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
+                        <th>Desc</th>
+                        <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Harga @</th>
+                        <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Qty</th>
+                        <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Total <br> <span class="text-sm">({{pointFormat(ujalan.harga || 0) }})</span>  </th>
+                      </tr>
+                    </thead>
+                    <tbody ref="to_move">
+                      <template v-for="(detail, index) in details" :key="index">
+                        <!-- <tr v-if="detail.p_status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)"> -->
+                        <tr v-if="detail.p_status!='Remove'"  :data-index="index">
+                          <td>{{ index + 1 }}.</td>
+                          <td class="cell">
+                            <div class="w-full h-full flex items-center justify-center">
+                              {{ detail.xdesc }}
+                            </div>
+                          </td>
+                          <td class="cell bold">
                           <div class="w-full h-full flex items-center justify-center">
                             {{ pointFormat(detail.harga||0) }}
-
                           </div>
                         </td>
                         <td class="cell">
@@ -68,10 +74,81 @@
                             {{ pointFormat(detail.qty||0) }}
                           </div>
                         </td>
+                          <td class="cell">
+                            <div class="w-full h-full flex items-center justify-center">                       
+                              {{ pointFormat(detail.qty * detail.harga || 0) }}   
+                            </div>
+                          </td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="w-full px-0 py-2 2xl:pl-1 2xl:py-0 2xl:w-1/2 2xl:h-full  2xl:overflow-auto">
+                <div class="w-full" role="sticky">
+                  <table class="tacky w-full !table-auto" style="white-space:normal;">
+                    <thead >
+                      <tr class="sticky top-0 !z-[2]">
+                        <td colspan="8" class="!bg-slate-800 text-white font-bold">
+                          Detail PVR
+                        </td>
                       </tr>
-                    </template>
-                  </tbody>
-                </table>
+                      <tr class="sticky top-8 !z-[2]">
+                        <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
+                        <th class="min-w-[40px] !w-[40px] max-w-[40px] ">Acc ID</th>
+                        <th class="!min-w-[100px] !w-[100px] !max-w-[100px] ">Acc Code</th>
+                        <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Acc Name</th>
+                        <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Desc</th>
+                        <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Amount</th>
+                        <th class="min-w-[40px] !w-[40px] max-w-[40px] ">Qty</th>
+                        <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Total <br> <span class="text-sm">({{pointFormat(total_harga2) }})</span></th>
+                      </tr>
+                    </thead>
+                    <tbody ref="to_move">
+                      <template v-for="(detail, index) in details2" :key="index">
+                        <!-- <tr v-if="detail.p_status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)"> -->
+                        <tr v-if="detail.p_status!='Remove'"  :data-index="index">
+                          <td>{{ index + 1 }}.</td>
+                          
+                          <td class="cell bold" :class="disabled ? 'unselectable' : ''">
+                            <div class="w-full h-full flex items-center justify-center">
+                              {{ detail.ac_account_id }}
+                            </div>
+                          </td>
+                          <td class="cell bold" :class="disabled ? 'unselectable' : ''">
+                            <div class="w-full h-full flex items-center justify-center">
+                              {{ detail.ac_account_code }}
+                            </div>
+                          </td>
+                          <td class="cell bold" :class="disabled ? 'unselectable' : ''">
+                            <div class="w-full h-full flex items-center justify-center">
+                              {{ detail.ac_account_name }}
+                            </div>
+                          </td>
+                          <td v-if="!disabled" class="cell">
+                            <div class="w-full h-full flex items-center justify-center">
+                              {{ detail.description }}
+                            </div>
+                          </td>
+                          <td class="cell bold" :class="disabled ? 'unselectable' : ''">
+                            <div class="w-full h-full flex items-center justify-center">
+                              {{ pointFormat(detail.amount||0) }}
+                            </div>
+                          </td>
+                          <td class="cell" :class="disabled ? 'unselectable' : ''">
+                            {{ pointFormat(detail.qty||0) }}
+                          </td>
+                          <td class="cell">
+                            <div class="w-full h-full flex items-center justify-center">                       
+                              {{ pointFormat(detail.qty * detail.amount || 0) }}   
+                            </div>
+                          </td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
             
@@ -79,6 +156,20 @@
           </div>
           
           <div class="w-full flex items-center justify-end">
+            <div class="w-full flex flex-wrap p-3 items-center">
+              <div>
+                Di Validasi oleh : 
+              </div>
+              <div v-if="ujalan.val || ujalan.val1" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
+                <div v-if="ujalan.val">
+                  App 1 : {{ ujalan.val_by.username}} ( {{ ujalan.val_at ? $moment(ujalan.val_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
+                <div v-if="ujalan.val1">
+                  App 2 : {{ ujalan.val1_by.username}} ( {{ ujalan.val1_at ? $moment(ujalan.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
+              </div>
+            </div>
+
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
@@ -137,7 +228,13 @@ const ujalan_temp = {
     // status: "Y",
     jenis: "",
     harga:0,
-    details: []
+    details: [],
+    val:0,
+    val_by:{ username:"" },
+    val_at:"",
+    val1:0,
+    val1_by:{ username:"" },
+    val1_at:"",
 };
 
 const ujalan = ref({...ujalan_temp});
@@ -146,16 +243,7 @@ const token = useCookie('token');
 const field_errors = ref({});
 
 const details = ref([]);
-
-const detail = ref({
-  ordinal:0,
-  id:-1,
-  xdesc:"",
-  qty:1,
-  harga:0,
-  // status:"",
-  p_status:""
-});
+const details2 = ref([]);
 
 const doSave = async () => {
   useCommonStore().loading_full = true;
@@ -198,6 +286,11 @@ const doSave = async () => {
   ujalan.value.val_by = data.value.val_by;
   ujalan.value.val_at = data.value.val_at;
 
+  ujalan.value.val1 = data.value.val1;
+  ujalan.value.val1_user = data.value.val1_user;
+  ujalan.value.val1_by = data.value.val1_by;
+  ujalan.value.val1_at = data.value.val1_at;
+
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
   if(idx>=-1){
@@ -234,8 +327,23 @@ const callData = async () => {
 
   ujalan.value = data.value.data;
   details.value = data.value.data.details;
+  details2.value = data.value.data.details2;
 }
 
+const total_harga2 = computed(()=>{
+  let temp = 0;
+
+  details2.value.forEach(e => {
+    if(e.p_status!="Remove")
+    temp += e.qty * e.amount;
+  });
+  return temp;
+})
+
+const disabled = computed(()=>{
+  return false;
+  // return ujalan.value.confirmed_by || ujalan.value.ref_id != null;
+});
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){

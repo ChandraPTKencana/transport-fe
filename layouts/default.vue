@@ -18,7 +18,7 @@
                 Dashboard
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['SuperAdmin','Logistic'])"  :class="activeMenu == '/data_ujalan'?'active':''" >
+            <li v-if="checkRole(['SuperAdmin','Logistic','PabrikTransport'])"  :class="activeMenu == '/data_ujalan'?'active':''" >
               <nuxt-link to="/data_ujalan"  class="cursor-pointer" @click="goTo('/data_ujalan')">
                 <IconsMoney class="mr-1"/>
                 U.Jalan
