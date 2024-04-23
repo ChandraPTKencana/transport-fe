@@ -174,7 +174,7 @@
 
     <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
     <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
-    <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ujalan="list_ujalan" :list_ticket="list_ticket" :list_pv="list_pv"/>
+    <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ujalan="list_ujalan" :list_ticket="list_ticket" :list_pv="list_pv" :list_cost_center="list_cost_center"/>
     <FormsTrxTrpValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps"/>
   
     <div v-if="prtView" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
@@ -283,6 +283,7 @@ const trx_trps = ref(dt_async.value.trx_trps || []);
 // const list_ticket = ref(dt_async.value.list_ticket);
 // const list_pv = ref(dt_async.value.list_pv);
 const list_ujalan = ref([]);
+const list_cost_center = ref([]);
 const list_ticket = ref([]);
 const list_pv = ref([]);
 const online_status=ref(false);
@@ -306,6 +307,7 @@ const fnLoadDBData = async (jenis) => {
   }
 
   list_ujalan.value = data.value.list_ujalan;
+  list_cost_center.value = data.value.list_cost_center;
   list_ticket.value = data.value.list_ticket;
   list_pv.value = data.value.list_pv;
 }

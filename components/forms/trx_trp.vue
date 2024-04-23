@@ -79,6 +79,38 @@
               </div>
 
               <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
+
+                <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
+                  <label for="">Cost Center Code</label>
+                  <input list="cost_center"  v-model="trx_trp.cost_center_code" @blur="blurCostCenterCode($event)">
+                  <datalist id="cost_center">
+                    <option v-for="lcc in list_cost_center" :value="lcc.CostCenter">{{lcc.CostCenter +'-'+ lcc.Description}}</option>
+                  </datalist>
+                  <p class="text-red-500">{{ field_errors.cost_center_code }}</p>
+                </div>
+
+                <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
+                  <label for="">Cost Center Desc</label>
+                  <div class="card-border disabled">
+                    {{  trx_trp.cost_center_desc }}
+                  </div>
+                </div>
+
+                <div class="w-6/12 sm:w-8/12  flex flex-col flex-wrap p-1">
+                  <label for="">PVR Number</label>
+                  <div class="card-border disabled">
+                    {{  trx_trp.pvr_number }}
+                  </div>
+                </div>
+
+                <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
+                  <label for="">PVR Amount</label>
+                  <div class="card-border disabled">
+                    {{  trx_trp.pvr_amount }}
+                  </div>
+                </div>
+
+
                 <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
                   <label for="">PV</label>
                   <input type="text" list="pv"  v-model="trx_trp.pv_no"/>
@@ -100,7 +132,7 @@
                 </div>
   
                 <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">Total Dari PV</label>
+                  <label for="">PV Amount</label>
                   <div class="card-border disabled">
                     {{  pointFormat(trx_trp.pv_total) }}
                   </div>
@@ -351,6 +383,11 @@ const props = defineProps({
     required:true,
     default:[]
   },
+  list_cost_center:{
+    type:Array,
+    required:true,
+    default:[]
+  },
   
 })
 
@@ -388,12 +425,33 @@ const trx_trp_temp = {
     supir: "",
     kernet: "",
     no_pol: '',
+    cost_center_code:"",
+    cost_center_desc:"",
+    pvr_number:"",
+    pvr_amount:"",
 };
 let trx_trp_loaded = {...trx_trp_temp};
 const trx_trp = ref({...trx_trp_temp});
 
 const token = useCookie('token');
 const field_errors = ref({})
+
+const blurCostCenterCode=($e)=>{
+  let val = $e.target.value;
+  if(!val) {
+    trx_trp.value.cost_center_code='';
+    trx_trp.value.cost_center_desc="";
+    return;
+  }
+  let match = props.list_cost_center.filter(
+    (x)=>x.CostCenter == val
+  );
+
+  if(match.length==0){
+    trx_trp.value.cost_center_code='112';
+    trx_trp.value.cost_center_desc="Transport";
+  }
+}
 
 const changeJenis=($e)=>{
   trx_trp.value.ticket_a_no = "";
@@ -430,7 +488,7 @@ const doSave = async () => {
   data_in.append("jenis", trx_trp.value.jenis);
   data_in.append("id_uj", trx_trp.value.id_uj);
   data_in.append("xto", trx_trp.value.xto);
-
+  data_in.append("cost_center_code", trx_trp.value.cost_center_code);
   // data_in.append("amount", trx_trp.value.amount);
 
 
@@ -572,19 +630,6 @@ const list_b_ticket = computed(()=>{
   return props.list_ticket.filter((x)=>jenis.indexOf(x.ProductName.toLowerCase())>-1);
   // return props.list_ticket.filter((x)=>["RTBS"].indexOf(x.ProductName)>-1);
 })
-
-const row = ref(-1);
-const tools_popup = ref(false);
-const coor = ref({
-  left:0,
-  top:0
-});
-
-const showAction=(e, index)=>{
-  row.value = index;
-  tools_popup.value = true;
-  coor.value = { left: e.clientX, top: e.clientY };
-};
 
 const disabled = computed(()=>{
   return false;
@@ -749,6 +794,25 @@ watch(()=>trx_trp.value.pv_no, (newVal, oldVal) => {
     $total = trx_trp_loaded.pv_total;
 
     trx_trp.value.pv_total = $total;
+  }
+}, {
+  deep:true,
+  immediate: true
+});
+
+watch(()=>trx_trp.value.cost_center_code, (newVal, oldVal) => {
+  let $desc = "";
+  if (newVal=="" || newVal){
+    let dt = props.list_cost_center.filter(
+      (x)=>x.CostCenter == trx_trp.value.cost_center_code
+    );
+
+    if(dt.length  > 0) 
+    $desc = dt[0].Description;
+    // else if(trx_trp.value.cost_center_code == trx_trp_loaded.cost_center_code) 
+    // $desc = trx_trp_loaded.cost_center_desc;
+
+    trx_trp.value.cost_center_desc = $desc;
   }
 }, {
   deep:true,
