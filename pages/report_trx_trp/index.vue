@@ -11,6 +11,10 @@
           @click="downloadExcel()">
           <IconsTable2Column />
         </button>
+        <button type="button" name="button" class="m-1 text-2xl "
+          @click="cogs_show=true">
+          <IconsCog />
+        </button>
       </div>
 
       <form action="#" class="w-full flex p-1">
@@ -83,68 +87,109 @@
               <tr class="sticky top-0 !z-[2]">
                 <!-- <th>No.</th> -->
                 <!-- <th>Updated At</th> -->
-                <th>ID</th>
-                <th>Tanggal</th>
-                <th>To</th>
-                <th>Tipe</th>
-                <th>Jenis</th>
-                <th>Amount</th>
-                <th>PV No</th>
-                <th>PV Total</th>
+                <th v-if="checkCheckedField('Status')">Status</th>
+                <th v-if="checkCheckedField('App 1')">App 1</th>
+                <th v-if="checkCheckedField('App 2')">App 2</th>
+                <th v-if="checkCheckedField('ID')">ID</th>
+                <th v-if="checkCheckedField('U.Jalan Per')">U.Jalan Per</th>
+                <th v-if="checkCheckedField('No Pol')">No Pol</th>
+                <th v-if="checkCheckedField('Tujuan')">Tujuan</th>
+                <th v-if="checkCheckedField('Tipe')">Tipe</th>
+                <th v-if="checkCheckedField('Jenis')">Jenis</th>
+                <th v-if="checkCheckedField('Amount')">Amount</th>
+                <th v-if="checkCheckedField('Cost Center Code')">Cost Center Code</th>
+                <th v-if="checkCheckedField('Cost Center Desc')">Cost Center Desc</th>
+                <th v-if="checkCheckedField('PVR No')">PVR No</th>
+                <th v-if="checkCheckedField('PVR Total')">PVR Total</th>
+                <th v-if="checkCheckedField('PVR Completed')">PVR Completed</th>
+                <th v-if="checkCheckedField('PV No')">PV No</th>
+                <th v-if="checkCheckedField('PV Total')">PV Total</th>
 
-                <th>Ticket A No</th>
-                <th>Ticket A Bruto</th>
-                <th>Ticket A Tara</th>
-                <th>Ticket A Netto</th>
-                <th>Ticket A Supir</th>
-                <th>Ticket A No Pol</th>
+                <th v-if="checkCheckedField('Ticket A No')">Ticket A No</th>
+                <th v-if="checkCheckedField('Ticket A Bruto')">Ticket A Bruto</th>
+                <th v-if="checkCheckedField('Ticket A Tara')">Ticket A Tara</th>
+                <th v-if="checkCheckedField('Ticket A Netto')">Ticket A Netto</th>
+                <th v-if="checkCheckedField('Ticket A Supir')">Ticket A Supir</th>
+                <th v-if="checkCheckedField('Ticket A No Pol')">Ticket A No Pol</th>
+                <th v-if="checkCheckedField('Ticket A In At')">Ticket A In At</th>
+                <th v-if="checkCheckedField('Ticket A Out At')">Ticket A Out At</th>
 
-                <th>Ticket B No</th>
-                <th>Ticket B Bruto</th>
-                <th>Ticket B Tara</th>
-                <th>Ticket B Netto</th>
-                <th>Ticket B Supir</th>
-                <th>Ticket B No Pol</th>
+                <th v-if="checkCheckedField('Ticket B No')">Ticket B No</th>
+                <th v-if="checkCheckedField('Ticket B Bruto')">Ticket B Bruto</th>
+                <th v-if="checkCheckedField('Ticket B Tara')">Ticket B Tara</th>
+                <th v-if="checkCheckedField('Ticket B Netto')">Ticket B Netto</th>
+                <th v-if="checkCheckedField('Ticket B Supir')">Ticket B Supir</th>
+                <th v-if="checkCheckedField('Ticket B No Pol')">Ticket B No Pol</th>
+                <th v-if="checkCheckedField('Ticket B In At')">Ticket B In At</th>
+                <th v-if="checkCheckedField('Ticket B Out At')">Ticket B Out At</th>
 
-                <th>Supir</th>
-                <th>Kernet</th>
-                <th>No Pol</th>
-                <!-- <th>Created User</th> -->
-                <th>Created At</th>
-                <th>Updated At</th>
+                <th v-if="checkCheckedField('Supir')">Supir</th>
+                <th v-if="checkCheckedField('Kernet')">Kernet</th>
+                <!-- <th v-if="checkCheckedField('App 1')">Created User</th> -->
+                <th v-if="checkCheckedField('Created At')">Created At</th>
+                <th v-if="checkCheckedField('Updated At')">Updated At</th>
+              
               </tr>
             </thead>
             <tbody>
               <tr v-for="(trx_trp, index) in trx_trps" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
-                <td class="bold">{{ trx_trp.id }}</td>
-                <td>{{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-Y") : "" }}</td>
-                <td>{{ trx_trp.xto }}</td>
-                <td>{{ trx_trp.tipe }}</td>
-                <td>{{ trx_trp.jenis }}</td>
-                <td>{{ pointFormat(trx_trp.amount) }}</td>
-                <td>{{ trx_trp.pv_no }}</td>
-                <td>{{ pointFormat(trx_trp.pv_total) }}</td>
+                <td v-if="checkCheckedField('Status')">
+                  <div class="flex items-center justify-center">
+                    <div class="text-white text-xs px-2 py-1 rounded-lg" :class="checkStatus(trx_trp) ? 'bg-green-600' : 'bg-red-600' ">
+                      {{checkStatus(trx_trp) ? "Done" : "Not Done" }}
+                    </div>
+                  </div>
+                </td>
+                <td v-if="checkCheckedField('App 1')">
+                  <div class="flex items-center justify-center">
+                    <IconsLine v-if="!trx_trp.val"/>
+                    <IconsCheck v-else/>
+                  </div>
+                </td>
+                <td v-if="checkCheckedField('App 2')">
+                  <div class="flex items-center justify-center">
+                    <IconsLine v-if="!trx_trp.val1"/>
+                    <IconsCheck v-else/>
+                  </div>
+                </td>
+                <td v-if="checkCheckedField('ID')" class="bold">{{ trx_trp.id }}</td>
+                <td v-if="checkCheckedField('U.Jalan Per')">{{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-Y") : "" }}</td>
+                <td v-if="checkCheckedField('No Pol')">{{ trx_trp.no_pol }}</td>
+                <td v-if="checkCheckedField('Tujuan')">{{ trx_trp.xto }}</td>
+                <td v-if="checkCheckedField('Tipe')">{{ trx_trp.tipe }}</td>
+                <td v-if="checkCheckedField('Jenis')">{{ trx_trp.jenis }}</td>
+                <td v-if="checkCheckedField('Amount')">{{ pointFormat(trx_trp.amount) }}</td>
+                <td v-if="checkCheckedField('Cost Center Code')">{{ trx_trp.cost_center_code }}</td>
+                <td v-if="checkCheckedField('Cost Center Desc')">{{ trx_trp.cost_center_desc }}</td>
+                <td v-if="checkCheckedField('PVR No')">{{ trx_trp.pvr_no }}</td>
+                <td v-if="checkCheckedField('PVR Total')">{{ trx_trp.pv_amount }}</td>
+                <td v-if="checkCheckedField('PVR Completed')"><IconsLine v-if="!trx_trp.pvr_had_detail"/><IconsCheck v-else/></td>
+                <td v-if="checkCheckedField('PV No')">{{ trx_trp.pv_no }}</td>
+                <td v-if="checkCheckedField('PV Total')">{{ pointFormat(trx_trp.pv_total) }}</td>
 
-                <td>{{ trx_trp.ticket_a_no }}</td>
-                <td>{{ pointFormat(trx_trp.ticket_a_bruto) }}</td>
-                <td>{{ pointFormat(trx_trp.ticket_a_tara) }}</td>
-                <td>{{ pointFormat(trx_trp.ticket_a_netto) }}</td>
-                <td>{{ trx_trp.ticket_a_supir }}</td>
-                <td>{{ trx_trp.ticket_a_no_pol }}</td>
+                <td v-if="checkCheckedField('Ticket A No')">{{ trx_trp.ticket_a_no }}</td>
+                <td v-if="checkCheckedField('Ticket A Bruto')">{{ pointFormat(trx_trp.ticket_a_bruto) }}</td>
+                <td v-if="checkCheckedField('Ticket A Tara')">{{ pointFormat(trx_trp.ticket_a_tara) }}</td>
+                <td v-if="checkCheckedField('Ticket A Netto')">{{ pointFormat(trx_trp.ticket_a_netto) }}</td>
+                <td v-if="checkCheckedField('Ticket A Supir')">{{ trx_trp.ticket_a_supir }}</td>
+                <td v-if="checkCheckedField('Ticket A No Pol')">{{ trx_trp.ticket_a_no_pol }}</td>
+                <td v-if="checkCheckedField('Ticket A In At')">{{ trx_trp.ticket_a_in_at ? $moment(trx_trp.ticket_a_in_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
+                <td v-if="checkCheckedField('Ticket A Out At')">{{ trx_trp.ticket_a_out_at ? $moment(trx_trp.ticket_a_out_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
 
-                <td>{{ trx_trp.ticket_b_no }}</td>
-                <td>{{ pointFormat(trx_trp.ticket_b_bruto) }}</td>
-                <td>{{ pointFormat(trx_trp.ticket_b_tara) }}</td>
-                <td>{{ pointFormat(trx_trp.ticket_b_netto) }}</td>
-                <td>{{ trx_trp.ticket_b_supir }}</td>
-                <td>{{ trx_trp.ticket_b_no_pol }}</td>
+                <td v-if="checkCheckedField('Ticket B No')">{{ trx_trp.ticket_b_no }}</td>
+                <td v-if="checkCheckedField('Ticket B Bruto')">{{ pointFormat(trx_trp.ticket_b_bruto) }}</td>
+                <td v-if="checkCheckedField('Ticket B Tara')">{{ pointFormat(trx_trp.ticket_b_tara) }}</td>
+                <td v-if="checkCheckedField('Ticket B Netto')">{{ pointFormat(trx_trp.ticket_b_netto) }}</td>
+                <td v-if="checkCheckedField('Ticket B Supir')">{{ trx_trp.ticket_b_supir }}</td>
+                <td v-if="checkCheckedField('Ticket B No Pol')">{{ trx_trp.ticket_b_no_pol }}</td>
+                <td v-if="checkCheckedField('Ticket B In At')">{{ trx_trp.ticket_b_in_at ? $moment(trx_trp.ticket_b_in_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
+                <td v-if="checkCheckedField('Ticket B Out At')">{{ trx_trp.ticket_b_out_at ? $moment(trx_trp.ticket_b_out_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
 
-                <td>{{ trx_trp.supir }}</td>
-                <td>{{ trx_trp.kernet }}</td>
-                <td>{{ trx_trp.no_pol }}</td>
-                <td>{{ trx_trp.created_at ? $moment(trx_trp.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
-                <td>{{ trx_trp.updated_at ? $moment(trx_trp.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
+                <td v-if="checkCheckedField('Supir')">{{ trx_trp.supir }}</td>
+                <td v-if="checkCheckedField('Kernet')">{{ trx_trp.kernet }}</td>
+                <td v-if="checkCheckedField('Created At')">{{ trx_trp.created_at ? $moment(trx_trp.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
+                <td v-if="checkCheckedField('Updated At')">{{ trx_trp.updated_at ? $moment(trx_trp.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
               </tr>
             </tbody>
           </table>
@@ -153,8 +198,6 @@
     </div>
 
     <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
-    <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
-    <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ujalan="list_ujalan" :list_ticket="list_ticket" :list_pv="list_pv"/>
   
     <div v-if="prtView" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
       style="background-color: rgba(255,255,255,0.9);">
@@ -167,6 +210,44 @@
         <div
           style="position: absolute; top: 12px; right: 88px; background-color: rgba(255,255,255,0); width: 37px; height: 36px; z-index:1; cursor: pointer;"
           @click="download()">
+        </div>
+      </div>
+    </div>
+
+
+    <div v-if="cogs_show" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
+    style="background-color: rgba(255,255,255,0.9);">
+      <div class="relative" style="width:95%; height: 90%;">
+        <div class="absolute -top-7 right-0 bg-white"
+          style="position: absolute; padding:5px 10px; border: solid 1px #ccc; border-bottom: none; border-top-right-radius: 5px;  border-top-left-radius: 5px;">
+          <IconsTimes  style="color:black; cursor:pointer;" @click="cogs_show=false"/>
+        </div>
+        <div class="w-full h-full flex flex-col items-center justify-content-center bg-white">
+          <div class="w-full p-1">
+            <div class="w-full p-1 bg-gray-200">
+              <div class="w-full text-blue-600 font-bold grid-">
+                Set Show Column Field           
+              </div>            
+              <div class="w-full flex flex-wrap">
+                <div v-for="(fd,k) in fields_data" class="p-2 m-1 font-bold cursor-pointer" :class="fd.checked ? 'bg-green-600 text-white' : 'bg-gray-400 text-black'" @click="fd.checked=!fd.checked">
+                  {{ fd.name }}
+                </div>
+              </div>
+              <div class="w-full flex justify-end">
+                <button class="bg-white font-bold mr-2"  @click="toggleAllFields('select')">
+                  Select All
+                </button>
+                <button class="bg-white font-bold" @click="toggleAllFields('invert')">
+                  Invert All
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div
+          style="position: absolute; top: 12px; right: 98px; background-color: rgba(255,255,255,0); width: 37px; height: 36px; z-index:1; cursor: pointer;"
+          @click="cogs_show=false">
         </div>
       </div>
     </div>
@@ -214,10 +295,6 @@ const date = ref({
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
   let trx_trps = [];
-  let list_ujalan = [];
-  let list_tipe = [];
-  let list_ticket = [];
-  let list_pv = [];
 
   const [data1, data2] = await Promise.all([
     useMyFetch("/trx_trps", {
@@ -228,14 +305,14 @@ const { data: dt_async } = await useAsyncData(async () => {
       },
       retry: 0,
     }),
-    useMyFetch("/trx_load_for_trp", {
-      method: 'get',
-      headers: {
-        'Authorization': `Bearer ${token.value}`,
-        'Accept': 'application/json'
-      },
-      retry: 0,
-    }),
+    // useMyFetch("/trx_load_for_trp", {
+    //   method: 'get',
+    //   headers: {
+    //     'Authorization': `Bearer ${token.value}`,
+    //     'Accept': 'application/json'
+    //   },
+    //   retry: 0,
+    // }),
   ]);
 
   
@@ -246,24 +323,15 @@ const { data: dt_async } = await useAsyncData(async () => {
 
   if (data1.status.value === 'error') {
     useErrorStore().trigger(data1.error);
-    return { trx_trps, list_ujalan, list_tipe, list_ticket, list_pv };
+    return { trx_trps};
   }
 
-  if (data2.status.value !== 'error') {
-    list_ujalan = data2.data.value.list_ujalan;
-    list_tipe = data2.data.value.list_tipe;
-    list_ticket = data2.data.value.list_ticket;
-    list_pv = data2.data.value.list_pv;
-  }
   useCommonStore().loading_full = false;
 
-  return { trx_trps, list_ujalan, list_tipe, list_ticket, list_pv };
+  return { trx_trps };
 });
 
 const trx_trps = ref(dt_async.value.trx_trps || []);
-const list_ujalan = ref(dt_async.value.list_ujalan);
-const list_ticket = ref(dt_async.value.list_ticket);
-const list_pv = ref(dt_async.value.list_pv);
 
 
 const search = ref("");
@@ -486,4 +554,76 @@ const downloadExcel = async()=>{
 const download = ()=>{
   downloadFile(pdfContent.value);
 }
+
+const cogs_show=ref(false);
+
+const toggleAllFields=(v)=>{
+  if(v=="select"){
+    fields_data.value = fields_data.value.map((x)=>{
+      x.checked = 1;
+      return x;
+    })
+  }else{
+    fields_data.value = fields_data.value.map((x)=>{
+      x.checked = 0;
+      return x;
+    })
+  }
+}
+
+const fields_data=ref([
+  {checked:1,name:"Status"},
+  {checked:1,name:"App 1"},
+  {checked:1,name:"App 2"},
+  {checked:1,name:"ID"},
+  {checked:1,name:"U.Jalan Per"},
+  {checked:1,name:"No Pol"},
+  {checked:1,name:"Tujuan"},
+  {checked:1,name:"Tipe"},
+  {checked:1,name:"Jenis"},
+  {checked:1,name:"Amount"},
+  {checked:1,name:"Cost Center Code"},
+  {checked:1,name:"Cost Center Desc"},
+  {checked:1,name:"PVR No"},
+  {checked:1,name:"PVR Total"},
+  {checked:1,name:"PVR Completed"},
+  {checked:1,name:"PV No"},
+  {checked:1,name:"PV Total"},
+  {checked:1,name:"Ticket A No"},
+  {checked:1,name:"Ticket A Bruto"},
+  {checked:1,name:"Ticket A Tara"},
+  {checked:1,name:"Ticket A Netto"},
+  {checked:1,name:"Ticket A Supir"},
+  {checked:1,name:"Ticket A No Pol"},
+  {checked:1,name:"Ticket A In At"},
+  {checked:1,name:"Ticket A Out At"},
+  {checked:1,name:"Ticket B No"},
+  {checked:1,name:"Ticket B Bruto"},
+  {checked:1,name:"Ticket B Tara"},
+  {checked:1,name:"Ticket B Netto"},
+  {checked:1,name:"Ticket B Supir"},
+  {checked:1,name:"Ticket B No Pol"},
+  {checked:1,name:"Ticket B In At"},
+  {checked:1,name:"Ticket B Out At"},
+  {checked:1,name:"Supir"},
+  {checked:1,name:"Kernet"},
+  {checked:1,name:"Created At"},
+  {checked:1,name:"Updated At"},
+]);
+
+const checkCheckedField=(name)=>{
+  let index  = fields_data.value.map((x)=>x.name).indexOf(name);
+  return fields_data.value[index].checked;  
+}
+
+const checkStatus=(data)=>{
+  if(
+    data.pv_id<=0 ||
+    (["CPO","PK"].indexOf(data.jenis)>-1 && (data.ticket_a_id<=0 || data.ticket_b_bruto<=0 || data.ticket_b_tara<=0 || data.ticket_b_netto <=0 || data.ticket_b_in_at==""|| data.ticket_b_out_at=="")) ||
+    (data.jenis=="TBS" && (data.ticket_a_id<=0 || data.ticket_b_id<=0)) ||
+    (data.jenis=="TBSK" && data.ticket_b_id<=0)
+  ) return 0;
+  return 1;
+}
+
 </script>
