@@ -34,6 +34,10 @@
             @click="generatePVR()">
             Gen/Update PVR
           </button>
+          <button type="button" name="button" class="m-1 text-sm whitespace-nowrap"
+            @click="updatePV()">
+            Update PV
+          </button>
           <div class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
             <span class="text-xs">Mode</span> : <span class="font-bold" :class="online_status?'text-green-600' : 'text-red-600'">{{ online_status ? "ONLINE" : "OFFLINE" }} </span>
           </div>
@@ -735,6 +739,7 @@ const generatePVR = async() => {
   let dt = trx_trps.value[selected.value];
   dt.pvr_id = data.value.pvr_id;
   dt.pvr_no = data.value.pvr_no;
+  dt.pvr_total = data.value.pvr_total;
   dt.pvr_had_detail = data.value.pvr_had_detail;
   dt.updated_at = data.value.updated_at;
 
@@ -742,5 +747,45 @@ const generatePVR = async() => {
   selected.value = -1;
 
   display({ show: true, status: "Success", message: "Generate Or Update PVR Done" });
+}
+
+const updatePV = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("online_status", online_status.value);  
+
+  const { data, error, status } = await useMyFetch("/trx_trp_do_update_pv", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  data.value.data.forEach(e => {
+    let idx = trx_trps.value.map((x)=>x.id).indexOf(e.id);
+    if(idx !== -1) {
+      let dt = {        
+        pv_id : data.value.pv_id,
+        pv_no : data.value.pv_no,
+        pv_total : data.value.pv_total,
+        updated_at : data.value.updated_at,
+      };
+      
+      trx_trps.value.splice(idx,1,{...dt});
+    }
+    
+  });
+
+
+  display({ show: true, status: "Success", message: "Update PV Done" });
 }
 </script>
