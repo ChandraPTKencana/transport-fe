@@ -82,7 +82,7 @@
 
                 <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
                   <label for="">Cost Center Code</label>
-                  <input list="cost_center"  v-model="trx_trp.cost_center_code" @blur="blurCostCenterCode($event)">
+                  <input list="cost_center"  v-model="trx_trp.cost_center_code" @blur="blurCostCenterCode($event)" :disabled="trx_trp.pvr_no!=''">
                   <datalist id="cost_center">
                     <option v-for="lcc in list_cost_center" :value="lcc.CostCenter">{{lcc.CostCenter +'-'+ lcc.Description}}</option>
                   </datalist>
@@ -97,23 +97,23 @@
                 </div>
 
                 <div class="w-6/12 sm:w-8/12  flex flex-col flex-wrap p-1">
-                  <label for="">PVR Number</label>
+                  <label for="">PVR No</label>
                   <div class="card-border disabled">
-                    {{  trx_trp.pvr_number }}
+                    {{  trx_trp.pvr_no }}
                   </div>
                 </div>
 
                 <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">PVR Amount</label>
+                  <label for="">PVR Total</label>
                   <div class="card-border disabled">
-                    {{  trx_trp.pvr_amount }}
+                    {{  trx_trp.pvr_total }}
                   </div>
                 </div>
 
 
                 <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
                   <label for="">PV</label>
-                  <input type="text" list="pv"  v-model="trx_trp.pv_no"/>
+                  <input type="text" list="pv"  v-model="trx_trp.pv_no" :disabled="trx_trp.pvr_no!=''"/>
                   <datalist id="pv">
                     <option v-for="lp in list_pv" :value="lp.VoucherNo" >{{lp.VoucherNo +'-'+ lp.AssociateName}}</option>
                   </datalist>
@@ -388,6 +388,11 @@ const props = defineProps({
     required:true,
     default:[]
   },
+  online_status:{
+    type:Boolean,
+    required:true,
+    default:false
+  },
   
 })
 
@@ -427,8 +432,10 @@ const trx_trp_temp = {
     no_pol: '',
     cost_center_code:"",
     cost_center_desc:"",
-    pvr_number:"",
-    pvr_amount:"",
+    pvr_id:"",
+    pvr_no:"",
+    pvr_total:"",
+    pvr_had_detail:"",
 };
 let trx_trp_loaded = {...trx_trp_temp};
 const trx_trp = ref({...trx_trp_temp});
@@ -489,6 +496,7 @@ const doSave = async () => {
   data_in.append("id_uj", trx_trp.value.id_uj);
   data_in.append("xto", trx_trp.value.xto);
   data_in.append("cost_center_code", trx_trp.value.cost_center_code);
+  data_in.append("online_status", props.online_status);
   // data_in.append("amount", trx_trp.value.amount);
 
 
@@ -565,14 +573,16 @@ const doSave = async () => {
   }
 
   
+  trx_trp.value.pvr_id = data.value.pvr_id;
+  trx_trp.value.pvr_no = data.value.pvr_no;
+  trx_trp.value.pvr_total = data.value.pvr_total;
+  trx_trp.value.pvr_had_detail = data.value.pvr_had_detail;
+  trx_trp.value.updated_at = data.value.updated_at;
   if(props.id<=0){
     trx_trp.value.id = data.value.id;
     trx_trp.value.created_at = data.value.created_at;
-    trx_trp.value.updated_at = data.value.updated_at;
     props.p_data.unshift(trx_trp.value);
   }else{
-    trx_trp.value.updated_at = data.value.updated_at;
-
     let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
     if(idx>=-1){
       props.p_data.splice(idx,1,{...trx_trp.value});    
@@ -809,8 +819,8 @@ watch(()=>trx_trp.value.cost_center_code, (newVal, oldVal) => {
 
     if(dt.length  > 0) 
     $desc = dt[0].Description;
-    // else if(trx_trp.value.cost_center_code == trx_trp_loaded.cost_center_code) 
-    // $desc = trx_trp_loaded.cost_center_desc;
+    else if(trx_trp.value.cost_center_code == trx_trp_loaded.cost_center_code) 
+    $desc = trx_trp_loaded.cost_center_desc;
 
     trx_trp.value.cost_center_desc = $desc;
   }

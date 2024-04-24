@@ -30,10 +30,10 @@
         </button>
         </div>
         <div class="flex">
-          <!-- <button type="button" name="button" class="m-1 text-sm whitespace-nowrap"
+          <button type="button" name="button" class="m-1 text-sm whitespace-nowrap"
             @click="generatePVR()">
             Gen/Update PVR
-          </button> -->
+          </button>
           <div class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
             <span class="text-xs">Mode</span> : <span class="font-bold" :class="online_status?'text-green-600' : 'text-red-600'">{{ online_status ? "ONLINE" : "OFFLINE" }} </span>
           </div>
@@ -91,6 +91,11 @@
                 <th v-if="checkCheckedField('Tipe')">Tipe</th>
                 <th v-if="checkCheckedField('Jenis')">Jenis</th>
                 <th v-if="checkCheckedField('Amount')">Amount</th>
+                <th v-if="checkCheckedField('Cost Center Code')">Cost Center Code</th>
+                <th v-if="checkCheckedField('Cost Center Desc')">Cost Center Desc</th>
+                <th v-if="checkCheckedField('PVR No')">PVR No</th>
+                <th v-if="checkCheckedField('PVR Total')">PVR Total</th>
+                <th v-if="checkCheckedField('PVR Completed')">PVR Completed</th>
                 <th v-if="checkCheckedField('PV No')">PV No</th>
                 <th v-if="checkCheckedField('PV Total')">PV Total</th>
 
@@ -148,6 +153,11 @@
                 <td v-if="checkCheckedField('Tipe')">{{ trx_trp.tipe }}</td>
                 <td v-if="checkCheckedField('Jenis')">{{ trx_trp.jenis }}</td>
                 <td v-if="checkCheckedField('Amount')">{{ pointFormat(trx_trp.amount) }}</td>
+                <td v-if="checkCheckedField('Cost Center Code')">{{ trx_trp.cost_center_code }}</td>
+                <td v-if="checkCheckedField('Cost Center Desc')">{{ trx_trp.cost_center_desc }}</td>
+                <td v-if="checkCheckedField('PVR No')">{{ trx_trp.pvr_no }}</td>
+                <td v-if="checkCheckedField('PVR Total')">{{ trx_trp.pv_amount }}</td>
+                <td v-if="checkCheckedField('PVR Completed')"><IconsLine v-if="!trx_trp.pvr_had_detail"/><IconsCheck v-else/></td>
                 <td v-if="checkCheckedField('PV No')">{{ trx_trp.pv_no }}</td>
                 <td v-if="checkCheckedField('PV Total')">{{ pointFormat(trx_trp.pv_total) }}</td>
 
@@ -182,7 +192,7 @@
 
     <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
     <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
-    <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ujalan="list_ujalan" :list_ticket="list_ticket" :list_pv="list_pv" :list_cost_center="list_cost_center"/>
+    <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ujalan="list_ujalan" :list_ticket="list_ticket" :list_pv="list_pv" :list_cost_center="list_cost_center" :online_status="online_status"/>
     <FormsTrxTrpValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps"/>
   
     <div v-if="prtView" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
@@ -666,6 +676,11 @@ const fields_data=ref([
   {checked:1,name:"Tipe"},
   {checked:1,name:"Jenis"},
   {checked:1,name:"Amount"},
+  {checked:1,name:"Cost Center Code"},
+  {checked:1,name:"Cost Center Desc"},
+  {checked:1,name:"PVR No"},
+  {checked:1,name:"PVR Total"},
+  {checked:1,name:"PVR Completed"},
   {checked:1,name:"PV No"},
   {checked:1,name:"PV Total"},
   {checked:1,name:"Ticket A No"},
@@ -693,5 +708,39 @@ const fields_data=ref([
 const checkCheckedField=(name)=>{
   let index  = fields_data.value.map((x)=>x.name).indexOf(name);
   return fields_data.value[index].checked;  
+}
+
+
+const generatePVR = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("id", trx_trps.value[selected.value].id);  
+  data_in.append("online_status", online_status.value);  
+
+  const { data, error, status } = await useMyFetch("/trx_trp_do_gen_pvr", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  let dt = trx_trps.value[selected.value];
+  dt.pvr_id = data.value.pvr_id;
+  dt.pvr_no = data.value.pvr_no;
+  dt.pvr_had_detail = data.value.pvr_had_detail;
+  dt.updated_at = data.value.updated_at;
+
+  trx_trps.value.splice(selected.value,1,{...dt});
+  selected.value = -1;
+
+  display({ show: true, status: "Success", message: "Generate Or Update PVR Done" });
 }
 </script>
