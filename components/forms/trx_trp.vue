@@ -658,10 +658,10 @@ const list_a_ticket = computed(()=>{
 
 const list_b_ticket = computed(()=>{
   let jenis = [];
-  if(trx_trp.value.jenis == "TBS"){
-    jenis=["rtbs"];
-  }else if(trx_trp.value.jenis == "TBSK"){
+  if(trx_trp.value.jenis == "TBSK" || trx_trp.value.transition_to!=""){
     jenis=["tbs"];
+  }else if(trx_trp.value.jenis == "TBS"){
+    jenis=["rtbs"];
   }
   return props.list_ticket.filter((x)=>jenis.indexOf(x.ProductName.toLowerCase())>-1);
   // return props.list_ticket.filter((x)=>["RTBS"].indexOf(x.ProductName)>-1);
