@@ -96,7 +96,7 @@
                   </div>
                 </div>
 
-                <div class="w-6/12 sm:w-8/12  flex flex-col flex-wrap p-1">
+                <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
                   <label for="">PVR No</label>
                   <div class="card-border disabled">
                     {{  trx_trp.pvr_no }}
