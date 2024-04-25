@@ -111,6 +111,13 @@
                 </div>
               </div>
 
+              <div v-if="trx_trp.jenis=='TBS'" class="w-full p-1">
+                <label for="">Peralihan</label>
+                <div class="card-border">
+                  {{ trx_trp.transition_to }}
+                </div>
+              </div>
+
               <div v-if="trx_trp.jenis!='' && trx_trp.jenis!='TBSK'" class="w-full flex flex-col flex-wrap p-1">
                 <label for="">Tiket A</label>
                 <div class="card-border">

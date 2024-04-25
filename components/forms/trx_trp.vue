@@ -139,6 +139,20 @@
                 </div>
               </div>
 
+              <div v-if="trx_trp.jenis=='TBS'" class="w-full p-1" @change="changeTransitionTo($event)">
+                <label for="">Peralihan</label>
+                <select v-model="trx_trp.transition_to">
+                  <option value=""></option>
+                  <option value="KPN">KPN</option>
+                  <option value="KAS">KAS</option>
+                  <option value="KUS">KUS</option>
+                  <option value="ARP">ARP</option>
+                  <option value="KAP">KAP</option>
+                  <option value="SMP">SMP</option>
+                </select>
+                <p class="text-red-500">{{ field_errors.transition_to }}</p>
+              </div>
+
               <div v-if="trx_trp.jenis!='' && trx_trp.jenis!='TBSK'" class="w-full flex flex-col flex-wrap p-1">
                 <label for="">Tiket A</label>
                 <input type="text" list="ticket_a"  v-model="trx_trp.ticket_a_no"/>
@@ -434,8 +448,9 @@ const trx_trp_temp = {
     cost_center_desc:"",
     pvr_id:"",
     pvr_no:"",
-    pvr_total:"",
+    pvr_total:0,
     pvr_had_detail:"",
+    transition_to:"",
 };
 let trx_trp_loaded = {...trx_trp_temp};
 const trx_trp = ref({...trx_trp_temp});
@@ -472,7 +487,15 @@ const changeJenis=($e)=>{
   trx_trp.value.ticket_b_supir = "-";
   trx_trp.value.ticket_b_no_pol = "-";
   trx_trp.value.ticket_b_no = "";
-  props.fnLoadDBData($e.target.value);
+  
+  trx_trp.value.transition_to = ($e.target.value=="TBS") ? trx_trp.value.transition_to : "";
+  props.fnLoadDBData($e.target.value,trx_trp.value.transition_to);
+}
+
+const changeTransitionTo=($e)=>{
+  if(trx_trp.value.jenis=="TBS"){
+    props.fnLoadDBData(trx_trp.value.jenis,$e.target.value);
+  }
 }
 const { display } = useAlertStore();
 
@@ -497,6 +520,7 @@ const doSave = async () => {
   data_in.append("xto", trx_trp.value.xto);
   data_in.append("cost_center_code", trx_trp.value.cost_center_code);
   data_in.append("online_status", props.online_status);
+  data_in.append("transition_to", trx_trp.value.transition_to);
   // data_in.append("amount", trx_trp.value.amount);
 
 
@@ -530,6 +554,8 @@ const doSave = async () => {
     data_in.append("ticket_b_id", ticket[0].TicketID);
   }
 
+  data_in.append("ticket_a_no", trx_trp.value.ticket_a_no);
+  data_in.append("ticket_b_no", trx_trp.value.ticket_b_no);
 
   data_in.append("ticket_b_bruto", trx_trp.value.ticket_b_bruto);
   data_in.append("ticket_b_tara", trx_trp.value.ticket_b_tara);
@@ -672,7 +698,7 @@ const callData = async () => {
   trx_trp.value = data.value.data;
   trx_trp_loaded = {...data.value.data};
 
-  props.fnLoadDBData(trx_trp.value.jenis);
+  props.fnLoadDBData(trx_trp.value.jenis,trx_trp.value.transition_to);
 }
 
 

@@ -105,6 +105,7 @@
                 <th v-if="checkCheckedField('PV No')">PV No</th>
                 <th v-if="checkCheckedField('PV Total')">PV Total</th>
 
+                <th v-if="checkCheckedField('Peralihan')">Peralihan</th>
                 <th v-if="checkCheckedField('Ticket A No')">Ticket A No</th>
                 <th v-if="checkCheckedField('Ticket A Bruto')">Ticket A Bruto</th>
                 <th v-if="checkCheckedField('Ticket A Tara')">Ticket A Tara</th>
@@ -168,6 +169,7 @@
                 <td v-if="checkCheckedField('PV No')">{{ trx_trp.pv_no }}</td>
                 <td v-if="checkCheckedField('PV Total')">{{ pointFormat(trx_trp.pv_total) }}</td>
 
+                <td v-if="checkCheckedField('Peralihan')">{{ trx_trp.transition_to }}</td>
                 <td v-if="checkCheckedField('Ticket A No')">{{ trx_trp.ticket_a_no }}</td>
                 <td v-if="checkCheckedField('Ticket A Bruto')">{{ pointFormat(trx_trp.ticket_a_bruto) }}</td>
                 <td v-if="checkCheckedField('Ticket A Tara')">{{ pointFormat(trx_trp.ticket_a_tara) }}</td>
@@ -589,6 +591,7 @@ const fields_data=ref([
   {checked:1,name:"PVR Completed"},
   {checked:1,name:"PV No"},
   {checked:1,name:"PV Total"},
+  {checked:1,name:"Peralihan"},
   {checked:1,name:"Ticket A No"},
   {checked:1,name:"Ticket A Bruto"},
   {checked:1,name:"Ticket A Tara"},
