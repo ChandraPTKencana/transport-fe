@@ -161,7 +161,7 @@
                 <td v-if="checkCheckedField('Cost Center Code')">{{ trx_trp.cost_center_code }}</td>
                 <td v-if="checkCheckedField('Cost Center Desc')">{{ trx_trp.cost_center_desc }}</td>
                 <td v-if="checkCheckedField('PVR No')">{{ trx_trp.pvr_no }}</td>
-                <td v-if="checkCheckedField('PVR Total')">{{ trx_trp.pv_amount }}</td>
+                <td v-if="checkCheckedField('PVR Total')">{{ pointFormat(trx_trp.pvr_total) }}</td>
                 <td v-if="checkCheckedField('PVR Completed')"><IconsLine v-if="!trx_trp.pvr_had_detail"/><IconsCheck v-else/></td>
                 <td v-if="checkCheckedField('PV No')">{{ trx_trp.pv_no }}</td>
                 <td v-if="checkCheckedField('PV Total')">{{ pointFormat(trx_trp.pv_total) }}</td>

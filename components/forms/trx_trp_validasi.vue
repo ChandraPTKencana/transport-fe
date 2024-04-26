@@ -91,7 +91,7 @@
                 <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
                   <label for="">PVR Total</label>
                   <div class="card-border">
-                    {{ trx_trp.pvr_total }}
+                    {{ pointFormat(trx_trp.pvr_total || 0) }}
                   </div>
                 </div>
 
