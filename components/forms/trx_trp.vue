@@ -599,6 +599,9 @@ const doSave = async () => {
   }
 
   
+  trx_trp.value.ticket_a_netto = trx_trp.ticket_a_bruto - trx_trp.ticket_a_tara;
+  trx_trp.value.ticket_b_netto = trx_trp.ticket_b_bruto - trx_trp.ticket_b_tara;
+
   trx_trp.value.pvr_id = data.value.pvr_id;
   trx_trp.value.pvr_no = data.value.pvr_no;
   trx_trp.value.pvr_total = data.value.pvr_total;
