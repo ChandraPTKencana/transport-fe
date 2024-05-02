@@ -60,7 +60,7 @@
                   <table class="tacky w-full" style="white-space:normal;">
                     <thead >
                       <tr class="sticky -top-1 !z-[2]">
-                        <td :colspan="role!='PabrikTransport' && !disabled ? 6 : 5" class="!bg-slate-800 text-white font-bold">
+                        <td :colspan="role!='PabrikTransport' && !disabled ? 7 : 6" class="!bg-slate-800 text-white font-bold">
                           Detail Uang Jalan
                         </td>
                       </tr>
@@ -75,6 +75,7 @@
                         <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Harga @</th>
                         <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Qty</th>
                         <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Total <br> <span class="text-sm">({{pointFormat(total_harga) }})</span>  </th>
+                        <th class="min-w-[50px] !w-[50px] max-w-[50px] ">For Remarks</th>
                       </tr>
                     </thead>
                     <tbody ref="to_move">
@@ -122,6 +123,16 @@
                               {{ pointFormat(detail.qty * detail.harga || 0) }}   
                             </div>
                           </td>
+
+                          <td class="cell">
+                            <div class="w-full h-full flex items-center justify-center">
+                              <button type="button" @click="detail.for_remarks = (detail.for_remarks ? 0 : 1)" class="text-white w-auto rounded text-xl" :class="detail.for_remarks?'bg-green-600' : 'bg-red-600' ">
+                                <IconsTimes v-if="detail.for_remarks==0"/>
+                                <IconsCheck v-else/>             
+                              </button>
+                            </div>
+                          </td>
+
                         </tr>
                       </template>
                       
@@ -388,6 +399,7 @@ const detail = ref({
   xdesc:"",
   qty:1,
   harga:0,
+  for_remarks:0,
   // status:"",
   p_status:""
 });
