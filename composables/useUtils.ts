@@ -51,10 +51,13 @@ export const useUtils = () => {
         return (list).includes(role.value);
     };
 
+    const round = (num:any, precision:any) => Number(Math.round(Number(num + "e+" + precision)) + "e-" + precision);
+
     return {
         sayHello,
         pointFormat,
         countClickListFn,
-        checkRole
+        checkRole,
+        round
     }
 }
