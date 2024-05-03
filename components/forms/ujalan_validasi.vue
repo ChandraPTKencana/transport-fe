@@ -22,16 +22,22 @@
                 </div>
               </div>
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-4/12 md:w-2/12 lg:w-1/12 flex flex-col flex-wrap p-1">
                 <label for="">Jenis</label>
                 <div class="card-border">
                   {{ ujalan.jenis }}
                 </div>
             </div>
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-4/12 md:w-2/12 lg:w-1/12 flex flex-col flex-wrap p-1">
                 <label for="">Harga</label>
                 <div class="card-border">
                   {{ pointFormat(ujalan.harga||0) }}
+                </div>
+              </div>
+              <div class="w-full sm:w-4/12 md:w-2/12 lg:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">Ket. Untuk Remarks</label>
+                <div class="card-border">
+                  {{ ujalan.note_for_remarks }}
                 </div>
               </div>
             </div>
@@ -42,7 +48,7 @@
                   <table class="tacky w-full" style="white-space:normal;">
                     <thead >
                       <tr class="sticky top-0 !z-[2]">
-                        <td colspan="5" class="!bg-slate-800 text-white font-bold">
+                        <td colspan="6" class="!bg-slate-800 text-white font-bold">
                           Detail Uang Jalan
                         </td>
                       </tr>
@@ -52,6 +58,7 @@
                         <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Harga @</th>
                         <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Qty</th>
                         <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Total <br> <span class="text-sm">({{pointFormat(ujalan.harga || 0) }})</span>  </th>
+                        <th class="min-w-[50px] !w-[50px] max-w-[50px] ">For Remarks</th>
                       </tr>
                     </thead>
                     <tbody ref="to_move">
@@ -77,6 +84,14 @@
                           <td class="cell">
                             <div class="w-full h-full flex items-center justify-center">                       
                               {{ pointFormat(detail.qty * detail.harga || 0) }}   
+                            </div>
+                          </td>
+                          <td class="cell">
+                            <div class="w-full h-full flex items-center justify-center">
+                              <div class="text-white rounded text-xl w-5 h-5" :class="detail.for_remarks?'bg-green-600' : 'bg-red-600' ">
+                                <IconsTimes v-if="detail.for_remarks==0"/>
+                                <IconsCheck v-else/>             
+                              </div>
                             </div>
                           </td>
                         </tr>
@@ -228,6 +243,7 @@ const ujalan_temp = {
     // status: "Y",
     jenis: "",
     harga:0,
+    note_for_remarks:0,
     details: [],
     val:0,
     val_by:{ username:"" },
