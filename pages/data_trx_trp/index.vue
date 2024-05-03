@@ -30,11 +30,11 @@
         </button>
         </div>
         <div class="flex">
-          <button type="button" name="button" class="m-1 text-sm whitespace-nowrap"
+          <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="generatePVR()">
             Gen/Update PVR
           </button>
-          <button type="button" name="button" class="m-1 text-sm whitespace-nowrap"
+          <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="updatePV()">
             Update PV
           </button>
@@ -639,9 +639,9 @@ const fields_thead=ref([
   {key:"xto",label:"Tujuan"},
   {key:"tipe",label:"Tipe"},
   {key:"jenis",label:"Jenis"},
-  {key:"amount",label:"Amount"},
+  {key:"amount",label:"Amount",class:" justify-end"},
   {key:"cost_center",label:"Cost Center",childs:[
-    {key:"cost_center_code",label:"Code",type:'default'},
+    {key:"cost_center_code",label:"Code",type:'default', class:" justify-start"},
     {key:"cost_center_desc",label:"Desc"},
   ]},
   {key:"pvr",label:"PVR",childs:[

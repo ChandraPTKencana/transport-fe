@@ -42,7 +42,7 @@
 
 
 
-    <div class="w-full flex justify-center items-center grow h-0">
+    <div class="w-full flex justify-center items-center grow h-0 text-sm">
 
       <div v-if="tbody.length == 0" class="">
         Maaf Tidak Ada Record
@@ -66,7 +66,7 @@
                   class="my-list"
                   v-if="tf.permit" v-show="tf.tbl_show"
                 >
-                  <div class="flex items-center justify-center">
+                  <div class="flex items-center" :class="tf.class ? tf.class : 'justify-center'">
                     <!-- {{ tf.id }} -->
                     <slot :name="tf.key" :item="tb">
                       <template v-if="tf.dateformat">

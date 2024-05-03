@@ -29,7 +29,7 @@
                 <p class="text-red-500">{{ field_errors.status }}</p>
               </div> -->
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-4/12 md:w-2/12 lg:w-1/12 flex flex-col flex-wrap p-1">
                 <label for="">Jenis</label>
                 <select v-model="ujalan.jenis" :disabled="role=='PabrikTransport' || disabled">
                   <option value="PK">PK</option>
@@ -38,7 +38,7 @@
                 </select>
                 <p class="text-red-500">{{ field_errors.jenis }}</p>
               </div>
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-4/12 md:w-2/12 lg:w-1/12 flex flex-col flex-wrap p-1">
                 <label for="">Harga</label>
                 <!-- <div class="card-bor">
                   <InputPointFormat
@@ -51,6 +51,12 @@
                   {{pointFormat(total_harga) }}
                 </div>
                 <p class="text-red-500">{{ field_errors.harga }}</p>
+              </div>
+
+              <div class="w-full sm:w-4/12 md:w-2/12 lg:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">Ket. Untuk Remarks</label>
+                <textarea v-model="ujalan.note_for_remarks" :disabled="role=='PabrikTransport' || disabled"></textarea>
+                <p class="text-red-500">{{ field_errors.note_for_remarks }}</p>
               </div>
             </div>
 
@@ -340,6 +346,7 @@ const ujalan_temp = {
     // status: "Y",
     jenis: "",
     harga:0,
+    note_for_remarks:"",
     details: [],
     details2: [],
 };
@@ -521,6 +528,7 @@ const doSave = async () => {
   // data_in.append("status", ujalan.value.status);
   data_in.append("jenis", ujalan.value.jenis);
   data_in.append("harga", ujalan.value.harga);
+  data_in.append("note_for_remarks", ujalan.value.note_for_remarks);
   data_in.append("details", JSON.stringify(details.value));
   data_in.append("details2", JSON.stringify(details2.value));
 
