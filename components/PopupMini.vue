@@ -19,7 +19,10 @@
 
       <div class="w-full text-left mt-3" >
         <b class="text-gray-600" >Data Information :</b>
-        <table class="w-full border-solid border-2 border-black ">
+        <div v-if="info_type=='custome'" class="w-full border-solid border-2 border-black p-1 capitalize bg-slate-800 text-white text-center">
+          <slot name="info"></slot> 
+        </div>
+        <table v-else class="w-full border-solid border-2 border-black ">
           <tr v-for="(v, k) in data">
             <td class="border-solid border-2 border-black p-1 capitalize bg-slate-800 text-white text-right">{{ k }}</td>
             <td class="border-solid border-2 border-black p-1 text-left">{{ v }}</td>
@@ -68,6 +71,11 @@ const props = defineProps({
   type: {
     type: String,
     required: true,
+  },
+  info_type: {
+    type: String,
+    required: false,
+    default:'default'
   },
   enabledOk: {
     type: Boolean,

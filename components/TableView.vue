@@ -42,7 +42,7 @@
 
 
 
-    <div class="w-full flex justify-center items-center grow h-0 text-sm">
+    <div class="w-full flex justify-center items-center grow h-0 text-sm flex-col">
 
       <div v-if="tbody.length == 0" class="">
         Maaf Tidak Ada Record
@@ -68,7 +68,7 @@
                 >
                   <div class="flex items-center" :class="tf.class ? tf.class : 'justify-center'">
                     <!-- {{ tf.id }} -->
-                    <slot :name="tf.key" :item="tb">
+                    <slot :name="tf.key" :item="tb" :index="index">
                       <template v-if="tf.dateformat">
                         {{ tb[tf.key] ? $moment(tb[tf.key]).format(tf.dateformat)  : "" }}
                       </template>
@@ -82,6 +82,31 @@
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <div v-if="loadDataType=='paginate'" class="w-full pt-1 flex justify-end">
+        <div class="flex gap-2">          
+          <div class="w-7 h-7 flex items-center justify-center ring-2 ring-slate-800 cursor-pointer text-sm" @click="paginateToPage(1)" v-if="pagination.list_page.indexOf(1) == -1">
+            <IconsCaretLeftDoubleBold />
+          </div>
+          <div class="w-7 h-7 flex items-center justify-center ring-2 ring-slate-800 cursor-pointer text-sm" @click="paginateToPage(pagination.current_page - 1)" v-if="pagination.list_page.indexOf(1) == -1">
+            <IconsCaretLeftBold />
+          </div>
+  
+          <div class="flex gap-2">
+            <div v-for="lp in pagination.list_page" :class="lp==pagination.current_page ?'bg-slate-800 text-white' : 'bg-white text-slate-800'" class="px-3 h-7 flex items-center justify-center ring-2 ring-slate-800 cursor-pointer text-sm"
+            @click="paginateToPage(lp)">
+              {{lp}}
+            </div>
+          </div>
+
+          <div class="w-7 h-7 flex items-center justify-center ring-2 ring-slate-800 cursor-pointer text-sm" @click="paginateToPage(pagination.current_page + 1)" v-if="pagination.list_page.indexOf(pagination.last_page) == -1">
+            <IconsCaretRightBold />
+          </div>
+          <div class="w-7 h-7 flex items-center justify-center ring-2 ring-slate-800 cursor-pointer text-sm" @click="paginateToPage(pagination.last_page)" v-if="pagination.list_page.indexOf(pagination.last_page) == -1">
+            <IconsCaretRightDoubleBold />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -128,6 +153,11 @@ const props = defineProps({
     fnCallData:{
       type:Function,
       required:true,
+    },
+    loadDataType:{
+      type:String,
+      required:false,
+      default:"scroll"
     }
 });
 
@@ -374,6 +404,7 @@ const checkType = (val,type="")=>{
 const loadRef = ref(null);
 
 const loadMore = async () => {
+  if(props.loadDataType!="scroll") return;
 
   if (!props.scrolling.may_get_data) return;
   let parent = loadRef.value;
@@ -455,12 +486,74 @@ const changeTblShowAllFieldTo=(data,x)=>{
   })
 }
 
+
+const pagination = ref({
+  current_page: 1,
+  list_page:[],
+  last_page:7,
+  piece:2
+  // perPage: 100,
+});
+
+const updatePagination = ()=>{
+  pagination.value.current_page = props.scrolling.page;
+  if(props.scrolling.is_last_record) pagination.value.current_page--;
+  
+  pagination.value.list_page = [];
+  if(pagination.value.current_page>0){
+    let limit_prev = 0;
+    let limit_next = 0;
+    let next = 0;
+    let prev = 0;
+
+    for (let index = pagination.value.current_page; index >= (pagination.value.current_page - pagination.value.piece); index--) {
+      if(index>0) limit_prev=index;
+      else next++;      
+    }
+
+    next += pagination.value.piece;
+
+    if(pagination.value.current_page + next > pagination.value.last_page)
+    {
+      limit_next = pagination.value.last_page;
+      for (let index = limit_prev - 1; index >= limit_prev - (pagination.value.current_page + next - limit_next); index--) {
+        if(index>0) prev++;
+      }
+      limit_prev-=prev;
+    }
+    else
+    limit_next = pagination.value.current_page + next;
+    
+    // if(limit_prev==0) limit_prev = pagination.value.current_page;
+
+    for (let index = limit_prev; index <= limit_next; index++) {
+      pagination.value.list_page.push(index);
+    }
+
+  }
+}
+
 watch(()=>props.scrolling.page,(newVal, oldVal) => {
   if(newVal==1 && loadRef.value) loadRef.value.scrollTop = 0;
+  updatePagination();
 }, {
   deep:true,
   immediate: true
 });
+
+watch(()=>props.scrolling.is_last_record,(newVal, oldVal) => {
+  updatePagination();
+}, {
+  deep:true,
+  immediate: true
+});
+
+const paginateToPage=async(page)=>{
+  if(props.loadDataType!="paginate") return;
+  emit('setScrollingPage',page );
+  await props.fnCallData();
+  if(loadRef.value)loadRef.value.scrollTop = 0;
+}
 
 
 // for example

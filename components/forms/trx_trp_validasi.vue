@@ -39,7 +39,7 @@
               <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">No Pol</label>
                 <div class="card-border">
-                  {{ trx_trp.kernet }}
+                  {{ trx_trp.no_pol }}
                 </div>
               </div>
             

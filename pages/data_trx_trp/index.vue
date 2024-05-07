@@ -2,7 +2,7 @@
   <div class="w-full h-full flex flex-col">
     <Header :title="'List Transaction'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
-      <div class="w-full flex justify-between">
+      <div class="w-full flex justify-between flex-wrap">
         <div class="grow flex">
           <button type="button" name="button" class="m-1 text-2xl "
           @click="form_add()">
@@ -106,6 +106,9 @@
             {{checkStatus(item) ? "Done" : "Not Done" }}
           </div>
         </template>
+        <template #[`absen`]="{item,index}">
+          <IconsImage v-if="item.trx_absens.length > 0" class="cursor-pointer" @click="form_absen(index)"/>
+        </template>
         <template #[`app1`]="{item}">
           <IconsLine v-if="!item.val"/>
           <IconsCheck v-else/>
@@ -124,6 +127,7 @@
     <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
     <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ujalan="list_ujalan" :list_ticket="list_ticket" :list_pv="list_pv" :list_cost_center="list_cost_center" :online_status="online_status"/>
     <FormsTrxTrpValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps"/>
+    <FormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
   
     <div v-if="prtView" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
     style="background-color: rgba(255,255,255,0.9);">
@@ -438,6 +442,13 @@ const validasi = () => {
   }
 };
 
+const forms_trx_absen_show =  ref(false);
+const forms_trx_absen_index = ref(0);
+const form_absen = (index) => {
+  forms_trx_absen_index.value = index;
+  forms_trx_absen_show.value = true;
+};
+
 const delete_data = ref({});
 const delete_box = ref(false);
 
@@ -634,6 +645,7 @@ const fields_thead=ref([
   {key:"app1",label:"App 1"},
   {key:"app2",label:"App 2"},
   {key:"id",label:"ID"},
+  {key:"absen",label:"Absen"},
   {key:"tanggal",label:"U.Jalan Per",dateformat:"DD-MM-Y"},
   {key:"no_pol",label:"No Pol"},
   {key:"xto",label:"Tujuan"},
