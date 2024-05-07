@@ -123,7 +123,14 @@
       </TableView>
     </div>
 
-    <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
+    <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk" >
+      <template #footer>
+        Masukkan Alasan Penghapusan:
+        <div class="grow mb-5" >
+          <textarea  v-model="deleted_reason"></textarea>
+        </div>
+      </template>
+    </PopupMini>
     <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
     <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ujalan="list_ujalan" :list_ticket="list_ticket" :list_pv="list_pv" :list_cost_center="list_cost_center" :online_status="online_status"/>
     <FormsTrxTrpValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps"/>
@@ -449,9 +456,10 @@ const form_absen = (index) => {
   forms_trx_absen_show.value = true;
 };
 
+const enabledOk = ref(false);
 const delete_data = ref({});
 const delete_box = ref(false);
-
+const deleted_reason = ref("");
 const toggleDeleteBox = async()=>{  
   if (delete_box.value) {
     delete_box.value = false;
@@ -462,16 +470,25 @@ const remove = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
+    deleted_reason.value = '';
     delete_data.value = {id : trx_trps.value[selected.value].id};
     delete_box.value = true;
   }
 };
+
+watch(()=>deleted_reason.value,(newval)=>{
+  if( newval.trim().length > 0 ) enabledOk.value = true;
+  else enabledOk.value = false;
+}, {
+  immediate: false
+})
 
 const confirmed_delete = async() => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
   data_in.append("id", trx_trps.value[selected.value].id);  
+  data_in.append("deleted_reason", deleted_reason.value);  
   data_in.append("_method", "DELETE");
 
   const { data, error, status } = await useMyFetch("/trx_trp", {
