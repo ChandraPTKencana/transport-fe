@@ -478,6 +478,7 @@ const fields_thead=ref([
     {key:"pvr_completed",label:"Completed"},
   ]},
   {key:"pv",label:"PV",childs:[
+    {key:"pv_datetime",label:"Date",dateformat:"DD-MM-Y"},
     {key:"pv_no",label:"No"},
     {key:"pv_total",label:"Total"},
   ]},

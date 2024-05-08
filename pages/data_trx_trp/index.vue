@@ -107,7 +107,7 @@
           </div>
         </template>
         <template #[`absen`]="{item,index}">
-          <IconsImage v-if="item.trx_absens.length > 0" class="cursor-pointer" @click="form_absen(index)"/>
+          <IconsImage v-if="item.trx_absens && item.trx_absens.length > 0" class="cursor-pointer" @click="form_absen(index)"/>
         </template>
         <template #[`app1`]="{item}">
           <IconsLine v-if="!item.val"/>
@@ -641,12 +641,12 @@ const updatePV = async() => {
   data.value.data.forEach(e => {
     let idx = trx_trps.value.map((x)=>x.id).indexOf(e.id);
     if(idx !== -1) {
-      let dt = {        
-        pv_id : data.value.pv_id,
-        pv_no : data.value.pv_no,
-        pv_total : data.value.pv_total,
-        updated_at : data.value.updated_at,
-      };
+      let dt = trx_trps.value[idx];
+      dt.pv_id = e.pv_id;
+      dt.pv_no = e.pv_no;
+      dt.pv_total = e.pv_total;
+      dt.pv_datetime = e.pv_datetime;
+      dt.updated_at = e.updated_at;
       
       trx_trps.value.splice(idx,1,{...dt});
     }
@@ -679,6 +679,7 @@ const fields_thead=ref([
     {key:"pvr_completed",label:"Completed"},
   ]},
   {key:"pv",label:"PV",childs:[
+    {key:"pv_datetime",label:"Date",dateformat:"DD-MM-Y"},
     {key:"pv_no",label:"No"},
     {key:"pv_total",label:"Total"},
   ]},
