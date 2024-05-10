@@ -170,7 +170,7 @@ const callData = async () => {
   params.page = scrolling.value.page;
   if (params.page == 1) users.value = [];
 
-  const { data, error, status } = await useFetch("/users", {
+  const { data, error, status } = await useMyFetch("/users", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
