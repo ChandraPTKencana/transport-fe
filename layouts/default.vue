@@ -30,7 +30,7 @@
                 Trx Trp
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['SuperAdmin','Logistic','Finance','Marketing','MIS'])" :class="activeMenu == '/report_trx_trp'?'active':''" >
+            <li v-if="checkRole(['SuperAdmin','Logistic','Finance','Marketing','MIS','Accounting'])" :class="activeMenu == '/report_trx_trp'?'active':''" >
               <nuxt-link to="/report_trx_trp"  class="cursor-pointer" @click="goTo('/report_trx_trp')">
                 <IconsFileCopy class="mr-1"/>
                 Report Trp

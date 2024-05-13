@@ -130,9 +130,14 @@
                             </div>
                           </td>
 
-                          <td class="cell">
+                          <td class="cell" :class="role=='PabrikTransport' || disabled ? 'unselectable' : ''">
                             <div class="w-full h-full flex items-center justify-center">
-                              <button type="button" @click="detail.for_remarks = (detail.for_remarks ? 0 : 1)" class="text-white w-auto rounded text-xl" :class="detail.for_remarks?'bg-green-600' : 'bg-red-600' ">
+                              <div v-if="role=='PabrikTransport' || disabled" class="text-3xl">
+                                <IconsTimes v-if="detail.for_remarks==0" class="text-red-800"/>
+                                <IconsCheck v-else class="text-green-800"/>                                           
+                              </div>
+
+                              <button v-else type="button" @click="detail.for_remarks = (detail.for_remarks ? 0 : 1)" class="text-white w-auto rounded text-xl" :class="detail.for_remarks?'bg-green-600' : 'bg-red-600'">
                                 <IconsTimes v-if="detail.for_remarks==0"/>
                                 <IconsCheck v-else/>             
                               </button>
@@ -824,6 +829,8 @@ const callData = async () => {
   let p_status = "Edit";
   if(props.is_copy){
     p_status = "Add";
+    ujalan.value.val = 0;
+    ujalan.value.val1 = 0;
   }
 
   details.value = data.value.data.details.map((x)=>{
