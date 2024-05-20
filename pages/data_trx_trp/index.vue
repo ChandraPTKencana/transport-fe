@@ -132,7 +132,7 @@
       </template>
     </PopupMini>
     <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
-    <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ujalan="list_ujalan" :list_ticket="list_ticket" :list_pv="list_pv" :list_cost_center="list_cost_center" :online_status="online_status"/>
+    <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ticket="list_ticket" :list_pv="list_pv" :list_cost_center="list_cost_center" :online_status="online_status"/>
     <FormsTrxTrpValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps"/>
     <FormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
   
@@ -257,7 +257,6 @@ const checkRole=(list)=>{
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
   let trx_trps = [];
-  // let list_ujalan = [];
   // let list_ticket = [];
   // let list_pv = [];
 
@@ -288,26 +287,23 @@ const { data: dt_async } = await useAsyncData(async () => {
 
   if (data1.status.value === 'error') {
     useErrorStore().trigger(data1.error);
-    // return { trx_trps, list_ujalan, list_ticket, list_pv };
+    // return { trx_trps, list_ticket, list_pv };
     return { trx_trps };
   }
 
   // if (data2.status.value !== 'error') {
-  //   list_ujalan = data2.data.value.list_ujalan;
   //   list_ticket = data2.data.value.list_ticket;
   //   list_pv = data2.data.value.list_pv;
   // }
   useCommonStore().loading_full = false;
 
-  // return { trx_trps, list_ujalan, list_ticket, list_pv };
+  // return { trx_trps, list_ticket, list_pv };
   return { trx_trps };
 });
 
 const trx_trps = ref(dt_async.value.trx_trps || []);
-// const list_ujalan = ref(dt_async.value.list_ujalan);
 // const list_ticket = ref(dt_async.value.list_ticket);
 // const list_pv = ref(dt_async.value.list_pv);
-const list_ujalan = ref([]);
 const list_cost_center = ref([]);
 const list_ticket = ref([]);
 const list_pv = ref([]);
@@ -332,7 +328,6 @@ const fnLoadDBData = async (jenis,transition_to="") => {
     return;
   }
 
-  list_ujalan.value = data.value.list_ujalan;
   list_cost_center.value = data.value.list_cost_center;
   list_ticket.value = data.value.list_ticket;
   list_pv.value = data.value.list_pv;

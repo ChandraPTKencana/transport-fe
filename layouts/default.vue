@@ -36,6 +36,18 @@
                 Report Trp
               </nuxt-link>
             </li>
+            <li v-if="checkRole(['SuperAdmin','PabrikTransport'])" :class="activeMenu == '/vehicle'?'active':''" >
+              <nuxt-link to="/vehicle"  class="cursor-pointer" @click="goTo('/vehicle')">
+                <IconsPerson class="mr-1"/>
+                Kendaraan
+              </nuxt-link>
+            </li>
+            <li v-if="checkRole(['SuperAdmin','PabrikTransport'])" :class="activeMenu == '/employee'?'active':''" >
+              <nuxt-link to="/employee"  class="cursor-pointer" @click="goTo('/employee')">
+                <IconsPerson class="mr-1"/>
+                Pekerja
+              </nuxt-link>
+            </li>
             <li v-if="checkRole(['SuperAdmin'])" :class="activeMenu == '/user'?'active':''" >
               <nuxt-link to="/user"  class="cursor-pointer" @click="goTo('/user')">
                 <IconsPerson class="mr-1"/>

@@ -10,7 +10,7 @@
 
               <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">U.Jalan Per</label>
-                <div class="grow" >
+                <div class="grow" v-if="trx_trp.pvr_no==''">
                   <ClientOnly>
                     <vue-date-picker  v-model="trx_trp.tanggal" 
                     type="datetime" 
@@ -20,12 +20,17 @@
                     teleport-center></vue-date-picker>
                   </ClientOnly>
                 </div>
+                <div class="grow" v-else>
+                  <div class="card-border" :class="trx_trp.pvr_no!='' ? 'unselectable':''">
+                    {{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-YYYY") : "" }}
+                  </div>
+                </div>
                 <p class="text-red-500">{{ field_errors.tanggal }}</p>
               </div>
 
               <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Jenis</label>
-                <select v-model="trx_trp.jenis" @change="changeJenis($event)">
+                <select v-model="trx_trp.jenis" @change="changeJenis($event)" :disabled="trx_trp.pvr_no!=''">
                   <option value="TBS">TBS</option>
                   <option value="TBSK">TBSK</option>
                   <option value="CPO">CPO</option>
@@ -36,19 +41,28 @@
 
               <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Supir</label>
-                <input v-model="trx_trp.supir">
+                <input type="text" list="supir"  v-model="trx_trp.supir" :disabled="trx_trp.pvr_no!=''"/>
+                <datalist id="supir">
+                  <option v-for="lk in list_supir" :value="lk.name" >{{lk.name}}</option>
+                </datalist>
                 <p class="text-red-500">{{ field_errors.supir }}</p>
               </div>
 
               <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Kernet</label>
-                <input v-model="trx_trp.kernet">
+                <input type="text" list="kernet"  v-model="trx_trp.kernet" :disabled="trx_trp.pvr_no!=''"/>
+                <datalist id="kernet">
+                  <option v-for="lk in list_kernet" :value="lk.name" >{{lk.name}}</option>
+                </datalist>
                 <p class="text-red-500">{{ field_errors.kernet }}</p>
               </div>
 
               <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">No Pol</label>
-                <input v-model="trx_trp.no_pol">
+                <input type="text" list="vehicle"  v-model="trx_trp.no_pol" :disabled="trx_trp.pvr_no!=''"/>
+                <datalist id="vehicle">
+                  <option v-for="lv in list_vehicle" :value="lv.no_pol" >{{lv.no_pol}}</option>
+                </datalist>
                 <p class="text-red-500">{{ field_errors.no_pol }}</p>
               </div>
           
@@ -56,7 +70,7 @@
               <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
                 <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
                   <label for="">Tujuan</label>
-                  <select v-model="trx_trp.xto">
+                  <select v-model="trx_trp.xto" :disabled="trx_trp.pvr_no!=''">
                     <option v-for="lt in list_to">{{lt}}</option>
                   </select>
                   <p class="text-red-500">{{ field_errors.xto }}</p>
@@ -64,7 +78,7 @@
 
                 <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
                   <label for="">Tipe</label>
-                  <select v-model="trx_trp.id_uj">
+                  <select v-model="trx_trp.id_uj" :disabled="trx_trp.pvr_no!=''">
                     <option v-for="lt in list_tipe" :value="lt.id" :selected="lt.id == trx_trp.id_uj">{{lt.tipe}}</option>
                   </select>
                   <p class="text-red-500">{{ field_errors.id_uj }}</p>
@@ -382,11 +396,6 @@ const props = defineProps({
     required:true,
     default:[]
   },
-  list_ujalan:{
-    type:Array,
-    required:true,
-    default:[]
-  },
   list_ticket:{
     type:Array,
     required:true,
@@ -632,16 +641,24 @@ const doSave = async () => {
 
 const list_to = computed(()=>{
   let jenisF = trx_trp.value.jenis == 'TBSK' ? 'TBS' : trx_trp.value.jenis;
-  return [...new Set(props.list_ujalan.filter((x)=>x.jenis==jenisF).map((x)=>x.xto))];
+  return [...new Set(list_ujalan.value.filter((x)=>x.jenis==jenisF).map((x)=>x.xto))];
 })
 
 const list_tipe = computed(()=>{
   let jenisF = trx_trp.value.jenis == 'TBSK' ? 'TBS' : trx_trp.value.jenis;
-  return props.list_ujalan.filter((x)=>x.xto == trx_trp.value.xto && x.jenis==jenisF);
+  return list_ujalan.value.filter((x)=>x.xto == trx_trp.value.xto && x.jenis==jenisF);
+})
+
+const list_supir = computed(()=>{
+  return [...new Set(list_employee.value.filter((x)=>x.role=="Supir"))];
+})
+
+const list_kernet = computed(()=>{
+  return [...new Set(list_employee.value.filter((x)=>x.role=="Kernet"))];
 })
 
 // const list_pv_to_minilist = computed(()=>{
-//   // return props.list_ujalan.map((x)=>{return {get:x.TicketNo,show:x.TicketNo + "-" + x.AssociateName}});
+//   // return list_ujalan.value.map((x)=>{return {get:x.TicketNo,show:x.TicketNo + "-" + x.AssociateName}});
 //   return props.list_pv.map((x)=>{return {get:x.TicketNo,show:x.TicketNo + "-" + x.AssociateName}});
 // })
 
@@ -704,11 +721,43 @@ const callData = async () => {
   props.fnLoadDBData(trx_trp.value.jenis,trx_trp.value.transition_to);
 }
 
+const list_ujalan = ref([]);
+const list_vehicle = ref([]);
+const list_employee = ref([]);
+
+const loadLocalDT = async () => {
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/trx_load_for_local", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    // params: {id:props.id},
+    // body: {
+    //   sort: "updated_at:desc"
+    // },
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  list_ujalan.value = data.value.list_ujalan;
+  list_vehicle.value = data.value.list_vehicle;
+  list_employee.value = data.value.list_employee;
+}
 
 
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
+    loadLocalDT();
     trx_trp.value = {...trx_trp_temp};
     field_errors.value = {};
     if(props.id!=0)
@@ -863,7 +912,7 @@ const checkAmount = (newVal, oldVal)=>{
   let $total=0;
   let $tipe = "";
   if (newVal=="" || newVal){
-    let hrg = props.list_ujalan.filter(
+    let hrg = list_ujalan.value.filter(
       (x)=>x.id == trx_trp.value.id_uj
     );
 
