@@ -1,21 +1,21 @@
 <template>
   <div class="w-full h-full flex flex-col">
-    <Header :title="'List Ujalan'" />
+    <Header :title="'List Standby'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
-        <button v-if="!useUtils().checkRole(['PabrikTransport'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="!useUtils().checkRole(['Logistic'])" type="button" name="button" class="m-1 text-2xl "
           @click="form_copy()">
           <IconsCopy />
         </button>
-        <button v-if="!useUtils().checkRole(['PabrikTransport'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="!useUtils().checkRole(['Logistic'])" type="button" name="button" class="m-1 text-2xl "
           @click="form_add()">
           <IconsPlus />
         </button>
-        <button type="button" name="button" class="m-1 text-2xl "
+        <button v-if="!useUtils().checkRole(['Logistic'])" type="button" name="button" class="m-1 text-2xl "
           @click="form_edit()">
           <IconsEdit/>
         </button>
-        <button v-if="!useUtils().checkRole(['PabrikTransport'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="!useUtils().checkRole(['Logistic'])" type="button" name="button" class="m-1 text-2xl "
           @click="remove()">
           <IconsDelete />
         </button>
@@ -36,9 +36,7 @@
           <select class="" v-model="sort.field">
             <option value=""></option>
             <option value="id">ID</option>
-            <option value="xto">To</option>
-            <option value="jenis">Jenis</option>
-            <option value="tipe">Tipe</option>
+            <option value="name">Name</option>
           </select>
         </div>
         <div class="pl-1">
@@ -56,7 +54,7 @@
       </form>
       <div class="w-full flex justify-center items-center grow h-0 p-1">
 
-        <div v-if="ujalans.length == 0" class="">
+        <div v-if="standby_msts.length == 0" class="">
           Maaf Tidak Ada Record
         </div>
 
@@ -64,46 +62,35 @@
           <table class="tacky">
             <thead>
               <tr class="sticky top-0 !z-[2]">
-                <!-- <th>No.</th> -->
-                <!-- <th>Updated At</th> -->
                 <th>App 1</th>
                 <th>App 2</th>
                 <th>ID</th>
-                <th>To</th>
-                <th>Tipe</th>
-                <!-- <th>Status</th> -->
-                <th>Jenis</th>
-                <th>Harga</th>
-                <th>Ket.U.Remarks</th>
-                <!-- <th>Created User</th> -->
+                <th>Name</th>
+                <th>Amount</th>
                 <th>Created At</th>
                 <th>Updated At</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(ujalan, index) in ujalans" :key="index" @click="selected = index"
+              <tr v-for="(standby_mst, index) in standby_msts" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
                 <td>
                   <div class="flex items-center justify-center">
-                    <IconsLine v-if="!ujalan.val"/>
+                    <IconsLine v-if="!standby_mst.val"/>
                     <IconsCheck v-else/>
                   </div>
                 </td>
                 <td>
                   <div class="flex items-center justify-center">
-                    <IconsLine v-if="!ujalan.val1"/>
+                    <IconsLine v-if="!standby_mst.val1"/>
                     <IconsCheck v-else/>
                   </div>
                 </td>
-                <td class="bold">{{ ujalan.id }}</td>
-                <td>{{ ujalan.xto }}</td>
-                <td>{{ ujalan.tipe }}</td>
-                <!-- <td>{{ ujalan.status }}</td> -->
-                <td>{{ ujalan.jenis }}</td>
-                <td>{{ pointFormat(ujalan.harga) }}</td>
-                <td>{{ ujalan.note_for_remarks }}</td>
-                <td>{{ ujalan.created_at ? $moment(ujalan.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
-                <td>{{ ujalan.updated_at ? $moment(ujalan.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
+                <td class="bold">{{ standby_mst.id }}</td>
+                <td>{{ standby_mst.name }}</td>
+                <td>{{ pointFormat(standby_mst.amount) }}</td>
+                <td>{{ standby_mst.created_at ? $moment(standby_mst.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
+                <td>{{ standby_mst.updated_at ? $moment(standby_mst.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
               </tr>
             </tbody>
           </table>
@@ -119,9 +106,8 @@
         </div>
       </template>
     </PopupMini>
-    <!-- <ujalansRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
-    <FormsUjalan :show="forms_ujalan_show" :fnClose="()=>{forms_ujalan_show=false}" :id="forms_ujalan_id" :p_data="ujalans" :is_copy="forms_ujalan_copy"/>
-    <FormsUjalanValidasi :show="forms_ujalan_valid_show" :fnClose="()=>{forms_ujalan_valid_show=false}" :id="forms_ujalan_valid_id" :p_data="ujalans"/>
+    <FormsStandbyMst :show="forms_standby_mst_show" :fnClose="()=>{forms_standby_mst_show=false}" :id="forms_standby_mst_id" :p_data="standby_msts" :is_copy="forms_standby_mst_copy"/>
+    <FormsStandbyMstValidasi :show="forms_standby_mst_valid_show" :fnClose="()=>{forms_standby_mst_valid_show=false}" :id="forms_standby_mst_valid_id" :p_data="standby_msts"/>
   
   </div>
 </template>
@@ -141,7 +127,7 @@ definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      // if (!useAuthStore().checkScopes(['ap-ujalan-view']))
+      // if (!useAuthStore().checkScopes(['ap-standby_mst-view']))
       //   return navigateTo('/');
       if (!useAuthStore().checkRole(["SuperAdmin","Logistic",'PabrikTransport']))
       return navigateTo('/');
@@ -157,10 +143,10 @@ params.sort ="created_at:desc";
 
 const token = useCookie('token');
 const { data: dt_async } = await useAsyncData(async () => {
-  let ujalans = [];
+  let standby_msts = [];
 
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/ujalan", {
+  const { data, error, status } = await useMyFetch("/standby_mst", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -172,13 +158,13 @@ const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = false;
   if (status.value === 'error') {
     useErrorStore().trigger(error);
-    return {ujalans};
+    return {standby_msts};
   }
-  ujalans = data.value.data;
-  return {ujalans};
+  standby_msts = data.value.data;
+  return {standby_msts};
 });
 
-const ujalans = ref(dt_async.value.ujalans);
+const standby_msts = ref(dt_async.value.standby_msts);
 // const popup_request = ref(false);
 
 const search = ref("");
@@ -197,7 +183,7 @@ const scrolling = ref({
 const inject_params = () => {
   params.like = "";
   if (search.value != "") {
-    params.like = `id:%${search.value}%,xto:%${search.value}%,tipe:%${search.value}%,jenis:%${search.value}%,harga:%${search.value}%`;
+    params.like = `id:%${search.value}%,name:%${search.value}%,amount:%${search.value}%`;
   }
   params.sort = "";
   if (sort.value.field) {
@@ -211,12 +197,12 @@ const callData = async () => {
   useCommonStore().loading_full = true;
   scrolling.value.may_get_data = false;
   params.page = scrolling.value.page;
-  if (params.page == 1) ujalans.value = [];
+  if (params.page == 1) standby_msts.value = [];
   if(params.first_row) delete params.first_row;
   if(params.page > 1){
-    params.first_row = JSON.stringify(ujalans.value[0]);
+    params.first_row = JSON.stringify(standby_msts.value[0]);
   }
-  const { data, error, status } = await useMyFetch("/ujalan", {
+  const { data, error, status } = await useMyFetch("/standby_mst", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -234,10 +220,10 @@ const callData = async () => {
   }
 
   if (scrolling.value.page == 1) {
-    ujalans.value = data.value.data;
+    standby_msts.value = data.value.data;
     if (loadRef.value) loadRef.value.scrollTop = 0;
   } else if (scrolling.value.page > 1) {
-    ujalans.value = [...ujalans.value, ...data.value.data];
+    standby_msts.value = [...standby_msts.value, ...data.value.data];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
@@ -273,14 +259,14 @@ const searching = () => {
 
 const router = useRouter();
 
-const forms_ujalan_show =  ref(false);
-const forms_ujalan_id = ref(0);
-const forms_ujalan_copy = ref(0);
+const forms_standby_mst_show =  ref(false);
+const forms_standby_mst_id = ref(0);
+const forms_standby_mst_copy = ref(0);
 const form_add = () => {
-  forms_ujalan_id.value = 0;
-  forms_ujalan_show.value = true;
-  forms_ujalan_copy.value = false;
-  // router.push({ name: 'data_ujalan-form', query: { id: "" } });
+  forms_standby_mst_id.value = 0;
+  forms_standby_mst_show.value = true;
+  forms_standby_mst_copy.value = false;
+  // router.push({ name: 'data_standby_mst-form', query: { id: "" } });
 }
 
 const { display } = useAlertStore();
@@ -290,10 +276,10 @@ const form_edit = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    forms_ujalan_id.value = ujalans.value[selected.value].id;
-    forms_ujalan_show.value = true;
-    forms_ujalan_copy.value = false;
-    // router.push({ name: 'data_ujalan-form', query: { id: ujalans.value[selected.value].id } });
+    forms_standby_mst_id.value = standby_msts.value[selected.value].id;
+    forms_standby_mst_show.value = true;
+    forms_standby_mst_copy.value = false;
+    // router.push({ name: 'data_standby_mst-form', query: { id: standby_msts.value[selected.value].id } });
   }
 };
 
@@ -301,21 +287,21 @@ const form_copy = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    forms_ujalan_id.value = ujalans.value[selected.value].id;
-    forms_ujalan_show.value = true;
-    forms_ujalan_copy.value = true;
+    forms_standby_mst_id.value = standby_msts.value[selected.value].id;
+    forms_standby_mst_show.value = true;
+    forms_standby_mst_copy.value = true;
     // router.push({ name: 'data_trx_trp-form', query: { id: trx_trps.value[selected.value].id } });
   }
 };
 
-const forms_ujalan_valid_show =  ref(false);
-const forms_ujalan_valid_id = ref(0);
+const forms_standby_mst_valid_show =  ref(false);
+const forms_standby_mst_valid_id = ref(0);
 const validasi = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    forms_ujalan_valid_id.value = ujalans.value[selected.value].id;
-    forms_ujalan_valid_show.value = true;
+    forms_standby_mst_valid_id.value = standby_msts.value[selected.value].id;
+    forms_standby_mst_valid_show.value = true;
   }
 };
 
@@ -334,7 +320,7 @@ const remove = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     deleted_reason.value = '';
-    delete_data.value = {id : ujalans.value[selected.value].id};
+    delete_data.value = {id : standby_msts.value[selected.value].id};
     delete_box.value = true;
   }
 };
@@ -350,11 +336,11 @@ const confirmed_delete = async() => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
-  data_in.append("id", ujalans.value[selected.value].id);
+  data_in.append("id", standby_msts.value[selected.value].id);
   data_in.append("deleted_reason", deleted_reason.value);  
   data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useMyFetch("/ujalan", {
+  const { data, error, status } = await useMyFetch("/standby_mst", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -368,7 +354,7 @@ const confirmed_delete = async() => {
     useErrorStore().trigger(error);
     return;
   }
-  ujalans.value.splice(selected.value,1);
+  standby_msts.value.splice(selected.value,1);
   selected.value = -1;
   delete_box.value = false;
 }

@@ -141,7 +141,7 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(items.value[0]);
   }
-  const { data, error, status } = await useMyFetch("/ujalan/ac_accounts", {
+  const { data, error, status } = await useMyFetch("/ac_accounts", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
