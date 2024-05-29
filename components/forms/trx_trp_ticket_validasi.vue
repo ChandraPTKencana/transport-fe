@@ -66,48 +66,154 @@
                 </div>
               </div>
 
-              <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
-                <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">Cost Center Code</label>
-                  <div class="card-border">
-                    {{ trx_trp.cost_center_code }}
+              <div v-if="trx_trp.jenis=='TBS'" class="w-full p-1">
+                <label for="">Peralihan</label>
+                <div class="card-border">
+                  {{ trx_trp.transition_to }}
+                </div>
+              </div>
+
+              <div v-if="trx_trp.jenis!='' && trx_trp.jenis!='TBSK'" class="w-full flex flex-col flex-wrap p-1">
+                <label for="">Tiket A</label>
+                <div class="card-border">
+                  {{ trx_trp.ticket_a_no }}
+                </div>
+              </div>
+              
+              <div v-if="trx_trp.jenis!='' && trx_trp.jenis!='TBSK'" class="w-full flex flex-wrap">
+                <div class="w-6/12 sm:w-6/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                  <label for="">In At</label>
+                  <div class="card-border disabled">
+                    {{ trx_trp.ticket_a_in_at ? $moment(trx_trp.ticket_a_in_at).format("DD-MM-Y HH:mm:ss") : "-" }}
+                  </div>
+                </div>
+                <div class="w-6/12 sm:w-6/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                  <label for="">Out At</label>
+                  <div class="card-border disabled">
+                    {{ trx_trp.ticket_a_out_at ? $moment(trx_trp.ticket_a_out_at).format("DD-MM-Y HH:mm:ss") : "-" }}
+                  </div>
+                </div>
+                <div class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+                  <label for="">Bruto</label>
+                  <div class="card-border disabled">
+                    {{ trx_trp.ticket_a_bruto ? pointFormat(trx_trp.ticket_a_bruto): 0 }}
+                  </div>
+                </div>
+                <div class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+                  <label for="">Tara</label>
+                  <div class="card-border disabled">
+                    {{ trx_trp.ticket_a_tara ? pointFormat(trx_trp.ticket_a_tara): 0 }}
+                  </div>
+                </div>
+                <div class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+                  <label for="">Netto</label>
+                  <div class="card-border disabled">
+                    {{ trx_trp.ticket_a_bruto ? pointFormat(trx_trp.ticket_a_bruto - trx_trp.ticket_a_tara): 0 }}
                   </div>
                 </div>
 
-                <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                  <label for="">Cost Center Desc</label>
-                  <div class="card-border">
-                    {{ trx_trp.cost_center_code }}
+                <div class="w-3/12 sm:w-2/12 md:w-2/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+                  <label for="">No Pol</label>
+                  <div class="card-border disabled">
+                    {{ trx_trp.ticket_a_no_pol }}
                   </div>
                 </div>
 
-                <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                  <label for="">PVR No</label>
-                  <div class="card-border">
-                    {{ trx_trp.pvr_no }}
+                <div class="w-full sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
+                  <label for="">Supir</label>
+                  <div class="card-border disabled">
+                    {{ trx_trp.ticket_a_supir }}
+                  </div>
+                </div>
+                
+              </div>
+              
+
+              <div  v-if="['TBS','TBSK'].indexOf(trx_trp.jenis) > -1" class="w-full flex flex-col flex-wrap p-1">
+                <label for="">Tiket B</label>
+                <div class="card-border">
+                  {{ trx_trp.ticket_b_no }}
+                </div>
+              </div>
+              <div v-if="['TBS','TBSK'].indexOf(trx_trp.jenis) > -1" class="w-full flex flex-wrap">
+                <div class="w-6/12 sm:w-6/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                  <label for="">In At</label>
+                  <div class="card-border disabled">
+                    {{ trx_trp.ticket_b_in_at ? $moment(trx_trp.ticket_b_in_at).format("DD-MM-Y HH:mm:ss") : "-" }}
+                  </div>
+                </div>
+                <div class="w-6/12 sm:w-6/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                  <label for="">Out At</label>
+                  <div class="card-border disabled">
+                    {{ trx_trp.ticket_b_out_at ? $moment(trx_trp.ticket_b_out_at).format("DD-MM-Y HH:mm:ss") : "-" }}
+                  </div>
+                </div>
+                <div class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+                  <label for="">Bruto </label>
+                  <div class="card-border disabled">
+                    {{ trx_trp.ticket_b_bruto ? pointFormat(trx_trp.ticket_b_bruto): 0 }}
+                  </div>
+                </div>
+                <div class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+                  <label for="">Tara </label>
+                  <div class="card-border disabled">
+                    {{ trx_trp.ticket_b_tara ? pointFormat(trx_trp.ticket_b_tara): 0 }}
+                  </div>
+                </div>
+                <div class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+                  <label for="">Netto </label>
+                  <div class="card-border disabled">
+                    {{ trx_trp.ticket_b_bruto ? pointFormat(trx_trp.ticket_b_bruto - trx_trp.ticket_b_tara): 0 }}
                   </div>
                 </div>
 
-                <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">PVR Total</label>
-                  <div class="card-border">
-                    {{ pointFormat(trx_trp.pvr_total || 0) }}
+                <div class="w-3/12 sm:w-2/12 md:w-2/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+                  <label for="">No Pol</label>
+                  <div class="card-border disabled">
+                    {{ trx_trp.ticket_b_no_pol }}
                   </div>
                 </div>
 
-
-                <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                  <label for="">PV</label>
-                  <div class="card-border">
-                    {{ trx_trp.pv_no }}
+                <div class="w-full sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
+                  <label for="">Supir</label>
+                  <div class="card-border disabled">
+                    {{ trx_trp.ticket_b_supir }}
                   </div>
                 </div>
-  
-                <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">PV Amount</label>
-                  <div class="card-border ">
-                    {{  pointFormat(trx_trp.pv_total || 0) }}
+              </div>
+              
+              <div v-if="['CPO','PK'].indexOf(trx_trp.jenis) > -1" class="w-full sm:w-6/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <label for="">In At</label>
+                <div class="card-border">
+                  {{ trx_trp.ticket_b_in_at ? $moment(trx_trp.ticket_b_in_at).format("DD-MM-Y HH:mm:ss") : "" }}
+                </div>
+              </div>
+
+              <div v-if="['CPO','PK'].indexOf(trx_trp.jenis) > -1" class="w-full sm:w-6/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <label for="">Out At</label>
+                <div class="card-border">
+                  {{trx_trp.ticket_b_out_at ? $moment(trx_trp.ticket_b_out_at).format("DD-MM-Y HH:mm:ss"):"" }}
+                </div>
+              </div>
+                     
+              <div v-if="['CPO','PK'].indexOf(trx_trp.jenis) > -1" class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+                <label for="">Bruto</label>
+                <div class="card-border">
+                    {{ pointFormat(trx_trp.ticket_b_bruto || 0) }}
                   </div>
+              </div>
+
+              <div v-if="['CPO','PK'].indexOf(trx_trp.jenis) > -1" class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+                <label for="">Tara</label>
+                <div class="card-border">
+                    {{ pointFormat(trx_trp.ticket_b_tara || 0) }}
+                  </div>
+              </div>
+
+              <div v-if="['CPO','PK'].indexOf(trx_trp.jenis) > -1" class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+                <label for="">Netto</label>
+                <div class="card-border ">
+                    {{ pointFormat(trx_trp.ticket_b_netto || 0) }}
                 </div>
               </div>
 
@@ -191,9 +297,26 @@ const trx_trp_temp = {
     tipe: "",
     jenis:"",
     amount: 0,
-    pv_id: -1,
-    pv_no:"",
-    pv_total:0,
+    ticket_a_id: -1,
+    ticket_a_no: "",
+    ticket_a_bruto:0,
+    ticket_a_tara:0,
+    ticket_a_netto:0,
+    ticket_a_supir:"",
+    ticket_a_no_pol:"",
+    ticket_a_in_at:"",
+    ticket_a_out_at:"",
+
+    ticket_b_id: -1,
+    ticket_b_no: "",
+    ticket_b_bruto:0,
+    ticket_b_tara:0,
+    ticket_b_netto:0,
+    ticket_b_supir:"",
+    ticket_b_no_pol:"",
+    ticket_b_in_at:"",
+    ticket_b_out_at:"",
+
     supir: "",
     kernet: "",
     no_pol: '',
@@ -206,12 +329,6 @@ const trx_trp_temp = {
     val2:0,
     val2_by:{ username:"" },
     val2_at:"",
-    cost_center_code:"",
-    cost_center_desc:"",
-    pvr_id:"",
-    pvr_no:"",
-    pvr_total:"",
-    pvr_had_detail:"",
 };
 const trx_trp = ref({...trx_trp_temp});
 

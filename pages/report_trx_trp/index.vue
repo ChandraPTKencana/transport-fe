@@ -13,8 +13,8 @@
         </button>
       </div>
 
-      <form action="#" class="w-full flex p-1">
-        <div >
+      <form action="#" class="w-full flex flex-wrap text-xs">
+        <div class="w-6/12 p-1 sm:w-4/12 md:w-3/12 lg:w-2/12 flex flex-col">
           <div class="font-bold"> Tgl Dari </div>
           <ClientOnly>
             <vue-date-picker  v-model="date.from" 
@@ -22,12 +22,12 @@
             format="dd-MM-yyyy" 
             :enable-time-picker = "false" 
             text-input
-            teleport-center></vue-date-picker>
+            teleport-center
+            class="flex-grow"></vue-date-picker>
           </ClientOnly>
           <p class="text-red-500">{{ field_errors.date_from }}</p>
         </div>
-
-        <div >
+        <div class="w-6/12 p-1 sm:w-4/12 md:w-3/12 lg:w-2/12 flex flex-col">
           <div class="font-bold"> Tgl Sampai </div>
           <ClientOnly>
             <vue-date-picker  v-model="date.to" 
@@ -35,37 +35,34 @@
             format="dd-MM-yyyy" 
             :enable-time-picker = "false" 
             text-input
-            teleport-center></vue-date-picker>
+            teleport-center
+            class="flex-grow"></vue-date-picker>
           </ClientOnly>
           <p class="text-red-500">{{ field_errors.date_to }}</p>
         </div>
-
-        <div class="grow">
+        <div class="w-6/12 p-1 sm:w-4/12 md:w-2/12 lg:w-4/12 flex flex-col">
           <div class="font-bold"> Keyword </div>
-          <input class="" type="text" v-model="search" name="search"
+          <input class="flex-grow" type="text" v-model="search" name="search"
             placeholder="Keyword">
         </div>
-        <div class="pl-1">
+        <div class="w-6/12 p-1 sm:w-4/12 md:w-1/12 lg:w-2/12 flex flex-col">
           <div class="font-bold"> Sort By </div>
-          <select class="" v-model="sort.field">
+          <select class="flex-grow" v-model="sort.field">
             <option value=""></option>
             <option value="id">ID</option>
             <option value="xto">To</option>
             <option value="jenis">Jenis</option>
             <option value="tipe">Tipe</option>
-            <option value="pv_no">PV No</option>
-            <option value="ticket_a_no">Ticket A No</option>
-            <option value="ticket_b_no">Ticket B No</option>
           </select>
         </div>
-        <div class="pl-1">
+        <div class="w-6/12 p-1 sm:w-4/12 md:w-2/12 lg:w-1/12 flex flex-col">
           <div class="font-bold"> Sort Order </div>
-          <select class="" v-model="sort.by">
+          <select class="flex-grow" v-model="sort.by">
             <option value="asc">Asc</option>
             <option value="desc">Desc</option>
           </select>
         </div>
-        <div class="flex items-end pl-1">
+        <div class="w-2/12 md:w-1/12 lg:w-1/12 p-1 flex items-end">
           <button class="" type="submit" name="button" @click.prevent="searching()">
             <IconsSearch class="text-2xl" />
           </button>

@@ -1,6 +1,6 @@
 
 <template>
-    <div class="w-full flex min-h-[3rem] items-center bg-slate-600 p-1 pl-8 sm:pl-1 text-white">
+    <div class="w-full flex min-h-[2rem] items-center bg-slate-600 p-1 pl-8 sm:pl-1 text-white">
         <h1>{{ title }}</h1>
     </div>
 </template>

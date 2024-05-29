@@ -18,6 +18,13 @@ div#__nuxt>div {
     @apply h-full;
 }
 
+input,select,textarea{
+    @apply flex-grow;
+}
+
+.dp__main , .dp__main > :first-child,.dp__input_wrap,.dp__input_wrap input{
+    @apply h-full;
+}
 
 table.tacky {
     @apply whitespace-nowrap m-0 border-none border-collapse border-spacing-0 ;

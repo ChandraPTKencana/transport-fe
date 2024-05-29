@@ -14,6 +14,13 @@
                   {{ standby_mst.name }}
                 </div>
               </div>
+
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">Tipe</label>
+                <div class="card-border">
+                  {{ standby_mst.tipe }}
+                </div>
+              </div>
               
               <div class="w-full sm:w-4/12 md:w-2/12 lg:w-1/12 flex flex-col flex-wrap p-1">
                 <label for="">Amount</label>
@@ -102,7 +109,7 @@
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
-            <button type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+            <button v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
               Validasi
             </button>
           </div>
@@ -146,13 +153,18 @@ const props = defineProps({
     type:Array,
     required:true,
     default:[]
-  }
-  
+  },
+  is_view:{
+    type:Boolean,
+    required:false,
+    default:false
+  },
 })
 
 const standby_mst_temp = {
     id: -1,
     name: "",
+    tipe: "",
     amount:0,
     details: [],
     val:0,

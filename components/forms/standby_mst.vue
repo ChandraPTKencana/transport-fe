@@ -13,6 +13,11 @@
                 <input v-model="standby_mst.name">
                 <p class="text-red-500">{{ field_errors.name }}</p>
               </div>
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">Tipe</label>
+                <input v-model="standby_mst.tipe">
+                <p class="text-red-500">{{ field_errors.tipe }}</p>
+              </div>
               <div class="w-full sm:w-4/12 md:w-2/12 lg:w-1/12 flex flex-col flex-wrap p-1">
                 <label for="">Amount</label>
                 <div class="card-border disabled">
@@ -192,6 +197,7 @@ const props = defineProps({
 const standby_mst_temp = {
     id: -1,
     name: "",
+    tipe: "",
     amount:0,
     details: [],
 };
@@ -295,6 +301,7 @@ const doSave = async () => {
 
   const data_in = new FormData();
   data_in.append("name", standby_mst.value.name);
+  data_in.append("tipe", standby_mst.value.tipe);
   data_in.append("amount", standby_mst.value.amount);
   data_in.append("details", JSON.stringify(details.value));
   

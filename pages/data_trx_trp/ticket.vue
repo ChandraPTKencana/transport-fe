@@ -6,19 +6,15 @@
         <div class="grow flex">
           <div class="m-1">
             <select class="" v-model="filter_status" >
-              <option value="pv_not_done">Undone</option>
-              <option value="pv_done">Done</option>
+              <option value="ticket_not_done">Undone</option>
+              <option value="ticket_done">Done</option>
               <option value="deleted">Trash</option>
               <option value="all">All</option>
               <option value="req_deleted">Req Delete</option>
             </select>
           </div>
 
-          <button v-if="['pv_not_done','all'].indexOf(filter_status) > -1" type="button" name="button" class="m-1 text-2xl "
-            @click="form_add()">
-            <IconsPlus />
-          </button>
-          <button v-if="['pv_not_done','all'].indexOf(filter_status) > -1 && selected > -1 && dt_selected.deleted == 0 && dt_selected.val == 0 && dt_selected.pvr_id == ''" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_edit" type="button" name="button" class="m-1 text-2xl "
             @click="form_edit()">
             <IconsEdit/>
           </button>
@@ -26,35 +22,20 @@
             @click="form_view()">
             <IconsEyes/>
           </button>
-          <button  v-if="['all','pv_not_done'].indexOf(filter_status) > -1 && selected > -1 && dt_selected.deleted == 0 && dt_selected.pvr_id == ''" type="button" name="button" class="m-1 text-2xl "
-            @click="remove()">
-            <IconsDelete />
-          </button>
-          <button  v-if="['all','pv_not_done','pv_done'].indexOf(filter_status) > -1 && selected > -1 && dt_selected.deleted == 0 && dt_selected.req_deleted == 0 && dt_selected.pvr_id !== ''" type="button" name="button" class="m-1 text-2xl "
+          <button  v-if="!checkRole(['PabrikTransport']) &&['req_deleted','all'].indexOf(filter_status) > -1 && selected > -1 && dt_selected.deleted == 0 && dt_selected.req_deleted == 1" type="button" name="button" class="m-1 text-2xl "
             @click="for_remove()">
             <IconsVoid />
           </button>
-          <button v-if="filter_status=='pv_not_done' && selected >-1 && dt_selected.val == 0 " type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_validasi" type="button" name="button" class="m-1 text-2xl "
             @click="validasi()">
             <IconsSignature />
           </button>
-          <button v-if="['deleted','req_deleted'].indexOf(filter_status) == -1 &&  selected > -1 && dt_selected.deleted == 0 && dt_selected.req_deleted == 0" type="button" name="button" class="m-1 text-2xl "
-            @click="printPreview()">
-            <IconsPrinterEye />
-          </button>
+          
         </div>
         <div class="flex">
           <button type="button" name="button" class="m-1 text-2xl "
             @click="cogs_show=true">
             <IconsCog />
-          </button>
-          <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
-            @click="generatePVR()">
-            Gen/Update PVR
-          </button>
-          <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
-            @click="updatePV()">
-            Update PV
           </button>
           <div class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
             <span class="text-xs">Mode</span> : <span class="font-bold" :class="online_status?'text-green-600' : 'text-red-600'">{{ online_status ? "ONLINE" : "OFFLINE" }} </span>
@@ -135,9 +116,7 @@
           <IconsLine v-if="!item.val2"/>
           <IconsCheck v-else/>
         </template>
-        <template #[`pvr_completed`]="{item}">
-          <IconsLine v-if="!item.pvr_had_detail"/><IconsCheck v-else/>
-        </template>
+
         <template #[`deleted_by_username`]="{item}">
           {{ item.deleted_by?.username }}
         </template>
@@ -148,47 +127,15 @@
       </TableView>
     </div>
 
-    <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk" >
-      <template #footer>
-        Masukkan Alasan Penghapusan:
-        <div class="grow mb-5" >
-          <textarea  v-model="deleted_reason"></textarea>
-        </div>
-      </template>
-    </PopupMini>
-
-    <PopupMini :type="'custome'" :show="req_deleted_box" :data="req_deleted_data" :fnClose="toggleReqDeleteBox" :fnConfirm="confirmedReqDeleted" :enabledOk="enabledOk1" >
-      
+    <PopupMini :type="'custome'" :show="req_deleted_box" :data="req_deleted_data" :fnClose="toggleReqDeleteBox" :fnConfirm="confirmedReqDeleted">      
       <template #words>
-        Data akan diproses dan <b>tidak dapat dibatalkan lagi</b>, yakin untuk melanjutkan ?
-      </template>
-      <template #footer>
-          Masukkan Alasan Permintaan Penghapusan:
-        <div class="grow mb-5" >
-          <textarea  v-model="req_deleted_reason"></textarea>
-        </div>
+        Data akan diproses dan <b>tidak dapat dibatalkan lagi</b>, apakah Anda menyetujui permintaan penghapusan data berikut?
       </template>
     </PopupMini>
     <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
-    <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_pv="list_pv" :list_cost_center="list_cost_center" :online_status="online_status"/>
-    <FormsTrxTrpValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" :is_view="forms_trx_trp_is_view"/>
+    <FormsTrxTrpTicket :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ticket="list_ticket" :list_pv="list_pv" :list_cost_center="list_cost_center" :online_status="online_status"/>
+    <FormsTrxTrpTicketValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" :is_view="forms_trx_trp_is_view"/>
     <FormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
-  
-    <div v-if="prtView" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
-    style="background-color: rgba(255,255,255,0.9);">
-      <div class="relative" style="width:95%; height: 90%;">
-        <div class="absolute -top-7 right-0 bg-white"
-          style="position: absolute; padding:5px 10px; border: solid 1px #ccc; border-bottom: none; border-top-right-radius: 5px;  border-top-left-radius: 5px;">
-          <IconsTimes  style="color:black; cursor:pointer;" @click="printPreview()"/>
-        </div>
-        <iframe ref="iframe" width='100%' height='100%' :src='pdfContent.dataBase64'></iframe>
-        <div
-          style="position: absolute; top: 12px; right: 98px; background-color: rgba(255,255,255,0); width: 37px; height: 36px; z-index:1; cursor: pointer;"
-          @click="download()">
-        </div>
-      </div>
-    </div>
-
 
     <div v-if="cogs_show" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
     style="background-color: rgba(255,255,255,0.9);">
@@ -260,8 +207,6 @@ import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
 
-const { pointFormat } = useUtils();
-
 definePageMeta({
   // layout: "clear",
   middleware: [
@@ -278,8 +223,10 @@ definePageMeta({
 
 const checkStatus=(data)=>{
   if(data.deleted==1) return "!bg-red-400";
-  if(data.pvr_id > 0 && data.req_deleted == 1) return "!bg-yellow-300"; 
-  if(data.pv_id > 0) return "!bg-blue-300"; 
+  if(data.req_deleted == 1) return "!bg-yellow-300"; 
+  if((["CPO","PK"].indexOf(data.jenis)>-1 && (data.ticket_a_id>0 || data.ticket_b_bruto>0 || data.ticket_b_tara>0 || data.ticket_b_netto >0 || data.ticket_b_in_at!=""|| data.ticket_b_out_at!="")) ||
+    (data.jenis=="TBS" && (data.ticket_a_id>0 || data.ticket_b_id>0)) ||
+    (data.jenis=="TBSK" && data.ticket_b_id>0)) return "!bg-blue-300"; 
   return "";
 }
 const addClassToTbody=(data)=>{
@@ -290,7 +237,7 @@ const addClassToTbody=(data)=>{
 }
 
 
-const filter_status = ref("pv_not_done")
+const filter_status = ref("ticket_not_done")
 watch(()=>filter_status.value,(newval)=>{
   fields_thead.value.map((x)=>{
     let in_list=["deleted_by_username","deleted_at","deleted_reason","req_deleted_by_username","req_deleted_at","req_deleted_reason"].indexOf(x.key) > -1;
@@ -329,6 +276,7 @@ const checkRole=(list)=>{
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
   let trx_trps = [];
+  // let list_ticket = [];
   // let list_pv = [];
 
   const [data1, data2] = await Promise.all([
@@ -359,22 +307,25 @@ const { data: dt_async } = await useAsyncData(async () => {
 
   if (data1.status.value === 'error') {
     useErrorStore().trigger(data1.error);
-    // return { trx_trps, list_pv };
+    // return { trx_trps, list_ticket, list_pv };
     return { trx_trps };
   }
 
   // if (data2.status.value !== 'error') {
+  //   list_ticket = data2.data.value.list_ticket;
   //   list_pv = data2.data.value.list_pv;
   // }
   useCommonStore().loading_full = false;
 
-  // return { trx_trps,  list_pv };
+  // return { trx_trps, list_ticket, list_pv };
   return { trx_trps };
 });
 
 const trx_trps = ref(dt_async.value.trx_trps || []);
+// const list_ticket = ref(dt_async.value.list_ticket);
 // const list_pv = ref(dt_async.value.list_pv);
 const list_cost_center = ref([]);
+const list_ticket = ref([]);
 const list_pv = ref([]);
 const online_status=ref(false);
 const fnLoadDBData = async (jenis,transition_to="") => {
@@ -398,6 +349,7 @@ const fnLoadDBData = async (jenis,transition_to="") => {
   }
 
   list_cost_center.value = data.value.list_cost_center;
+  list_ticket.value = data.value.list_ticket;
   list_pv.value = data.value.list_pv;
 }
 
@@ -489,11 +441,6 @@ const router = useRouter();
 
 const forms_trx_trp_show =  ref(false);
 const forms_trx_trp_id = ref(0);
-const form_add = () => {
-  forms_trx_trp_id.value = 0;
-  forms_trx_trp_show.value = true;
-  // router.push({ name: 'data_trx_trp-form', query: { id: "" } });
-}
 
 const { display } = useAlertStore();
 const { show, status, message } = storeToRefs(useAlertStore());
@@ -538,42 +485,39 @@ const form_absen = (index) => {
   forms_trx_absen_show.value = true;
 };
 
-const enabledOk = ref(false);
-const delete_data = ref({});
-const delete_box = ref(false);
-const deleted_reason = ref("");
-const toggleDeleteBox = async()=>{  
-  if (delete_box.value) {
-    delete_box.value = false;
+const req_deleted_data = ref({});
+const req_deleted_box = ref(false);
+const req_deleted_reason = ref("");
+const toggleReqDeleteBox = async()=>{  
+  if (req_deleted_box.value) {
+    req_deleted_box.value = false;
   }
 };
 
-const remove = () => {
+const for_remove = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    deleted_reason.value = '';
-    delete_data.value = {id : trx_trps.value[selected.value].id, "no pol":trx_trps.value[selected.value].no_pol, "tujuan":trx_trps.value[selected.value].xto};
-    delete_box.value = true;
+    req_deleted_reason.value = '';
+    req_deleted_data.value = {
+      id : trx_trps.value[selected.value].id, 
+      "no pol":trx_trps.value[selected.value].no_pol, 
+      "tujuan":trx_trps.value[selected.value].xto,
+      "permintaan":trx_trps.value[selected.value].req_deleted_by?.username,
+      "alasan":trx_trps.value[selected.value].req_deleted_reason,
+    };
+    req_deleted_box.value = true;
   }
 };
 
-watch(()=>deleted_reason.value,(newval)=>{
-  if( newval.trim().length > 0 ) enabledOk.value = true;
-  else enabledOk.value = false;
-}, {
-  immediate: false
-})
-
-const confirmed_delete = async() => {
+const confirmedReqDeleted = async() => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
   data_in.append("id", trx_trps.value[selected.value].id);  
-  data_in.append("deleted_reason", deleted_reason.value);  
   data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useMyFetch("/trx_trp", {
+  const { data, error, status } = await useMyFetch("/trx_trp_approve_req_delete", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -600,119 +544,8 @@ const confirmed_delete = async() => {
   }else{
     trx_trps.value.splice(selected.value,1,{...old});
   }
-
-  selected.value = -1;
-  delete_box.value = false;
-}
-
-
-
-const enabledOk1 = ref(false);
-const req_deleted_data = ref({});
-const req_deleted_box = ref(false);
-const req_deleted_reason = ref("");
-const toggleReqDeleteBox = async()=>{  
-  if (req_deleted_box.value) {
-    req_deleted_box.value = false;
-  }
-};
-
-const for_remove = () => {
-  if (selected.value == -1) {
-    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
-  } else {
-    req_deleted_reason.value = '';
-    req_deleted_data.value = {id : trx_trps.value[selected.value].id, "no pol":trx_trps.value[selected.value].no_pol, "tujuan":trx_trps.value[selected.value].xto};
-    req_deleted_box.value = true;
-  }
-};
-
-watch(()=>req_deleted_reason.value,(newval)=>{
-  if( newval.trim().length > 0 ) enabledOk1.value = true;
-  else enabledOk1.value = false;
-}, {
-  immediate: false
-})
-
-const confirmedReqDeleted = async() => {
-  useCommonStore().loading_full = true;
-
-  const data_in = new FormData();
-  data_in.append("id", trx_trps.value[selected.value].id);  
-  data_in.append("req_deleted_reason", req_deleted_reason.value);  
-  data_in.append("_method", "DELETE");
-
-  const { data, error, status } = await useMyFetch("/trx_trp_req_delete", {
-    method: "post",
-    headers: {
-      'Authorization': `Bearer ${token.value}`,
-      'Accept': 'application/json',
-    },
-    body: data_in,
-    retry: 0,
-  });
-  useCommonStore().loading_full = false;
-  if (status.value === 'error') {
-    useErrorStore().trigger(error);
-    return;
-  }
-  let old = {...trx_trps.value[selected.value]};
-  old['req_deleted'] = data.value.req_deleted;
-  old['req_deleted_user'] = data.value.req_deleted_user;
-  old['req_deleted_by'] = data.value.req_deleted_by;
-  old['req_deleted_at'] = data.value.req_deleted_at;
-  old['req_deleted_reason'] = data.value.req_deleted_reason;
-  old['class_h'] = checkStatus(old);
-  if(filter_status.value!='all'){
-    trx_trps.value.splice(selected.value,1);
-  }else{
-    trx_trps.value.splice(selected.value,1,{...old});
-  }
   selected.value = -1;
   req_deleted_box.value = false;
-}
-
-const { downloadFile, printHtml } = useDownload();
-
-const prtView = ref(false);
-const pdfContent = ref("");
-
-const printPreview = async()=>{
-  
-  if (prtView.value==true) {
-    prtView.value = false;
-    return;
-  }
-
-  if (selected.value == -1) {
-    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
-    return;
-  } 
-  
-  useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/trx_trp_preview_file", {
-    method: 'get',
-    headers: {
-      'Authorization': `Bearer ${token.value}`,
-      'Accept': 'application/json'
-    },
-    params: {id : trx_trps.value[selected.value].id},
-    retry: 0,
-  });
-  useCommonStore().loading_full = false;
-
-  if (status.value === 'error') {
-    useErrorStore().trigger(error);
-    return;
-  }
-  // pdfContent.value = data.value;
-  // prtView.value = true;
-
-  printHtml(data.value.html,318);
-}
-
-const download = ()=>{
-  downloadFile(pdfContent.value);
 }
 
 
@@ -736,84 +569,6 @@ const handleDate = (source)=>{
   }
 }
 
-const generatePVR = async() => {
-  useCommonStore().loading_full = true;
-
-  const data_in = new FormData();
-  // data_in.append("id", trx_trps.value[selected.value].id);  
-  data_in.append("online_status", online_status.value);  
-
-  const { data, error, status } = await useMyFetch("/trx_trp_do_gen_pvr", {
-    method: "post",
-    headers: {
-      'Authorization': `Bearer ${token.value}`,
-      'Accept': 'application/json',
-    },
-    body: data_in,
-    retry: 0,
-  });
-  useCommonStore().loading_full = false;
-  if (status.value === 'error') {
-    useErrorStore().trigger(error);
-    return;
-  }
-
-  data.value.forEach(e => {
-    let idx = trx_trps.value.map((x)=>x.id).indexOf(e.id);
-    if(idx !== -1) {
-      let dt = trx_trps.value[idx];
-      dt.pvr_id = e.pvr_id;
-      dt.pvr_no = e.pvr_no;
-      dt.pvr_total = e.pvr_total;
-      dt.pvr_had_detail = e.pvr_had_detail;
-      dt.updated_at = e.updated_at;
-      
-      trx_trps.value.splice(idx,1,{...dt});
-    }
-    
-  });
-
-  display({ show: true, status: "Success", message: "Generate Or Update PVR Done" });
-}
-
-const updatePV = async() => {
-  useCommonStore().loading_full = true;
-
-  const data_in = new FormData();
-  data_in.append("online_status", online_status.value);  
-
-  const { data, error, status } = await useMyFetch("/trx_trp_do_update_pv", {
-    method: "post",
-    headers: {
-      'Authorization': `Bearer ${token.value}`,
-      'Accept': 'application/json',
-    },
-    body: data_in,
-    retry: 0,
-  });
-  useCommonStore().loading_full = false;
-  if (status.value === 'error') {
-    useErrorStore().trigger(error);
-    return;
-  }
-
-  data.value.data.forEach(e => {
-    let idx = trx_trps.value.map((x)=>x.id).indexOf(e.id);
-    if(idx !== -1) {
-      let dt = trx_trps.value[idx];
-      dt.pv_id = e.pv_id;
-      dt.pv_no = e.pv_no;
-      dt.pv_total = e.pv_total;
-      dt.pv_datetime = e.pv_datetime;
-      dt.updated_at = e.updated_at;
-      
-      trx_trps.value.splice(idx,1,{...dt});
-    }
-    
-  });
-
-  display({ show: true, status: "Success", message: "Update PV Done" });
-}
 
 const fields_thead=ref([
   {key:"no",label:"No",isai:true},
@@ -821,27 +576,33 @@ const fields_thead=ref([
   {key:"app2",label:"App 2"},
   {key:"app3",label:"App 3"},
   {key:"id",label:"ID"},
-  {key:"absen",label:"Absen"},
   {key:"tanggal",label:"U.Jalan Per",dateformat:"DD-MM-Y"},
   {key:"no_pol",label:"No Pol",freeze:1},
   {key:"xto",label:"Tujuan"},
   {key:"tipe",label:"Tipe"},
   {key:"jenis",label:"Jenis"},
   {key:"amount",label:"Amount",class:" justify-end"},
-  {key:"cost_center",label:"Cost Center",childs:[
-    {key:"cost_center_code",label:"Code",type:'default', class:" justify-start"},
-    {key:"cost_center_desc",label:"Desc"},
+  {key:"transition_to",label:"Peralihan"},
+  {key:"ticket_a",label:"Ticket A",childs:[
+    {key:"ticket_a_no",label:"No"},
+    {key:"ticket_a_bruto",label:"Bruto"},
+    {key:"ticket_a_tara",label:"Tara"},
+    {key:"ticket_a_netto",label:"Netto"},
+    {key:"ticket_a_supir",label:"Supir"},
+    {key:"ticket_a_no_pol",label:"No Pol"},
+    {key:"ticket_a_in_at",label:"In At",dateformat:"DD-MM-Y HH:mm:ss"},
+    {key:"ticket_a_out_at",label:"Out At",dateformat:"DD-MM-Y HH:mm:ss"},
   ]},
-  {key:"pvr",label:"PVR",childs:[
-    {key:"pvr_no",label:"No"},
-    {key:"pvr_total",label:"Total"},
-    {key:"pvr_completed",label:"Completed"},
-  ]},
-  {key:"pv",label:"PV",childs:[
-    {key:"pv_datetime",label:"Date",dateformat:"DD-MM-Y"},
-    {key:"pv_no",label:"No"},
-    {key:"pv_total",label:"Total"},
-  ]},
+    {key:"ticket_b",label:"Ticket B",childs:[
+      {key:"ticket_b_no",label:"No"},
+      {key:"ticket_b_bruto",label:"Bruto"},
+      {key:"ticket_b_tara",label:"Tara"},
+      {key:"ticket_b_netto",label:"Netto"},
+      {key:"ticket_b_supir",label:"Supir"},
+      {key:"ticket_b_no_pol",label:"No Pol"},
+      {key:"ticket_b_in_at",label:"In At",dateformat:"DD-MM-Y HH:mm:ss"},
+      {key:"ticket_b_out_at",label:"Out At",dateformat:"DD-MM-Y HH:mm:ss"},
+    ]},
   {key:"supir",label:"Supir"},
   {key:"kernet",label:"Kernet"},
   {key:"created_at",label:"Created At",dateformat:"DD-MM-Y HH:mm:ss"},
@@ -850,8 +611,26 @@ const fields_thead=ref([
   {key:"deleted_at",label:"Deleted At",dateformat:"DD-MM-Y HH:mm:ss", tbl_show:0},
   {key:"deleted_reason",label:"Deleted Reason", tbl_show:0},
   {key:"req_deleted_by_username",label:"Req Deleted By",tbl_show:0},
-  {key:"req_deleted_at",label:"Req Delete At",dateformat:"DD-MM-Y HH:mm:ss", tbl_show:0},
-  {key:"req_deleted_reason",label:"Req Delete Reason", tbl_show:0,type:'default'},
+  {key:"req_deleted_at",label:"Req Deleted At",dateformat:"DD-MM-Y HH:mm:ss", tbl_show:0},
+  {key:"req_deleted_reason",label:"Req Deleted Reason", tbl_show:0},
 ]);
 
+
+const enabled_edit = computed(()=>{  
+  let result = ['ticket_not_done','ticket_done','all'].indexOf(filter_status.value) > -1 
+  && selected.value > -1 
+  && dt_selected.value.deleted == 0
+  && dt_selected.value.req_deleted == 0
+  && dt_selected.value.val2 == 0;
+  return result;
+})
+
+const enabled_validasi = computed(()=>{  
+  let result = ['ticket_done','all'].indexOf(filter_status.value) > -1 
+  && selected.value > -1 
+  && dt_selected.value.deleted == 0
+  && dt_selected.value.req_deleted == 0
+  && dt_selected.value.val2 == 0;
+  return result;
+})
 </script>

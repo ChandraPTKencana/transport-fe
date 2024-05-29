@@ -15,7 +15,11 @@
           @click="form_edit()">
           <IconsEdit/>
         </button>
-        <button v-if="!useUtils().checkRole(['Logistic'])" type="button" name="button" class="m-1 text-2xl "
+        <button type="button" name="button" class="m-1 text-2xl "
+            @click="form_view()">
+            <IconsEyes/>
+          </button>
+        <button v-if="!useUtils().checkRole(['PabrikTransport'])" type="button" name="button" class="m-1 text-2xl "
           @click="remove()">
           <IconsDelete />
         </button>
@@ -37,6 +41,7 @@
             <option value=""></option>
             <option value="id">ID</option>
             <option value="name">Name</option>
+            <option value="tipe">Tipe</option>
           </select>
         </div>
         <div class="pl-1">
@@ -66,6 +71,7 @@
                 <th>App 2</th>
                 <th>ID</th>
                 <th>Name</th>
+                <th>Tipe</th>
                 <th>Amount</th>
                 <th>Created At</th>
                 <th>Updated At</th>
@@ -88,6 +94,7 @@
                 </td>
                 <td class="bold">{{ standby_mst.id }}</td>
                 <td>{{ standby_mst.name }}</td>
+                <td>{{ standby_mst.tipe }}</td>
                 <td>{{ pointFormat(standby_mst.amount) }}</td>
                 <td>{{ standby_mst.created_at ? $moment(standby_mst.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <td>{{ standby_mst.updated_at ? $moment(standby_mst.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
@@ -107,7 +114,7 @@
       </template>
     </PopupMini>
     <FormsStandbyMst :show="forms_standby_mst_show" :fnClose="()=>{forms_standby_mst_show=false}" :id="forms_standby_mst_id" :p_data="standby_msts" :is_copy="forms_standby_mst_copy"/>
-    <FormsStandbyMstValidasi :show="forms_standby_mst_valid_show" :fnClose="()=>{forms_standby_mst_valid_show=false}" :id="forms_standby_mst_valid_id" :p_data="standby_msts"/>
+    <FormsStandbyMstValidasi :show="forms_standby_mst_valid_show" :fnClose="()=>{forms_standby_mst_valid_show=false}" :id="forms_standby_mst_valid_id" :p_data="standby_msts" :is_view="forms_trx_trp_is_view"/>
   
   </div>
 </template>
@@ -296,12 +303,24 @@ const form_copy = () => {
 
 const forms_standby_mst_valid_show =  ref(false);
 const forms_standby_mst_valid_id = ref(0);
+const forms_trx_trp_is_view = ref(false);
 const validasi = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_standby_mst_valid_id.value = standby_msts.value[selected.value].id;
     forms_standby_mst_valid_show.value = true;
+    forms_trx_trp_is_view.value = false;
+  }
+};
+
+const form_view = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_standby_mst_valid_id.value = standby_msts.value[selected.value].id;
+    forms_standby_mst_valid_show.value = true;
+    forms_trx_trp_is_view.value = true;
   }
 };
 

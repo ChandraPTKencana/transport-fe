@@ -5,7 +5,7 @@
       class="bg-slate-800 h-full min-w-[150px] max-w-[150px] fixed sm:relative sm:right-0 text-white z-10"
       style="width:320px;">
       <div class="relative h-full">
-        <button class="absolute left-full h-12 text-2xl text-white bg-slate-500 sm:hidden bg-opacity-0 ring-0 focus:ring-0"
+        <button class="absolute left-full h-8 text-2xl text-white bg-slate-500 sm:hidden bg-opacity-0 ring-0 focus:ring-0 flex justify-center items-center"
           @click="triggerSidebar(!is_sidebar_open)">
           <IconsTimes v-if="is_sidebar_open" />
           <IconsBurger v-else />
@@ -24,12 +24,27 @@
                 U.Jalan
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['SuperAdmin','Logistic','PabrikTransport'])" :class="activeMenu == '/data_trx_trp'?'active':''" >
+            <li v-if="checkRole(['SuperAdmin','PabrikTransport'])" :class="activeMenu == '/data_trx_trp'?'active':''" >
               <nuxt-link to="/data_trx_trp"  class="cursor-pointer" @click="goTo('/data_trx_trp')">
                 <IconsProduct class="mr-1"/>
                 Trx Trp
               </nuxt-link>
             </li>
+
+            <li v-if="checkRole(['SuperAdmin','PabrikTransport','Logistic'])" :class="activeMenu == '/data_trx_trp/ticket'?'active':''" >
+              <nuxt-link to="/data_trx_trp/ticket"  class="cursor-pointer" @click="goTo('/data_trx_trp/ticket')">
+                <IconsProduct class="mr-1"/>
+                Trx Ticket
+              </nuxt-link>
+            </li>
+
+            <li v-if="checkRole(['SuperAdmin','PabrikMandor'])" :class="activeMenu == '/data_trx_trp/ritase'?'active':''" >
+              <nuxt-link to="/data_trx_trp/ritase"  class="cursor-pointer" @click="goTo('/data_trx_trp/ritase')">
+                <IconsProduct class="mr-1"/>
+                Trx Ritase
+              </nuxt-link>
+            </li>
+
             <li v-if="checkRole(['SuperAdmin','Logistic','PabrikTransport'])"  :class="activeMenu == '/data_standby'?'active':''" >
               <nuxt-link to="/data_standby"  class="cursor-pointer" @click="goTo('/data_standby')">
                 <IconsMoney class="mr-1"/>
@@ -103,7 +118,10 @@ const route = useRoute();
 const activeMenu = ref('');
 watch(() => route.path, (newVal, oldVal) => {
   let splitPath = newVal.split("/");
-  activeMenu.value = "/"+(splitPath.length > 1 ? splitPath[1] : '');
+
+  splitPath = splitPath.filter((x)=>x!="");
+  activeMenu.value = "/"+splitPath.join("/");
+  // activeMenu.value = "/"+(splitPath.length > 1 ? splitPath[1] : '');
 }, {
   immediate: true
 });

@@ -24,6 +24,7 @@
                 <label for="">Hak Akses</label>
                 <select v-model="user.hak_akses">
                   <option value="PabrikTransport">Pabrik Transport</option>
+                  <option value="PabrikMandor">Pabrik Mandor</option>
                   <option value="Logistic">Logisitic</option>
                   <option value="Finance">Finance</option>
                   <option value="Marketing">Marketing</option>

@@ -65,10 +65,15 @@
                   :is="tf.freeze==0 ? 'td' : 'th'"
                   class="my-list"
                   v-if="tf.permit" v-show="tf.tbl_show"
+                  :class="tb.class_h ? tb.class_h : ''"
                 >
-                  <div class="flex items-center" :class="tf.class ? tf.class : 'justify-center'">
+                  <div class="w-full h-full flex items-center" :class="tf.class ? tf.class : 'justify-center'">
                     <!-- {{ tf.id }} -->
                     <slot :name="tf.key" :item="tb" :index="index">
+                      <template v-if="tf.isai">
+                        {{ index + 1 }}
+                      </template>
+
                       <template v-if="tf.dateformat">
                         {{ tb[tf.key] ? $moment(tb[tf.key]).format(tf.dateformat)  : "" }}
                       </template>
@@ -623,6 +628,14 @@ const paginateToPage=async(page)=>{
   position: sticky;
   left: 0;
   z-index: 2;
+}
+
+.my-list{
+  padding: 0px !important;
+}
+
+.my-list > div{
+  padding: 0.25rem;
 }
 </style>
 

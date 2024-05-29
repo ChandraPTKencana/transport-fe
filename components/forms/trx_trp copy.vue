@@ -348,7 +348,10 @@ const doSave = async () => {
     return;
   }
 
-
+  trx_trp.value.pvr_id = data.value.pvr_id;
+  trx_trp.value.pvr_no = data.value.pvr_no;
+  trx_trp.value.pvr_total = data.value.pvr_total;
+  trx_trp.value.pvr_had_detail = data.value.pvr_had_detail;
   trx_trp.value.updated_at = data.value.updated_at;
   if(props.id<=0){
     trx_trp.value.id = data.value.id;

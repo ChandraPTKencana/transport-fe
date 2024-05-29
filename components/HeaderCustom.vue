@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="w-full flex min-h-[3rem] items-center bg-slate-600 p-1 sm:pl-1 text-white">
+  <div class="w-full flex min-h-[2rem] items-center bg-slate-600 p-1 sm:pl-1 text-white">
     <div v-if="back" class="text-center w-10 cursor-pointer" @click="go_back()">
       <IconsCaretLeft class="text-2xl text-white" />
     </div>

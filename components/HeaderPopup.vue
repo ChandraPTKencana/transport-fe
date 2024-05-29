@@ -1,10 +1,10 @@
 <template lang="html">
-  <div class="w-full flex min-h-[3rem] items-center bg-slate-600 p-1 sm:pl-1 text-white">
+  <div class="w-full flex min-h-[2rem] items-center bg-slate-600 p-1 sm:pl-1 text-white">
     <div class="grow" style="padding-left:10px;">
       {{ title || " " }}
     </div>
-    <div class="text-center w-10 cursor-pointer" @click="go_back()">
-      <IconsTimes class="text-2xl text-white" />
+    <div class="text-center w-10 flex justify-center" >
+      <IconsTimes class="text-2xl cursor-pointer text-white" @click="go_back()"/>
     </div>
   </div>
 </template>
