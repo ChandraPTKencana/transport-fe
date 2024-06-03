@@ -22,8 +22,8 @@
             @click="form_view()">
             <IconsEyes/>
           </button>
-          <button  v-if="!checkRole(['PabrikTransport']) &&['req_deleted','all'].indexOf(filter_status) > -1 && selected > -1 && dt_selected.deleted == 0 && dt_selected.req_deleted == 1" type="button" name="button" class="m-1 text-2xl "
-            @click="for_remove()">
+          <button  v-if="enabled_approve_void " type="button" name="button" class="m-1 text-2xl "
+            @click="approveVoid()">
             <IconsVoid />
           </button>
           <button v-if="enabled_validasi" type="button" name="button" class="m-1 text-2xl "
@@ -494,7 +494,7 @@ const toggleReqDeleteBox = async()=>{
   }
 };
 
-const for_remove = () => {
+const approveVoid = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
@@ -617,8 +617,7 @@ const fields_thead=ref([
 
 
 const enabled_edit = computed(()=>{  
-  let result = ['ticket_not_done','ticket_done','all'].indexOf(filter_status.value) > -1 
-  && selected.value > -1 
+  let result = selected.value > -1 
   && dt_selected.value.deleted == 0
   && dt_selected.value.req_deleted == 0
   && dt_selected.value.val2 == 0;
@@ -626,10 +625,19 @@ const enabled_edit = computed(()=>{
 })
 
 const enabled_validasi = computed(()=>{  
-  let result = ['ticket_done','all'].indexOf(filter_status.value) > -1 
+  let result = !checkRole(['PabrikTransport']) 
   && selected.value > -1 
   && dt_selected.value.deleted == 0
   && dt_selected.value.req_deleted == 0
+  && dt_selected.value.val2 == 0;
+  return result;
+})
+
+const enabled_approve_void = computed(()=>{  
+  let result = !checkRole(['PabrikTransport']) 
+  && selected.value > -1 
+  && dt_selected.value.deleted == 0
+  && dt_selected.value.req_deleted == 1
   && dt_selected.value.val2 == 0;
   return result;
 })

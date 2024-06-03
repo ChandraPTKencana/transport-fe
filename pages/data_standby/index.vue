@@ -153,7 +153,7 @@ const { data: dt_async } = await useAsyncData(async () => {
   let standby_msts = [];
 
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/standby_mst", {
+  const { data, error, status } = await useMyFetch("/standby_msts", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -209,7 +209,7 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(standby_msts.value[0]);
   }
-  const { data, error, status } = await useMyFetch("/standby_mst", {
+  const { data, error, status } = await useMyFetch("/standby_msts", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

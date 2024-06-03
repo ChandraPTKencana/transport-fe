@@ -28,97 +28,96 @@
             </div>
 
             <div class="w-full flex grow p-1 overflow-auto 2xl:overflow-hidden justify-between flex-wrap">
-
               <div class="w-full" role="sticky">
-                  <table class="tacky w-full !table-auto" style="white-space:normal;">
-                    <thead >
-                      <tr class="sticky -top-1 !z-[2]">
-                        <td :colspan="!disabled  ? 8 : 6" class="!bg-slate-800 text-white font-bold">
-                          Detail PVR
+                <table class="tacky w-full !table-auto" style="white-space:normal;">
+                  <thead >
+                    <tr class="sticky -top-1 !z-[2]">
+                      <td :colspan="!disabled  ? 8 : 6" class="!bg-slate-800 text-white font-bold">
+                        Detail
+                      </td>
+                    </tr>
+                    <tr class="sticky top-7 !z-[2]">
+                      <th v-if="!disabled" class="min-w-[30px] !w-[30px] max-w-[30px] ">
+                        <!-- <button type="button" name="button" class="bg-yellow-600" @click="insertDefault()">
+                          In
+                        </button> -->
+                      </th> 
+                      <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
+                      <th v-if="!disabled" class="min-w-[30px] !w-[30px] max-w-[30px] "></th>
+                      <th class="min-w-[40px] !w-[40px] max-w-[40px] ">Acc ID</th>
+                      <th class="!min-w-[100px] !w-[100px] !max-w-[100px] ">Acc Code</th>
+                      <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Acc Name</th>
+                      <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Desc</th>
+                      <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Amount <br> <span class="text-sm">({{pointFormat(total_amount) }})</span></th>
+                    </tr>
+                  </thead>
+                  <tbody ref="to_move">
+                    <template v-for="(detail, index) in details" :key="index">
+                      <!-- <tr v-if="detail.p_status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)"> -->
+                      <tr v-if="detail.p_status!='Remove'"  :data-index="index">
+                        <td v-if="!disabled" class="tools cell">
+                          <div class="w-full h-full flex items-center justify-center">
+                            <button  type="button" name="button"
+                              @click="showAction($event, index)">
+                              <IconsTools />
+                            </button>
+                          </div>
+                        </td>
+                        <td>{{ index + 1 }}.</td>
+                        <td v-if="!disabled" class="cell">
+                          <div class="w-full h-full flex items-center justify-center">
+                            <button v-if="!detail.ac_account_id" type="button" name="button" @click="showSNSItem($event, index)">
+                              ...
+                            </button>
+                            <button type="button" v-else @click="deleteSNSItem($event, index)" :disabled="detail.confirm_by">
+                              <IconsTimes class=" font-bold text-2xl"/>
+                            </button>
+                          </div>
+                        </td>
+                        <td class="cell bold" :class="disabled ? 'unselectable' : ''">
+                          <div class="w-full h-full flex items-center justify-center">
+                            {{ detail.ac_account_id }}
+                          </div>
+                        </td>
+                        <td class="cell bold" :class="disabled ? 'unselectable' : ''">
+                          <div class="w-full h-full flex items-center justify-center">
+                            {{ detail.ac_account_code }}
+                          </div>
+                        </td>
+                        <td class="cell bold" :class="disabled ? 'unselectable' : ''">
+                          <div class="w-full h-full flex items-center justify-center">
+                            {{ detail.ac_account_name }}
+                          </div>
+                        </td>
+                        <td class="cell">
+                          <div class="w-full h-full flex items-center justify-center">
+                            <textarea :disabled="disabled" class="p-1 w-full" v-model="detail.description" cols="7" rows="2"></textarea>
+                          </div>
+                        </td>
+                        <td class="cell bold" :class="disabled ? 'unselectable' : ''">
+                          <div class="w-full h-full flex items-center justify-center">
+                            <InputPointFormat
+                            :key="index" 
+                            class="w-full h-full p-1" 
+                            type="text" 
+                            :value="detail.amount || 0" 
+                            @input="detail.amount = $event"
+                            :show="show"/>
+                          </div>
                         </td>
                       </tr>
-                      <tr class="sticky top-7 !z-[2]">
-                        <th v-if="!disabled" class="min-w-[30px] !w-[30px] max-w-[30px] ">
-                          <!-- <button type="button" name="button" class="bg-yellow-600" @click="insertDefault()">
-                            In
-                          </button> -->
-                        </th> 
-                        <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
-                        <th v-if="!disabled" class="min-w-[30px] !w-[30px] max-w-[30px] "></th>
-                        <th class="min-w-[40px] !w-[40px] max-w-[40px] ">Acc ID</th>
-                        <th class="!min-w-[100px] !w-[100px] !max-w-[100px] ">Acc Code</th>
-                        <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Acc Name</th>
-                        <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Desc</th>
-                        <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Amount <br> <span class="text-sm">({{pointFormat(total_amount) }})</span></th>
-                      </tr>
-                    </thead>
-                    <tbody ref="to_move">
-                      <template v-for="(detail, index) in details" :key="index">
-                        <!-- <tr v-if="detail.p_status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)"> -->
-                        <tr v-if="detail.p_status!='Remove'"  :data-index="index">
-                          <td v-if="!disabled" class="tools cell">
-                            <div class="w-full h-full flex items-center justify-center">
-                              <button  type="button" name="button"
-                                @click="showAction($event, index)">
-                                <IconsTools />
-                              </button>
-                            </div>
-                          </td>
-                          <td>{{ index + 1 }}.</td>
-                          <td v-if="!disabled" class="cell">
-                            <div class="w-full h-full flex items-center justify-center">
-                              <button v-if="!detail.ac_account_id" type="button" name="button" @click="showSNSItem($event, index)">
-                                ...
-                              </button>
-                              <button type="button" v-else @click="deleteSNSItem($event, index)" :disabled="detail.confirm_by">
-                                <IconsTimes class=" font-bold text-2xl"/>
-                              </button>
-                            </div>
-                          </td>
-                          <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
-                              {{ detail.ac_account_id }}
-                            </div>
-                          </td>
-                          <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
-                              {{ detail.ac_account_code }}
-                            </div>
-                          </td>
-                          <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
-                              {{ detail.ac_account_name }}
-                            </div>
-                          </td>
-                          <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center">
-                              <textarea :disabled="disabled" class="p-1 w-full" v-model="detail.description" cols="7" rows="2"></textarea>
-                            </div>
-                          </td>
-                          <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
-                              <InputPointFormat
-                              :key="index" 
-                              class="w-full h-full p-1" 
-                              type="text" 
-                              :value="detail.amount || 0" 
-                              @input="detail.amount = $event"
-                              :show="show"/>
-                            </div>
-                          </td>
-                        </tr>
-                      </template>
-                      
-                      <tr v-if="!disabled">
-                        <td class="tools cell">
-                          <button type="button" name="button" @click="addList()">
-                            <IconsPlus />
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                    </template>
+                    
+                    <tr v-if="!disabled">
+                      <td class="tools cell">
+                        <button type="button" name="button" @click="addList()">
+                          <IconsPlus />
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
             
 
@@ -433,7 +432,7 @@ const disabled = computed(()=>{
 
 const callData = async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/standby_mst_", {
+  const { data, error, status } = await useMyFetch("/standby_mst", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

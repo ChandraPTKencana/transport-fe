@@ -51,6 +51,12 @@
                 StandBy
               </nuxt-link>
             </li>
+            <li v-if="checkRole(['SuperAdmin', 'PabrikTransport','PabrikMandor','Logistic'])"  :class="activeMenu == '/data_standby/trx'?'active':''" >
+              <nuxt-link to="/data_standby/trx"  class="cursor-pointer" @click="goTo('/data_standby/trx')">
+                <IconsMoney class="mr-1"/>
+                StandBy Trx
+              </nuxt-link>
+            </li>
             
             <li v-if="checkRole(['SuperAdmin','Logistic','Finance','Marketing','MIS','Accounting'])" :class="activeMenu == '/report_trx_trp'?'active':''" >
               <nuxt-link to="/report_trx_trp"  class="cursor-pointer" @click="goTo('/report_trx_trp')">

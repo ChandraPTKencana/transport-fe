@@ -1,11 +1,11 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Form Ujalan Validation'" :fn="fnClose" class="w-100 flex align-items-center"
+      <HeaderPopup :title="'Form Master Standby Validation'" :fn="fnClose" class="w-100 flex align-items-center"
         style="color:white;" />
 
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
-          <div class="w-full flex flex-col items-center justify-center grow overflow-auto">
+          <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
 
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
@@ -241,7 +241,7 @@ const doSave = async () => {
 
 const callData = async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/standby_mst_", {
+  const { data, error, status } = await useMyFetch("/standby_mst", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

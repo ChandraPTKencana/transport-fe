@@ -6,15 +6,15 @@
         <div class="grow flex">
           <div class="m-1">
             <select class="" v-model="filter_status" >
-              <option value="pv_not_done">Undone</option>
-              <option value="pv_done">Done</option>
+              <option value="trx_not_done">Undone</option>
+              <option value="trx_done">Done</option>
               <option value="deleted">Trash</option>
               <option value="all">All</option>
               <option value="req_deleted">Req Delete</option>
             </select>
           </div>
 
-          <button v-if="['pv_not_done','all'].indexOf(filter_status) > -1" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_add" type="button" name="button" class="m-1 text-2xl "
             @click="form_add()">
             <IconsPlus />
           </button>
@@ -34,6 +34,10 @@
             @click="for_remove()">
             <IconsVoid />
           </button>
+          <button  v-if="enabled_approve_void " type="button" name="button" class="m-1 text-2xl "
+            @click="approveVoid()">
+            <IconsVoid />
+          </button>
           <button v-if="enabled_validasi" type="button" name="button" class="m-1 text-2xl "
             @click="validasi()">
             <IconsSignature />
@@ -43,11 +47,8 @@
             <IconsPrinterEye />
           </button>
         </div>
-        <div class="flex">
-          <button type="button" name="button" class="m-1 text-2xl "
-            @click="cogs_show=true">
-            <IconsCog />
-          </button>
+        <div v-if="checkRole(['PabrikTransport'])" class="flex">
+
           <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="generatePVR()">
             Gen/Update PVR
@@ -99,9 +100,7 @@
           <select class="flex-grow" v-model="sort.field">
             <option value=""></option>
             <option value="id">ID</option>
-            <option value="xto">To</option>
-            <option value="jenis">Jenis</option>
-            <option value="tipe">Tipe</option>
+            <option value="created_at">Tgl Dibuat</option>
           </select>
         </div>
         <div class="w-6/12 p-1 sm:w-4/12 md:w-2/12 lg:w-1/12 flex flex-col">
@@ -119,10 +118,7 @@
       </form>
       
 
-      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event">
-        <template #[`absen`]="{item,index}">
-          <IconsImage v-if="item.trx_absens && item.trx_absens.length > 0" class="cursor-pointer" @click="form_absen(index)"/>
-        </template>
+      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="standby_trxs" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event">
         <template #[`app1`]="{item}">
           <IconsLine v-if="!item.val"/>
           <IconsCheck v-else/>
@@ -134,6 +130,15 @@
         <template #[`app3`]="{item}">
           <IconsLine v-if="!item.val2"/>
           <IconsCheck v-else/>
+        </template>
+        <template #[`standby_mst_name`]="{item}">
+          {{item.standby_mst_?.name}}
+        </template>
+        <template #[`standby_mst_type`]="{item}">
+          {{item.standby_mst_?.tipe}}
+        </template>
+        <template #[`standby_mst_amount`]="{item}">
+          Rp. {{ pointFormat(item.standby_mst_?.amount || 0) }}
         </template>
         <template #[`pvr_completed`]="{item}">
           <IconsLine v-if="!item.pvr_had_detail"/><IconsCheck v-else/>
@@ -169,85 +174,16 @@
         </div>
       </template>
     </PopupMini>
-    <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
-    <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_pv="list_pv" :list_cost_center="list_cost_center" :online_status="online_status"/>
-    <FormsTrxTrpValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" :is_view="forms_trx_trp_is_view"/>
-    <FormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
+
+    <PopupMini :type="'custome'" :show="approve_void_box" :data="approve_void_data" :fnClose="toggleApproveVoidBox" :fnConfirm="confirmedApproveVoid">      
+      <template #words>
+        Data akan diproses dan <b>tidak dapat dibatalkan lagi</b>, apakah Anda menyetujui permintaan penghapusan data berikut?
+      </template>
+    </PopupMini>
+
+    <FormsStandbyTrx :show="forms_standby_trx_show" :fnClose="()=>{forms_standby_trx_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_standby_trx_id" :p_data="standby_trxs" :list_cost_center="list_cost_center" :online_status="online_status"/>
+    <FormsStandbyTrxValidasi :show="forms_standby_trx_valid_show" :fnClose="()=>{forms_standby_trx_valid_show=false}" :id="forms_standby_trx_valid_id" :p_data="standby_trxs" :is_view="forms_standby_trx_is_view"/>
   
-    <div v-if="prtView" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
-    style="background-color: rgba(255,255,255,0.9);">
-      <div class="relative" style="width:95%; height: 90%;">
-        <div class="absolute -top-7 right-0 bg-white"
-          style="position: absolute; padding:5px 10px; border: solid 1px #ccc; border-bottom: none; border-top-right-radius: 5px;  border-top-left-radius: 5px;">
-          <IconsTimes  style="color:black; cursor:pointer;" @click="printPreview()"/>
-        </div>
-        <iframe ref="iframe" width='100%' height='100%' :src='pdfContent.dataBase64'></iframe>
-        <div
-          style="position: absolute; top: 12px; right: 98px; background-color: rgba(255,255,255,0); width: 37px; height: 36px; z-index:1; cursor: pointer;"
-          @click="download()">
-        </div>
-      </div>
-    </div>
-
-
-    <div v-if="cogs_show" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
-    style="background-color: rgba(255,255,255,0.9);">
-      <div class="relative" style="width:95%; height: 90%;">
-        <div class="absolute -top-7 right-0 bg-white"
-          style="position: absolute; padding:5px 10px; border: solid 1px #ccc; border-bottom: none; border-top-right-radius: 5px;  border-top-left-radius: 5px;">
-          <IconsTimes  style="color:black; cursor:pointer;" @click="cogs_show=false"/>
-        </div>
-        <div class="w-full h-full flex flex-col items-center justify-content-center bg-white">
-          <div class="w-full p-1">
-            <div class="w-full p-1 bg-gray-200">
-              <div class="w-full text-blue-600 font-bold">
-                Set Date For Load Data
-              </div>
-              <div class="w-full grid grid-cols-2 grid-rows-1 gap-1">
-                
-                <div class="flex flex-col flex-wrap p-1">
-                  <label for="">From</label>
-                  <div class="grow" >
-                    <ClientOnly>
-                      <vue-date-picker  v-model="loadDBData.from" 
-                      type="datetime" 
-                      format="dd-MM-yyyy"
-                      :enable-time-picker = "false"
-                      :clearable="false" 
-                      text-input
-                      teleport-center @closed="handleDate('from')"></vue-date-picker>
-                    </ClientOnly>
-                  </div>
-                </div>
-                
-                <div class="flex flex-col flex-wrap p-1">
-                  <label for="">To</label>
-                    <div class="grow" >
-                    <ClientOnly>
-                      <vue-date-picker  v-model="loadDBData.to" 
-                      type="datetime" 
-                      format="dd-MM-yyyy"
-                      :enable-time-picker = "false"
-                      :clearable="false" 
-                      text-input
-                      teleport-center @closed="handleDate('to')"></vue-date-picker>
-                    </ClientOnly>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-          
-
-        </div>
-        <div
-          style="position: absolute; top: 12px; right: 98px; background-color: rgba(255,255,255,0); width: 37px; height: 36px; z-index:1; cursor: pointer;"
-          @click="cogs_show=false">
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -266,9 +202,9 @@ definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      // if (!useAuthStore().checkScopes(['ap-trx_trp-view']))
+      // if (!useAuthStore().checkScopes(['ap-standby_trx-view']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","Logistic",'PabrikTransport']))
+      if (!useAuthStore().checkRole(["SuperAdmin","Logistic",'PabrikTransport','PabrikMandor']))
       return navigateTo('/');
 
     },
@@ -290,7 +226,7 @@ const addClassToTbody=(data)=>{
 }
 
 
-const filter_status = ref("pv_not_done")
+const filter_status = ref("trx_not_done")
 watch(()=>filter_status.value,(newval)=>{
   fields_thead.value.map((x)=>{
     let in_list=["deleted_by_username","deleted_at","deleted_reason","req_deleted_by_username","req_deleted_at","req_deleted_reason"].indexOf(x.key) > -1;
@@ -328,11 +264,10 @@ const checkRole=(list)=>{
 };
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  let trx_trps = [];
-  // let list_pv = [];
+  let standby_trxs = [];
 
   const [data1, data2] = await Promise.all([
-    useMyFetch("/trx_trps", {
+    useMyFetch("/standby_trxs", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -354,40 +289,30 @@ const { data: dt_async } = await useAsyncData(async () => {
   
 
   if (data1.status.value !== 'error') {
-    trx_trps = addClassToTbody(data1.data.value.data);
+    standby_trxs = addClassToTbody(data1.data.value.data);
   }
 
   if (data1.status.value === 'error') {
     useErrorStore().trigger(data1.error);
-    // return { trx_trps, list_pv };
-    return { trx_trps };
+    return { standby_trxs };
   }
 
-  // if (data2.status.value !== 'error') {
-  //   list_pv = data2.data.value.list_pv;
-  // }
   useCommonStore().loading_full = false;
-
-  // return { trx_trps,  list_pv };
-  return { trx_trps };
+  return { standby_trxs };
 });
 
-const trx_trps = ref(dt_async.value.trx_trps || []);
-// const list_pv = ref(dt_async.value.list_pv);
+const standby_trxs = ref(dt_async.value.standby_trxs || []);
 const list_cost_center = ref([]);
-const list_pv = ref([]);
 const online_status=ref(false);
-const fnLoadDBData = async (jenis,transition_to="") => {
+const fnLoadDBData = async () => {
   useCommonStore().loading_full = true;
-  let from = loadDBData.value.from ? $moment(loadDBData.value.from).format("Y-MM-DD") : "";
-  let to = loadDBData.value.to ? $moment(loadDBData.value.to).format("Y-MM-DD") : "";
-  const { data, error, status } = await useMyFetch("/trx_load_for_trp", {
+  const { data, error, status } = await useMyFetch("/standby_trx_load_sqlsrv", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
-    params: {jenis,"online_status":online_status.value,from,to,transition_to},
+    params: {"online_status":online_status.value},
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -398,7 +323,6 @@ const fnLoadDBData = async (jenis,transition_to="") => {
   }
 
   list_cost_center.value = data.value.list_cost_center;
-  list_pv.value = data.value.list_pv;
 }
 
 const search = ref("");
@@ -408,7 +332,7 @@ const sort = ref({
 });
 const selected = ref(-1);
 const dt_selected = computed(()=>{  
-  return trx_trps.value[selected.value];
+  return standby_trxs.value[selected.value];
 })
 
 const scrolling = ref({
@@ -421,7 +345,7 @@ const scrolling = ref({
 const inject_params = () => {
   params.like = "";
   if (search.value != "") {
-    params.like = `id:%${search.value}%,xto:%${search.value}%,jenis:%${search.value}%,pv_no:%${search.value}%,ticket_a_no:%${search.value}%,ticket_b_no:%${search.value}%,no_pol:%${search.value}%,supir:%${search.value}%,kernet:%${search.value}%,cost_center_code:%${search.value}%,cost_center_desc:%${search.value}%,pvr_id:%${search.value}%,pvr_no:%${search.value}%,tanggal:%${search.value}%,transition_to:%${search.value}%`;
+    params.like = `id:%${search.value}%,transition_target:%${search.value}%,transition_type:%${search.value}%,standby_mst_name:%${search.value}%,standby_mst_type:%${search.value}%,supir:%${search.value}%,kernet:%${search.value}%,no_pol:%${search.value}%,xto:%${search.value}%,pvr_no:%${search.value}%,pv_no:%${search.value}%,pvr_id:%${search.value}%,pvr_no:%${search.value}%,tanggal:%${search.value}%,transition_to:%${search.value}%,cost_center_code:%${search.value}%`;
   }
   params.sort = "";
   if (sort.value.field) {
@@ -430,7 +354,6 @@ const inject_params = () => {
 
   params.date_from = date.value.from ? $moment(date.value.from).format("YYYY-MM-DD") : "";
   params.date_to = date.value.to ? $moment(date.value.to).format("YYYY-MM-DD") : "";
-
 };
 
 
@@ -441,14 +364,14 @@ const callData = async () => {
 
   scrolling.value.may_get_data = false;
   params.page = scrolling.value.page;
-  if (params.page == 1) trx_trps.value = [];
+  if (params.page == 1) standby_trxs.value = [];
   if(params.first_row) delete params.first_row;
   if(params.page > 1){
-    params.first_row = JSON.stringify(trx_trps.value[0]);
+    params.first_row = JSON.stringify(standby_trxs.value[0]);
   }
   params.filter_status = filter_status.value;
 
-  const { data, error, status } = await useMyFetch("/trx_trps", {
+  const { data, error, status } = await useMyFetch("/standby_trxs", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -466,9 +389,9 @@ const callData = async () => {
   }
 
   if (scrolling.value.page == 1) {
-    trx_trps.value = addClassToTbody(data.value.data);
+    standby_trxs.value = addClassToTbody(data.value.data);
   } else if (scrolling.value.page > 1) {
-    trx_trps.value = [...trx_trps.value, ...addClassToTbody(data.value.data)];
+    standby_trxs.value = [...standby_trxs.value, ...addClassToTbody(data.value.data)];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
@@ -485,14 +408,11 @@ const searching = () => {
   callData();
 }
 
-const router = useRouter();
-
-const forms_trx_trp_show =  ref(false);
-const forms_trx_trp_id = ref(0);
+const forms_standby_trx_show =  ref(false);
+const forms_standby_trx_id = ref(0);
 const form_add = () => {
-  forms_trx_trp_id.value = 0;
-  forms_trx_trp_show.value = true;
-  // router.push({ name: 'data_trx_trp-form', query: { id: "" } });
+  forms_standby_trx_id.value = 0;
+  forms_standby_trx_show.value = true;
 }
 
 const { display } = useAlertStore();
@@ -502,22 +422,21 @@ const form_edit = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    forms_trx_trp_id.value = trx_trps.value[selected.value].id;
-    forms_trx_trp_show.value = true;
-    // router.push({ name: 'data_trx_trp-form', query: { id: trx_trps.value[selected.value].id } });
+    forms_standby_trx_id.value = standby_trxs.value[selected.value].id;
+    forms_standby_trx_show.value = true;
   }
 };
 
-const forms_trx_trp_valid_show =  ref(false);
-const forms_trx_trp_valid_id = ref(0);
-const forms_trx_trp_is_view = ref(false);
+const forms_standby_trx_valid_show =  ref(false);
+const forms_standby_trx_valid_id = ref(0);
+const forms_standby_trx_is_view = ref(false);
 const validasi = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    forms_trx_trp_valid_id.value = trx_trps.value[selected.value].id;
-    forms_trx_trp_valid_show.value = true;
-    forms_trx_trp_is_view.value = false;
+    forms_standby_trx_valid_id.value = standby_trxs.value[selected.value].id;
+    forms_standby_trx_valid_show.value = true;
+    forms_standby_trx_is_view.value = false;
   }
 };
 
@@ -525,18 +444,12 @@ const form_view = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    forms_trx_trp_valid_id.value = trx_trps.value[selected.value].id;
-    forms_trx_trp_valid_show.value = true;
-    forms_trx_trp_is_view.value = true;
+    forms_standby_trx_valid_id.value = standby_trxs.value[selected.value].id;
+    forms_standby_trx_valid_show.value = true;
+    forms_standby_trx_is_view.value = true;
   }
 };
 
-const forms_trx_absen_show =  ref(false);
-const forms_trx_absen_index = ref(0);
-const form_absen = (index) => {
-  forms_trx_absen_index.value = index;
-  forms_trx_absen_show.value = true;
-};
 
 const enabledOk = ref(false);
 const delete_data = ref({});
@@ -553,7 +466,7 @@ const remove = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     deleted_reason.value = '';
-    delete_data.value = {id : trx_trps.value[selected.value].id, "no pol":trx_trps.value[selected.value].no_pol, "tujuan":trx_trps.value[selected.value].xto};
+    delete_data.value = {id : standby_trxs.value[selected.value].id, "no pol":standby_trxs.value[selected.value].no_pol, "tujuan":standby_trxs.value[selected.value].xto};
     delete_box.value = true;
   }
 };
@@ -569,11 +482,11 @@ const confirmed_delete = async() => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
-  data_in.append("id", trx_trps.value[selected.value].id);  
+  data_in.append("id", standby_trxs.value[selected.value].id);  
   data_in.append("deleted_reason", deleted_reason.value);  
   data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useMyFetch("/trx_trp", {
+  const { data, error, status } = await useMyFetch("/standby_trx", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -588,7 +501,7 @@ const confirmed_delete = async() => {
     return;
   }
 
-  let old = {...trx_trps.value[selected.value]};
+  let old = {...standby_trxs.value[selected.value]};
   old['deleted'] = data.value.deleted;
   old['deleted_user'] = data.value.deleted_user;
   old['deleted_at'] = data.value.deleted_at;
@@ -596,9 +509,9 @@ const confirmed_delete = async() => {
   old['deleted_reason'] = data.value.deleted_reason;
   old['class_h'] = checkStatus(old);
   if(filter_status.value!='all'){
-    trx_trps.value.splice(selected.value,1);
+    standby_trxs.value.splice(selected.value,1);
   }else{
-    trx_trps.value.splice(selected.value,1,{...old});
+    standby_trxs.value.splice(selected.value,1,{...old});
   }
 
   selected.value = -1;
@@ -622,27 +535,44 @@ const for_remove = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     req_deleted_reason.value = '';
-    req_deleted_data.value = {id : trx_trps.value[selected.value].id, "no pol":trx_trps.value[selected.value].no_pol, "tujuan":trx_trps.value[selected.value].xto};
+    req_deleted_data.value = {id : standby_trxs.value[selected.value].id, "no pol":standby_trxs.value[selected.value].no_pol, "tujuan":standby_trxs.value[selected.value].xto};
     req_deleted_box.value = true;
   }
 };
 
-watch(()=>req_deleted_reason.value,(newval)=>{
-  if( newval.trim().length > 0 ) enabledOk1.value = true;
-  else enabledOk1.value = false;
-}, {
-  immediate: false
-})
+const approve_void_data = ref({});
+const approve_void_box = ref(false);
+const approve_void_reason = ref("");
+const toggleApproveVoidBox = async()=>{  
+  if (approve_void_box.value) {
+    approve_void_box.value = false;
+  }
+};
 
-const confirmedReqDeleted = async() => {
+const approveVoid = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    approve_void_reason.value = '';
+    approve_void_data.value = {
+      id : standby_trxs.value[selected.value].id, 
+      "no pol":standby_trxs.value[selected.value].no_pol, 
+      "tujuan":standby_trxs.value[selected.value].xto,
+      "permintaan":standby_trxs.value[selected.value].approve_void_by?.username,
+      "alasan":standby_trxs.value[selected.value].approve_void_reason,
+    };
+    approve_void_box.value = true;
+  }
+};
+
+const confirmedApproveVoid = async() => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
-  data_in.append("id", trx_trps.value[selected.value].id);  
-  data_in.append("req_deleted_reason", req_deleted_reason.value);  
+  data_in.append("id", standby_trxs.value[selected.value].id);  
   data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useMyFetch("/trx_trp_req_delete", {
+  const { data, error, status } = await useMyFetch("/standby_trx_approve_void", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -656,7 +586,53 @@ const confirmedReqDeleted = async() => {
     useErrorStore().trigger(error);
     return;
   }
-  let old = {...trx_trps.value[selected.value]};
+
+  let old = {...standby_trxs.value[selected.value]};
+  old['deleted'] = data.value.deleted;
+  old['deleted_user'] = data.value.deleted_user;
+  old['deleted_at'] = data.value.deleted_at;
+  old['deleted_by'] = data.value.deleted_by;
+  old['deleted_reason'] = data.value.deleted_reason;
+  old['class_h'] = checkStatus(old);
+  if(filter_status.value!='all'){
+    standby_trxs.value.splice(selected.value,1);
+  }else{
+    standby_trxs.value.splice(selected.value,1,{...old});
+  }
+  selected.value = -1;
+  approve_void_box.value = false;
+}
+
+watch(()=>req_deleted_reason.value,(newval)=>{
+  if( newval.trim().length > 0 ) enabledOk1.value = true;
+  else enabledOk1.value = false;
+}, {
+  immediate: false
+})
+
+const confirmedReqDeleted = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("id", standby_trxs.value[selected.value].id);  
+  data_in.append("req_deleted_reason", req_deleted_reason.value);  
+  data_in.append("_method", "DELETE");
+
+  const { data, error, status } = await useMyFetch("/standby_trx_req_delete", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  let old = {...standby_trxs.value[selected.value]};
   old['req_deleted'] = data.value.req_deleted;
   old['req_deleted_user'] = data.value.req_deleted_user;
   old['req_deleted_by'] = data.value.req_deleted_by;
@@ -664,25 +640,17 @@ const confirmedReqDeleted = async() => {
   old['req_deleted_reason'] = data.value.req_deleted_reason;
   old['class_h'] = checkStatus(old);
   if(filter_status.value!='all'){
-    trx_trps.value.splice(selected.value,1);
+    standby_trxs.value.splice(selected.value,1);
   }else{
-    trx_trps.value.splice(selected.value,1,{...old});
+    standby_trxs.value.splice(selected.value,1,{...old});
   }
   selected.value = -1;
   req_deleted_box.value = false;
 }
 
-const { downloadFile, printHtml } = useDownload();
-
-const prtView = ref(false);
-const pdfContent = ref("");
+const { printHtml } = useDownload();
 
 const printPreview = async()=>{
-  
-  if (prtView.value==true) {
-    prtView.value = false;
-    return;
-  }
 
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
@@ -690,13 +658,13 @@ const printPreview = async()=>{
   } 
   
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/trx_trp_preview_file", {
+  const { data, error, status } = await useMyFetch("/standby_trx_preview_file", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
-    params: {id : trx_trps.value[selected.value].id},
+    params: {id : standby_trxs.value[selected.value].id},
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -705,45 +673,19 @@ const printPreview = async()=>{
     useErrorStore().trigger(error);
     return;
   }
-  // pdfContent.value = data.value;
-  // prtView.value = true;
 
   printHtml(data.value.html,318);
 }
 
-const download = ()=>{
-  downloadFile(pdfContent.value);
-}
-
-
-
-const cogs_show=ref(false);
-
-const loadDBData = ref({
-  from: new Date().setDate(new Date().getDate() - 3),
-  to:new Date(),
-})
-
-const handleDate = (source)=>{
-  if(source=='from'){
-    if(loadDBData.value.from-loadDBData.value.to>0){
-      loadDBData.value.from = loadDBData.value.to;
-    }
-  }else{
-    if(loadDBData.value.to-loadDBData.value.from<0){
-      loadDBData.value.to = loadDBData.value.from;
-    }
-  }
-}
 
 const generatePVR = async() => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
-  // data_in.append("id", trx_trps.value[selected.value].id);  
+  // data_in.append("id", standby_trxs.value[selected.value].id);  
   data_in.append("online_status", online_status.value);  
 
-  const { data, error, status } = await useMyFetch("/trx_trp_do_gen_pvr", {
+  const { data, error, status } = await useMyFetch("/standby_trx_do_gen_pvr", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -759,16 +701,16 @@ const generatePVR = async() => {
   }
 
   data.value.forEach(e => {
-    let idx = trx_trps.value.map((x)=>x.id).indexOf(e.id);
+    let idx = standby_trxs.value.map((x)=>x.id).indexOf(e.id);
     if(idx !== -1) {
-      let dt = trx_trps.value[idx];
+      let dt = standby_trxs.value[idx];
       dt.pvr_id = e.pvr_id;
       dt.pvr_no = e.pvr_no;
       dt.pvr_total = e.pvr_total;
       dt.pvr_had_detail = e.pvr_had_detail;
       dt.updated_at = e.updated_at;
       
-      trx_trps.value.splice(idx,1,{...dt});
+      standby_trxs.value.splice(idx,1,{...dt});
     }
     
   });
@@ -782,7 +724,7 @@ const updatePV = async() => {
   const data_in = new FormData();
   data_in.append("online_status", online_status.value);  
 
-  const { data, error, status } = await useMyFetch("/trx_trp_do_update_pv", {
+  const { data, error, status } = await useMyFetch("/standby_trx_do_update_pv", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -798,16 +740,16 @@ const updatePV = async() => {
   }
 
   data.value.data.forEach(e => {
-    let idx = trx_trps.value.map((x)=>x.id).indexOf(e.id);
+    let idx = standby_trxs.value.map((x)=>x.id).indexOf(e.id);
     if(idx !== -1) {
-      let dt = trx_trps.value[idx];
+      let dt = standby_trxs.value[idx];
       dt.pv_id = e.pv_id;
       dt.pv_no = e.pv_no;
       dt.pv_total = e.pv_total;
       dt.pv_datetime = e.pv_datetime;
       dt.updated_at = e.updated_at;
       
-      trx_trps.value.splice(idx,1,{...dt});
+      standby_trxs.value.splice(idx,1,{...dt});
     }
     
   });
@@ -821,13 +763,17 @@ const fields_thead=ref([
   {key:"app2",label:"App 2"},
   {key:"app3",label:"App 3"},
   {key:"id",label:"ID"},
-  {key:"absen",label:"Absen"},
-  {key:"tanggal",label:"U.Jalan Per",dateformat:"DD-MM-Y"},
   {key:"no_pol",label:"No Pol",freeze:1},
+  {key:"supir",label:"Supir"},
+  {key:"kernet",label:"Kernet"},
   {key:"xto",label:"Tujuan"},
-  {key:"tipe",label:"Tipe"},
-  {key:"jenis",label:"Jenis"},
-  {key:"amount",label:"Amount",class:" justify-end"},
+  {key:"standby_mst_name",label:"Nama Standby"},
+  {key:"standby_mst_type",label:"Tipe Standby"},
+  {key:"standby_mst_amount",label:"Total Standby",class:" justify-end"},
+  {key:"note_for_remarks",label:"Note untuk Remarks"},
+  {key:"ref",label:"Ref"},
+  {key:"transition_target",label:"Tujuan Pengalihan"},
+  {key:"transition_type",label:"Tipe Pengalihan"},
   {key:"cost_center",label:"Cost Center",childs:[
     {key:"cost_center_code",label:"Code",type:'default', class:" justify-start"},
     {key:"cost_center_desc",label:"Desc"},
@@ -842,8 +788,6 @@ const fields_thead=ref([
     {key:"pv_no",label:"No"},
     {key:"pv_total",label:"Total"},
   ]},
-  {key:"supir",label:"Supir"},
-  {key:"kernet",label:"Kernet"},
   {key:"created_at",label:"Created At",dateformat:"DD-MM-Y HH:mm:ss"},
   {key:"updated_at",label:"Updated At",dateformat:"DD-MM-Y HH:mm:ss"},
   {key:"deleted_by_username",label:"Deleted By",tbl_show:0},
@@ -855,8 +799,15 @@ const fields_thead=ref([
 ]);
 
 
+const enabled_add = computed(()=>{  
+  let result = ['trx_not_done','all'].indexOf(filter_status.value) > -1  
+  && checkRole(['PabrikTransport']);
+  return result;
+})
+
 const enabled_edit = computed(()=>{  
-  let result = selected.value > -1 
+  let result = checkRole(['PabrikTransport']) 
+  && selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.val) > -1
@@ -868,13 +819,19 @@ const enabled_validasi = computed(()=>{
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.val) > -1
+  && (
+    (
+      checkRole(['PabrikTransport']) && [undefined,0].indexOf(dt_selected.value.val) > -1)
+      || (checkRole(['PabrikMandor']) && [undefined,0].indexOf(dt_selected.value.val1) > -1)
+      || (checkRole(['Logistic']) && [undefined,0].indexOf(dt_selected.value.val2) > -1)
+    )
   && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1;
   return result;
 })
 
 const enabled_remove = computed(()=>{  
-  let result = selected.value > -1 
+  let result = checkRole(['PabrikTransport']) 
+  && selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1;
@@ -882,18 +839,30 @@ const enabled_remove = computed(()=>{
 })
 
 const enabled_void = computed(()=>{  
-  let result = selected.value > -1 
+  let result = checkRole(['PabrikTransport']) 
+  && selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && dt_selected.value.pvr_id != '';
   return result;
 })
 
-const enabled_print_preview = computed(()=>{  
-  let result = selected.value > -1 
-  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.val) > -1;
+const enabled_approve_void = computed(()=>{  
+  let result = checkRole(['Logistic']) 
+  && selected.value > -1 
+  && dt_selected.value.deleted == 0
+  && dt_selected.value.req_deleted == 1
+  && dt_selected.value.val2 == 0;
   return result;
 })
+
+const enabled_print_preview = computed(()=>{  
+  let result = checkRole(['PabrikTransport'])  
+  && selected.value > -1 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
+  && dt_selected.value.val == 1;
+  return result;
+})
+
 </script>

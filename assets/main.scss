@@ -57,7 +57,7 @@ table.tacky tbody th::before {
 }
 
 table.tacky th *,
-table.tacky td *{
+table.tacky td *:not(.dp__main *){
     @apply relative;
 }
 

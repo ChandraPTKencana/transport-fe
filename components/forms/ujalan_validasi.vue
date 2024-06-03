@@ -5,7 +5,7 @@
         style="color:white;" />
 
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
-          <div class="w-full flex flex-col items-center justify-center grow overflow-auto">
+          <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
 
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
