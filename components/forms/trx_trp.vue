@@ -10,7 +10,7 @@
 
               <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">U.Jalan Per</label>
-                <div class="grow" v-if="trx_trp.pvr_no==''">
+                <div class="grow" v-if="trx_trp.val==0">
                   <ClientOnly>
                     <vue-date-picker  v-model="trx_trp.tanggal" 
                     type="datetime" 
@@ -21,7 +21,7 @@
                   </ClientOnly>
                 </div>
                 <div class="grow" v-else>
-                  <div class="card-border" :class="trx_trp.pvr_no!='' ? 'unselectable':''">
+                  <div class="card-border disabled" :class="trx_trp.pvr_no!='' ? 'unselectable':''">
                     {{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-YYYY") : "" }}
                   </div>
                 </div>
@@ -30,7 +30,7 @@
 
               <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Jenis</label>
-                <select v-model="trx_trp.jenis" @change="changeJenis($event)" :disabled="trx_trp.pvr_no!=''">
+                <select v-model="trx_trp.jenis" @change="changeJenis($event)" :disabled="trx_trp.val==1">
                   <option value="TBS">TBS</option>
                   <option value="TBSK">TBSK</option>
                   <option value="CPO">CPO</option>
@@ -41,7 +41,7 @@
 
               <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Supir</label>
-                <input type="text" list="supir"  v-model="trx_trp.supir" :disabled="trx_trp.pvr_no!=''"/>
+                <input type="text" list="supir"  v-model="trx_trp.supir" :disabled="trx_trp.val==1"/>
                 <datalist id="supir">
                   <option v-for="lk in list_supir" :value="lk.name" >{{lk.name}}</option>
                 </datalist>
@@ -50,7 +50,7 @@
 
               <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Kernet</label>
-                <input type="text" list="kernet"  v-model="trx_trp.kernet" :disabled="trx_trp.pvr_no!=''"/>
+                <input type="text" list="kernet"  v-model="trx_trp.kernet" :disabled="trx_trp.val==1"/>
                 <datalist id="kernet">
                   <option v-for="lk in list_kernet" :value="lk.name" >{{lk.name}}</option>
                 </datalist>
@@ -59,7 +59,7 @@
 
               <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">No Pol</label>
-                <input type="text" list="vehicle"  v-model="trx_trp.no_pol" :disabled="trx_trp.pvr_no!=''"/>
+                <input type="text" list="vehicle"  v-model="trx_trp.no_pol" :disabled="trx_trp.val==1"/>
                 <datalist id="vehicle">
                   <option v-for="lv in list_vehicle" :value="lv.no_pol" >{{lv.no_pol}}</option>
                 </datalist>
@@ -70,7 +70,7 @@
               <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
                 <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
                   <label for="">Tujuan</label>
-                  <select v-model="trx_trp.xto" :disabled="trx_trp.pvr_no!=''">
+                  <select v-model="trx_trp.xto" :disabled="trx_trp.val==1">
                     <option v-for="lt in list_to">{{lt}}</option>
                   </select>
                   <p class="text-red-500">{{ field_errors.xto }}</p>
@@ -78,7 +78,7 @@
 
                 <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
                   <label for="">Tipe</label>
-                  <select v-model="trx_trp.id_uj" :disabled="trx_trp.pvr_no!=''">
+                  <select v-model="trx_trp.id_uj" :disabled="trx_trp.val==1">
                     <option v-for="lt in list_tipe" :value="lt.id" :selected="lt.id == trx_trp.id_uj">{{lt.tipe}}</option>
                   </select>
                   <p class="text-red-500">{{ field_errors.id_uj }}</p>
@@ -127,22 +127,9 @@
 
                 <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
                   <label for="">PV</label>
-                  <input type="text" list="pv"  v-model="trx_trp.pv_no" :disabled="trx_trp.pvr_no!=''"/>
-                  <datalist id="pv">
-                    <option v-for="lp in list_pv" :value="lp.VoucherNo" >{{lp.VoucherNo +'-'+ lp.AssociateName}}</option>
-                  </datalist>
-                  <!-- {{list_pv_to_minilist}} -->
-                  <div>
-                    <!-- <MiniList  
-                    class="w-full h-full p-1" 
-                    type="text" 
-                    :value="trx_trp.pv_no" 
-                    @input="trx_trp.pv_no = $event"
-                    :lists="list_pv_to_minilist"
-                    /> -->
-                    
+                  <div class="card-border disabled">
+                    {{  trx_trp.pv_no }}
                   </div>
-                  <p class="text-red-500">{{ field_errors.pv }}</p>
                 </div>
   
                 <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
@@ -209,11 +196,6 @@ const props = defineProps({
     required:true,
     default:[]
   },
-  list_pv:{
-    type:Array,
-    required:true,
-    default:[]
-  },
   list_cost_center:{
     type:Array,
     required:true,
@@ -275,14 +257,9 @@ const blurCostCenterCode=($e)=>{
 
 const changeJenis=($e)=>{  
   trx_trp.value.transition_to = ($e.target.value=="TBS") ? trx_trp.value.transition_to : "";
-  props.fnLoadDBData($e.target.value,trx_trp.value.transition_to);
 }
 
-const changeTransitionTo=($e)=>{
-  if(trx_trp.value.jenis=="TBS"){
-    props.fnLoadDBData(trx_trp.value.jenis,$e.target.value);
-  }
-}
+
 const { display } = useAlertStore();
 
 const doSave = async () => {
@@ -304,16 +281,6 @@ const doSave = async () => {
   data_in.append("cost_center_code", trx_trp.value.cost_center_code);
   data_in.append("online_status", props.online_status);
   data_in.append("transition_to", trx_trp.value.transition_to);
-
-  if(trx_trp.value.pv_no){
-    let pv = props.list_pv.filter(
-      (x)=>x.VoucherNo == trx_trp.value.pv_no
-    );
-    if(pv.length == 0 && trx_trp.value.pv_no == trx_trp_loaded.pv_no)
-    data_in.append("pv_id", trx_trp_loaded.pv_id);
-    else
-    data_in.append("pv_id", pv[0].VoucherID);
-  }
 
   data_in.append("supir", trx_trp.value.supir);
   data_in.append("kernet", trx_trp.value.kernet);
@@ -391,11 +358,6 @@ const list_kernet = computed(()=>{
   return [...new Set(list_employee.value.filter((x)=>x.role=="Kernet"))];
 })
 
-// const list_pv_to_minilist = computed(()=>{
-//   // return list_ujalan.value.map((x)=>{return {get:x.TicketNo,show:x.TicketNo + "-" + x.AssociateName}});
-//   return props.list_pv.map((x)=>{return {get:x.TicketNo,show:x.TicketNo + "-" + x.AssociateName}});
-// })
-
 const disabled = computed(()=>{
   return false;
   // return trx_trp.value.confirmed_by || trx_trp.value.ref_id != null;
@@ -427,7 +389,7 @@ const callData = async () => {
   trx_trp.value = data.value.data;
   trx_trp_loaded = {...data.value.data};
 
-  props.fnLoadDBData(trx_trp.value.jenis,trx_trp.value.transition_to);
+  props.fnLoadDBData();
 }
 
 const list_ujalan = ref([]);
@@ -464,34 +426,17 @@ const loadLocalDT = async () => {
 
 
 
-watch(() => props.show, (newVal, oldVal) => {
+watch(() => props.show, async(newVal, oldVal) => {
   if (newVal == true){
-    loadLocalDT();
+    await loadLocalDT();
+    await props.fnLoadDBData();
+
     trx_trp.value = {...trx_trp_temp};
     field_errors.value = {};
     if(props.id!=0)
     callData();
   }
 }, {
-  immediate: true
-});
-
-watch(()=>trx_trp.value.pv_no, (newVal, oldVal) => {
-  let $total = 0;
-  if (newVal=="" || newVal){
-    let hrg = props.list_pv.filter(
-      (x)=>x.VoucherNo == trx_trp.value.pv_no
-    );
-
-    if(hrg.length  > 0) 
-    $total = hrg[0].total_amount;
-    else if(trx_trp.value.pv_no == trx_trp_loaded.pv_no) 
-    $total = trx_trp_loaded.pv_total;
-
-    trx_trp.value.pv_total = $total;
-  }
-}, {
-  deep:true,
   immediate: true
 });
 

@@ -44,10 +44,6 @@
           </button>
         </div>
         <div class="flex">
-          <button type="button" name="button" class="m-1 text-2xl "
-            @click="cogs_show=true">
-            <IconsCog />
-          </button>
           <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="generatePVR()">
             Gen/Update PVR
@@ -169,98 +165,19 @@
         </div>
       </template>
     </PopupMini>
-    <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
-    <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_pv="list_pv" :list_cost_center="list_cost_center" :online_status="online_status"/>
+    <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_cost_center="list_cost_center" :online_status="online_status"/>
     <FormsTrxTrpValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" :is_view="forms_trx_trp_is_view"/>
     <FormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
-  
-    <div v-if="prtView" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
-    style="background-color: rgba(255,255,255,0.9);">
-      <div class="relative" style="width:95%; height: 90%;">
-        <div class="absolute -top-7 right-0 bg-white"
-          style="position: absolute; padding:5px 10px; border: solid 1px #ccc; border-bottom: none; border-top-right-radius: 5px;  border-top-left-radius: 5px;">
-          <IconsTimes  style="color:black; cursor:pointer;" @click="printPreview()"/>
-        </div>
-        <iframe ref="iframe" width='100%' height='100%' :src='pdfContent.dataBase64'></iframe>
-        <div
-          style="position: absolute; top: 12px; right: 98px; background-color: rgba(255,255,255,0); width: 37px; height: 36px; z-index:1; cursor: pointer;"
-          @click="download()">
-        </div>
-      </div>
-    </div>
-
-
-    <div v-if="cogs_show" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
-    style="background-color: rgba(255,255,255,0.9);">
-      <div class="relative" style="width:95%; height: 90%;">
-        <div class="absolute -top-7 right-0 bg-white"
-          style="position: absolute; padding:5px 10px; border: solid 1px #ccc; border-bottom: none; border-top-right-radius: 5px;  border-top-left-radius: 5px;">
-          <IconsTimes  style="color:black; cursor:pointer;" @click="cogs_show=false"/>
-        </div>
-        <div class="w-full h-full flex flex-col items-center justify-content-center bg-white">
-          <div class="w-full p-1">
-            <div class="w-full p-1 bg-gray-200">
-              <div class="w-full text-blue-600 font-bold">
-                Set Date For Load Data
-              </div>
-              <div class="w-full grid grid-cols-2 grid-rows-1 gap-1">
-                
-                <div class="flex flex-col flex-wrap p-1">
-                  <label for="">From</label>
-                  <div class="grow" >
-                    <ClientOnly>
-                      <vue-date-picker  v-model="loadDBData.from" 
-                      type="datetime" 
-                      format="dd-MM-yyyy"
-                      :enable-time-picker = "false"
-                      :clearable="false" 
-                      text-input
-                      teleport-center @closed="handleDate('from')"></vue-date-picker>
-                    </ClientOnly>
-                  </div>
-                </div>
-                
-                <div class="flex flex-col flex-wrap p-1">
-                  <label for="">To</label>
-                    <div class="grow" >
-                    <ClientOnly>
-                      <vue-date-picker  v-model="loadDBData.to" 
-                      type="datetime" 
-                      format="dd-MM-yyyy"
-                      :enable-time-picker = "false"
-                      :clearable="false" 
-                      text-input
-                      teleport-center @closed="handleDate('to')"></vue-date-picker>
-                    </ClientOnly>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-          
-
-        </div>
-        <div
-          style="position: absolute; top: 12px; right: 98px; background-color: rgba(255,255,255,0); width: 37px; height: 36px; z-index:1; cursor: pointer;"
-          @click="cogs_show=false">
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup>
 const { $moment } = useNuxtApp()
-import { storeToRefs } from 'pinia';
 
 import { useAuthStore } from '~/store/auth';
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
-
-const { pointFormat } = useUtils();
 
 definePageMeta({
   // layout: "clear",
@@ -322,14 +239,9 @@ const date = ref({
 });
 
 const token = useCookie('token');
-const role = useCookie('role'); // useCookie new hook in nuxt 3
-const checkRole=(list)=>{
-  return (list).includes(role.value);
-};
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
   let trx_trps = [];
-  // let list_pv = [];
 
   const [data1, data2] = await Promise.all([
     useMyFetch("/trx_trps", {
@@ -359,35 +271,26 @@ const { data: dt_async } = await useAsyncData(async () => {
 
   if (data1.status.value === 'error') {
     useErrorStore().trigger(data1.error);
-    // return { trx_trps, list_pv };
     return { trx_trps };
   }
 
-  // if (data2.status.value !== 'error') {
-  //   list_pv = data2.data.value.list_pv;
-  // }
   useCommonStore().loading_full = false;
 
-  // return { trx_trps,  list_pv };
   return { trx_trps };
 });
 
 const trx_trps = ref(dt_async.value.trx_trps || []);
-// const list_pv = ref(dt_async.value.list_pv);
 const list_cost_center = ref([]);
-const list_pv = ref([]);
 const online_status=ref(false);
-const fnLoadDBData = async (jenis,transition_to="") => {
+const fnLoadDBData = async () => {
   useCommonStore().loading_full = true;
-  let from = loadDBData.value.from ? $moment(loadDBData.value.from).format("Y-MM-DD") : "";
-  let to = loadDBData.value.to ? $moment(loadDBData.value.to).format("Y-MM-DD") : "";
-  const { data, error, status } = await useMyFetch("/trx_load_for_trp", {
+  const { data, error, status } = await useMyFetch("/trx_load_cost_center", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
-    params: {jenis,"online_status":online_status.value,from,to,transition_to},
+    params: {"online_status":online_status.value},
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -398,7 +301,6 @@ const fnLoadDBData = async (jenis,transition_to="") => {
   }
 
   list_cost_center.value = data.value.list_cost_center;
-  list_pv.value = data.value.list_pv;
 }
 
 const search = ref("");
@@ -485,18 +387,14 @@ const searching = () => {
   callData();
 }
 
-const router = useRouter();
-
 const forms_trx_trp_show =  ref(false);
 const forms_trx_trp_id = ref(0);
 const form_add = () => {
   forms_trx_trp_id.value = 0;
   forms_trx_trp_show.value = true;
-  // router.push({ name: 'data_trx_trp-form', query: { id: "" } });
 }
 
 const { display } = useAlertStore();
-const { show, status, message } = storeToRefs(useAlertStore());
 
 const form_edit = () => {
   if (selected.value == -1) {
@@ -504,7 +402,6 @@ const form_edit = () => {
   } else {
     forms_trx_trp_id.value = trx_trps.value[selected.value].id;
     forms_trx_trp_show.value = true;
-    // router.push({ name: 'data_trx_trp-form', query: { id: trx_trps.value[selected.value].id } });
   }
 };
 
@@ -672,18 +569,10 @@ const confirmedReqDeleted = async() => {
   req_deleted_box.value = false;
 }
 
-const { downloadFile, printHtml } = useDownload();
-
-const prtView = ref(false);
-const pdfContent = ref("");
+const { printHtml } = useDownload();
 
 const printPreview = async()=>{
   
-  if (prtView.value==true) {
-    prtView.value = false;
-    return;
-  }
-
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
     return;
@@ -705,35 +594,7 @@ const printPreview = async()=>{
     useErrorStore().trigger(error);
     return;
   }
-  // pdfContent.value = data.value;
-  // prtView.value = true;
-
   printHtml(data.value.html,318);
-}
-
-const download = ()=>{
-  downloadFile(pdfContent.value);
-}
-
-
-
-const cogs_show=ref(false);
-
-const loadDBData = ref({
-  from: new Date().setDate(new Date().getDate() - 3),
-  to:new Date(),
-})
-
-const handleDate = (source)=>{
-  if(source=='from'){
-    if(loadDBData.value.from-loadDBData.value.to>0){
-      loadDBData.value.from = loadDBData.value.to;
-    }
-  }else{
-    if(loadDBData.value.to-loadDBData.value.from<0){
-      loadDBData.value.to = loadDBData.value.from;
-    }
-  }
 }
 
 const generatePVR = async() => {
@@ -859,7 +720,7 @@ const enabled_edit = computed(()=>{
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.val) > -1
+  && [undefined,0].indexOf(dt_selected.value.val1) > -1
   && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1;
   return result;
 })
@@ -893,7 +754,7 @@ const enabled_print_preview = computed(()=>{
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.val) > -1;
+  && dt_selected.value.val == 1;
   return result;
 })
 </script>
