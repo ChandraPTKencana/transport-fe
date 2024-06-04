@@ -753,8 +753,7 @@ const enabled_void = computed(()=>{
 const enabled_print_preview = computed(()=>{  
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
-  && dt_selected.value.val == 1;
+  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1;
   return result;
 })
 </script>
