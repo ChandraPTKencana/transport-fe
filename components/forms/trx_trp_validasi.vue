@@ -77,7 +77,7 @@
                 <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
                   <label for="">Cost Center Desc</label>
                   <div class="card-border">
-                    {{ trx_trp.cost_center_code }}
+                    {{ trx_trp.cost_center_desc }}
                   </div>
                 </div>
 
