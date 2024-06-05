@@ -105,7 +105,7 @@
                   <table class="tacky w-full !table-auto" style="white-space:normal;">
                     <thead >
                       <tr class="sticky top-0 !z-[2]">
-                        <td colspan="8" class="!bg-slate-800 text-white font-bold">
+                        <td colspan="9" class="!bg-slate-800 text-white font-bold">
                           Detail PVR
                         </td>
                       </tr>
@@ -117,6 +117,7 @@
                         <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Desc</th>
                         <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Amount</th>
                         <th class="min-w-[40px] !w-[40px] max-w-[40px] ">Qty</th>
+                        <th class="min-w-[80px] !w-[80px] max-w-[80px] ">For</th>
                         <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Total <br> <span class="text-sm">({{pointFormat(total_harga2) }})</span></th>
                       </tr>
                     </thead>
@@ -153,6 +154,9 @@
                           </td>
                           <td class="cell" :class="disabled ? 'unselectable' : ''">
                             {{ pointFormat(detail.qty||0) }}
+                          </td>
+                          <td class="cell" :class="disabled ? 'unselectable' : ''">
+                            {{ detail.xfor }}
                           </td>
                           <td class="cell">
                             <div class="w-full h-full flex items-center justify-center">                       

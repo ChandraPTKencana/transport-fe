@@ -10,12 +10,12 @@
 
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Name</label>
-                <input v-model="standby_mst.name">
+                <input v-model="standby_mst.name" :disabled="disabled">
                 <p class="text-red-500">{{ field_errors.name }}</p>
               </div>
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Tipe</label>
-                <input v-model="standby_mst.tipe">
+                <input v-model="standby_mst.tipe" :disabled="disabled">
                 <p class="text-red-500">{{ field_errors.tipe }}</p>
               </div>
               <div class="w-full sm:w-4/12 md:w-2/12 lg:w-1/12 flex flex-col flex-wrap p-1">
@@ -32,7 +32,7 @@
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
                   <thead >
                     <tr class="sticky -top-1 !z-[2]">
-                      <td :colspan="!disabled  ? 8 : 6" class="!bg-slate-800 text-white font-bold">
+                      <td :colspan="!disabled  ? 9 : 7" class="!bg-slate-800 text-white font-bold">
                         Detail
                       </td>
                     </tr>
@@ -49,6 +49,7 @@
                       <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Acc Name</th>
                       <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Desc</th>
                       <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Amount <br> <span class="text-sm">({{pointFormat(total_amount) }})</span></th>
+                      <th class="min-w-[80px] !w-[80px] max-w-[80px] ">For</th>
                     </tr>
                   </thead>
                   <tbody ref="to_move">
@@ -102,7 +103,15 @@
                             type="text" 
                             :value="detail.amount || 0" 
                             @input="detail.amount = $event"
-                            :show="show"/>
+                            :show="show" :disabled="disabled"/>
+                          </div>
+                        </td>
+                        <td class="cell" :class="disabled ? 'unselectable' : ''">
+                          <div class="w-full h-full flex items-center justify-center">                       
+                            <select v-model="detail.xfor" :disabled="disabled">
+                              <option value="Supir">Supir</option>
+                              <option value="Kernet">Kernet</option>
+                            </select>
                           </div>
                         </td>
                       </tr>
@@ -234,6 +243,7 @@ const detail = ref({
   ac_account_code:"",
   description:"",
   amount:0,
+  xfor:"",
   // status:"",
   p_status:""
 });

@@ -110,7 +110,7 @@
                               type="text" 
                               :value="detail.harga || 0" 
                               @input="detail.harga = $event"
-                              :show="show"/>
+                              :show="show" :disabled="role=='PabrikTransport' || disabled"/>
                             </div>
                           </td>
                           <td class="cell" :class="role=='PabrikTransport' || disabled ? 'unselectable' : ''">
@@ -121,7 +121,7 @@
                               type="text" 
                               :value="detail.qty || 0" 
                               @input="detail.qty = $event"
-                              :show="show"/>
+                              :show="show" :disabled="role=='PabrikTransport' || disabled"/>
                             </div>
                           </td>
                           <td class="cell">
@@ -163,7 +163,7 @@
                   <table class="tacky w-full !table-auto" style="white-space:normal;">
                     <thead >
                       <tr class="sticky -top-1 !z-[2]">
-                        <td :colspan="!disabled  ? 10 : 8" class="!bg-slate-800 text-white font-bold">
+                        <td :colspan="!disabled  ? 11 : 9" class="!bg-slate-800 text-white font-bold">
                           Detail PVR
                         </td>
                       </tr>
@@ -181,6 +181,7 @@
                         <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Desc</th>
                         <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Amount</th>
                         <th class="min-w-[40px] !w-[40px] max-w-[40px] ">Qty</th>
+                        <th class="min-w-[80px] !w-[80px] max-w-[80px] ">For</th>
                         <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Total <br> <span class="text-sm">({{pointFormat(total_harga2) }})</span></th>
                       </tr>
                     </thead>
@@ -235,7 +236,7 @@
                               type="text" 
                               :value="detail.amount || 0" 
                               @input="detail.amount = $event"
-                              :show="show"/>
+                              :show="show" :disabled="disabled"/>
                             </div>
                           </td>
                           <td class="cell" :class="disabled ? 'unselectable' : ''">
@@ -246,7 +247,15 @@
                               type="text" 
                               :value="detail.qty || 0" 
                               @input="detail.qty = $event"
-                              :show="show"/>
+                              :show="show" :disabled="disabled"/>
+                            </div>
+                          </td>
+                          <td class="cell" :class="disabled ? 'unselectable' : ''">
+                            <div class="w-full h-full flex items-center justify-center">                       
+                              <select class="h-full" v-model="detail.xfor" :disabled="disabled">
+                                <option value="Supir">Supir</option>
+                                <option value="Kernet">Kernet</option>
+                              </select>
                             </div>
                           </td>
                           <td class="cell">
@@ -424,6 +433,7 @@ const detail2 = ref({
   description:"",
   qty:1,
   amount:0,
+  xfor:"",
   // status:"",
   p_status:""
 });
@@ -521,9 +531,15 @@ const deleteSNSItem=(e, index)=>{
 //   show_warehouse.value = false;
 // }
 
+const { display } = useAlertStore();
 
 
 const doSave = async () => {
+  if(details2.value.length > 0 && total_harga.value != total_harga2.value){    
+    display({ show: true, status: "Failed", message: "Total tidak cocok" });
+    return;
+  }
+
   useCommonStore().loading_full = true;
   field_errors.value = {};
 

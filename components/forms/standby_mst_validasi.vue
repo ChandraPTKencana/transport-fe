@@ -37,7 +37,7 @@
                   <table class="tacky w-full !table-auto" style="white-space:normal;">
                     <thead >
                       <tr class="sticky top-0 !z-[2]">
-                        <td colspan="6" class="!bg-slate-800 text-white font-bold">
+                        <td colspan="7" class="!bg-slate-800 text-white font-bold">
                           Detail PVR
                         </td>
                       </tr>
@@ -48,6 +48,7 @@
                         <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Acc Name</th>
                         <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Desc</th>
                         <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Amount <br> <span class="text-sm">({{pointFormat(total_amount) }})</span></th>
+                        <th class="min-w-[80px] !w-[80px] max-w-[80px] ">For</th>
                       </tr>
                     </thead>
                     <tbody ref="to_move">
@@ -80,6 +81,9 @@
                             <div class="w-full h-full flex items-center justify-center">
                               {{ pointFormat(detail.amount||0) }}
                             </div>
+                          </td>
+                          <td class="cell" :class="disabled ? 'unselectable' : ''">
+                            {{ detail.xfor }}
                           </td>
                         </tr>
                       </template>
@@ -271,7 +275,7 @@ const total_amount = computed(()=>{
 
   details.value.forEach(e => {
     if(e.p_status!="Remove")
-    temp += e.amount;
+    temp += parseInt(e.amount);
   });
   return temp;
 })
