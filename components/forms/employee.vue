@@ -1,57 +1,44 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Form Employee'" :fn="fnClose" class="w-100 flex align-items-center"
-        style="color:white;" />
+      <HeaderPopup :title="'Form Employee'" :fn="fnClose" class="w-100 flex align-items-center" style="color:white;" />
 
-        <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
-          <div class="w-full flex flex-col items-center grow overflow-auto">
-            <div class="w-full flex flex-row flex-wrap">
+      <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
+        <div class="w-full flex flex-col items-center grow overflow-auto">
+          <div class="w-full flex flex-row flex-wrap">
+            <div class="w-full flex flex-col flex-wrap p-1">
+              <label for="">Nama</label>
+              <input type="text" v-model="employee.name">
+              <p class="text-red-500">{{ field_errors.name }}</p>
+            </div>
 
-              <div class="w-full flex flex-col flex-wrap p-1">
-                <label for="">Nama</label>
-                <input type="text" v-model="employee.name">
-                <p class="text-red-500">{{ field_errors.name }}</p>
-              </div>
-
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Jabatan</label>
-                <select v-model="employee.role">
-                  <option value="Supir">Supir</option>
-                  <option value="Kernet">Kernet</option>
-                </select>
-                <p class="text-red-500">{{ field_errors.role }}</p>
-              </div>
-            
-              
+            <div class="w-full flex flex-col flex-wrap p-1">
+              <label for="">Jabatan</label>
+              <select v-model="employee.role">
+                <option value="Supir">Supir</option>
+                <option value="Kernet">Kernet</option>
+              </select>
+              <p class="text-red-500">{{ field_errors.role }}</p>
             </div>
           </div>
-          
-          <div class="w-full flex items-center justify-end">
-            <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
-              Cancel
-            </button>
-            <button type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
-              Save
-            </button>
-          </div>
-        </form>
+        </div>
+        
+        <div class="w-full flex items-center justify-end">
+          <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
+            Cancel
+          </button>
+          <button type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+            Save
+          </button>
+        </div>
+      </form>
     </div>
   </section>
-
 </template>
 
 <script setup>
-
-const { $moment } = useNuxtApp()
-import { storeToRefs } from 'pinia';
-
-import { useAuthStore } from '~/store/auth';
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
-import { useAlertStore } from '~/store/alert';
-const { pointFormat } = useUtils();
-
 
 const props = defineProps({
   show: {
@@ -75,17 +62,15 @@ const props = defineProps({
 })
 
 const employee_temp = {
-    id: -1,
-    name: "",
-    role: "Supir",
+  id: -1,
+  name: "",
+  role: "Supir",
 };
 
 const employee = ref({...employee_temp});
 
 const token = useCookie('token');
 const field_errors = ref({})
-
-
 
 const doSave = async () => { 
   useCommonStore().loading_full = true;
@@ -101,8 +86,6 @@ const doSave = async () => {
   let id = props.id;
   if (id == 0) {
   } else {
-    // $method = "put";
-    // data_in['id'] = id;
     data_in.append("id", id);
     data_in.append("_method", "PUT");
   }
@@ -111,13 +94,10 @@ const doSave = async () => {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
-      // 'Content-Type': 'application/json',
       'Accept': 'application/json',
-      // "Content-Type": "multipart/form-data",
     },
     body: data_in,
     retry: 0,
-    // server: true
   });
   useCommonStore().loading_full = false;
   if (status.value === 'error') {
@@ -138,7 +118,6 @@ const doSave = async () => {
     }
   }
   props.fnClose();
-  // router.go(-1);
 }
 
 
@@ -180,36 +159,3 @@ watch(() => props.show, (newVal, oldVal) => {
 });
 
 </script>
-<style scoped="">
-/* table.sticky thead th:nth-child(2) {
-  position: -webkit-sticky;
-  position: sticky;
-  left: 0;
-  z-index: 2;
-}
-
-table.sticky thead tr {
-  top: 0;
-} */
-
-.box-fixed {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  top: 0px;
-  left:0px;
-}
-
-.box-fixed>div {
-  width: 95%;
-  height: 95%;
-  background-color: white;
-  border: solid 1px #ccc;
-  display: flex;
-  flex-direction: column;
-}
-</style>

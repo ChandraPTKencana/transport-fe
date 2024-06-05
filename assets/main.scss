@@ -176,3 +176,14 @@ table button{
     }
     #print_target , #print_target > * { display: block; }
 }
+
+.box-fixed {
+    @apply w-full h-full fixed z-10 flex items-center justify-center top-0 left-0;
+}
+  
+.box-fixed>div {
+    @apply bg-white flex flex-col border-solid border-gray-400;
+    width: 95%;
+    height: 95%;
+    border-width: 1px;
+}

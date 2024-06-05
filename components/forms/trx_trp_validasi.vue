@@ -4,142 +4,142 @@
       <HeaderPopup :title="'Form Transaction Validation'" :fn="fnClose" class="w-100 flex align-items-center"
         style="color:white;" />
 
-        <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
-          <div class="w-full flex flex-col items-center grow overflow-auto">
-            <div class="w-full flex flex-row flex-wrap">
+      <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
+        <div class="w-full flex flex-col items-center grow overflow-auto">
+          <div class="w-full flex flex-row flex-wrap">
 
-              <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
-                <label for="">U.Jalan Per</label>
-                <div class="card-border">
-                  {{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-YYYY") : "" }}
-                </div>
+            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <label for="">U.Jalan Per</label>
+              <div class="card-border">
+                {{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-YYYY") : "" }}
               </div>
-
-              <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
-                <label for="">Jenis</label>
-                <div class="card-border">
-                  {{ trx_trp.jenis }}
-                </div>
-              </div>
-
-              <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Supir</label>
-                <div class="card-border">
-                  {{ trx_trp.supir }}
-                </div>
-              </div>
-
-              <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Kernet</label>
-                <div class="card-border">
-                  {{ trx_trp.kernet }}
-                </div>
-              </div>
-
-              <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
-                <label for="">No Pol</label>
-                <div class="card-border">
-                  {{ trx_trp.no_pol }}
-                </div>
-              </div>
-            
-              <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">Tujuan</label>
-                  <div class="card-border">
-                    {{ trx_trp.xto }}
-                  </div>
-                </div>
-
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">Tipe</label>
-                  <div class="card-border">
-                    {{ trx_trp.tipe }}
-                  </div>
-                </div>
-
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">Total Dari U.Jalan</label>
-                  <div class="card-border ">
-                    {{pointFormat(trx_trp.amount || 0) }}
-                  </div>
-                </div>
-              </div>
-
-              <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
-                <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">Cost Center Code</label>
-                  <div class="card-border">
-                    {{ trx_trp.cost_center_code }}
-                  </div>
-                </div>
-
-                <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                  <label for="">Cost Center Desc</label>
-                  <div class="card-border">
-                    {{ trx_trp.cost_center_desc }}
-                  </div>
-                </div>
-
-                <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                  <label for="">PVR No</label>
-                  <div class="card-border">
-                    {{ trx_trp.pvr_no }}
-                  </div>
-                </div>
-
-                <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">PVR Total</label>
-                  <div class="card-border">
-                    {{ pointFormat(trx_trp.pvr_total || 0) }}
-                  </div>
-                </div>
-
-
-                <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                  <label for="">PV</label>
-                  <div class="card-border">
-                    {{ trx_trp.pv_no }}
-                  </div>
-                </div>
-  
-                <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">PV Amount</label>
-                  <div class="card-border ">
-                    {{  pointFormat(trx_trp.pv_total || 0) }}
-                  </div>
-                </div>
-              </div>
-
             </div>
-          </div>
+
+            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <label for="">Jenis</label>
+              <div class="card-border">
+                {{ trx_trp.jenis }}
+              </div>
+            </div>
+
+            <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <label for="">Supir</label>
+              <div class="card-border">
+                {{ trx_trp.supir }}
+              </div>
+            </div>
+
+            <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <label for="">Kernet</label>
+              <div class="card-border">
+                {{ trx_trp.kernet }}
+              </div>
+            </div>
+
+            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <label for="">No Pol</label>
+              <div class="card-border">
+                {{ trx_trp.no_pol }}
+              </div>
+            </div>
           
-          <div class="w-full flex items-center justify-end">
-            <div class="w-full flex flex-wrap p-3 items-center">
-              <div>
-                Di Validasi oleh : 
+            <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
+              <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">Tujuan</label>
+                <div class="card-border">
+                  {{ trx_trp.xto }}
+                </div>
               </div>
-              <div v-if="trx_trp.val || trx_trp.val1 || trx_trp.val2" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
-                <div v-if="trx_trp.val">
-                  App 1 : {{ trx_trp.val_by.username}} ( {{ trx_trp.val_at ? $moment(trx_trp.val_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+
+              <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">Tipe</label>
+                <div class="card-border">
+                  {{ trx_trp.tipe }}
                 </div>
-                <div v-if="trx_trp.val1">
-                  App 2 : {{ trx_trp.val1_by.username}} ( {{ trx_trp.val1_at ? $moment(trx_trp.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
-                </div>
-                <div v-if="trx_trp.val2">
-                  App 3 : {{ trx_trp.val2_by.username}} ( {{ trx_trp.val2_at ? $moment(trx_trp.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+              </div>
+
+              <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">Total Dari U.Jalan</label>
+                <div class="card-border ">
+                  {{pointFormat(trx_trp.amount || 0) }}
                 </div>
               </div>
             </div>
 
-            <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
-              Cancel
-            </button>
-            <button v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
-              Validasi
-            </button>
+            <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
+              <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">Cost Center Code</label>
+                <div class="card-border">
+                  {{ trx_trp.cost_center_code }}
+                </div>
+              </div>
+
+              <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
+                <label for="">Cost Center Desc</label>
+                <div class="card-border">
+                  {{ trx_trp.cost_center_desc }}
+                </div>
+              </div>
+
+              <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
+                <label for="">PVR No</label>
+                <div class="card-border">
+                  {{ trx_trp.pvr_no }}
+                </div>
+              </div>
+
+              <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">PVR Total</label>
+                <div class="card-border">
+                  {{ pointFormat(trx_trp.pvr_total || 0) }}
+                </div>
+              </div>
+
+
+              <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
+                <label for="">PV</label>
+                <div class="card-border">
+                  {{ trx_trp.pv_no }}
+                </div>
+              </div>
+
+              <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">PV Amount</label>
+                <div class="card-border ">
+                  {{  pointFormat(trx_trp.pv_total || 0) }}
+                </div>
+              </div>
+            </div>
+
           </div>
-        </form>
+        </div>
+        
+        <div class="w-full flex items-center justify-end">
+          <div class="w-full flex flex-wrap p-3 items-center">
+            <div>
+              Di Validasi oleh : 
+            </div>
+            <div v-if="trx_trp.val || trx_trp.val1 || trx_trp.val2" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
+              <div v-if="trx_trp.val">
+                App 1 : {{ trx_trp.val_by.username}} ( {{ trx_trp.val_at ? $moment(trx_trp.val_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+              </div>
+              <div v-if="trx_trp.val1">
+                App 2 : {{ trx_trp.val1_by.username}} ( {{ trx_trp.val1_at ? $moment(trx_trp.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+              </div>
+              <div v-if="trx_trp.val2">
+                App 3 : {{ trx_trp.val2_by.username}} ( {{ trx_trp.val2_at ? $moment(trx_trp.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+              </div>
+            </div>
+          </div>
+
+          <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
+            Cancel
+          </button>
+          <button v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+            Validasi
+          </button>
+        </div>
+      </form>
     </div>
   </section>
 
@@ -148,12 +148,8 @@
 <script setup>
 
 const { $moment } = useNuxtApp()
-import { storeToRefs } from 'pinia';
-
-import { useAuthStore } from '~/store/auth';
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
-import { useAlertStore } from '~/store/alert';
 const { pointFormat } = useUtils();
 
 
@@ -221,8 +217,6 @@ const doSave = async () => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
-  // data_in.append("tanggal", $moment(trx_trp.value.tanggal).format("Y-MM-DD"));
-  // data_in.append("tipe", trx_trp.value.tipe);
   
   let $method = "post";
 
@@ -237,13 +231,10 @@ const doSave = async () => {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
-      // 'Content-Type': 'application/json',
       'Accept': 'application/json',
-      // "Content-Type": "multipart/form-data",
     },
     body: data_in,
     retry: 0,
-    // server: true
   });
   useCommonStore().loading_full = false;
   if (status.value === 'error') {
@@ -280,15 +271,10 @@ const callData = async () => {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
-      // 'Content-Type': 'application/json',
       'Accept': 'application/json'
     },
     params: {id:props.id},
-    // body: {
-    //   sort: "updated_at:desc"
-    // },
     retry: 0,
-    // server: true
   });
   useCommonStore().loading_full = false;
 
@@ -308,36 +294,3 @@ watch(() => props.show, (newVal, oldVal) => {
   immediate: true
 });
 </script>
-<style scoped="">
-/* table.sticky thead th:nth-child(2) {
-  position: -webkit-sticky;
-  position: sticky;
-  left: 0;
-  z-index: 2;
-}
-
-table.sticky thead tr {
-  top: 0;
-} */
-
-.box-fixed {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  top: 0px;
-  left:0px;
-}
-
-.box-fixed>div {
-  width: 95%;
-  height: 95%;
-  background-color: white;
-  border: solid 1px #ccc;
-  display: flex;
-  flex-direction: column;
-}
-</style>

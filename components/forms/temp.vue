@@ -1,46 +1,45 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Form Vehicle'" :fn="fnClose" class="w-100 flex align-items-center"
-        style="color:white;" />
+      <HeaderPopup :title="'Form Employee'" :fn="fnClose" class="w-100 flex align-items-center" style="color:white;" />
 
-        <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
-          <div class="w-full flex flex-col items-center grow overflow-auto">
-            <div class="w-full flex flex-row flex-wrap">
+      <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
+        <div class="w-full flex flex-col items-center grow overflow-auto">
+          <div class="w-full flex flex-row flex-wrap">
 
-              <div class="w-full flex flex-col flex-wrap p-1">
-                <label for="">No Pol</label>
-                <input type="text" v-model="vehicle.no_pol">
-                <p class="text-red-500">{{ field_errors.no_pol }}</p>
-              </div>
+            <div class="w-full flex flex-col flex-wrap p-1">
+              <label for="">Nama</label>
+              <input type="text" v-model="employee.name">
+              <p class="text-red-500">{{ field_errors.name }}</p>
+            </div>
+
+            <div class="w-full flex flex-col flex-wrap p-1">
+              <label for="">Jabatan</label>
+              <select v-model="employee.role">
+                <option value="Supir">Supir</option>
+                <option value="Kernet">Kernet</option>
+              </select>
+              <p class="text-red-500">{{ field_errors.role }}</p>
             </div>
           </div>
-          
-          <div class="w-full flex items-center justify-end">
-            <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
-              Cancel
-            </button>
-            <button type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
-              Save
-            </button>
-          </div>
-        </form>
+        </div>
+        
+        <div class="w-full flex items-center justify-end">
+          <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
+            Cancel
+          </button>
+          <button type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+            Save
+          </button>
+        </div>
+      </form>
     </div>
   </section>
-
 </template>
 
 <script setup>
-
-const { $moment } = useNuxtApp()
-import { storeToRefs } from 'pinia';
-
-import { useAuthStore } from '~/store/auth';
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
-import { useAlertStore } from '~/store/alert';
-const { pointFormat } = useUtils();
-
 
 const props = defineProps({
   show: {
@@ -63,17 +62,16 @@ const props = defineProps({
   },
 })
 
-const vehicle_temp = {
-    id: -1,
-    no_pol: "",
+const employee_temp = {
+  id: -1,
+  name: "",
+  role: "Supir",
 };
 
-const vehicle = ref({...vehicle_temp});
+const employee = ref({...employee_temp});
 
 const token = useCookie('token');
 const field_errors = ref({})
-
-
 
 const doSave = async () => { 
   useCommonStore().loading_full = true;
@@ -81,20 +79,19 @@ const doSave = async () => {
 
   const data_in = new FormData();
   
-  data_in.append("no_pol", vehicle.value.no_pol);
+  data_in.append("name", employee.value.name);
+  data_in.append("role", employee.value.role);
 
   let $method = "post";
 
   let id = props.id;
   if (id == 0) {
   } else {
-    // $method = "put";
-    // data_in['id'] = id;
     data_in.append("id", id);
     data_in.append("_method", "PUT");
   }
 
-  const { data, error, status } = await useMyFetch("/vehicle", {
+  const { data, error, status } = await useMyFetch("/employee", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -112,26 +109,25 @@ const doSave = async () => {
     return;
   }
 
-  vehicle.value.updated_at = data.value.updated_at;
+  employee.value.updated_at = data.value.updated_at;
   
   if(props.id<=0){
-    vehicle.value.id = data.value.id;
-    vehicle.value.created_at = data.value.created_at;
-    props.p_data.unshift(vehicle.value);
+    employee.value.id = data.value.id;
+    employee.value.created_at = data.value.created_at;
+    props.p_data.unshift(employee.value);
   }else{
     let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
     if(idx>=-1){
-      props.p_data.splice(idx,1,{...vehicle.value});    
+      props.p_data.splice(idx,1,{...employee.value});    
     }
   }
   props.fnClose();
-  // router.go(-1);
 }
 
 
 const callData = async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/vehicle", {
+  const { data, error, status } = await useMyFetch("/employee", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -152,12 +148,12 @@ const callData = async () => {
     return;
   }
 
-  vehicle.value = data.value.data;
+  employee.value = data.value.data;
 }
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
-    vehicle.value = {...vehicle_temp};
+    employee.value = {...employee_temp};
     field_errors.value = {};
     if(props.id!=0)
     callData();
@@ -167,15 +163,3 @@ watch(() => props.show, (newVal, oldVal) => {
 });
 
 </script>
-<style scoped="">
-/* table.sticky thead th:nth-child(2) {
-  position: -webkit-sticky;
-  position: sticky;
-  left: 0;
-  z-index: 2;
-}
-
-table.sticky thead tr {
-  top: 0;
-} */
-</style>

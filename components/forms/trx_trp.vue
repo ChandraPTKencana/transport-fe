@@ -1,161 +1,157 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Form Transaction'" :fn="fnClose" class="w-100 flex align-items-center"
-        style="color:white;" />
+      <HeaderPopup :title="'Form Transaction'" :fn="fnClose" class="w-100 flex align-items-center" style="color:white;" />
 
-        <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
-          <div class="w-full flex flex-col items-center grow overflow-auto">
-            <div class="w-full flex flex-row flex-wrap">
+      <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
+        <div class="w-full flex flex-col items-center grow overflow-auto">
+          <div class="w-full flex flex-row flex-wrap">
 
-              <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
-                <label for="">U.Jalan Per</label>
-                <div class="grow" v-if="trx_trp.val!==1">
-                  <ClientOnly>
-                    <vue-date-picker  v-model="trx_trp.tanggal" 
-                    type="datetime" 
-                    format="dd-MM-yyyy"
-                    :enable-time-picker = "false" 
-                    text-input
-                    teleport-center></vue-date-picker>
-                  </ClientOnly>
-                </div>
-                <div class="grow" v-else>
-                  <div class="card-border disabled" :class="trx_trp.pvr_no!='' ? 'unselectable':''">
-                    {{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-YYYY") : "" }}
-                  </div>
-                </div>
-                <p class="text-red-500">{{ field_errors.tanggal }}</p>
+            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <label for="">U.Jalan Per</label>
+              <div class="grow" v-if="trx_trp.val!==1">
+                <ClientOnly>
+                  <vue-date-picker  v-model="trx_trp.tanggal" 
+                  type="datetime" 
+                  format="dd-MM-yyyy"
+                  :enable-time-picker = "false" 
+                  text-input
+                  teleport-center></vue-date-picker>
+                </ClientOnly>
               </div>
-
-              <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
-                <label for="">Jenis</label>
-                <select v-model="trx_trp.jenis" @change="changeJenis($event)" :disabled="trx_trp.val==1">
-                  <option value="TBS">TBS</option>
-                  <option value="TBSK">TBSK</option>
-                  <option value="CPO">CPO</option>
-                  <option value="PK">PK</option>
-                </select>
-                <p class="text-red-500">{{ field_errors.jenis }}</p>
-              </div>
-
-              <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Supir</label>
-                <input type="text" list="supir"  v-model="trx_trp.supir" :disabled="trx_trp.val==1"/>
-                <datalist id="supir">
-                  <option v-for="lk in list_supir" :value="lk.name" >{{lk.name}}</option>
-                </datalist>
-                <p class="text-red-500">{{ field_errors.supir }}</p>
-              </div>
-
-              <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Kernet</label>
-                <input type="text" list="kernet"  v-model="trx_trp.kernet" :disabled="trx_trp.val==1"/>
-                <datalist id="kernet">
-                  <option v-for="lk in list_kernet" :value="lk.name" >{{lk.name}}</option>
-                </datalist>
-                <p class="text-red-500">{{ field_errors.kernet }}</p>
-              </div>
-
-              <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
-                <label for="">No Pol</label>
-                <input type="text" list="vehicle"  v-model="trx_trp.no_pol" :disabled="trx_trp.val==1"/>
-                <datalist id="vehicle">
-                  <option v-for="lv in list_vehicle" :value="lv.no_pol" >{{lv.no_pol}}</option>
-                </datalist>
-                <p class="text-red-500">{{ field_errors.no_pol }}</p>
-              </div>
-          
-
-              <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">Tujuan</label>
-                  <select v-model="trx_trp.xto" :disabled="trx_trp.val==1">
-                    <option v-for="lt in list_to">{{lt}}</option>
-                  </select>
-                  <p class="text-red-500">{{ field_errors.xto }}</p>
-                </div>
-
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">Tipe</label>
-                  <select v-model="trx_trp.id_uj" :disabled="trx_trp.val==1">
-                    <option v-for="lt in list_tipe" :value="lt.id" :selected="lt.id == trx_trp.id_uj">{{lt.tipe}}</option>
-                  </select>
-                  <p class="text-red-500">{{ field_errors.id_uj }}</p>
-                </div>
-
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">Total Dari U.Jalan</label>
-                  <div class="card-border disabled">
-                    {{pointFormat(trx_trp.amount) }}
-                  </div>
+              <div class="grow" v-else>
+                <div class="card-border disabled" :class="trx_trp.pvr_no!='' ? 'unselectable':''">
+                  {{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-YYYY") : "" }}
                 </div>
               </div>
-
-              <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
-
-                <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">Cost Center Code</label>
-                  <input list="cost_center"  v-model="trx_trp.cost_center_code" @blur="blurCostCenterCode($event)" :disabled="trx_trp.pvr_no!=''">
-                  <datalist id="cost_center">
-                    <option v-for="lcc in list_cost_center" :value="lcc.CostCenter">{{lcc.CostCenter +'-'+ lcc.Description}}</option>
-                  </datalist>
-                  <p class="text-red-500">{{ field_errors.cost_center_code }}</p>
-                </div>
-
-                <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                  <label for="">Cost Center Desc</label>
-                  <div class="card-border disabled">
-                    {{  trx_trp.cost_center_desc }}
-                  </div>
-                </div>
-
-                <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                  <label for="">PVR No</label>
-                  <div class="card-border disabled">
-                    {{  trx_trp.pvr_no }}
-                  </div>
-                </div>
-
-                <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">PVR Total</label>
-                  <div class="card-border disabled">
-                    {{ pointFormat(trx_trp.pvr_total || 0) }}
-                  </div>
-                </div>
-
-
-                <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                  <label for="">PV</label>
-                  <div class="card-border disabled">
-                    {{  trx_trp.pv_no }}
-                  </div>
-                </div>
-  
-                <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                  <label for="">PV Amount</label>
-                  <div class="card-border disabled">
-                    {{  pointFormat(trx_trp.pv_total) }}
-                  </div>
-                </div>
-              </div>
- 
-
+              <p class="text-red-500">{{ field_errors.tanggal }}</p>
             </div>
+
+            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <label for="">Jenis</label>
+              <select v-model="trx_trp.jenis" @change="changeJenis($event)" :disabled="trx_trp.val==1">
+                <option value="TBS">TBS</option>
+                <option value="TBSK">TBSK</option>
+                <option value="CPO">CPO</option>
+                <option value="PK">PK</option>
+              </select>
+              <p class="text-red-500">{{ field_errors.jenis }}</p>
+            </div>
+
+            <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <label for="">Supir</label>
+              <input type="text" list="supir"  v-model="trx_trp.supir" :disabled="trx_trp.val==1"/>
+              <datalist id="supir">
+                <option v-for="lk in list_supir" :value="lk.name" >{{lk.name}}</option>
+              </datalist>
+              <p class="text-red-500">{{ field_errors.supir }}</p>
+            </div>
+
+            <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <label for="">Kernet</label>
+              <input type="text" list="kernet"  v-model="trx_trp.kernet" :disabled="trx_trp.val==1"/>
+              <datalist id="kernet">
+                <option v-for="lk in list_kernet" :value="lk.name" >{{lk.name}}</option>
+              </datalist>
+              <p class="text-red-500">{{ field_errors.kernet }}</p>
+            </div>
+
+            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <label for="">No Pol</label>
+              <input type="text" list="vehicle"  v-model="trx_trp.no_pol" :disabled="trx_trp.val==1"/>
+              <datalist id="vehicle">
+                <option v-for="lv in list_vehicle" :value="lv.no_pol" >{{lv.no_pol}}</option>
+              </datalist>
+              <p class="text-red-500">{{ field_errors.no_pol }}</p>
+            </div>
+        
+
+            <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
+              <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">Tujuan</label>
+                <select v-model="trx_trp.xto" :disabled="trx_trp.val==1">
+                  <option v-for="lt in list_to">{{lt}}</option>
+                </select>
+                <p class="text-red-500">{{ field_errors.xto }}</p>
+              </div>
+
+              <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">Tipe</label>
+                <select v-model="trx_trp.id_uj" :disabled="trx_trp.val==1">
+                  <option v-for="lt in list_tipe" :value="lt.id" :selected="lt.id == trx_trp.id_uj">{{lt.tipe}}</option>
+                </select>
+                <p class="text-red-500">{{ field_errors.id_uj }}</p>
+              </div>
+
+              <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">Total Dari U.Jalan</label>
+                <div class="card-border disabled">
+                  {{pointFormat(trx_trp.amount) }}
+                </div>
+              </div>
+            </div>
+
+            <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
+
+              <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">Cost Center Code</label>
+                <input list="cost_center"  v-model="trx_trp.cost_center_code" @blur="blurCostCenterCode($event)" :disabled="trx_trp.pvr_no!=''">
+                <datalist id="cost_center">
+                  <option v-for="lcc in list_cost_center" :value="lcc.CostCenter">{{lcc.CostCenter +'-'+ lcc.Description}}</option>
+                </datalist>
+                <p class="text-red-500">{{ field_errors.cost_center_code }}</p>
+              </div>
+
+              <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
+                <label for="">Cost Center Desc</label>
+                <div class="card-border disabled">
+                  {{  trx_trp.cost_center_desc }}
+                </div>
+              </div>
+
+              <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
+                <label for="">PVR No</label>
+                <div class="card-border disabled">
+                  {{  trx_trp.pvr_no }}
+                </div>
+              </div>
+
+              <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">PVR Total</label>
+                <div class="card-border disabled">
+                  {{ pointFormat(trx_trp.pvr_total || 0) }}
+                </div>
+              </div>
+
+
+              <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
+                <label for="">PV</label>
+                <div class="card-border disabled">
+                  {{  trx_trp.pv_no }}
+                </div>
+              </div>
+
+              <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">PV Amount</label>
+                <div class="card-border disabled">
+                  {{  pointFormat(trx_trp.pv_total) }}
+                </div>
+              </div>
+            </div>
+
+
           </div>
-          
-          <div class="w-full flex items-center justify-end">
-            <!-- <button type="button" name="button" class="w-36 m-1 bg-yellow-600 text-white" @click="fnLoadDBData()">
-              Load DB Data
-            </button> -->
-            <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
-              Cancel
-            </button>
-            <button v-if="!disabled" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
-              Save
-            </button>
-          </div>
-        </form>
+        </div>
+        
+        <div class="w-full flex items-center justify-end">
+          <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
+            Cancel
+          </button>
+          <button v-if="!disabled" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+            Save
+          </button>
+        </div>
+      </form>
     </div>
   </section>
 
@@ -164,9 +160,6 @@
 <script setup>
 
 const { $moment } = useNuxtApp()
-import { storeToRefs } from 'pinia';
-
-import { useAuthStore } from '~/store/auth';
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
@@ -291,8 +284,6 @@ const doSave = async () => {
   let id = props.id;
   if (id == 0) {
   } else {
-    // $method = "put";
-    // data_in['id'] = id;
     data_in.append("id", id);
     data_in.append("_method", "PUT");
   }
@@ -301,13 +292,10 @@ const doSave = async () => {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
-      // 'Content-Type': 'application/json',
       'Accept': 'application/json',
-      // "Content-Type": "multipart/form-data",
     },
     body: data_in,
     retry: 0,
-    // server: true
   });
   useCommonStore().loading_full = false;
   if (status.value === 'error') {
@@ -328,17 +316,7 @@ const doSave = async () => {
     }
   }
   props.fnClose();
-  // router.go(-1);
 }
-
-// // const exclude_id = computed({
-// //   get(){
-// //     return trx_trp.value.warehouse?.id || trx_trp.value.warehouse_target?.id;
-// //   },
-// //   set(){
-    
-// //   }
-// // })
 
 const list_to = computed(()=>{
   let jenisF = trx_trp.value.jenis == 'TBSK' ? 'TBS' : trx_trp.value.jenis;
@@ -369,15 +347,10 @@ const callData = async () => {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
-      // 'Content-Type': 'application/json',
       'Accept': 'application/json'
     },
     params: {id:props.id},
-    // body: {
-    //   sort: "updated_at:desc"
-    // },
     retry: 0,
-    // server: true
   });
   useCommonStore().loading_full = false;
 
@@ -402,15 +375,9 @@ const loadLocalDT = async () => {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
-      // 'Content-Type': 'application/json',
       'Accept': 'application/json'
     },
-    // params: {id:props.id},
-    // body: {
-    //   sort: "updated_at:desc"
-    // },
     retry: 0,
-    // server: true
   });
   useCommonStore().loading_full = false;
 
@@ -498,36 +465,3 @@ watch(()=>trx_trp.value.id_uj, (newVal, oldVal) => {
 });
 
 </script>
-<style scoped="">
-/* table.sticky thead th:nth-child(2) {
-  position: -webkit-sticky;
-  position: sticky;
-  left: 0;
-  z-index: 2;
-}
-
-table.sticky thead tr {
-  top: 0;
-} */
-
-.box-fixed {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  top: 0px;
-  left:0px;
-}
-
-.box-fixed>div {
-  width: 95%;
-  height: 95%;
-  background-color: white;
-  border: solid 1px #ccc;
-  display: flex;
-  flex-direction: column;
-}
-</style>

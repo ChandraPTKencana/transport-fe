@@ -654,25 +654,4 @@ watch(()=>standby_trx.value.cost_center_code, (newVal, oldVal) => {
 table.sticky thead tr {
   top: 0;
 } */
-
-.box-fixed {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  top: 0px;
-  left:0px;
-}
-
-.box-fixed>div {
-  width: 95%;
-  height: 95%;
-  background-color: white;
-  border: solid 1px #ccc;
-  display: flex;
-  flex-direction: column;
-}
 </style>
