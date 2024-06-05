@@ -10,7 +10,7 @@
 
               <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">U.Jalan Per</label>
-                <div class="grow" v-if="trx_trp.val==0">
+                <div class="grow" v-if="trx_trp.val!==1">
                   <ClientOnly>
                     <vue-date-picker  v-model="trx_trp.tanggal" 
                     type="datetime" 
