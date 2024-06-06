@@ -1,8 +1,8 @@
 <template>
   <div class="w-full h-full flex">
 
-    <nav :class="is_sidebar_open ? 'left-0' : 'right-full'"
-      class="bg-slate-800 h-full min-w-[150px] max-w-[150px] fixed sm:relative sm:right-0 text-white z-10"
+    <nav id="side_menu" ref="side_menu"
+      class="bg-slate-800 h-full min-w-[150px] max-w-[150px] fixed sm:relative sm:left-0  text-white z-10"
       style="width:320px;">
       <div class="relative h-full">
         <button class="absolute left-full h-8 text-2xl text-white bg-slate-500 sm:hidden bg-opacity-0 ring-0 focus:ring-0 flex justify-center items-center"
@@ -174,7 +174,36 @@ if (process.client) {
       }
     }
   });
+
+  window.addEventListener('resize', (e)=>{
+    let sm = document.getElementById('side_menu');
+    if(sm){   
+      if(window.innerWidth>=640){
+        sm.style.left="0px";
+      }else{
+        if(!is_sidebar_open.value){
+          sm.style.left="-150px";
+        }
+      }
+    }
+  })
+
 }
+
+onMounted(() => {
+  let sm = document.getElementById('side_menu');
+    if(sm){   
+      if(window.innerWidth>=640){
+        sm.style.left="0px";
+      }else{
+        if(!is_sidebar_open.value){
+          sm.style.left="-150px";
+        }
+      }
+    }
+});
+
+
 const role = useCookie('role'); // useCookie new hook in nuxt 3
 const checkRole=(list:Array<string>)=>{
   return (list).includes(role.value as string);
@@ -183,10 +212,49 @@ const checkRole=(list:Array<string>)=>{
 const goTo=(url:any)=>{
   if(activeMenu.value == url) return;
   activeMenu.value = url;
-  is_sidebar_open.value=false;
+  if(window.innerWidth<640) is_sidebar_open.value=false;
   router.push(url);
 }
 
+const side_menu = ref<HTMLElement | null>(null);
+
+watch(()=>is_sidebar_open.value,(newV,oldV)=>{
+
+  let limit = 150;
+  let cpro = 300 / 150;
+
+  let play:null | ReturnType<typeof setInterval>  = null;
+  let sm = side_menu.value;
+
+
+  if(play){
+    clearInterval(play);
+    play=null;
+  }
+
+  if(sm){
+      play = setInterval(()=>{
+        let left = parseFloat(sm.style.left);
+        if(newV){          
+          if(left>=0 && play){
+            sm.style.left = '0px';         
+            clearInterval(play);
+            play=null;
+          }else{
+            sm.style.left = (left + cpro) +'px'; 
+          }
+        }else{
+          if(left<=limit * -1 && play){
+            sm.style.left = '-150px';         
+            clearInterval(play);
+            play=null;
+          }else{
+            sm.style.left = (left - cpro) +'px'; 
+          }
+        }
+      },1);
+    }
+})
 
 </script>
 <style>
