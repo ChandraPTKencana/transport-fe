@@ -13,7 +13,7 @@
         </button>
       </div>
 
-      <form action="#" class="w-full flex flex-wrap text-xs">
+      <!-- <form action="#" class="w-full flex flex-wrap text-xs">
         <div class="w-6/12 p-1 sm:w-4/12 md:w-3/12 lg:w-2/12 flex flex-col">
           <div class="font-bold"> Tgl Dari </div>
           <ClientOnly>
@@ -67,22 +67,22 @@
             <IconsSearch class="text-2xl" />
           </button>
         </div>
-      </form>
-      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event">
+      </form> -->
+      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event" @doFilter="searching()">
         <template #[`status`]="{item}">
           <div class="text-white text-xs px-2 py-1 rounded-lg" :class="checkStatus(item) ? 'bg-green-600' : 'bg-red-600' ">
             {{checkStatus(item) ? "Done" : "Not Done" }}
           </div>
         </template>
-        <template #[`app1`]="{item}">
+        <template #[`val`]="{item}">
           <IconsLine v-if="!item.val"/>
           <IconsCheck v-else/>
         </template>
-        <template #[`app2`]="{item}">
+        <template #[`val1`]="{item}">
           <IconsLine v-if="!item.val1"/>
           <IconsCheck v-else/>
         </template>
-        <template #[`pvr_completed`]="{item}">
+        <template #[`pvr_had_detail`]="{item}">
           <IconsLine v-if="!item.pvr_had_detail"/><IconsCheck v-else/>
         </template>
         <template #[`susut_bruto_a`]="{item}">
@@ -252,6 +252,7 @@ const inject_params = () => {
   //inject filter
   params.date_from = date.value.from ? $moment(date.value.from).format("YYYY-MM-DD") : "";
   params.date_to = date.value.to ? $moment(date.value.to).format("YYYY-MM-DD") : "";
+  params.filter_model = JSON.stringify(useCommonStore()._tv.filter_model);
 };
 
 const loadRef = ref(null);
@@ -292,6 +293,8 @@ const callData = async () => {
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
   }
+  useCommonStore()._tv.filter_box = false;
+
 }
 
 const loadMore = async () => {
@@ -455,50 +458,50 @@ const checkStatus=(data)=>{
 }
 
 const fields_thead=ref([
-  {key:"status",label:"Status"},
-  {key:"app1",label:"App 1"},
-  {key:"app2",label:"App 2"},
-  {key:"id",label:"ID"},
-  {key:"tanggal",label:"U.Jalan Per",dateformat:"DD-MM-Y"},
-  {key:"no_pol",label:"No Pol"},
-  {key:"xto",label:"Tujuan"},
-  {key:"tipe",label:"Tipe"},
-  {key:"jenis",label:"Jenis"},
-  {key:"amount",label:"Amount",class:" justify-end"},
+  {key:"status",label:"Status",filter_on:1,sort_off:1,type:"select",select_item:['Undone','Done']},
+  {key:"val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"id",label:"ID",filter_on:1,type:"number"},
+  {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1,sort:{priority:1,type:"desc"}},
+  {key:"no_pol",label:"No Pol",filter_on:1,type:'string'},
+  {key:"xto",label:"Tujuan",filter_on:1,type:'string'},
+  {key:"tipe",label:"Tipe",filter_on:1,type:'string'},
+  {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK']},
+  {key:"amount",label:"Amount",class:" justify-end",filter_on:1,type:"number"},
   {key:"cost_center",label:"Cost Center",childs:[
-    {key:"cost_center_code",label:"Code",type:'default', class:" justify-start"},
-    {key:"cost_center_desc",label:"Desc"},
+    {key:"cost_center_code",label:"Code", class:" justify-start",filter_on:1,type:'string'},
+    {key:"cost_center_desc",label:"Desc",filter_on:1,type:'string'},
   ]},
   {key:"pvr",label:"PVR",childs:[
-    {key:"pvr_no",label:"No"},
-    {key:"pvr_total",label:"Total"},
-    {key:"pvr_completed",label:"Completed"},
+    {key:"pvr_no",label:"No",filter_on:1,type:'string'},
+    {key:"pvr_total",label:"Total",filter_on:1,type:'number'},
+    {key:"pvr_had_detail",label:"Completed",filter_on:1,type:"select",select_item:[{k:'1',v:'Completed'},{k:'0',v:'Uncompleted'}]},
   ]},
   {key:"pv",label:"PV",childs:[
-    {key:"pv_datetime",label:"Date",dateformat:"DD-MM-Y"},
-    {key:"pv_no",label:"No"},
-    {key:"pv_total",label:"Total"},
+    {key:"pv_datetime",label:"Date",type:'date',dateformat:"DD-MM-Y",filter_on:1},
+    {key:"pv_no",label:"No",filter_on:1,type:'string'},
+    {key:"pv_total",label:"Total",filter_on:1,type:'number'},
   ]},
-  {key:"transition_to",label:"Peralihan"},
+  {key:"transition_to",label:"Peralihan",filter_on:1,type:"select",select_item:['KPN','KAS','KUS','ARP','KAP','SMP']},
   {key:"ticket_a",label:"Ticket A",childs:[
-    {key:"ticket_a_no",label:"No"},
-    {key:"ticket_a_bruto",label:"Bruto"},
-    {key:"ticket_a_tara",label:"Tara"},
-    {key:"ticket_a_netto",label:"Netto"},
-    {key:"ticket_a_supir",label:"Supir"},
-    {key:"ticket_a_no_pol",label:"No Pol"},
-    {key:"ticket_a_in_at",label:"In At",dateformat:"DD-MM-Y HH:mm:ss"},
-    {key:"ticket_a_out_at",label:"Out At",dateformat:"DD-MM-Y HH:mm:ss"},
+    {key:"ticket_a_no",label:"No",filter_on:1,type:'string'},
+    {key:"ticket_a_bruto",label:"Bruto",filter_on:1,type:'number'},
+    {key:"ticket_a_tara",label:"Tara",filter_on:1,type:'number'},
+    {key:"ticket_a_netto",label:"Netto",filter_on:1,type:'number'},
+    {key:"ticket_a_supir",label:"Supir",filter_on:1,type:'string'},
+    {key:"ticket_a_no_pol",label:"No Pol",filter_on:1,type:'string'},
+    {key:"ticket_a_in_at",label:"In At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
+    {key:"ticket_a_out_at",label:"Out At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   ]},
   {key:"ticket_b",label:"Ticket B",childs:[
-    {key:"ticket_b_no",label:"No"},
-    {key:"ticket_b_bruto",label:"Bruto"},
-    {key:"ticket_b_tara",label:"Tara"},
-    {key:"ticket_b_netto",label:"Netto"},
-    {key:"ticket_b_supir",label:"Supir"},
-    {key:"ticket_b_no_pol",label:"No Pol"},
-    {key:"ticket_b_in_at",label:"In At",dateformat:"DD-MM-Y HH:mm:ss"},
-    {key:"ticket_b_out_at",label:"Out At",dateformat:"DD-MM-Y HH:mm:ss"},
+    {key:"ticket_b_no",label:"No",filter_on:1,type:'string'},
+    {key:"ticket_b_bruto",label:"Bruto",filter_on:1,type:'number'},
+    {key:"ticket_b_tara",label:"Tara",filter_on:1,type:'number'},
+    {key:"ticket_b_netto",label:"Netto",filter_on:1,type:'number'},
+    {key:"ticket_b_supir",label:"Supir",filter_on:1,type:'string'},
+    {key:"ticket_b_no_pol",label:"No Pol",filter_on:1,type:'string'},
+    {key:"ticket_b_in_at",label:"In At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
+    {key:"ticket_b_out_at",label:"Out At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   ]},
   {key:"susut",label:"Susut",childs:[
     {key:"susut_bruto",label:"Bruto",childs:[
@@ -520,10 +523,10 @@ const fields_thead=ref([
       {key:"susut_netto_b_a_persen",label:"%"},
     ]},
   ]},
-  {key:"supir",label:"Supir"},
-  {key:"kernet",label:"Kernet"},
-  {key:"created_at",label:"Created At",dateformat:"DD-MM-Y HH:mm:ss"},
-  {key:"updated_at",label:"Updated At",dateformat:"DD-MM-Y HH:mm:ss"},
+  {key:"supir",label:"Supir",filter_on:1,type:'string'},
+  {key:"kernet",label:"Kernet",filter_on:1,type:'string'},
+  {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
+  {key:"updated_at",label:"Updated At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
 ]);
 
 const calculateSusut=(a,b)=>{

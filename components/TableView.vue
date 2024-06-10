@@ -2,20 +2,24 @@
 <template>
   <div class="w-full flex justify-center items-center grow h-0 pb-1 px-1 flex-col">
     <div class="w-full flex justify-end">
-      <button type="button" name="button" class="m-1 text-xs "
-        @click="cogs_show=true">
+      <button type="button" name="button" class="m-1 text-2xl "
+        @click="_tv.filter_box=!_tv.filter_box">
+        <IconsSearch />
+      </button>
+      <button type="button" name="button" class="m-1 text-2xl "
+        @click="cogs_show=!cogs_show">
         <IconsTableHeaderEye />
       </button>
     </div>
 
     <div v-if="cogs_show" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
     style="background-color: rgba(255,255,255,0.9);">
-      <div class="relative" style="width:95%; height: 90%;">
+      <div class="relative" style="width:95%; height: 90%; width: 320px;">
         <div class="absolute -top-7 right-0 bg-white"
           style="position: absolute; padding:5px 10px; border: solid 1px #ccc; border-bottom: none; border-top-right-radius: 5px;  border-top-left-radius: 5px;">
           <IconsTimes  style="color:black; cursor:pointer;" @click="cogs_show=false"/>
         </div>
-        <div class="w-full h-full flex flex-col items-center justify-content-center bg-white">
+        <div class="w-full h-full flex flex-col items-center justify-content-center bg-white  ring-1 ring-gray-300 p-2">
           <div class="w-full text-blue-600 font-bold grid-">
             Set Show Column Field           
           </div>            
@@ -33,14 +37,135 @@
             </button>
           </div>
         </div>
-        <div
-          style="position: absolute; top: 12px; right: 98px; background-color: rgba(255,255,255,0); width: 37px; height: 36px; z-index:1; cursor: pointer;"
-          @click="cogs_show=false">
-        </div>
       </div>
     </div>
 
+    <div v-if="_tv.filter_box" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
+    style="background-color: rgba(255,255,255,0.9);">
+      <div class="relative" style="max-width:95%; height: 90%;">
+        <div class="absolute -top-7 right-0 bg-white"
+          style="position: absolute; padding:5px 10px; border: solid 1px #ccc; border-bottom: none; border-top-right-radius: 5px;  border-top-left-radius: 5px;">
+          <IconsTimes  style="color:black; cursor:pointer;" @click="_tv.filter_box=false"/>
+        </div>
+        <div class="w-full h-full flex flex-col items-center justify-content-center bg-white  ring-1 ring-gray-300 p-2">         
+          <div class="w-full flex flex-wrap overflow-auto">
+            <table id="tbl_filter" class=" border-separate ">
+              <thead  class="sticky top-0 !z-[2] bg-slate-500">
+                <tr>
+                  <th class="border-black border-[1px]" colspan="2">Sort</th>
+                  <th class="border-black border-[1px]" rowspan="2">Column</th>
+                  <th class="border-black border-[1px]" rowspan="2">Operator</th>
+                  <th class="border-black border-[1px]" rowspan="2">Value</th>
+                  <th class="border-black border-[1px] p-2" rowspan="2">
+                    <button type="button" class="ring-1 ring-gray-700 text-white bg-slate-700" @click="clearAllFields()">
+                        <IconsClearAll />
+                      </button>
+                  </th>
+                </tr>
+                <tr>
+                  <th class="border-black border-[1px]">Priority</th>
+                  <th class="border-black border-[1px]">Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-for="(fd,index) in tbody_fields">
+                  <tr v-if="fd.filter_on && fd.filter_on==1">                  
+                    <td>
+                      <select v-if="fd.sort_off!=1" v-model="filter_model[fd.key]['sort_priority']" @focus="focusPriority($event)" @change="changePriority($event,fd.key)">
+                        <option v-if="filter_model[fd.key]['sort_priority']" :value="filter_model[fd.key]['sort_priority']">{{filter_model[fd.key]['sort_priority']}}</option>
+                        <option v-if="filter_model[fd.key]['sort_priority']" disabled></option>
+                        <option value=""></option>
+                        <option v-for="sp in sort_priority_sorted" :value="sp">{{sp}}</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select v-if="fd.sort_off!=1" v-model="filter_model[fd.key]['sort_type']" :disabled="filter_model[fd.key]['sort_priority']==''">
+                        <option value=""></option>
+                        <option value="asc">ASC</option>
+                        <option value="desc">DESC</option>
+                      </select>
+                    </td>
+                    <td>{{ treeVisible(fd) }}</td>
+                    <td>
+                      <select v-model="filter_model[fd.key]['operator']">
+                        <option v-if="['select','number','string'].indexOf(fd.type)>-1" value="exactly_same">==</option>
+                        <option v-if="['select','number','string'].indexOf(fd.type)>-1" value="exactly_not_same">!==</option>
+                        <option v-if="['number','string'].indexOf(fd.type)>-1" value="same">=</option>
+                        <option v-if="['number','string'].indexOf(fd.type)>-1" value="not_same">!=</option>
+                        <option v-if="['number','string'].indexOf(fd.type)>-1" value="more_then">&gt;</option>
+                        <option v-if="['number','string'].indexOf(fd.type)>-1" value="more_and">&gt;=</option>
+                        <option v-if="['number','string'].indexOf(fd.type)>-1" value="less_then">&lt;</option>
+                        <option v-if="['number','string'].indexOf(fd.type)>-1" value="less_and">&lt;=</option>
+                        <option v-if="['date','datetime'].indexOf(fd.type)>-1" value="specific">Specific</option>
+                        <option v-if="['date','datetime'].indexOf(fd.type)>-1" value="fullday">Fullday</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select v-if="fd.type=='select'" v-model="filter_model[fd.key]['value_1']">
+                        <option value=""></option>
+                        <option v-for="si in fd.select_item" :value="si.k==undefined ? si : si.k">{{si.v==undefined ? si : si.v}}</option>
+                      </select>
+                      <input v-if="['string','number'].indexOf(fd.type) > -1" v-model="filter_model[fd.key]['value_1']" class="flex-grow" type="text" placeholder="Keyword">
+                      <div class="flex" v-if="['date','datetime'].indexOf(fd.type)>-1">
 
+                        <div class="w-1/2">
+                          <div class="w-full">From</div>
+                          <div>
+                            <ClientOnly>
+                            <vue-date-picker 
+                            v-model="filter_model[fd.key]['value_1']" 
+                            type="datetime" 
+                            :format="fd.type=='date'?'dd-MM-yyyy':'dd-MM-yyyy HH:mm:ss'"
+                            :enable-time-picker = "fd.type == 'datetime'" 
+                            text-input
+                            teleport-center
+                            class="flex-grow"></vue-date-picker>
+                          </ClientOnly>
+                          </div>
+                        </div>
+                        <div class="w-1/2">
+                          <div class="w-full">To</div>
+                          <div>
+                            <ClientOnly>
+                              <vue-date-picker  
+                              type="datetime" 
+                              v-model="filter_model[fd.key]['value_2']"
+                              :format="fd.type=='date'?'dd-MM-yyyy':'dd-MM-yyyy HH:mm:ss'"
+                              :enable-time-picker = "fd.type == 'datetime'" 
+                              text-input
+                              teleport-center
+                              class="flex-grow"></vue-date-picker>
+                            </ClientOnly>
+                          </div>
+                        </div>
+                      </div>
+                      
+                    </td>
+                    <td>
+                      <button type="button" class="ring-1 ring-gray-700 text-white bg-slate-700" @click="filter_model[fd.key]['value_1'] = '',filter_model[fd.key]['value_2'] = ''">
+                        <IconsClearEach />
+                      </button>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+
+            <!-- <div v-for="(fd,index) in tbody_fields" class="p-2 m-1 font-bold cursor-pointer" :class="fd.tbl_show == 1 ? 'bg-green-600 text-white' : 'bg-gray-400 text-black'" @click="toggleVisible(fd,index)">
+              {{ fd }}
+            </div> -->
+          </div>
+          <div class="w-full flex justify-end">
+            <button type="button" class="bg-white font-bold mt-3 mr-2"  @click="_tv.filter_box=false">
+              Cancel
+            </button>
+            <button type="button" class="bg-white font-bold mt-3" @click="$emit('doFilter')">
+              Filter
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="w-full flex justify-center items-center grow h-0 text-sm flex-col">
 
@@ -115,14 +240,13 @@
       </div>
     </div>
   </div>
-
-
- 
-
-
 </template>
 
 <script setup>
+import { storeToRefs } from 'pinia';
+import { useCommonStore } from '~/store/common';
+const { _tv } = storeToRefs(useCommonStore()); // make authenticated state reactive
+
 
 const props = defineProps({
     title: {
@@ -396,12 +520,12 @@ watch(()=>changeableData.value,(newVal, oldVal) => {
 });
 
 
-const emit = defineEmits(['setSelected','setScrollingPage']);
+const emit = defineEmits(['doFilter','setSelected','setScrollingPage']);
 
 const { pointFormat } = useUtils();
 
 const checkType = (val,type="")=>{
-  if(type=="default") return val;
+  if(type=="string") return val;
   if(val == parseFloat(val) ) return pointFormat(val);
   return val;
 }
@@ -560,6 +684,84 @@ const paginateToPage=async(page)=>{
   if(loadRef.value)loadRef.value.scrollTop = 0;
 }
 
+const filter_model=ref({});
+useCommonStore()._tv.filter_model = filter_model;
+// filter_model.value.all_key =tbody_fields.value.map((x)=>x.key);
+const sort_priority = ref(JSON.parse(JSON.stringify(tbody_fields.value.map((x,k)=>(k+1).toString()))));
+tbody_fields.value.forEach((z,k)=>{
+  let x = JSON.parse(JSON.stringify(z))
+  // sort_priority.value.push((k+1).toString());
+  let dt = {};
+  dt[x.key]={
+    sort_priority:"",
+    sort_type:"",
+    operator:['date','datetime'].indexOf(x.type) > -1 ? 'specific' :"exactly_same",
+    value_1:"",
+    value_2:"",
+    type:x.type,
+    label:x.label,
+  };
+  // dt[x.key+"_operator"]="exactly_same";
+  // dt[x.key+"_value_1"]="";
+  // dt[x.key+"_value_2"]="";
+
+  _tv.filter_model={..._tv.filter_model,...dt};
+  if(x.sort){
+    _tv.filter_model[x.key]["sort_priority"]=x.sort.priority;
+    _tv.filter_model[x.key]["sort_type"]=x.sort.type;
+
+    let val = x.sort.priority.toString();
+    let idx = sort_priority.value.indexOf(val);
+    if(idx > -1){
+      sort_priority.value.splice(idx,1);
+    }
+  }
+
+  filter_model.value={...filter_model.value,...dt};
+  if(x.sort){
+    filter_model.value[x.key]["sort_priority"]=x.sort.priority;
+    filter_model.value[x.key]["sort_type"]=x.sort.type;
+
+    let val = x.sort.priority.toString();
+    let idx = sort_priority.value.indexOf(val);
+    if(idx > -1){
+      sort_priority.value.splice(idx,1);
+    }
+  }
+})
+
+let priority_old = "";
+
+const focusPriority=(e)=>{
+  priority_old = e.target.value;
+}
+
+const changePriority=(e,k)=>{
+  if(priority_old!=""){
+    sort_priority.value.push(priority_old)
+  }
+  let val = e.target.value;
+  let idx = sort_priority.value.indexOf(val);
+  if(idx > -1){
+    sort_priority.value.splice(idx,1);
+  }
+
+  if(val=="") filter_model.value[k]["sort_type"]="";
+  e.target.blur();
+}
+
+const sort_priority_sorted = computed(() =>{
+  let tosort=sort_priority.value;
+  tosort.sort((a,b)=>a-b);
+  return tosort;
+});
+
+const clearAllFields=()=>{
+  for (let v in filter_model.value){
+    filter_model.value[v]['value_1']="";
+    filter_model.value[v]['value_2']="";
+  }
+}
 
 // for example
 // const fields_thead=ref([
@@ -636,6 +838,18 @@ const paginateToPage=async(page)=>{
 
 .my-list > div{
   padding: 0.25rem;
+}
+
+#tbl_filter tr:nth-child(even) td{
+  background-color: #ddd;
+}
+
+#tbl_filter tr td{
+  padding: 2px;
+}
+
+select{
+  @apply ring-1 ring-gray-500;
 }
 </style>
 

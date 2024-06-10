@@ -58,7 +58,7 @@
         </div>
       </div>
 
-      <form action="#" class="w-full flex flex-wrap text-xs">
+      <!-- <form action="#" class="w-full flex flex-wrap text-xs">
         <div class="w-6/12 p-1 sm:w-4/12 md:w-3/12 lg:w-2/12 flex flex-col">
           <div class="font-bold"> Tgl Dari </div>
           <ClientOnly>
@@ -112,26 +112,26 @@
             <IconsSearch class="text-2xl" />
           </button>
         </div>
-      </form>
+      </form> -->
       
 
-      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event">
+      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event" @doFilter="searching()">
         <template #[`absen`]="{item,index}">
           <IconsImage v-if="item.trx_absens && item.trx_absens.length > 0" class="cursor-pointer" @click="form_absen(index)"/>
         </template>
-        <template #[`app1`]="{item}">
+        <template #[`val`]="{item}">
           <IconsLine v-if="!item.val"/>
           <IconsCheck v-else/>
         </template>
-        <template #[`app2`]="{item}">
+        <template #[`val1`]="{item}">
           <IconsLine v-if="!item.val1"/>
           <IconsCheck v-else/>
         </template>
-        <template #[`app3`]="{item}">
+        <template #[`val2`]="{item}">
           <IconsLine v-if="!item.val2"/>
           <IconsCheck v-else/>
         </template>
-        <template #[`pvr_completed`]="{item}">
+        <template #[`pvr_had_detail`]="{item}">
           <IconsLine v-if="!item.pvr_had_detail"/><IconsCheck v-else/>
         </template>
         <template #[`deleted_by_username`]="{item}">
@@ -332,7 +332,7 @@ const inject_params = () => {
 
   params.date_from = date.value.from ? $moment(date.value.from).format("YYYY-MM-DD") : "";
   params.date_to = date.value.to ? $moment(date.value.to).format("YYYY-MM-DD") : "";
-
+  params.filter_model = JSON.stringify(useCommonStore()._tv.filter_model);
 };
 
 
@@ -375,6 +375,8 @@ const callData = async () => {
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
   }
+  
+  useCommonStore()._tv.filter_box = false;
 }
 
 
@@ -678,41 +680,41 @@ const updatePV = async() => {
 
 const fields_thead=ref([
   {key:"no",label:"No",isai:true},
-  {key:"app1",label:"App 1"},
-  {key:"app2",label:"App 2"},
-  {key:"app3",label:"App 3"},
-  {key:"id",label:"ID"},
+  {key:"val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val2",label:"App 3",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"absen",label:"Absen"},
-  {key:"tanggal",label:"U.Jalan Per",dateformat:"DD-MM-Y"},
-  {key:"no_pol",label:"No Pol",freeze:1},
-  {key:"xto",label:"Tujuan"},
-  {key:"tipe",label:"Tipe"},
-  {key:"jenis",label:"Jenis"},
-  {key:"amount",label:"Amount",class:" justify-end"},
+  {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1,sort:{priority:1,type:"desc"}},
+  {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
+  {key:"xto",label:"Tujuan",filter_on:1,type:'string'},
+  {key:"tipe",label:"Tipe",filter_on:1,type:'string'},
+  {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK']},
+  {key:"amount",label:"Amount",class:" justify-end",filter_on:1,type:"number"},
   {key:"cost_center",label:"Cost Center",childs:[
-    {key:"cost_center_code",label:"Code",type:'default', class:" justify-start"},
-    {key:"cost_center_desc",label:"Desc"},
+    {key:"cost_center_code",label:"Code",type:'string', class:" justify-start",filter_on:1},
+    {key:"cost_center_desc",label:"Desc",filter_on:1,type:'string'},
   ]},
   {key:"pvr",label:"PVR",childs:[
-    {key:"pvr_no",label:"No"},
-    {key:"pvr_total",label:"Total"},
-    {key:"pvr_completed",label:"Completed"},
+    {key:"pvr_no",label:"No",filter_on:1,type:'string'},
+    {key:"pvr_total",label:"Total",filter_on:1,type:'number'},
+    {key:"pvr_had_detail",label:"Completed",filter_on:1,type:"select",select_item:[{k:'1',v:'Completed'},{k:'0',v:'Uncompleted'}]},
   ]},
   {key:"pv",label:"PV",childs:[
-    {key:"pv_datetime",label:"Date",dateformat:"DD-MM-Y"},
-    {key:"pv_no",label:"No"},
-    {key:"pv_total",label:"Total"},
+    {key:"pv_datetime",label:"Date",type:'date',dateformat:"DD-MM-Y",filter_on:1},
+    {key:"pv_no",label:"No",filter_on:1,type:'string'},
+    {key:"pv_total",label:"Total",filter_on:1,type:'number'},
   ]},
-  {key:"supir",label:"Supir"},
-  {key:"kernet",label:"Kernet"},
-  {key:"created_at",label:"Created At",dateformat:"DD-MM-Y HH:mm:ss"},
-  {key:"updated_at",label:"Updated At",dateformat:"DD-MM-Y HH:mm:ss"},
+  {key:"supir",label:"Supir",filter_on:1,type:'string'},
+  {key:"kernet",label:"Kernet",filter_on:1,type:'string'},
+  {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
+  {key:"updated_at",label:"Updated At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   {key:"deleted_by_username",label:"Deleted By",tbl_show:0},
-  {key:"deleted_at",label:"Deleted At",dateformat:"DD-MM-Y HH:mm:ss", tbl_show:0},
-  {key:"deleted_reason",label:"Deleted Reason", tbl_show:0},
+  {key:"deleted_at",label:"Deleted At",dateformat:"DD-MM-Y HH:mm:ss", tbl_show:0,type:'datetime',filter_on:1},
+  {key:"deleted_reason",label:"Deleted Reason", tbl_show:0,type:'string',filter_on:1},
   {key:"req_deleted_by_username",label:"Req Deleted By",tbl_show:0},
-  {key:"req_deleted_at",label:"Req Delete At",dateformat:"DD-MM-Y HH:mm:ss", tbl_show:0},
-  {key:"req_deleted_reason",label:"Req Delete Reason", tbl_show:0,type:'default'},
+  {key:"req_deleted_at",label:"Req Delete At",dateformat:"DD-MM-Y HH:mm:ss", tbl_show:0,type:'datetime',filter_on:1},
+  {key:"req_deleted_reason",label:"Req Delete Reason", tbl_show:0,type:'string',filter_on:1},
 ]);
 
 

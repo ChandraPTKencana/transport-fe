@@ -665,7 +665,7 @@ const fields_thead=ref([
   {key:"jenis",label:"Jenis"},
   {key:"amount",label:"Amount",class:" justify-end"},
   {key:"cost_center",label:"Cost Center",childs:[
-    {key:"cost_center_code",label:"Code",type:'default', class:" justify-start"},
+    {key:"cost_center_code",label:"Code",type:'string', class:" justify-start"},
     {key:"cost_center_desc",label:"Desc"},
   ]},
   {key:"pvr",label:"PVR",childs:[

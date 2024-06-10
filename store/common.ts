@@ -6,6 +6,11 @@ export const useCommonStore = defineStore('common', {
     is_sidebar_open: false,
     loading_full: false,
     // loading: false,
+
+    _tv:{
+      filter_box : false,
+      filter_model:{}
+    }
   }),
   actions: {
     triggerSidebar(act: boolean) {
