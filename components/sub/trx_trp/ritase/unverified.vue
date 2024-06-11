@@ -84,7 +84,7 @@
       <div class="w-full sm:w-10/12 md:w-8/12 lg:w-6/12 bg-white flex flex-col border-solid border-gray-200 max-w-full max-h-full" style="border-width: 1px;">
         <HeaderPopup :title="'Detail Information'" :fn="()=>{pop_show = false, show_confirm = false}" class="w-100 flex align-items-center"
           style="color:white;" />
-        <div class="p-1 flex flex-wrap overflow-auto">
+        <div class="p-1 flex flex-wrap overflow-auto items-start">
           <div class="w-full sm:w-1/2  flex flex-wrap">
             <div class="flex flex-col m-2">
               <span class="text-xs">
