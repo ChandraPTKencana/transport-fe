@@ -9,7 +9,8 @@ export const useCommonStore = defineStore('common', {
 
     _tv:{
       filter_box : false,
-      filter_model:{}
+      filter_model:{},
+      global_keyword:""
     }
   }),
   actions: {

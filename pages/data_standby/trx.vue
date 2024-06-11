@@ -325,7 +325,6 @@ const fnLoadDBData = async () => {
   list_cost_center.value = data.value.list_cost_center;
 }
 
-const search = ref("");
 const sort = ref({
   field: "tanggal",
   by: "desc"
@@ -344,8 +343,9 @@ const scrolling = ref({
 
 const inject_params = () => {
   params.like = "";
-  if (search.value != "") {
-    params.like = `id:%${search.value}%,transition_target:%${search.value}%,transition_type:%${search.value}%,standby_mst_name:%${search.value}%,standby_mst_type:%${search.value}%,supir:%${search.value}%,kernet:%${search.value}%,no_pol:%${search.value}%,xto:%${search.value}%,pvr_no:%${search.value}%,pv_no:%${search.value}%,pvr_id:%${search.value}%,pvr_no:%${search.value}%,tanggal:%${search.value}%,transition_to:%${search.value}%,cost_center_code:%${search.value}%`;
+  let words = JSON.parse(JSON.stringify(useCommonStore()._tv.global_keyword));
+  if (words != "") {
+    params.like = `id:%${words}%,transition_target:%${words}%,transition_type:%${words}%,standby_mst_name:%${words}%,standby_mst_type:%${words}%,supir:%${words}%,kernet:%${words}%,no_pol:%${words}%,xto:%${words}%,pvr_no:%${words}%,pv_no:%${words}%,pvr_no:%${words}%,tanggal:%${words}%,transition_to:%${words}%,cost_center_code:%${words}%`;
   }
   params.sort = "";
   if (sort.value.field) {

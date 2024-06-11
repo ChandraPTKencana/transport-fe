@@ -2,9 +2,16 @@
 <template>
   <div class="w-full flex justify-center items-center grow h-0 pb-1 px-1 flex-col">
     <div class="w-full flex justify-end">
+      <div class="w-6/12 p-1 sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col">
+        <input class="flex-grow" type="text" v-model="global_keyword" name="search"
+          placeholder="Keyword" @keyup.enter="$emit('doFilter')">
+      </div>
+      <button type="button" name="button" class="m-1 text-2xl " @click="$emit('doFilter')">
+        <IconsSearch />
+      </button>
       <button type="button" name="button" class="m-1 text-2xl "
         @click="_tv.filter_box=!_tv.filter_box">
-        <IconsSearch />
+        <IconsAdjust />
       </button>
       <button type="button" name="button" class="m-1 text-2xl "
         @click="cogs_show=!cogs_show">
@@ -762,6 +769,10 @@ const clearAllFields=()=>{
     filter_model.value[v]['value_2']="";
   }
 }
+
+const global_keyword=ref("");
+useCommonStore()._tv.global_keyword = global_keyword;
+
 
 // for example
 // const fields_thead=ref([
