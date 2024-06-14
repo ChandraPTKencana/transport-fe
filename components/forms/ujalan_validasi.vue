@@ -42,7 +42,7 @@
               </div>
             </div>
 
-            <div class="w-full flex grow p-1 overflow-auto 2xl:overflow-hidden justify-between flex-wrap">
+            <div class="w-full flex flex-col sm:flex-row grow p-1 justify-between flex-wrap 2xl:overflow-hidden">
               <div class="w-full p-0 2xl:pr-1 2xl:w-1/2 2xl:h-full  2xl:overflow-auto">
                 <div class="w-full" role="sticky">
                   <table class="tacky w-full" style="white-space:normal;">

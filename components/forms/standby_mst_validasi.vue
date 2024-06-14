@@ -31,7 +31,7 @@
               
             </div>
 
-            <div class="w-full flex grow p-1 overflow-auto 2xl:overflow-hidden justify-between flex-wrap">
+            <div class="w-full flex grow p-1 2xl:overflow-hidden justify-between flex-wrap">
 
               <div class="w-full" role="sticky">
                   <table class="tacky w-full !table-auto" style="white-space:normal;">

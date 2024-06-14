@@ -5,7 +5,7 @@
         style="color:white;" />
 
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
-          <div class="w-full flex flex-col items-center justify-center grow overflow-auto">
+          <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
 
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
@@ -60,8 +60,8 @@
               </div>
             </div>
 
-            <div class="w-full flex grow p-1 overflow-auto 2xl:overflow-hidden justify-between flex-wrap">
-              <div class="w-full p-0 2xl:pr-1 2xl:w-1/2 2xl:h-full  2xl:overflow-auto">
+            <div class="w-full flex flex-col sm:flex-row grow p-1 justify-between flex-wrap 2xl:overflow-hidden">
+              <div class="w-full max-w-full p-0 2xl:pr-1 2xl:w-1/2 2xl:max-h-full 2xl:overflow-auto">
                 <div class="w-full" role="sticky">
                   <table class="tacky w-full" style="white-space:normal;">
                     <thead >
@@ -158,7 +158,7 @@
                   </table>
                 </div>
               </div>
-              <div class="w-full px-0 py-2 2xl:pl-1 2xl:py-0 2xl:w-1/2 2xl:h-full  2xl:overflow-auto">
+              <div class="w-full max-w-full max-h-full px-0 py-2 2xl:pl-1 2xl:py-0 2xl:w-1/2 2xl:overflow-auto">
                 <div class="w-full" role="sticky">
                   <table class="tacky w-full !table-auto" style="white-space:normal;">
                     <thead >

@@ -64,6 +64,18 @@
                 Report Trp
               </nuxt-link>
             </li>
+            <li v-if="checkRole(['SuperAdmin','Logistic'])" :class="activeMenu == '/report/ramp'?'active':''" >
+              <nuxt-link to="/report/ramp"  class="cursor-pointer" @click="goTo('/report/ramp')">
+                <IconsFileCopy class="mr-1"/>
+                Report Ramp
+              </nuxt-link>
+            </li>
+            <!-- <li v-if="checkRole(['SuperAdmin','Logistic'])" :class="activeMenu == '/report/ast_n_driver'?'active':''" >
+              <nuxt-link to="/report/ast_n_driver"  class="cursor-pointer" @click="goTo('/report/ast_n_driver')">
+                <IconsFileCopy class="mr-1"/>
+                Report Ast &amp; Driver
+              </nuxt-link>
+            </li> -->
             <li v-if="checkRole(['SuperAdmin','PabrikTransport'])" :class="activeMenu == '/vehicle'?'active':''" >
               <nuxt-link to="/vehicle"  class="cursor-pointer" @click="goTo('/vehicle')">
                 <IconsPerson class="mr-1"/>
