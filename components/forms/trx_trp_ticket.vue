@@ -475,7 +475,9 @@ const list_a_ticket = computed(()=>{
 
 const list_b_ticket = computed(()=>{
   let jenis = [];
-  if(trx_trp.value.jenis == "TBSK" || trx_trp.value.transition_to!=""){
+  if(trx_trp.value.transition_to!=""){
+    jenis=["tbs","rtbs"];
+  }else if(trx_trp.value.jenis == "TBSK"){
     jenis=["tbs"];
   }else if(trx_trp.value.jenis == "TBS"){
     jenis=["rtbs"];
