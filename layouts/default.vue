@@ -70,6 +70,12 @@
                 Report Ramp
               </nuxt-link>
             </li>
+            <li v-if="checkRole(['SuperAdmin','Finance'])" :class="activeMenu == '/fin_payment_req'?'active':''" >
+              <nuxt-link to="/fin_payment_req"  class="cursor-pointer" @click="goTo('/fin_payment_req')">
+                <IconsFileCopy class="mr-1"/>
+                Finance Payment Request
+              </nuxt-link>
+            </li>
             <!-- <li v-if="checkRole(['SuperAdmin','Logistic'])" :class="activeMenu == '/report/ast_n_driver'?'active':''" >
               <nuxt-link to="/report/ast_n_driver"  class="cursor-pointer" @click="goTo('/report/ast_n_driver')">
                 <IconsFileCopy class="mr-1"/>

@@ -11,6 +11,10 @@
           @click="downloadExcel()">
           <IconsTable2Column />
         </button>
+        <button type="button" name="button" class="m-1 text-2xl "
+          @click="lookUj()">
+          <IconsEyes />
+        </button>
       </div>
 
       <!-- <form action="#" class="w-full flex flex-wrap text-xs">
@@ -140,6 +144,107 @@
         </div>
       </div>
     </div>  
+
+
+    <div v-show="pop_show" class="w-full h-full fixed top-0 left-0 bg-gray-100 bg-opacity-80 flex items-center justify-center z-10">
+      <div class="w-full sm:w-10/12 md:w-8/12 lg:w-6/12 bg-white flex flex-col border-solid border-gray-200 max-w-full max-h-full" style="border-width: 1px;">
+        <HeaderPopup :title="'Detail Information'" :fn="()=>{pop_show = false, show_confirm = false}" class="w-100 flex align-items-center"
+          style="color:white;" />
+        <div class="p-1 flex flex-wrap overflow-auto items-start">
+          <div class="w-full sm:w-1/2  flex flex-wrap">
+            <div class="flex flex-col m-2">
+              <span class="text-xs">
+                To
+              </span>
+              <div class="">
+                {{ ujalan.xto }}
+                <!-- {{ $moment(trx_trp.tanggal).format("DD-MM-YYYY") }} -->
+              </div>
+            </div>
+  
+            <div class="flex flex-col m-2">
+              <span class="text-xs">
+                Tipe
+              </span>
+              <div class="">
+                {{ ujalan.tipe }}
+              </div>
+            </div>
+  
+            <div class="flex flex-col m-2">
+              <span class="text-xs">
+                Jenis
+              </span>
+              <div class="">
+                {{ ujalan.jenis }}
+              </div>
+            </div>
+
+  
+            <!-- <div class="flex flex-col m-2">
+              <span class="text-xs">
+                Harga
+              </span>
+              <div class="">
+                {{pointFormat(total_harga) }}
+              </div>
+            </div> -->
+  
+            <div class="flex flex-col m-2">
+              <span class="text-xs">
+                Ket. Untuk Remarks
+              </span>
+              <div class="">
+                {{ ujalan.note_for_remarks }}
+              </div>
+            </div>
+  
+            
+          </div>
+          <div class="w-full sm:w-1/2  text-sm flex justify-center">
+            <table class="border border-collapse border-black">
+              <tr>
+                <th colspan="4" class="bg-blue-400"> List Uang Jalan </th>
+              </tr>
+              <tr v-for="duj in ujalan.details">
+                <td class="p-1"> {{ duj.ordinal }}. </td>
+                <td class="p-1">{{ duj.xdesc }} {{ duj.qty<=1 ? '' : pointFormat(duj.qty || 0) + ' x Rp.' + pointFormat(duj.harga || 0)}}  </td>
+                <td class="p-1">= Rp.</td>
+                <td class="text-right p-1">{{pointFormat(duj.qty * duj.harga)}}</td>
+              </tr>
+              <tr class="border-t-black border-dashed" style="border-top-width:1px;">
+                <th colspan="2" class="text-right">Total</th>
+                <th class="p-1 text-right" >Rp.</th>
+                <th class="p-1 text-right"> {{ pointFormat(ujalan.harga) }} </th>
+              </tr>
+            </table>
+          </div>
+
+          <div class="w-full mt-2 text-sm flex justify-center">
+            <table class="border border-collapse border-black">
+              <tr>
+                <th colspan="5" class="bg-blue-400"> List PVR </th>
+              </tr>
+              <tr v-for="duj in ujalan.details2">
+                <td class="p-1"> {{ duj.ordinal }}. </td>
+                <td class="p-1"> {{ duj.ac_account_code }} </td>
+                <td class="p-1"> {{ duj.description }} {{ duj.qty<=1 ? '' : pointFormat(duj.qty || 0) + ' x Rp.' + pointFormat(duj.amount || 0)}}  </td>
+                <td class="p-1">= Rp.</td>
+                <td class="text-right p-1">{{pointFormat(duj.qty * duj.amount)}}</td>
+              </tr>
+              <tr class="border-t-black border-dashed" style="border-top-width:1px;">
+                <th colspan="2" class="text-right">Total</th>
+                <th class="p-1 text-right" >Rp.</th>
+                <th class="p-1 text-right"> {{ pointFormat(total_harga2) }} </th>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="flex p-1 justify-end flex-wrap">
+          <button class="rounded m-1" @click="pop_show = false"> Cancel </button>
+        </div>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -553,4 +658,55 @@ const calculateSelisih=(a,b)=>{
 }
 
 
+
+const pop_show =  ref(false);
+
+const ujalan_temp = {
+    id: -1,
+    xto: "",
+    tipe: "",
+    // status: "Y",
+    jenis: "",
+    harga:0,
+    note_for_remarks:"",
+    details: [],
+    details2: [],
+};
+
+const ujalan = ref({...ujalan_temp});
+const lookUj = async()=>{
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } 
+
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/ujalan_", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json'
+    },
+    params: {id:trx_trps.value[selected.value].id_uj},
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error, field_errors);
+    return;
+  }
+  ujalan.value = data.value.data;
+  
+  pop_show.value = true;  
+}
+
+
+const total_harga2 = computed(()=>{
+  let temp = 0;
+  ujalan.value.details2.forEach(e => {
+    if(e.p_status!="Remove")
+    temp += e.qty * e.amount;
+  });
+  return temp;
+})
 </script>

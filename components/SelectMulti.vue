@@ -19,25 +19,32 @@
         </div>
       </div>
     </div>
-    <div v-show="focused" class="z-[2] bg-white w-full flex flex-col mt-1 ring-1 ring-gray-600 relative max-h-40 overflow-auto ">
-      <div v-for="(a,idx) in source" class="p-1 flex" >
-        <div class="flex items-center">
-          <button v-show="a.checked" type="button" class="text-white bg-green-500 text-sm" @click="toggle(a)"> 
-            <IconsCheck />
-          </button> 
-          <button v-show="!a.checked" type="button" class="text-white bg-red-500 text-sm" @click="toggle(a)"> 
-            <IconsTimes />
-          </button> 
+    <div v-show="focused" class="z-[2]  w-full flex flex-col mt-1  relative">
+      <div class="w-full flex justify-end h-4">
+        <div class="w-8 bg-gray-600 text-white rounded-t flex items-center justify-center font-bold text-sm cursor-pointer" @click="focused=false">
+          <IconsTimes />
         </div>
-        <div class="pl-1 flex flex-wrap items-center"> 
-          <div class="w-full">
-            <span class="font-bold"> #{{ a.name }}</span>
+      </div>
+      <div class="bg-white w-full flex flex-col ring-1 ring-gray-600 max-h-40 overflow-auto">
+        <div v-for="(a,idx) in source" class="p-1 flex" >
+          <div class="flex items-center">
+            <button v-show="a.checked" type="button" class="text-white bg-green-500 text-sm" @click="toggle(a)"> 
+              <IconsCheck />
+            </button> 
+            <button v-show="!a.checked" type="button" class="text-white bg-red-500 text-sm" @click="toggle(a)"> 
+              <IconsTimes />
+            </button> 
           </div>
-          <div v-if="a.title" class="w-full">
-            {{ a.title || '' }}
+          <div class="pl-1 flex flex-wrap items-center"> 
+            <div class="w-full">
+              <span class="font-bold"> #{{ a.name }}</span>
+            </div>
+            <div v-if="a.title" class="w-full">
+              {{ a.title || '' }}
+            </div>
           </div>
-        </div>
-      </div>      
+        </div>      
+      </div>
     </div>
   </div>
 </template>
@@ -59,19 +66,19 @@ const props = defineProps({
 
 const slt_mul = ref<HTMLElement | null>(null);
 
-if (process.client) {
-  window.addEventListener('click', (e) => {
-    const target = e.target;
+// if (process.client) {
+//   window.addEventListener('click', (e) => {
+//     const target = e.target;
     
-    if (target instanceof Element) {
-      // Now TypeScript knows that target is an Element
-      if (slt_mul.value?.contains(target)) {
-      } else {
-        focused.value = false;
-      }
-    }
-  });
-}
+//     if (target instanceof Element) {
+//       // Now TypeScript knows that target is an Element
+//       if (slt_mul.value?.contains(target)) {
+//       } else {
+//         focused.value = false;
+//       }
+//     }
+//   });
+// }
 
 let selectedArr = ref([]);
 const focused = ref(false);
