@@ -400,7 +400,7 @@ const doSave = async () => {
 
   let tDetails = [...details.value];
   tDetails = tDetails.map(x=>{
-    x.tanggal = $moment(x.tanggal).format("Y-MM-DD")
+    x.tanggal = (x.tanggal) ? $moment(x.tanggal).format("Y-MM-DD") : '';
     return x;
   });
   data_in.append("details", JSON.stringify(tDetails));
