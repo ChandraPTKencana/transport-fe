@@ -772,7 +772,7 @@ const fields_thead=ref([
   {key:"standby_mst_amount",label:"Total Standby",class:" justify-end",filter_on:1,type:'number'},
   {key:"note_for_remarks",label:"Note untuk Remarks"},
   {key:"ref",label:"Ref"},
-  {key:"transition_target",label:"Tujuan Pengalihan",filter_on:1,type:"select",select_item:['KPN','KAS','KUS','ARP','KAP','SMP']},
+  {key:"transition_target",label:"Tujuan Pengalihan",filter_on:1,type:"select",select_item:useCommonStore().list_pabrik},
   {key:"transition_type",label:"Tipe Pengalihan",type:"select",select_item:[{k:'From',v:'Dari'},{k:'To',v:'Ke'}]},
   {key:"cost_center",label:"Cost Center",childs:[
     {key:"cost_center_code",label:"Code",type:'string', class:" justify-start",filter_on:1},

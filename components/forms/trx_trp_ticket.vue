@@ -71,12 +71,7 @@
                 <label for="">Peralihan</label>
                 <select v-model="trx_trp.transition_to">
                   <option value=""></option>
-                  <option value="KPN">KPN</option>
-                  <option value="KAS">KAS</option>
-                  <option value="KUS">KUS</option>
-                  <option value="ARP">ARP</option>
-                  <option value="KAP">KAP</option>
-                  <option value="SMP">SMP</option>
+                  <option v-for="v in useCommonStore().list_pabrik" :value="v">{{ v }}</option>
                 </select>
                 <p class="text-red-500">{{ field_errors.transition_to }}</p>
               </div>

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 
 export const useCommonStore = defineStore('common', {
   state: () => ({
+    list_pabrik:['KPN','KAS','KUS','ARP','KAP','SMP'],
     is_sidebar_open: false,
     loading_full: false,
     // loading: false,

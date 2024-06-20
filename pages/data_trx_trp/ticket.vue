@@ -579,7 +579,7 @@ const fields_thead=ref([
   {key:"tipe",label:"Tipe",filter_on:1,type:'string'},
   {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK']},
   {key:"amount",label:"Amount",class:" justify-end",filter_on:1,type:"number"},
-  {key:"transition_to",label:"Peralihan",filter_on:1,type:"select",select_item:['KPN','KAS','KUS','ARP','KAP','SMP']},
+  {key:"transition_to",label:"Peralihan",filter_on:1,type:"select",select_item:useCommonStore().list_pabrik},
   {key:"ticket_a",label:"Ticket A",childs:[
     {key:"ticket_a_no",label:"No",filter_on:1,type:'string'},
     {key:"ticket_a_bruto",label:"Bruto",filter_on:1,type:'number'},
