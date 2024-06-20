@@ -186,13 +186,13 @@ const prtView = ref(false);
 const pdfContent = ref({});
 
 const printPreview = async()=>{
-  // if (prtView.value==true) {
-  //   prtView.value = false;
-  //   return;
-  // }
+  if (prtView.value==true) {
+    prtView.value = false;
+    return;
+  }
   inject_params();
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/report/ast_n_driver/index", {
+  const { data, error, status } = await useMyFetch("/report/ast_n_driver/pdf_preview", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -207,8 +207,8 @@ const printPreview = async()=>{
     useErrorStore().trigger(error);
     return;
   }
-  // pdfContent.value = data.value;
-  // prtView.value = true;
+  pdfContent.value = data.value;
+  prtView.value = true;
 }
 
 const downloadExcel = async()=>{  
