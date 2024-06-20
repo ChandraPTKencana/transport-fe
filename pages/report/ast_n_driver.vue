@@ -4,6 +4,21 @@
     <div class="w-full flex grow flex-col overflow-auto h-0 bg-gray-200 justify-center items-center p-2">
       <div class="bg-white p-2 max-w-[350px] max-h-full overflow-auto">
         <form action="#" class="w-full flex flex-col sm:flex-row flex-wrap text-xs">
+          <div class="w-full p-1 flex flex-col">
+            <div class="font-bold"> Tipe </div>
+            <select v-model="type">
+              <option value="header">Header</option>
+              <option value="detail">Detail</option>
+            </select>
+          </div>
+          <div class="w-full p-1 flex flex-col">
+            <div class="font-bold"> Jenis </div>
+            <select v-model="jenis">
+              <option value=""></option>
+              <option value="UJ">Uang Jalan</option>
+              <option value="SB">Uang Standby</option>
+            </select>
+          </div>
           <div class="w-full sm:w-1/2 p-1 flex flex-col">
             <div class="font-bold"> Tgl Dari </div>
             <ClientOnly>
@@ -43,13 +58,7 @@
             <SelectMulti :arr="list_vehicle"/>
           </div>
 
-          <div class="w-full p-1 flex flex-col">
-            <div class="font-bold"> Tipe </div>
-            <select v-model="type">
-              <option value="header">Header</option>
-              <option value="detail">Detail</option>
-            </select>
-          </div>
+          
           <div class="w-full p-1 flex items-end justify-end">
             <button class="flex items-center justify-center m-1" type="submit" name="button" @click.prevent="printPreview()">
               <div><IconsPrinterEye class="text-2xl"/></div>
@@ -168,6 +177,7 @@ dt_async.value.list_vehicle.forEach(e => {
 });
 
 const type = ref("header");
+const jenis = ref("");
 
 const inject_params = () => {
   params._TimeZoneOffset = new Date().getTimezoneOffset();
@@ -177,6 +187,7 @@ const inject_params = () => {
   params.list_employee = JSON.stringify(list_employee.value.filter((x)=>x.checked).map((x)=>x.id));
   params.list_vehicle = JSON.stringify(list_vehicle.value.filter((x)=>x.checked).map((x)=>x.id));
   params.type = type.value;
+  params.jenis = jenis.value;
 };
 
 
