@@ -596,19 +596,23 @@ let temp_standby_mst_={
 };
 
 watch(()=>standby_trx.value.standby_mst_id, (newVal, oldVal) => {
-
-  if (newVal=="" || newVal!=""){
-    let filters = list_standby_mst.value.filter( x =>x.id == newVal );
-    if(filters.length  > 0) {
-      standby_trx.value.standby_mst_    = {...filters[0]};
+  if(useCommonStore().loading_full == false){
+    if (newVal=="" || newVal!=""){
+      
+      let filters = list_standby_mst.value.filter( x =>x.id == newVal );
+      if(filters.length  > 0) {
+        standby_trx.value.standby_mst_    = {...filters[0]};
+      }
+      else if(standby_trx.value.standby_mst_id == standby_trx_loaded.standby_mst_id) {
+        standby_trx.value.standby_mst_    = {...standby_trx_loaded.standby_mst_};
+      }else{
+        standby_trx.value.standby_mst_= {...temp_standby_mst_};
+      }
+      if(!standby_trx.value.standby_mst_.is_transition){
+        standby_trx.value.transition_target = "";
+        standby_trx.value.transition_type = "";
+      }
     }
-    else if(standby_trx.value.standby_mst_id == standby_trx_loaded.standby_mst_id) {
-      standby_trx.value.standby_mst_    = {...standby_trx_loaded.standby_mst_};
-    }else{
-      standby_trx.value.standby_mst_= {...temp_standby_mst_};
-    }
-    standby_trx.value.transition_target = "";
-    standby_trx.value.transition_type = "";
   }
 }, {
   // deep:true,
