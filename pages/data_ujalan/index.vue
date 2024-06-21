@@ -75,6 +75,7 @@
                 <th>Jenis</th>
                 <th>Harga</th>
                 <th>Ket.U.Remarks</th>
+                <th>Asal Peralihan</th>
                 <!-- <th>Created User</th> -->
                 <th>Created At</th>
                 <th>Updated At</th>
@@ -102,6 +103,7 @@
                 <td>{{ ujalan.jenis }}</td>
                 <td>{{ pointFormat(ujalan.harga) }}</td>
                 <td>{{ ujalan.note_for_remarks }}</td>
+                <td>{{ ujalan.transition_from }}</td>
                 <td>{{ ujalan.created_at ? $moment(ujalan.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <td>{{ ujalan.updated_at ? $moment(ujalan.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
               </tr>

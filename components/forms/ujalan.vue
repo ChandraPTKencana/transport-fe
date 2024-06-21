@@ -14,11 +14,7 @@
                 <p class="text-red-500">{{ field_errors.xto }}</p>
               </div>
               
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Tipe</label>
-                <textarea v-model="ujalan.tipe" :disabled="role=='PabrikTransport' || disabled"></textarea>
-                <p class="text-red-500">{{ field_errors.tipe }}</p>
-              </div>
+              
 
               <!-- <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Status</label>
@@ -29,7 +25,7 @@
                 <p class="text-red-500">{{ field_errors.status }}</p>
               </div> -->
 
-              <div class="w-full sm:w-4/12 md:w-2/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Jenis</label>
                 <select v-model="ujalan.jenis" :disabled="role=='PabrikTransport' || disabled">
                   <option value="PK">PK</option>
@@ -38,26 +34,35 @@
                 </select>
                 <p class="text-red-500">{{ field_errors.jenis }}</p>
               </div>
-              <div class="w-full sm:w-4/12 md:w-2/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Harga</label>
-                <!-- <div class="card-bor">
-                  <InputPointFormat
-                  class="w-full h-full p-1" 
-                  type="text" 
-                  :value="ujalan.harga || 0" 
-                  @input="ujalan.harga = $event"/>
-                </div> -->
                 <div class="card-border disabled">
                   {{pointFormat(total_harga) }}
                 </div>
                 <p class="text-red-500">{{ field_errors.harga }}</p>
               </div>
 
-              <div class="w-full sm:w-4/12 md:w-2/12 lg:w-4/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">Asal Peralihan</label>
+                <select v-model="ujalan.transition_from" :disabled="role=='PabrikTransport' || disabled">
+                  <option value=""></option>
+                  <option v-for="v in useCommonStore().list_pabrik" :value="v">{{ v }}</option>
+                </select>
+                <p class="text-red-500">{{ field_errors.transition_from }}</p>
+              </div>
+              
+              <div class="w-full sm:w-4/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+                <label for="">Tipe</label>
+                <textarea v-model="ujalan.tipe" :disabled="role=='PabrikTransport' || disabled"></textarea>
+                <p class="text-red-500">{{ field_errors.tipe }}</p>
+              </div>
+
+              <div class="w-full sm:w-4/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Ket. Untuk Remarks</label>
                 <textarea v-model="ujalan.note_for_remarks" :disabled="role=='PabrikTransport' || disabled"></textarea>
                 <p class="text-red-500">{{ field_errors.note_for_remarks }}</p>
               </div>
+
             </div>
 
             <div class="w-full flex flex-col sm:flex-row grow p-1 justify-between flex-wrap 2xl:overflow-hidden">
@@ -361,6 +366,7 @@ const ujalan_temp = {
     jenis: "",
     harga:0,
     note_for_remarks:"",
+    transition_from:"",
     details: [],
     details2: [],
 };
@@ -550,6 +556,7 @@ const doSave = async () => {
   data_in.append("jenis", ujalan.value.jenis);
   data_in.append("harga", ujalan.value.harga);
   data_in.append("note_for_remarks", ujalan.value.note_for_remarks);
+  data_in.append("transition_from", ujalan.value.transition_from);
   data_in.append("details", JSON.stringify(details.value));
   data_in.append("details2", JSON.stringify(details2.value));
 

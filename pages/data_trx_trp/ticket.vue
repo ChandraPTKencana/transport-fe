@@ -323,7 +323,7 @@ const trx_trps = ref(dt_async.value.trx_trps || []);
 // const list_ticket = ref(dt_async.value.list_ticket);
 const list_ticket = ref([]);
 const online_status=ref(false);
-const fnLoadDBData = async (jenis,transition_to="") => {
+const fnLoadDBData = async (jenis,transition_target="") => {
   useCommonStore().loading_full = true;
   let from = loadDBData.value.from ? $moment(loadDBData.value.from).format("Y-MM-DD") : "";
   let to = loadDBData.value.to ? $moment(loadDBData.value.to).format("Y-MM-DD") : "";
@@ -333,7 +333,7 @@ const fnLoadDBData = async (jenis,transition_to="") => {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
-    params: {jenis,"online_status":online_status.value,from,to,transition_to},
+    params: {jenis,"online_status":online_status.value,from,to,transition_target},
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -366,7 +366,7 @@ const inject_params = () => {
   params.like = "";
   let words = JSON.parse(JSON.stringify(useCommonStore()._tv.global_keyword));
   if (words != "") {
-    params.like = `id:%${words}%,xto:%${words}%,jenis:%${words}%,pv_no:%${words}%,ticket_a_no:%${words}%,ticket_b_no:%${words}%,no_pol:%${words}%,supir:%${words}%,kernet:%${words}%,cost_center_code:%${words}%,cost_center_desc:%${words}%,pvr_no:%${words}%,tanggal:%${words}%,transition_to:%${words}%`;
+    params.like = `id:%${words}%,xto:%${words}%,jenis:%${words}%,pv_no:%${words}%,ticket_a_no:%${words}%,ticket_b_no:%${words}%,no_pol:%${words}%,supir:%${words}%,kernet:%${words}%,cost_center_code:%${words}%,cost_center_desc:%${words}%,pvr_no:%${words}%,tanggal:%${words}%,transition_target:%${words}%`;
   }
   params.sort = "";
   if (sort.value.field) {
@@ -579,7 +579,7 @@ const fields_thead=ref([
   {key:"tipe",label:"Tipe",filter_on:1,type:'string'},
   {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK']},
   {key:"amount",label:"Amount",class:" justify-end",filter_on:1,type:"number"},
-  {key:"transition_to",label:"Peralihan",filter_on:1,type:"select",select_item:useCommonStore().list_pabrik},
+  {key:"transition_target",label:"Peralihan",filter_on:1,type:"select",select_item:useCommonStore().list_pabrik},
   {key:"ticket_a",label:"Ticket A",childs:[
     {key:"ticket_a_no",label:"No",filter_on:1,type:'string'},
     {key:"ticket_a_bruto",label:"Bruto",filter_on:1,type:'number'},

@@ -7,34 +7,6 @@
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
-              
-              <div class="w-full sm:w-3/12 flex px-2 py-3">                
-                <div class="w-full flex flex-wrap ring-1 ring-gray-500 p-2 relative">
-                  
-                  <div class="absolute bg-white -top-3"> Peralihan </div>
-                  
-                  <div class="w-6/12 flex flex-col flex-wrap p-1">
-                    <label for="">Tujuan</label>
-                    <select v-model="standby_trx.transition_target">
-                      <option value=""></option>
-                      <option v-for="v in useCommonStore().list_pabrik" :value="v">{{ v }}</option>
-                    </select>
-                    <p class="text-red-500">{{ field_errors.transition_target }}</p>
-                  </div>
-
-                  <div class="w-6/12 flex flex-col flex-wrap p-1">
-                    <label for="">Tipe</label>
-                    <select v-model="standby_trx.transition_type" :disabled="standby_trx.pvr_no!=''">
-                      <option value=""></option>
-                      <option value="From">Dari</option>
-                      <option value="To">Ke</option>
-                    </select>
-                    <p class="text-red-500">{{ field_errors.transition_type }}</p>
-                  </div>
-
-                </div>
-              </div>
-
 
               <div class="w-full sm:w-9/12 flex px-2 py-3">                
                 <div class="w-full flex flex-wrap ring-1 ring-gray-500 p-2 relative">
@@ -70,6 +42,31 @@
                       {{ pointFormat(standby_trx.standby_mst_?.amount) }}
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <div class="w-full sm:w-3/12 flex px-2 py-3">                
+                <div class="w-full flex flex-wrap ring-1 ring-gray-500 p-2 relative">
+                  
+                  <div class="absolute bg-white -top-3"> Peralihan </div>
+                  
+                  <div  class="w-6/12 flex flex-col flex-wrap p-1">
+                    <select v-model="standby_trx.transition_type" :disabled="standby_trx.standby_mst_?.is_transition==0">
+                      <option value=""></option>
+                      <option value="From">Dari</option>
+                      <option value="To">Ke</option>
+                    </select>
+                    <p class="text-red-500">{{ field_errors.transition_type }}</p>
+                  </div>
+
+                  <div class="w-6/12 flex flex-col flex-wrap p-1">
+                    <select v-model="standby_trx.transition_target" :disabled="standby_trx.standby_mst_?.is_transition==0">
+                      <option value=""></option>
+                      <option v-for="v in useCommonStore().list_pabrik" :value="v">{{ v }}</option>
+                    </select>
+                    <p class="text-red-500">{{ field_errors.transition_target }}</p>
+                  </div>
+
                 </div>
               </div>
 
@@ -324,6 +321,7 @@ const standby_trx_temp = {
       name: "",
       tipe: "",
       amount:0,
+      is_transition:0
     },
 
     supir: "",
@@ -594,6 +592,7 @@ let temp_standby_mst_={
   name: "",
   tipe: "",
   amount:0,
+  is_transition:0
 };
 
 watch(()=>standby_trx.value.standby_mst_id, (newVal, oldVal) => {
@@ -608,6 +607,8 @@ watch(()=>standby_trx.value.standby_mst_id, (newVal, oldVal) => {
     }else{
       standby_trx.value.standby_mst_= {...temp_standby_mst_};
     }
+    standby_trx.value.transition_target = "";
+    standby_trx.value.transition_type = "";
   }
 }, {
   // deep:true,

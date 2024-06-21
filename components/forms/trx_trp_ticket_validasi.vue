@@ -69,7 +69,7 @@
               <div v-if="trx_trp.jenis=='TBS'" class="w-full p-1">
                 <label for="">Peralihan</label>
                 <div class="card-border">
-                  {{ trx_trp.transition_to }}
+                  {{ trx_trp.transition_target }}
                 </div>
               </div>
 

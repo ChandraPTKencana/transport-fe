@@ -799,7 +799,7 @@ useCommonStore()._tv.global_keyword = global_keyword;
 //     {key:"pv_no",label:"No"},
 //     {key:"pv_total",label:"Total"},
 //   ]},
-//   {key:"transition_to",label:"Peralihan"},
+//   {key:"transition_target",label:"Peralihan"},
 //   {key:"ticket_a",label:"Ticket A",childs:[
 //     {key:"ticket_a_no",label:"No"},
 //     {key:"ticket_a_bruto",label:"Bruto"},

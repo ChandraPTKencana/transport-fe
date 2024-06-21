@@ -7,7 +7,6 @@
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
-
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Name</label>
                 <input v-model="standby_mst.name" :disabled="disabled">
@@ -18,12 +17,20 @@
                 <input v-model="standby_mst.tipe" :disabled="disabled">
                 <p class="text-red-500">{{ field_errors.tipe }}</p>
               </div>
-              <div class="w-full sm:w-4/12 md:w-2/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Amount</label>
                 <div class="card-border disabled">
                   {{pointFormat(total_amount) }}
                 </div>
                 <p class="text-red-500">{{ field_errors.amount }}</p>
+              </div>
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">Peralihan?</label>
+                <div class="card-border !flex flex-row items-center">
+                  <input id="checkbox" :checked="standby_mst.is_transition" v-model="standby_mst.is_transition" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded">
+                  <label for="checkbox" class="w-full ml-1"> {{standby_mst.is_transition ? 'Ya' : 'Tidak'}} </label>
+                </div>
+                <p class="text-red-500">{{ field_errors.is_transition }}</p>
               </div>
             </div>
 
@@ -207,6 +214,7 @@ const standby_mst_temp = {
     name: "",
     tipe: "",
     amount:0,
+    is_transition:0,
     details: [],
 };
 
@@ -311,6 +319,7 @@ const doSave = async () => {
   const data_in = new FormData();
   data_in.append("name", standby_mst.value.name);
   data_in.append("tipe", standby_mst.value.tipe);
+  data_in.append("is_transition", standby_mst.value.is_transition);
   data_in.append("amount", standby_mst.value.amount);
   data_in.append("details", JSON.stringify(details.value));
   

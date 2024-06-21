@@ -8,28 +8,6 @@
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
 
-              <div class="w-full sm:w-3/12 flex px-2 py-3">                
-                <div class="w-full flex flex-wrap ring-1 ring-gray-500 p-2 relative">
-                  
-                  <div class="absolute bg-white -top-3"> Peralihan </div>
-                  
-                  <div class="w-6/12 flex flex-col flex-wrap p-1">
-                    <label for="">Tujuan</label>
-                    <div class="card-border">
-                      {{ standby_trx.transition_target }}
-                    </div>
-                  </div>
-
-                  <div class="w-6/12 flex flex-col flex-wrap p-1">
-                    <label for="">Tipe</label>
-                    <div class="card-border">
-                      {{ standby_trx.transition_type }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
               <div class="w-full sm:w-9/12 flex px-2 py-3">                
                 <div class="w-full flex flex-wrap ring-1 ring-gray-500 p-2 relative">
                   
@@ -62,6 +40,26 @@
                       {{ pointFormat(standby_trx.standby_mst_?.amount) }}
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <div class="w-full sm:w-3/12 flex px-2 py-3">                
+                <div class="w-full flex flex-wrap ring-1 ring-gray-500 p-2 relative">
+                  
+                  <div class="absolute bg-white -top-3"> Peralihan </div>
+                  
+                  <div class="w-6/12 flex flex-col flex-wrap p-1">
+                    <div class="card-border">
+                      {{ standby_trx.transition_type }}
+                    </div>
+                  </div>
+
+                  <div class="w-6/12 flex flex-col flex-wrap p-1">
+                    <div class="card-border">
+                      {{ standby_trx.transition_target }}
+                    </div>
+                  </div>
+
                 </div>
               </div>
 

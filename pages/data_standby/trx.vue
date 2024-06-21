@@ -140,6 +140,9 @@
         <template #[`standby_mst_amount`]="{item}">
           Rp. {{ pointFormat(item.standby_mst_?.amount || 0) }}
         </template>
+        <template #[`sb_total`]="{item}">
+          Rp. {{ pointFormat(item.standby_mst_?.amount * item.details_count || 0) }}
+        </template>
         <template #[`pvr_had_detail`]="{item}">
           <IconsLine v-if="!item.pvr_had_detail"/><IconsCheck v-else/>
         </template>
@@ -345,7 +348,7 @@ const inject_params = () => {
   params.like = "";
   let words = JSON.parse(JSON.stringify(useCommonStore()._tv.global_keyword));
   if (words != "") {
-    params.like = `id:%${words}%,transition_target:%${words}%,transition_type:%${words}%,standby_mst_name:%${words}%,standby_mst_type:%${words}%,supir:%${words}%,kernet:%${words}%,no_pol:%${words}%,xto:%${words}%,pvr_no:%${words}%,pv_no:%${words}%,pvr_no:%${words}%,tanggal:%${words}%,transition_to:%${words}%,cost_center_code:%${words}%`;
+    params.like = `id:%${words}%,transition_target:%${words}%,transition_type:%${words}%,standby_mst_name:%${words}%,standby_mst_type:%${words}%,supir:%${words}%,kernet:%${words}%,no_pol:%${words}%,xto:%${words}%,pvr_no:%${words}%,pv_no:%${words}%,pvr_no:%${words}%,tanggal:%${words}%,transition_target:%${words}%,cost_center_code:%${words}%`;
   }
   params.sort = "";
   if (sort.value.field) {
@@ -769,10 +772,12 @@ const fields_thead=ref([
   {key:"xto",label:"Tujuan",filter_on:1,type:'string'},
   {key:"standby_mst_name",label:"Nama Standby",filter_on:1,type:'string'},
   {key:"standby_mst_type",label:"Tipe Standby",filter_on:1,type:'string'},
-  {key:"standby_mst_amount",label:"Total Standby",class:" justify-end",filter_on:1,type:'number'},
+  {key:"standby_mst_amount",label:"Nilai SB",class:" justify-end",type:'number'},
+  {key:"details_count",label:"Jlh SB",class:" justify-end",type:'number'},
+  {key:"sb_total",label:"Total SB",class:" justify-end",type:'number'},
   {key:"note_for_remarks",label:"Note untuk Remarks"},
   {key:"ref",label:"Ref"},
-  {key:"transition_target",label:"Tujuan Pengalihan",filter_on:1,type:"select",select_item:useCommonStore().list_pabrik},
+  {key:"transition_target",label:"Pengalihan",filter_on:1,type:"select",select_item:useCommonStore().list_pabrik},
   {key:"transition_type",label:"Tipe Pengalihan",type:"select",select_item:[{k:'From',v:'Dari'},{k:'To',v:'Ke'}]},
   {key:"cost_center",label:"Cost Center",childs:[
     {key:"cost_center_code",label:"Code",type:'string', class:" justify-start",filter_on:1},

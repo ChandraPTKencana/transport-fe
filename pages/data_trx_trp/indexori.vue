@@ -308,7 +308,7 @@ const list_cost_center = ref([]);
 const list_ticket = ref([]);
 const list_pv = ref([]);
 const online_status=ref(false);
-const fnLoadDBData = async (jenis,transition_to="") => {
+const fnLoadDBData = async (jenis,transition_target="") => {
   useCommonStore().loading_full = true;
   let from = loadDBData.value.from ? $moment(loadDBData.value.from).format("Y-MM-DD") : "";
   let to = loadDBData.value.to ? $moment(loadDBData.value.to).format("Y-MM-DD") : "";
@@ -318,7 +318,7 @@ const fnLoadDBData = async (jenis,transition_to="") => {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
-    params: {jenis,"online_status":online_status.value,from,to,transition_to},
+    params: {jenis,"online_status":online_status.value,from,to,transition_target},
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -349,7 +349,7 @@ const scrolling = ref({
 const inject_params = () => {
   params.like = "";
   if (search.value != "") {
-    params.like = `id:%${search.value}%,xto:%${search.value}%,jenis:%${search.value}%,pv_no:%${search.value}%,ticket_a_no:%${search.value}%,ticket_b_no:%${search.value}%,no_pol:%${search.value}%,supir:%${search.value}%,kernet:%${search.value}%,cost_center_code:%${search.value}%,cost_center_desc:%${search.value}%,pvr_id:%${search.value}%,pvr_no:%${search.value}%,tanggal:%${search.value}%,transition_to:%${search.value}%`;
+    params.like = `id:%${search.value}%,xto:%${search.value}%,jenis:%${search.value}%,pv_no:%${search.value}%,ticket_a_no:%${search.value}%,ticket_b_no:%${search.value}%,no_pol:%${search.value}%,supir:%${search.value}%,kernet:%${search.value}%,cost_center_code:%${search.value}%,cost_center_desc:%${search.value}%,pvr_id:%${search.value}%,pvr_no:%${search.value}%,tanggal:%${search.value}%,transition_target:%${search.value}%`;
   }
   params.sort = "";
   if (sort.value.field) {
@@ -678,7 +678,7 @@ const fields_thead=ref([
     {key:"pv_no",label:"No"},
     {key:"pv_total",label:"Total"},
   ]},
-  {key:"transition_to",label:"Peralihan"},
+  {key:"transition_target",label:"Peralihan"},
   {key:"ticket_a",label:"Ticket A",childs:[
     {key:"ticket_a_no",label:"No"},
     {key:"ticket_a_bruto",label:"Bruto"},

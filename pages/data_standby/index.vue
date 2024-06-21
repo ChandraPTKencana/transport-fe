@@ -73,6 +73,7 @@
                 <th>Name</th>
                 <th>Tipe</th>
                 <th>Amount</th>
+                <th>Peralihan</th>
                 <th>Created At</th>
                 <th>Updated At</th>
               </tr>
@@ -96,6 +97,7 @@
                 <td>{{ standby_mst.name }}</td>
                 <td>{{ standby_mst.tipe }}</td>
                 <td>{{ pointFormat(standby_mst.amount) }}</td>
+                <td>{{ standby_mst.is_transition ? 'Ya' : 'Tidak' }}</td>
                 <td>{{ standby_mst.created_at ? $moment(standby_mst.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <td>{{ standby_mst.updated_at ? $moment(standby_mst.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
               </tr>

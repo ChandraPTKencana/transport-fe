@@ -223,7 +223,7 @@ const trx_trp_temp = {
     pvr_no:"",
     pvr_total:0,
     pvr_had_detail:"",
-    transition_to:"",
+    transition_target:"",
 };
 let trx_trp_loaded = {...trx_trp_temp};
 const trx_trp = ref({...trx_trp_temp});
@@ -249,7 +249,7 @@ const blurCostCenterCode=($e)=>{
 }
 
 const changeJenis=($e)=>{  
-  trx_trp.value.transition_to = ($e.target.value=="TBS") ? trx_trp.value.transition_to : "";
+  trx_trp.value.transition_target = ($e.target.value=="TBS") ? trx_trp.value.transition_target : "";
 }
 
 
@@ -273,7 +273,7 @@ const doSave = async () => {
   data_in.append("xto", trx_trp.value.xto);
   data_in.append("cost_center_code", trx_trp.value.cost_center_code);
   data_in.append("online_status", props.online_status);
-  data_in.append("transition_to", trx_trp.value.transition_to);
+  data_in.append("transition_target", trx_trp.value.transition_target);
 
   data_in.append("supir", trx_trp.value.supir);
   data_in.append("kernet", trx_trp.value.kernet);

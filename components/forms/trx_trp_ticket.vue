@@ -69,11 +69,11 @@
 
               <div v-if="trx_trp.jenis=='TBS'" class="w-full p-1" @change="changeTransitionTo($event)">
                 <label for="">Peralihan</label>
-                <select v-model="trx_trp.transition_to">
+                <select v-model="trx_trp.transition_target" :disabled="trx_trp.transition_type=='From'">
                   <option value=""></option>
                   <option v-for="v in useCommonStore().list_pabrik" :value="v">{{ v }}</option>
                 </select>
-                <p class="text-red-500">{{ field_errors.transition_to }}</p>
+                <p class="text-red-500">{{ field_errors.transition_target }}</p>
               </div>
 
               <div v-if="trx_trp.jenis!='' && trx_trp.jenis!='TBSK'" class="w-full flex flex-col flex-wrap p-1">
@@ -348,7 +348,8 @@ const trx_trp_temp = {
     supir: "",
     kernet: "",
     no_pol: '',
-    transition_to:"",
+    transition_target:"",
+    transition_type:"",
 };
 let trx_trp_loaded = {...trx_trp_temp};
 const trx_trp = ref({...trx_trp_temp});
@@ -373,7 +374,7 @@ const doSave = async () => {
   data_in.append("id_uj", trx_trp.value.id_uj);
   data_in.append("xto", trx_trp.value.xto);
   data_in.append("online_status", props.online_status);
-  data_in.append("transition_to", trx_trp.value.transition_to);
+  data_in.append("transition_target", trx_trp.value.transition_target);
 
   if(trx_trp.value.ticket_a_no){
     let ticket = list_a_ticket.value.filter(
@@ -470,7 +471,7 @@ const list_a_ticket = computed(()=>{
 
 const list_b_ticket = computed(()=>{
   let jenis = [];
-  if(trx_trp.value.transition_to!=""){
+  if(trx_trp.value.transition_target!=""){
     jenis=["tbs","rtbs"];
   }else if(trx_trp.value.jenis == "TBSK"){
     jenis=["tbs"];
@@ -512,7 +513,7 @@ const callData = async () => {
   trx_trp.value = data.value.data;
   trx_trp_loaded = {...data.value.data};
 
-  props.fnLoadDBData(trx_trp.value.jenis,trx_trp.value.transition_to);
+  props.fnLoadDBData(trx_trp.value.jenis,trx_trp.value.transition_target);
 }
 
 watch(() => props.show, (newVal, oldVal) => {

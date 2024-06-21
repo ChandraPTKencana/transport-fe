@@ -14,27 +14,31 @@
                   {{ ujalan.xto }}
                 </div>
               </div>
-              
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Tipe</label>
-                <div class="card-border">
-                  {{ ujalan.tipe }}
-                </div>
-              </div>
-
-              <div class="w-full sm:w-4/12 md:w-2/12 lg:w-1/12 flex flex-col flex-wrap p-1">
                 <label for="">Jenis</label>
                 <div class="card-border">
                   {{ ujalan.jenis }}
                 </div>
-            </div>
-              <div class="w-full sm:w-4/12 md:w-2/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+              </div>
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Harga</label>
                 <div class="card-border">
                   {{ pointFormat(ujalan.harga||0) }}
                 </div>
               </div>
-              <div class="w-full sm:w-4/12 md:w-2/12 lg:w-4/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">Asal Peralihan</label>
+                <div class="card-border">
+                  {{ ujalan.transition_from }}
+                </div>
+              </div>
+              <div class="w-full sm:w-4/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+                <label for="">Tipe</label>
+                <div class="card-border">
+                  {{ ujalan.tipe }}
+                </div>
+              </div>
+              <div class="w-full sm:w-4/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Ket. Untuk Remarks</label>
                 <div class="card-border">
                   {{ ujalan.note_for_remarks }}
