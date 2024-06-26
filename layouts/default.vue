@@ -79,16 +79,16 @@
             <li v-if="checkRole(['SuperAdmin','Finance'])" :class="activeMenu == '/fin_payment_req'?'active':''" >
               <nuxt-link to="/fin_payment_req"  class="cursor-pointer" @click="goTo('/fin_payment_req')">
                 <IconsFileCopy class="mr-1"/>
-                Finance Payment Request
+                Payment Request
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['SuperAdmin','PabrikTransport'])" :class="activeMenu == '/vehicle'?'active':''" >
+            <li v-if="checkRole(['SuperAdmin','PabrikTransport','Logistic'])" :class="activeMenu == '/vehicle'?'active':''" >
               <nuxt-link to="/vehicle"  class="cursor-pointer" @click="goTo('/vehicle')">
                 <IconsPerson class="mr-1"/>
                 Kendaraan
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['SuperAdmin','PabrikTransport'])" :class="activeMenu == '/employee'?'active':''" >
+            <li v-if="checkRole(['SuperAdmin','Logistic'])" :class="activeMenu == '/employee'?'active':''" >
               <nuxt-link to="/employee"  class="cursor-pointer" @click="goTo('/employee')">
                 <IconsPerson class="mr-1"/>
                 Pekerja

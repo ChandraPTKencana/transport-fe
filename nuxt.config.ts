@@ -62,7 +62,8 @@ export default defineNuxtConfig({
   },
   experimental: {
     payloadExtraction: false
-  }
+  },
+  components: [{ path: "~/components", global: true }]
   // proxy: {
   //   '/api/': {
   //     target: process.env.API_URL,

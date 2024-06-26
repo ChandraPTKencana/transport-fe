@@ -245,7 +245,7 @@ const downloadExcel = async()=>{
 
 </script>
 
-<style>
+<style scoped>
 .dp__input_wrap{
   height: auto;
 }</style>

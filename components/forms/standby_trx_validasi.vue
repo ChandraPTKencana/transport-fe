@@ -44,7 +44,7 @@
               </div>
 
               <div class="w-full sm:w-3/12 flex px-2 py-3">                
-                <div class="w-full flex flex-wrap ring-1 ring-gray-500 p-2 relative">
+                <div class="w-full flex flex-wrap ring-1 ring-gray-500 p-2 relative items-end">
                   
                   <div class="absolute bg-white -top-3"> Peralihan </div>
                   
@@ -64,41 +64,41 @@
               </div>
 
               <div class="w-full flex flex-wrap">
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                   <label for="">Supir</label>
-                  <div class="card-border">
-                    {{ standby_trx.supir }}
+                  <div class="card-border !flex">
+                    <WidthMiniPart :selected="selected_supir"/>
                   </div>
                 </div>
-  
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+
+                <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                   <label for="">Kernet</label>
-                  <div class="card-border">
-                    {{ standby_trx.kernet }}
+                  <div class="card-border !flex">
+                    <WidthMiniPart :selected="selected_kernet"/>
                   </div>
                 </div>
   
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">No Pol</label>
                   <div class="card-border">
                     {{ standby_trx.no_pol }}
                   </div>
                 </div>
             
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">Tujuan</label>
                   <div class="card-border">
                     {{ standby_trx.xto }}
                   </div>
                 </div>
   
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">Note For Remarks</label>
                   <div class="card-border">
                     {{ standby_trx.note_for_remarks }}
                   </div>
                 </div>
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">Referensi</label>
                   <div class="card-border">
                     {{ standby_trx.ref }}
@@ -335,6 +335,39 @@ const field_errors = ref({});
 const it_val = ref(null);
 const details = ref([]);
 
+
+const selected_mini_temp={
+  _:{
+    id:{
+      tcon:"IconsBaselineNumbers",
+      text:"ID",
+      val:"",
+    },
+    name:{
+      tcon:"IconsPerson",
+      text:"Nama",
+      val:"",
+    },
+    rek_no:{
+      tcon:"IconsNumber",
+      text:"No Rek",
+      val:"",
+    },
+    rek_name:{
+      tcon:"IconsCreditCard",
+      text:"Nama Rek",
+      val:"",
+    },
+  },
+  id:-1,
+  name:"",
+  title:"",
+};
+
+const selected_supir = ref(JSON.parse(JSON.stringify(selected_mini_temp)));
+const selected_kernet = ref(JSON.parse(JSON.stringify(selected_mini_temp)));
+
+
 const doSave = async () => {
   useCommonStore().loading_full = true;
   field_errors.value = {};
@@ -421,7 +454,28 @@ const callData = async () => {
     return;
   }
 
-  standby_trx.value = data.value.data;
+  let dt =data.value.data;
+
+  standby_trx.value = dt;
+
+  selected_supir.value._.id.val=dt.supir_id;
+  selected_supir.value._.name.val=dt.supir;
+  selected_supir.value._.rek_no.val=dt.supir_rek_no;
+  selected_supir.value._.rek_name.val=dt.supir_rek_name;
+
+  selected_supir.value.id=dt.supir_id;
+  selected_supir.value.name=dt.supir;
+  selected_supir.value.rek_no=(dt.supir_rek_no || '')+" "+(dt.supir_rek_name || '');
+
+
+  selected_kernet.value._.id.val=dt.kernet_id;
+  selected_kernet.value._.name.val=dt.kernet;
+  selected_kernet.value._.rek_no.val=dt.kernet_rek_no;
+  selected_kernet.value._.rek_name.val=dt.kernet_rek_name;
+  selected_kernet.value.id=dt.kernet_id;
+  selected_kernet.value.name=dt.kernet;
+  selected_kernet.value.rek_no=(dt.kernet_rek_no || '')+" "+(dt.kernet_rek_name || '');
+
   details.value = data.value.data.details;
 }
 

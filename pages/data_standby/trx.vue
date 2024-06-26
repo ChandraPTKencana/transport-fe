@@ -768,7 +768,11 @@ const fields_thead=ref([
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
   {key:"supir",label:"Supir",filter_on:1,type:'string'},
+  {key:"supir_rek_no",label:"No Rek Supir",filter_on:1,type:'string'},
+  {key:"supir_rek_name",label:"Nama Rek Supir",filter_on:1,type:'string'},
   {key:"kernet",label:"Kernet",filter_on:1,type:'string'},
+  {key:"kernet_rek_no",label:"No Rek Kernet",filter_on:1,type:'string'},
+  {key:"kernet_rek_name",label:"Nama Rek Kernet",filter_on:1,type:'string'},
   {key:"xto",label:"Tujuan",filter_on:1,type:'string'},
   {key:"standby_mst_name",label:"Nama Standby",filter_on:1,type:'string'},
   {key:"standby_mst_type",label:"Tipe Standby",filter_on:1,type:'string'},
@@ -826,11 +830,16 @@ const enabled_validasi = computed(()=>{
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && (
     (
-      checkRole(['PabrikTransport']) && [undefined,0].indexOf(dt_selected.value.val) > -1)
-      || (checkRole(['PabrikMandor']) && [undefined,0].indexOf(dt_selected.value.val1) > -1)
-      || (checkRole(['Logistic']) && [undefined,0].indexOf(dt_selected.value.val2) > -1)
+      [undefined,""].indexOf(dt_selected.value.pvr_id) > -1 && 
+      (
+        checkRole(['PabrikTransport']) && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
+        checkRole(['PabrikMandor']) && [undefined,0].indexOf(dt_selected.value.val1) > -1
+      )
+    )|| 
+    (
+      dt_selected.value.pvr_id > -1 &&  checkRole(['Logistic']) && [undefined,0].indexOf(dt_selected.value.val2) > -1
     )
-  && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1;
+  );
   return result;
 })
 

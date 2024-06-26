@@ -1,7 +1,7 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Form Transaction'" :fn="fnClose" class="w-100 flex align-items-center" style="color:white;" />
+      <HeaderPopup :title="'Form Transaction'" :fn="fnClose" class="w-full flex align-items-center" style="color:white;" />
 
       <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
         <div class="w-full flex flex-col items-center grow overflow-auto">
@@ -38,24 +38,6 @@
               <p class="text-red-500">{{ field_errors.jenis }}</p>
             </div>
 
-            <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-              <label for="">Supir</label>
-              <input type="text" list="supir"  v-model="trx_trp.supir" :disabled="trx_trp.val==1"/>
-              <datalist id="supir">
-                <option v-for="lk in list_supir" :value="lk.name" >{{lk.name}}</option>
-              </datalist>
-              <p class="text-red-500">{{ field_errors.supir }}</p>
-            </div>
-
-            <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-              <label for="">Kernet</label>
-              <input type="text" list="kernet"  v-model="trx_trp.kernet" :disabled="trx_trp.val==1"/>
-              <datalist id="kernet">
-                <option v-for="lk in list_kernet" :value="lk.name" >{{lk.name}}</option>
-              </datalist>
-              <p class="text-red-500">{{ field_errors.kernet }}</p>
-            </div>
-
             <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">No Pol</label>
               <input type="text" list="vehicle"  v-model="trx_trp.no_pol" :disabled="trx_trp.val==1"/>
@@ -64,7 +46,18 @@
               </datalist>
               <p class="text-red-500">{{ field_errors.no_pol }}</p>
             </div>
-        
+
+            <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+              <label for="">Supir</label>
+              <WidthMiniList :arr="list_emp" :selected="selected_supir" @setSelected="selected_supir=$event"/>
+              <p class="text-red-500">{{ field_errors.supir_id }}</p>
+            </div>
+
+            <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+              <label for="">Kernet</label>
+              <WidthMiniList :arr="list_emp" :selected="selected_kernet" @setSelected="selected_kernet=$event"/>
+              <p class="text-red-500">{{ field_errors.kernet_id }}</p>
+            </div>
 
             <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
               <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
@@ -257,11 +250,11 @@ const { display } = useAlertStore();
 
 const doSave = async () => {
 
-  if(trx_trp.value.pv_no && parseInt(trx_trp.value.pv_total) != parseInt(trx_trp.value.amount))
-  {
-    display({ show: true, status: "Failed", message: "Total dari Ujalan dan PV tidak cocok" });
-    return;
-  }
+  // if(trx_trp.value.pv_no && parseInt(trx_trp.value.pv_total) != parseInt(trx_trp.value.amount))
+  // {
+  //   display({ show: true, status: "Failed", message: "Total dari Ujalan dan PV tidak cocok" });
+  //   return;
+  // }
   
   useCommonStore().loading_full = true;
   field_errors.value = {};
@@ -275,9 +268,9 @@ const doSave = async () => {
   data_in.append("online_status", props.online_status);
   data_in.append("transition_target", trx_trp.value.transition_target);
 
-  data_in.append("supir", trx_trp.value.supir);
-  data_in.append("kernet", trx_trp.value.kernet);
   data_in.append("no_pol", trx_trp.value.no_pol);
+  data_in.append("supir_id", selected_supir.value.id);
+  data_in.append("kernet_id", selected_kernet.value.id);
   
   let $method = "post";
 
@@ -303,6 +296,12 @@ const doSave = async () => {
     return;
   }
 
+  trx_trp.value.supir           = selected_supir.value.name;
+  trx_trp.value.supir_rek_no    = selected_supir.value._.rek_no.val;
+  trx_trp.value.supir_rek_name  = selected_supir.value._.rek_name.val;
+  trx_trp.value.kernet          = selected_kernet.value.name;
+  trx_trp.value.kernet_rek_no   = selected_kernet.value._.rek_no.val;
+  trx_trp.value.kernet_rek_name = selected_kernet.value._.rek_name.val;
 
   trx_trp.value.updated_at = data.value.updated_at;
   if(props.id<=0){
@@ -328,12 +327,53 @@ const list_tipe = computed(()=>{
   return list_ujalan.value.filter((x)=>x.xto == trx_trp.value.xto && x.jenis==jenisF);
 })
 
-const list_supir = computed(()=>{
-  return [...new Set(list_employee.value.filter((x)=>x.role=="Supir"))];
-})
+const selected_mini_temp={
+  _:{
+    id:{
+      tcon:"IconsBaselineNumbers",
+      text:"ID",
+      val:"",
+    },
+    name:{
+      tcon:"IconsPerson",
+      text:"Nama",
+      val:"",
+    },
+    rek_no:{
+      tcon:"IconsNumber",
+      text:"No Rek",
+      val:"",
+    },
+    rek_name:{
+      tcon:"IconsCreditCard",
+      text:"Nama Rek",
+      val:"",
+    },
+  },
+  id:"",
+  name:"",
+  title:"",
+};
 
-const list_kernet = computed(()=>{
-  return [...new Set(list_employee.value.filter((x)=>x.role=="Kernet"))];
+const selected_supir = ref(JSON.parse(JSON.stringify(selected_mini_temp)));
+const selected_kernet = ref(JSON.parse(JSON.stringify(selected_mini_temp)));
+
+const list_emp = computed(()=>{
+  let results = [];
+  list_employee.value.forEach((x,y)=>{
+    let temp = JSON.parse(JSON.stringify(selected_mini_temp));
+    temp._.id.val = x.id,
+    temp._.name.val = x.name,
+    temp._.rek_no.val = x.rek_no,
+    temp._.rek_name.val = x.rek_name,
+
+    temp.id = x.id,
+    temp.name = x.name,
+    temp.title = (x.rek_no || '')+" "+(x.rek_name || ''),
+    
+    results.push(JSON.parse(JSON.stringify(temp)));
+  });
+  return results;
 })
 
 const disabled = computed(()=>{
@@ -359,8 +399,27 @@ const callData = async () => {
     return;
   }
 
-  trx_trp.value = data.value.data;
-  trx_trp_loaded = {...data.value.data};
+  let dt =data.value.data;
+  trx_trp.value = dt;
+  trx_trp_loaded = {...dt};
+  
+  selected_supir.value._.id.val=dt.supir_id;
+  selected_supir.value._.name.val=dt.supir;
+  selected_supir.value._.rek_no.val=dt.supir_rek_no;
+  selected_supir.value._.rek_name.val=dt.supir_rek_name;
+
+  selected_supir.value.id=dt.supir_id;
+  selected_supir.value.name=dt.supir;
+  selected_supir.value.rek_no=(dt.supir_rek_no || '')+" "+(dt.supir_rek_name || '');
+
+
+  selected_kernet.value._.id.val=dt.kernet_id;
+  selected_kernet.value._.name.val=dt.kernet;
+  selected_kernet.value._.rek_no.val=dt.kernet_rek_no;
+  selected_kernet.value._.rek_name.val=dt.kernet_rek_name;
+  selected_kernet.value.id=dt.kernet_id;
+  selected_kernet.value.name=dt.kernet;
+  selected_kernet.value.rek_no=(dt.kernet_rek_no || '')+" "+(dt.kernet_rek_name || '');
 
   props.fnLoadDBData();
 }
@@ -399,6 +458,9 @@ watch(() => props.show, async(newVal, oldVal) => {
     await props.fnLoadDBData();
 
     trx_trp.value = {...trx_trp_temp};
+    selected_supir.value = JSON.parse(JSON.stringify(selected_mini_temp));
+    selected_kernet.value = JSON.parse(JSON.stringify(selected_mini_temp));
+
     field_errors.value = {};
     if(props.id!=0)
     callData();

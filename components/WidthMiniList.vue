@@ -1,28 +1,27 @@
 <template>
   <div class="relative">
-
-    <div v-if="selected.id==-1"  class="card-border cursor-pointer" @click="openSearch()">
+    <div v-if="selected.id==''"  class="card-border cursor-pointer" @click="openSearch()">
 
 
     </div>
     <div v-else class="card-border cursor-pointer !flex flex-row flex-nowrap">
-      <div class="flex flex-wrap items-center grow" @click="openSearch()"> 
-        <div class="w-full">
-          <span class=""> #{{ selected.id }}   </span>
-          <span class=" ml-1"> {{ selected.name }}  </span>
+      <div class="flex flex-wrap items-center grow" @click="openSearch()">
+        <div class="w-full flex flex-row flex-wrap">
+          <WidthMiniPart :selected="selected" />
         </div>
-        <div v-if="selected.title" class="w-full">
-          {{ selected.title || '' }}
-        </div>
+        
       </div>
-      <button type="button" @click="selected = {...temp_selected}">
-        <IconsTimes />
-      </button>
+      <div class="flex items-center">
+        <button type="button" class="bg-red-500 text-white border-none" @click="clearIt()">
+          <IconsTimes />
+        </button>
+      </div>
     </div>
 
-    <div v-show="open_search" class="fixed h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
-      <div ref="search_box" class="w-[320px] h-full ring-1 ring-gray-500 p-2 bg-white flex flex-col">
+    <div v-show="open_search" class="fixed h-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-10">
+      <div ref="search_box" class="w-[320px] h-full ring-1 ring-gray-500 p-2 bg-white flex flex-col relative">
         <input ref="search_words" type="text" v-model="search" placeholder="search" class="max-h-8"/>
+        <IconsTimes class="absolute right-3 top-4 cursor-pointer" @click="search='',search_words?.focus()" />
         <div class="grow overflow-y-auto">
           <div v-for="(a,idx) in source" class="mt-3 flex border-[1px] border-solid border-gray-400 cursor-pointer" @click="selectIt(a)">
             <div class="p-1 flex flex-wrap items-center"> 
@@ -55,6 +54,16 @@ const props = defineProps({
     required: false,
     default: [],
   },
+  selected:{
+    type:Object,
+    required:false,
+    default:{
+      _:{},
+      id:"",
+      name:"",
+      title:"",
+    }
+  }
   
 })
 
@@ -87,7 +96,7 @@ if (process.client) {
   });
 }
 
-const emit = defineEmits(['input','nextBlur']);
+const emit = defineEmits(['input','nextBlur','setSelected']);
 // const source = ref<Array<any>>([]);
 
 const source = computed(()=>{
@@ -103,16 +112,26 @@ const source = computed(()=>{
 });
 
 const temp_selected = {
-  id:-1,
+  _:{},
+  id:'',
   name:"",
   title:"",
 };
 
-const selected = ref({...temp_selected});
-
 const selectIt = (a:any)=>{
-  selected.value = a;
+  emit('setSelected',a);
   open_search.value = false;
+}
+
+const clearIt =()=>{
+  let tmp:any = {...temp_selected};
+  
+  Object.keys(props.selected._).forEach((x)=>{
+    tmp._[x]=props.selected._[x];
+    tmp._[x].val="";
+  });
+
+  emit('setSelected',{...temp_selected});
 }
 </script>
 <style scoped>

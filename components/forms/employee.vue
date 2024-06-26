@@ -20,6 +20,43 @@
               </select>
               <p class="text-red-500">{{ field_errors.role }}</p>
             </div>
+
+            <div class="w-full flex flex-col flex-wrap p-1">
+              <label for="">No KTP</label>
+              <input type="text" v-model="employee.ktp_no">
+              <p class="text-red-500">{{ field_errors.ktp_no }}</p>
+            </div>
+
+            <div class="w-full flex flex-col flex-wrap p-1">
+              <label for="">No SIM</label>
+              <input type="text" v-model="employee.sim_no">
+              <p class="text-red-500">{{ field_errors.sim_no }}</p>
+            </div>
+
+            <div class="w-full flex flex-col flex-wrap p-1">
+              <label for="">Nama Bank</label>
+              <input type="text" v-model="employee.bank_name">
+              <p class="text-red-500">{{ field_errors.bank_name }}</p>
+            </div>
+
+            <div class="w-full flex flex-col flex-wrap p-1">
+              <label for="">No Rek</label>
+              <input type="text" v-model="employee.rek_no">
+              <p class="text-red-500">{{ field_errors.rek_no }}</p>
+            </div>
+
+            <div class="w-full flex flex-col flex-wrap p-1">
+              <label for="">Nama Rek</label>
+              <input type="text" v-model="employee.rek_name">
+              <p class="text-red-500">{{ field_errors.rek_name }}</p>
+            </div>
+
+            <div class="w-full flex flex-col flex-wrap p-1">
+              <label for="">Phone Number</label>
+              <input type="text" v-model="employee.phone_number">
+              <p class="text-red-500">{{ field_errors.phone_number }}</p>
+            </div>
+
           </div>
         </div>
         
@@ -65,6 +102,12 @@ const employee_temp = {
   id: -1,
   name: "",
   role: "Supir",
+  ktp_no: "",
+  sim_no: "",
+  bank_name: "",
+  rek_no: "",
+  rek_name: "",
+  phone_number: "",
 };
 
 const employee = ref({...employee_temp});
@@ -80,6 +123,12 @@ const doSave = async () => {
   
   data_in.append("name", employee.value.name);
   data_in.append("role", employee.value.role);
+  data_in.append("ktp_no", employee.value.ktp_no);
+  data_in.append("sim_no", employee.value.sim_no);
+  data_in.append("bank_name", employee.value.bank_name);
+  data_in.append("rek_no", employee.value.rek_no);
+  data_in.append("rek_name", employee.value.rek_name);
+  data_in.append("phone_number", employee.value.phone_number);
 
   let $method = "post";
 

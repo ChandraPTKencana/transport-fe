@@ -15,6 +15,10 @@
           @click="remove()">
           <IconsDelete />
         </button>
+        <button type="button" name="button" class="m-1 text-2xl "
+          @click="validasi()">
+          <IconsSignature />
+        </button>
         <!-- <button type="button" name="button" style="margin:4px; " @click="cetak()">
           <fa :icon="['fas','print']"/>
         </button> -->
@@ -56,9 +60,16 @@
           <table class="tacky">
             <thead>
               <tr class="sticky top-0 !z-[2]">
+                <th>App</th>
                 <th>No.</th>
                 <th>Nama</th>
                 <th>Jabatan</th>
+                <th>No KTP</th>
+                <th>No SIM</th>
+                <th>Nama Bank</th>
+                <th>No Rek</th>
+                <th>Nama Rek</th>
+                <th>Phone Number</th>
                 <th>Tanggal Dibuat</th>
                 <th>Tanggal Diubah</th>
               </tr>
@@ -66,11 +77,21 @@
             <tbody>
               <tr v-for="(employee, index) in employees" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
+                <td >
+                  <div class="w-full h-full flex items-center justify-center">
+                    <IconsLine v-if="!employee.val"/>
+                    <IconsCheck v-else/>
+                  </div>
+                </td>
                 <td>{{ index + 1 }}.</td>
                 <td class="bold">{{ employee.name }}</td>
                 <td>{{ employee.role }}</td>
-                <!-- 
-                <td>{{ employee.is_active ? 'Aktif' : 'Nonaktif' }}</td> -->
+                <td>{{ employee.ktp_no }}</td>
+                <td>{{ employee.sim_no }}</td>
+                <td>{{ employee.bank_name }}</td>
+                <td>{{ employee.rek_no }}</td>
+                <td>{{ employee.rek_name }}</td>
+                <td>{{ employee.phone_number }}</td>
                 <td>{{ $moment(employee.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td>{{ $moment(employee.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
               </tr>
@@ -92,6 +113,7 @@
     </template>
   </PopupMini>
   <FormsEmployee :show="forms_employee_show" :fnClose="()=>{forms_employee_show=false}" :id="forms_employee_id" :p_data="employees"/>
+  <FormsEmployeeValidasi :show="forms_employee_valid_show" :fnClose="()=>{forms_employee_valid_show=false}" :id="forms_employee_valid_id" :p_data="employees"/>
 
 </template>
 
@@ -109,7 +131,7 @@ definePageMeta({
     function (to, from) {
       // if (!useAuthStore().checkScopes(['ap-trx_trp-view']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","PabrikTransport"]))
+      if (!useAuthStore().checkRole(["SuperAdmin","Logistic"]))
       return navigateTo('/');
     },
     // 'auth',
@@ -254,6 +276,17 @@ const form_edit = () => {
   } else {
     forms_employee_id.value = employees.value[selected.value].id;
     forms_employee_show.value = true;
+  }
+};
+
+const forms_employee_valid_show =  ref(false);
+const forms_employee_valid_id = ref(0);
+const validasi = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_employee_valid_id.value = employees.value[selected.value].id;
+    forms_employee_valid_show.value = true;
   }
 };
 
