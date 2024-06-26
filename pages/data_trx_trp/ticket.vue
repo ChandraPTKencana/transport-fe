@@ -224,9 +224,9 @@ definePageMeta({
 const checkStatus=(data)=>{
   if(data.deleted==1) return "!bg-red-400";
   if(data.req_deleted == 1) return "!bg-yellow-300"; 
-  if((["CPO","PK"].indexOf(data.jenis)>-1 && (data.ticket_a_id>0 || data.ticket_b_bruto>0 || data.ticket_b_tara>0 || data.ticket_b_netto >0 || data.ticket_b_in_at!=""|| data.ticket_b_out_at!="")) ||
-    (data.jenis=="TBS" && (data.ticket_a_id>0 || data.ticket_b_id>0)) ||
-    (data.jenis=="TBSK" && data.ticket_b_id>0)) return "!bg-blue-300"; 
+  if((["CPO","PK"].indexOf(data.jenis)>-1 && (data.ticket_a_id!="" && data.ticket_b_bruto!="" && data.ticket_b_tara!="" && data.ticket_b_netto !="" && data.ticket_b_in_at!="" && data.ticket_b_out_at!="")) ||
+    (data.jenis=="TBS" && (data.ticket_a_id!="" && data.ticket_b_id!="")) ||
+    (data.jenis=="TBSK" && data.ticket_b_id!="")) return "!bg-blue-300"; 
   return "";
 }
 const addClassToTbody=(data)=>{
