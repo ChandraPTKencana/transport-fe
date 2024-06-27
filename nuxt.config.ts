@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     },
   },
   app:{
-    baseURL:process.env.MY_NODE_ENV === 'production' ? '/logistik' : '/logistik/dist',
+    baseURL:process.env.ROUTER_BASE || '/',
     head: {
       title: "App-Genkagromas",
       meta: [
