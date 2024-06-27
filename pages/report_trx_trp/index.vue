@@ -266,7 +266,7 @@ definePageMeta({
     function (to, from) {
       // if (!useAuthStore().checkScopes(['ap-trx_trp-view']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","Logistic",'Finance','Marketing', 'MIS','Accounting']))
+      if (!useAuthStore().checkRole(["SuperAdmin","ViewOnly","Logistic",'Finance','Marketing', 'MIS','Accounting']))
       return navigateTo('/');
 
     },

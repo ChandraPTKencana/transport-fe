@@ -108,7 +108,7 @@ definePageMeta({
     function (to, from) {
       // if (!useAuthStore().checkScopes(['ap-trx_trp-view']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","PabrikTransport","Logistic"]))
+      if (!useAuthStore().checkRole(["SuperAdmin",'ViewOnly',"PabrikTransport","Logistic"]))
       return navigateTo('/');
     },
     // 'auth',

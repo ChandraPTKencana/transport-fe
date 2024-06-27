@@ -145,7 +145,7 @@ definePageMeta({
     function (to, from) {
       // if (!useAuthStore().checkScopes(['ap-ujalan-view']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","Logistic",'PabrikTransport']))
+      if (!useAuthStore().checkRole(["SuperAdmin","ViewOnly","Logistic",'PabrikTransport']))
       return navigateTo('/');
 
     },

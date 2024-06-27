@@ -207,7 +207,7 @@ definePageMeta({
     function (to, from) {
       // if (!useAuthStore().checkScopes(['ap-standby_trx-view']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","Logistic",'PabrikTransport','PabrikMandor']))
+      if (!useAuthStore().checkRole(["SuperAdmin","ViewOnly","Logistic",'PabrikTransport','PabrikMandor']))
       return navigateTo('/');
 
     },

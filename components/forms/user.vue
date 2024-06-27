@@ -30,6 +30,7 @@
                   <option value="Marketing">Marketing</option>
                   <option value="Accounting">Accounting</option>
                   <option value="MIS">MIS</option>
+                  <option value="ViewOnly">ViewOnly</option>
                   <option value="SuperAdmin">SuperAdmin</option>
                 </select>
                 <p class="text-red-500">{{ field_errors.hak_akses }}</p>

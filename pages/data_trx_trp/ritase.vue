@@ -37,7 +37,7 @@ definePageMeta({
     function (to, from) {
       // if (!useAuthStore().checkScopes(['ap-trx_trp-view']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","PabrikMandor"]))
+      if (!useAuthStore().checkRole(["SuperAdmin","ViewOnly","PabrikMandor"]))
       return navigateTo('/');
 
     },
