@@ -810,12 +810,12 @@ const fields_thead=ref([
 
 const enabled_add = computed(()=>{  
   let result = ['trx_not_done','all'].indexOf(filter_status.value) > -1  
-  && checkRole(['PabrikTransport']);
+  && checkRole(['PabrikTransport','PabrikMandor']);
   return result;
 })
 
 const enabled_edit = computed(()=>{  
-  let result = checkRole(['PabrikTransport']) 
+  let result = checkRole(['PabrikTransport','PabrikMandor']) 
   && selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
@@ -844,7 +844,7 @@ const enabled_validasi = computed(()=>{
 })
 
 const enabled_remove = computed(()=>{  
-  let result = checkRole(['PabrikTransport']) 
+  let result = checkRole(['PabrikTransport','PabrikMandor']) 
   && selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
@@ -853,7 +853,7 @@ const enabled_remove = computed(()=>{
 })
 
 const enabled_void = computed(()=>{  
-  let result = checkRole(['PabrikTransport']) 
+  let result = checkRole(['PabrikTransport','PabrikMandor']) 
   && selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
@@ -871,7 +871,7 @@ const enabled_approve_void = computed(()=>{
 })
 
 const enabled_print_preview = computed(()=>{  
-  let result = checkRole(['PabrikTransport'])  
+  let result = checkRole(['PabrikTransport','PabrikMandor'])  
   && selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1

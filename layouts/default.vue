@@ -24,7 +24,7 @@
                 U.Jalan
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['SuperAdmin','ViewOnly','PabrikTransport'])" :class="activeMenu == '/data_trx_trp'?'active':''" >
+            <li v-if="checkRole(['SuperAdmin','ViewOnly','PabrikTransport','PabrikMandor'])" :class="activeMenu == '/data_trx_trp'?'active':''" >
               <nuxt-link to="/data_trx_trp"  class="cursor-pointer" @click="goTo('/data_trx_trp')">
                 <IconsProduct class="mr-1"/>
                 Trx Trp
