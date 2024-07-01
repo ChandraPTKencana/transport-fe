@@ -47,7 +47,7 @@
             <IconsPrinterEye />
           </button>
         </div>
-        <div v-if="checkRole(['PabrikTransport'])" class="flex">
+        <div v-if="checkRole(['PabrikTransport','PabrikMandor'])" class="flex">
 
           <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="generatePVR()">

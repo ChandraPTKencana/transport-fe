@@ -1,53 +1,21 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Form User'" :fn="fnClose" class="w-100 flex align-items-center"
+      <HeaderPopup :title="'Form Permission Group'" :fn="fnClose" class="w-100 flex align-items-center"
         style="color:white;" />
 
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
-
               <div class="w-full flex flex-col flex-wrap p-1">
-                <label for="">Username</label>
-                <input type="text" v-model="user.username">
-                <p class="text-red-500">{{ field_errors.username }}</p>
-              </div>
-
-              <div class="w-full flex flex-col flex-wrap p-1">
-                <label for="">Password</label>
-                <input type="password" v-model="user.password">
-                <p class="text-red-500">{{ field_errors.password }}</p>
-              </div>
-
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Hak Akses</label>
-                <select v-model="user.hak_akses">
-                  <option value="PabrikTransport">Pabrik Transport</option>
-                  <option value="PabrikMandor">Pabrik Mandor</option>
-                  <option value="Logistic">Logisitic</option>
-                  <option value="Finance">Finance</option>
-                  <option value="Marketing">Marketing</option>
-                  <option value="Accounting">Accounting</option>
-                  <option value="MIS">MIS</option>
-                  <option value="ViewOnly">ViewOnly</option>
-                  <option value="SuperAdmin">SuperAdmin</option>
-                </select>
-                <p class="text-red-500">{{ field_errors.hak_akses }}</p>
-              </div>
-            
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Status</label>
-                <select v-model="user.is_active">
-                  <option value="1">Aktif</option>
-                  <option value="0">Nonaktif</option>
-                </select>
-                <p class="text-red-500">{{ field_errors.is_active }}</p>
+                <label for="">Name</label>
+                <input v-model="permission_group.name">
+                <p class="text-red-500">{{ field_errors.name }}</p>
               </div>
             </div>
 
             <div class="w-full flex flex-col sm:flex-row grow p-1 justify-between flex-wrap 2xl:overflow-hidden">
-              <div class="w-full max-w-full p-0 2xl:pr-1 2xl:max-h-full 2xl:overflow-auto">
+              <div class="w-full max-w-full p-0 2xl:pr-1 2xl:w-1/2 2xl:max-h-full 2xl:overflow-auto">
                 <div class="w-full" role="sticky">
                   <table class="tacky w-full !table-auto" style="white-space:normal;">
                     <thead >
@@ -84,8 +52,46 @@
                   </table>
                 </div>
               </div>
-              
+              <div class="w-full max-w-full max-h-full px-0 py-2 2xl:pl-1 2xl:py-0 2xl:w-1/2 2xl:overflow-auto">
+                <div class="w-full" role="sticky">
+                  <table class="tacky w-full !table-auto" style="white-space:normal;">
+                    <thead >
+                      <tr class="sticky -top-1 !z-[2]">
+                        <td colspan="2" class="!bg-slate-800 text-white font-bold">
+                          Detail Permission User
+                        </td>
+                      </tr>
+                      <tr class="sticky top-7 !z-[2]">
+                        <th class="min-w-[10px] !w-[10px] max-w-[10px]">
+                          <button type="button" name="button" class="text-xs" :class="(users_checked.length != users.length) ?'bg-green-500' :'bg-red-500'" @click="unChUser()">
+                            {{ (users_checked.length != users.length) ? 'Allow' : 'Deny' }}
+                          </button>
+                        </th> 
+                        <th>Name</th>
+                      </tr>
+                    </thead>
+                    <tbody ref="to_move">
+                      <template v-for="(user, index) in users" :key="index">
+                        <tr>
+                          <td class="!w-[10px]">
+                            <div class="w-full h-full flex items-center justify-center">
+                              <input type="checkbox" v-model="user.checked" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600 cursor-pointer">
+                            </div>
+                          </td>
+                          <td>
+                            <div class="w-full h-full flex items-center justify-start">
+                              {{ user.username }}
+                            </div>
+                          </td>
+                        </tr>
+                      </template>                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
+
+            
           </div>
           
           <div class="w-full flex items-center justify-end">
@@ -99,7 +105,6 @@
         </form>
     </div>
   </section>
-
 </template>
 
 <script setup>
@@ -111,8 +116,8 @@ import { useAuthStore } from '~/store/auth';
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
-const { pointFormat } = useUtils();
 
+const { pointFormat } = useUtils();
 
 const props = defineProps({
   show: {
@@ -122,6 +127,20 @@ const props = defineProps({
   fnClose: {
     type: Function,
     required: false,
+  },
+  fnSelect: {
+    type: Function,
+    required: false,
+  },
+  excludes: {
+    type: String,
+    required: false,
+    // default: '',
+  },
+  exclude_lists: {
+    type: Array,
+    required: false,
+    // default: '',
   },
   id:{
     type: Number,
@@ -133,55 +152,50 @@ const props = defineProps({
     required:true,
     default:[]
   },
+  is_copy: {
+    type: [Boolean,Number],
+    required: true,
+    default: false,
+  },
+  
 })
 
-const user_temp = {
-    id: -1,
-    username: "",
-    password: "",
-    hak_akses:"PabrikTransport",
-    is_active: 1,
+const permission_group_temp = {
+    name: "",
+    list: [],
 };
 
-const user = ref({...user_temp});
-
+const permission_group = ref({...permission_group_temp});
 const token = useCookie('token');
 const field_errors = ref({})
 
-const doSave = async () => { 
+const doSave = async () => {
   useCommonStore().loading_full = true;
   field_errors.value = {};
 
   const data_in = new FormData();
-  
-  data_in.append("username", user.value.username);
-  if(user.value.password) data_in.append("password", user.value.password);
-  data_in.append("hak_akses", user.value.hak_akses);
-  data_in.append("is_active", user.value.is_active);
+  data_in.append("name", permission_group.value.name);
   data_in.append("permission_list", JSON.stringify(permission_list_checked.value));
+  data_in.append("users", JSON.stringify(users_checked.value));
+
 
   let $method = "post";
 
-  let id = props.id;
+  let id = props.is_copy ? 0 : props.id;
   if (id == 0) {
   } else {
-    // $method = "put";
-    // data_in['id'] = id;
     data_in.append("id", id);
     data_in.append("_method", "PUT");
   }
 
-  const { data, error, status } = await useMyFetch("/user", {
+  const { data, error, status } = await useMyFetch("/permission_group", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
-      // 'Content-Type': 'application/json',
       'Accept': 'application/json',
-      // "Content-Type": "multipart/form-data",
     },
     body: data_in,
     retry: 0,
-    // server: true
   });
   useCommonStore().loading_full = false;
   if (status.value === 'error') {
@@ -189,28 +203,25 @@ const doSave = async () => {
     return;
   }
 
-  
-  if(props.id<=0){
-    user.value.id = data.value.id;
-    user.value.created_at = data.value.created_at;
-    user.value.updated_at = data.value.updated_at;
-    props.p_data.unshift(user.value);
+  if(id<=0){
+    permission_group.value.id = data.value.id;
+    permission_group.value.created_at = data.value.created_at;
+    permission_group.value.updated_at = data.value.updated_at;
+    props.p_data.unshift(permission_group.value);
   }else{
-    user.value.updated_at = data.value.updated_at;
+    permission_group.value.updated_at = data.value.updated_at;
 
-    let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
+    let idx= props.p_data.map((x)=>x.id).indexOf(id);
     if(idx>=-1){
-      props.p_data.splice(idx,1,{...user.value});    
+      props.p_data.splice(idx,1,{...permission_group.value});    
     }
   }
   props.fnClose();
-  // router.go(-1);
 }
-
 
 const callData = async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/user", {
+  const { data, error, status } = await useMyFetch("/permission_group", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -231,7 +242,14 @@ const callData = async () => {
     return;
   }
 
-  user.value = data.value.data;
+  permission_group.value = data.value.data;
+
+  let p_status = "Edit";
+  if(props.is_copy){
+    p_status = "Add";
+    permission_group.value.val = 0;
+    permission_group.value.val1 = 0;
+  }
 
   data.value.data.details.forEach((v,k)=>{
     permission_list.value = permission_list.value.map(x=>{
@@ -240,9 +258,23 @@ const callData = async () => {
       return x
     })
   })
+
+
+  data.value.data.users.forEach((v,k)=>{
+    users.value = users.value.map(x=>{
+      if(x.username == v.username)
+      x.checked = true;
+      return x
+    })
+  })
+
+  // details.value = data.value.data.details.map((x)=>{
+  //   x["p_status"]= p_status;
+  //   x["key"] = x["ordinal"];
+  //   return x;
+  // });
+  
 }
-
-
 
 const permission_list = ref([]);
 
@@ -275,6 +307,36 @@ const callPermissionListData = async () => {
   });
 }
 
+const users=ref([]);
+const callUserData = async () => {
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/users", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    params: {sort: "username:asc"},
+    // body: {
+    //   sort: "updated_at:desc"
+    // },
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  users.value = data.value.data.map((x)=>{
+    x["checked"] = false;
+    return x;
+  });
+}
+
 const permission_list_checked = computed((x)=>{
   return permission_list.value.filter((x)=>x.checked);
 })
@@ -292,14 +354,32 @@ const unChPerList=(item)=>{
   }
 };
 
+
+const users_checked = computed((x)=>{
+  return users.value.filter((x)=>x.checked);
+})
+const unChUser=(item)=>{
+  if(users_checked.value.length != users.value.length){
+    users.value = users.value.map(x=>{
+      x.checked = true;
+      return x;
+    });
+  }else{
+    users.value = users.value.map(x=>{
+      x.checked = false;
+      return x;
+    });
+  }
+};
+
 watch(() => props.show, async(newVal, oldVal) => {
   if (newVal == true){
-    user.value = {...user_temp};
+    permission_group.value = {...permission_group_temp};
     permission_list.value = [];
 
     await callPermissionListData();
+    await callUserData();
 
-    field_errors.value = {};
     if(props.id!=0)
     await callData();
   }
@@ -308,15 +388,3 @@ watch(() => props.show, async(newVal, oldVal) => {
 });
 
 </script>
-<style scoped="">
-/* table.sticky thead th:nth-child(2) {
-  position: -webkit-sticky;
-  position: sticky;
-  left: 0;
-  z-index: 2;
-}
-
-table.sticky thead tr {
-  top: 0;
-} */
-</style>

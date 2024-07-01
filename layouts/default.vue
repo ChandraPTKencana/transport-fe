@@ -100,6 +100,13 @@
                 User
               </nuxt-link>
             </li>
+
+            <li v-if="checkRole(['SuperAdmin'])" :class="activeMenu == '/permission_group'?'active':''" >
+              <nuxt-link to="/permission_group"  class="cursor-pointer" @click="goTo('/permission_group')">
+                <IconsPerson class="mr-1"/>
+                Permission Group
+              </nuxt-link>
+            </li>
           </ul>
           <div id="panel" class="h-7 text-xs relative">
             <div v-show="is_panel_open"
