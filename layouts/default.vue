@@ -18,90 +18,90 @@
                 Dashboard
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['SuperAdmin','ViewOnly','Logistic','PabrikTransport'])"  :class="activeMenu == '/data_ujalan'?'active':''" >
+            <li v-if="useUtils().checkPermission('ujalan.views')"  :class="activeMenu == '/data_ujalan'?'active':''" >
               <nuxt-link to="/data_ujalan"  class="cursor-pointer" @click="goTo('/data_ujalan')">
                 <IconsMoney class="mr-1"/>
                 U.Jalan
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['SuperAdmin','ViewOnly','PabrikTransport','PabrikMandor'])" :class="activeMenu == '/data_trx_trp'?'active':''" >
+            <li v-if="useUtils().checkPermission('trp_trx.views')" :class="activeMenu == '/data_trx_trp'?'active':''" >
               <nuxt-link to="/data_trx_trp"  class="cursor-pointer" @click="goTo('/data_trx_trp')">
                 <IconsProduct class="mr-1"/>
                 Trx Trp
               </nuxt-link>
             </li>
 
-            <li v-if="checkRole(['SuperAdmin','ViewOnly','PabrikTransport','Logistic'])" :class="activeMenu == '/data_trx_trp/ticket'?'active':''" >
+            <li v-if="useUtils().checkPermission('trp_trx.ticket.views')" :class="activeMenu == '/data_trx_trp/ticket'?'active':''" >
               <nuxt-link to="/data_trx_trp/ticket"  class="cursor-pointer" @click="goTo('/data_trx_trp/ticket')">
                 <IconsProduct class="mr-1"/>
                 Trx Ticket
               </nuxt-link>
             </li>
 
-            <li v-if="checkRole(['SuperAdmin','ViewOnly','PabrikMandor'])" :class="activeMenu == '/data_trx_trp/ritase'?'active':''" >
+            <li v-if="useUtils().checkPermission('trp_trx.ritase.views')" :class="activeMenu == '/data_trx_trp/ritase'?'active':''" >
               <nuxt-link to="/data_trx_trp/ritase"  class="cursor-pointer" @click="goTo('/data_trx_trp/ritase')">
                 <IconsProduct class="mr-1"/>
                 Trx Ritase
               </nuxt-link>
             </li>
 
-            <li v-if="checkRole(['SuperAdmin','ViewOnly','Logistic','PabrikTransport'])"  :class="activeMenu == '/data_standby'?'active':''" >
+            <li v-if="useUtils().checkPermission('standby_mst.views')"  :class="activeMenu == '/data_standby'?'active':''" >
               <nuxt-link to="/data_standby"  class="cursor-pointer" @click="goTo('/data_standby')">
                 <IconsMoney class="mr-1"/>
                 StandBy
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['SuperAdmin','ViewOnly', 'PabrikTransport','PabrikMandor','Logistic'])"  :class="activeMenu == '/data_standby/trx'?'active':''" >
+            <li v-if="useUtils().checkPermission('standby_trx.views')"  :class="activeMenu == '/data_standby/trx'?'active':''" >
               <nuxt-link to="/data_standby/trx"  class="cursor-pointer" @click="goTo('/data_standby/trx')">
                 <IconsMoney class="mr-1"/>
                 StandBy Trx
               </nuxt-link>
             </li>
             
-            <li v-if="checkRole(['SuperAdmin','ViewOnly','Logistic','Finance','Marketing','MIS','Accounting'])" :class="activeMenu == '/report_trx_trp'?'active':''" >
+            <li v-if="useUtils().checkPermission('trp_trx.report.views')" :class="activeMenu == '/report_trx_trp'?'active':''" >
               <nuxt-link to="/report_trx_trp"  class="cursor-pointer" @click="goTo('/report_trx_trp')">
                 <IconsFileCopy class="mr-1"/>
                 Report Trp
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['SuperAdmin','ViewOnly','Logistic'])" :class="activeMenu == '/report/ramp'?'active':''" >
+            <li v-if="useUtils().checkPermission('report.ramp.views')" :class="activeMenu == '/report/ramp'?'active':''" >
               <nuxt-link to="/report/ramp"  class="cursor-pointer" @click="goTo('/report/ramp')">
                 <IconsFileCopy class="mr-1"/>
                 Report Ramp
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['SuperAdmin','ViewOnly','Logistic'])" :class="activeMenu == '/report/ast_n_driver'?'active':''" >
+            <li v-if="useUtils().checkPermission('report.ast_n_driver.views')" :class="activeMenu == '/report/ast_n_driver'?'active':''" >
               <nuxt-link to="/report/ast_n_driver"  class="cursor-pointer" @click="goTo('/report/ast_n_driver')">
                 <IconsFileCopy class="mr-1"/>
                 Report Ast &amp; Driver
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['SuperAdmin','ViewOnly','Finance'])" :class="activeMenu == '/fin_payment_req'?'active':''" >
+            <li v-if="useUtils().checkPermission('development')" :class="activeMenu == '/fin_payment_req'?'active':''" >
               <nuxt-link to="/fin_payment_req"  class="cursor-pointer" @click="goTo('/fin_payment_req')">
                 <IconsFileCopy class="mr-1"/>
                 Payment Request
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['SuperAdmin','ViewOnly','PabrikTransport','Logistic'])" :class="activeMenu == '/vehicle'?'active':''" >
+            <li v-if="useUtils().checkPermission('vehicle.views')" :class="activeMenu == '/vehicle'?'active':''" >
               <nuxt-link to="/vehicle"  class="cursor-pointer" @click="goTo('/vehicle')">
                 <IconsPerson class="mr-1"/>
                 Kendaraan
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['SuperAdmin','ViewOnly','Logistic'])" :class="activeMenu == '/employee'?'active':''" >
+            <li v-if="useUtils().checkPermission('employee.views')" :class="activeMenu == '/employee'?'active':''" >
               <nuxt-link to="/employee"  class="cursor-pointer" @click="goTo('/employee')">
                 <IconsPerson class="mr-1"/>
                 Pekerja
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['SuperAdmin'])" :class="activeMenu == '/user'?'active':''" >
+            <li v-if="useUtils().checkPermission('user.views')" :class="activeMenu == '/user'?'active':''" >
               <nuxt-link to="/user"  class="cursor-pointer" @click="goTo('/user')">
                 <IconsPerson class="mr-1"/>
                 User
               </nuxt-link>
             </li>
 
-            <li v-if="checkRole(['SuperAdmin'])" :class="activeMenu == '/permission_group'?'active':''" >
+            <li v-if="useUtils().checkPermission('permission_group.views')" :class="activeMenu == '/permission_group'?'active':''" >
               <nuxt-link to="/permission_group"  class="cursor-pointer" @click="goTo('/permission_group')">
                 <IconsPerson class="mr-1"/>
                 Permission Group
@@ -227,12 +227,6 @@ onMounted(() => {
       }
     }
 });
-
-
-const role = useCookie('role'); // useCookie new hook in nuxt 3
-const checkRole=(list:Array<string>)=>{
-  return (list).includes(role.value as string);
-};
 
 const goTo=(url:any)=>{
   if(activeMenu.value == url) return;

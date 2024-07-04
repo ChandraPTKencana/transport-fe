@@ -22,7 +22,7 @@ div#__nuxt>div {
 //     @apply flex-grow;
 // }
 
-.dp__main , .dp__main > :first-child,.dp__input_wrap,.dp__input_wrap input{
+table .dp__main , table .dp__main > :first-child,table .dp__input_wrap,table .dp__input_wrap input{
     @apply h-full;
 }
 

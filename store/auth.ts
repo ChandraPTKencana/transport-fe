@@ -115,6 +115,8 @@ export const useAuthStore = defineStore('auth', {
             const role = useCookie('role'); // useCookie new hook in nuxt 3
             role.value = data?.value?.user?.role; // set token to cookie
 
+            localStorage.setItem("permissions", JSON.stringify(data?.value?.user?.permissions));
+
             const scopes = useCookie('scopes'); // useCookie new hook in nuxt 3
             scopes.value = data?.value?.user?.scopes; // set token to cookie
 
@@ -143,6 +145,28 @@ export const useAuthStore = defineStore('auth', {
       return roles.includes(role.value as string);
     },
 
+    checkPermission(permission: string = "") {
+      let permissions = localStorage.getItem('permissions');
+      if(permissions) {
+        permissions=JSON.parse(permissions)
+        return permissions ? permissions.includes(permission) : false;
+      }; // useCookie new hook in nuxt 3
+
+      return  false;
+    },
+    
+    checkPermissions(list:any) {
+
+      let permissions = localStorage.getItem('permissions');
+      if(permissions) {
+        permissions=JSON.parse(permissions);
+        if(permissions && Array.isArray(permissions)){
+          return  permissions.filter((x:any)=>list.includes(x)).length > 0;
+        }
+      } // useCookie new hook in nuxt 3
+      return 0;
+    },
+
     clearAuth(){
       this.authenticated = false; // set authenticated  state value to false
       this.done_get_user_info = false;
@@ -158,6 +182,8 @@ export const useAuthStore = defineStore('auth', {
 
       const role = useCookie('role'); // useCookie new hook in nuxt 3
       role.value = null;
+
+      localStorage.clear();
 
       const scopes = useCookie('scopes'); // useCookie new hook in nuxt 3
       scopes.value = null;

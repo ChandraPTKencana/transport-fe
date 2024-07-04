@@ -3,23 +3,23 @@
     <Header :title="'List Ujalan'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
-        <button v-if="!useUtils().checkRole(['PabrikTransport'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermission('ujalan.create')" type="button" name="button" class="m-1 text-2xl "
           @click="form_copy()">
           <IconsCopy />
         </button>
-        <button v-if="!useUtils().checkRole(['PabrikTransport'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermission('ujalan.create')" type="button" name="button" class="m-1 text-2xl "
           @click="form_add()">
           <IconsPlus />
         </button>
-        <button type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermissions(['ujalan.modify','ujalan.detail.modify','ujalan.details.modify'])" type="button" name="button" class="m-1 text-2xl "
           @click="form_edit()">
           <IconsEdit/>
         </button>
-        <button v-if="!useUtils().checkRole(['PabrikTransport'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermission('ujalan.remove')" type="button" name="button" class="m-1 text-2xl "
           @click="remove()">
           <IconsDelete />
         </button>
-        <button type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermissions(['ujalan.val','ujalan.val1'])" type="button" name="button" class="m-1 text-2xl "
           @click="validasi()">
           <IconsSignature />
         </button>
@@ -143,11 +143,10 @@ definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      // if (!useAuthStore().checkScopes(['ap-ujalan-view']))
-      //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","ViewOnly","Logistic",'PabrikTransport']))
-      return navigateTo('/');
-
+      if (!useAuthStore().checkPermission('ujalan.views')){
+        useCommonStore().loading_full = false;
+        return navigateTo('/');
+      }
     },
     // 'auth',
   ],

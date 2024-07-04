@@ -51,6 +51,29 @@ export const useUtils = () => {
         return (list).includes(role.value);
     };
 
+
+    const checkPermission=(name:string)=>{
+        
+        let permissions = localStorage.getItem('permissions');
+        if(permissions) {
+            permissions=JSON.parse(permissions)
+            return permissions ? permissions.includes(name) : false;
+        }; // useCookie new hook in nuxt 3
+
+        return  false;
+    };
+
+    const checkPermissions=(list:any)=>{
+        let permissions = localStorage.getItem('permissions');
+        if(permissions) {
+          permissions=JSON.parse(permissions);
+          if(permissions && Array.isArray(permissions)){
+            return  permissions.filter((x:any)=>list.includes(x)).length > 0;
+          }
+        } // useCookie new hook in nuxt 3
+        return 0;
+    };
+
     const round = (num:any, precision:any) => Number(Math.round(Number(num + "e+" + precision)) + "e-" + precision);
 
     return {
@@ -58,6 +81,8 @@ export const useUtils = () => {
         pointFormat,
         countClickListFn,
         checkRole,
+        checkPermission,
+        checkPermissions,
         round
     }
 }
