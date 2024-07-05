@@ -10,24 +10,13 @@
 
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">To</label>
-                <input v-model="ujalan.xto" :disabled="role=='PabrikTransport' || disabled">
+                <input v-model="ujalan.xto" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
                 <p class="text-red-500">{{ field_errors.xto }}</p>
               </div>
-              
-              
-
-              <!-- <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Status</label>
-                <select v-model="ujalan.status">
-                  <option value="Y">Y</option>
-                  <option value="N">N</option>
-                </select>
-                <p class="text-red-500">{{ field_errors.status }}</p>
-              </div> -->
 
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Jenis</label>
-                <select v-model="ujalan.jenis" :disabled="role=='PabrikTransport' || disabled">
+                <select v-model="ujalan.jenis" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
                   <option value="PK">PK</option>
                   <option value="CPO">CPO</option>
                   <option value="TBS">TBS</option>
@@ -44,7 +33,7 @@
 
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Asal Peralihan</label>
-                <select v-model="ujalan.transition_from" :disabled="role=='PabrikTransport' || disabled">
+                <select v-model="ujalan.transition_from" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
                   <option value=""></option>
                   <option v-for="v in useCommonStore().list_pabrik" :value="v">{{ v }}</option>
                 </select>
@@ -53,13 +42,13 @@
               
               <div class="w-full sm:w-4/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Tipe</label>
-                <textarea v-model="ujalan.tipe" :disabled="role=='PabrikTransport' || disabled"></textarea>
+                <textarea v-model="ujalan.tipe" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"></textarea>
                 <p class="text-red-500">{{ field_errors.tipe }}</p>
               </div>
 
               <div class="w-full sm:w-4/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Ket. Untuk Remarks</label>
-                <textarea v-model="ujalan.note_for_remarks" :disabled="role=='PabrikTransport' || disabled"></textarea>
+                <textarea v-model="ujalan.note_for_remarks" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"></textarea>
                 <p class="text-red-500">{{ field_errors.note_for_remarks }}</p>
               </div>
 
@@ -71,12 +60,12 @@
                   <table class="tacky w-full" style="white-space:normal;">
                     <thead >
                       <tr class="sticky -top-1 !z-[2]">
-                        <td :colspan="role!='PabrikTransport' && !disabled ? 7 : 6" class="!bg-slate-800 text-white font-bold">
+                        <td :colspan="useUtils().checkPermissions(['ujalan.create','ujalan.modify']) && !disabled ? 7 : 6" class="!bg-slate-800 text-white font-bold">
                           Detail Uang Jalan
                         </td>
                       </tr>
                       <tr class="sticky top-7 !z-[2]">
-                        <th v-if="role!='PabrikTransport' && !disabled" class="min-w-[50px] !w-[50px] max-w-[50px] ">
+                        <th v-if="useUtils().checkPermissions(['ujalan.create','ujalan.modify']) && !disabled" class="min-w-[50px] !w-[50px] max-w-[50px] ">
                           <button type="button" name="button" class="bg-yellow-600" @click="insertDefault()">
                             Default In
                           </button>
@@ -93,7 +82,7 @@
                       <template v-for="(detail, index) in details" :key="index">
                         <!-- <tr v-if="detail.p_status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)"> -->
                         <tr v-if="detail.p_status!='Remove'"  :data-index="index">
-                          <td v-if="role!='PabrikTransport' && !disabled" class="tools cell">
+                          <td v-if="useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) && !disabled" class="tools cell">
                             <div class="w-full h-full flex items-center justify-center">
                               <button  type="button" name="button"
                                 @click="showAction($event, index)">
@@ -104,10 +93,10 @@
                           <td>{{ index + 1 }}.</td>
                           <td class="cell">
                             <div class="w-full h-full flex items-center justify-center">
-                              <textarea :disabled="role=='PabrikTransport' || disabled" class="p-1 w-full" v-model="detail.xdesc" cols="7" rows="2"></textarea>
+                              <textarea :disabled="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled" class="p-1 w-full" v-model="detail.xdesc" cols="7" rows="2"></textarea>
                             </div>
                           </td>
-                          <td class="cell bold" :class="role=='PabrikTransport' || disabled ? 'unselectable' : ''">
+                          <td class="cell bold" :class="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled ? 'unselectable' : ''">
                             <div class="w-full h-full flex items-center justify-center">
                               <InputPointFormat
                               :key="index" 
@@ -115,10 +104,10 @@
                               type="text" 
                               :value="detail.harga || 0" 
                               @input="detail.harga = $event"
-                              :show="show" :disabled="role=='PabrikTransport' || disabled"/>
+                              :show="show" :disabled="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled"/>
                             </div>
                           </td>
-                          <td class="cell" :class="role=='PabrikTransport' || disabled ? 'unselectable' : ''">
+                          <td class="cell" :class="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled ? 'unselectable' : ''">
                             <div class="w-full h-full flex items-center justify-center">
                               <InputPointFormat
                               :key="index" 
@@ -126,7 +115,7 @@
                               type="text" 
                               :value="detail.qty || 0" 
                               @input="detail.qty = $event"
-                              :show="show" :disabled="role=='PabrikTransport' || disabled"/>
+                              :show="show" :disabled="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled"/>
                             </div>
                           </td>
                           <td class="cell">
@@ -135,9 +124,9 @@
                             </div>
                           </td>
 
-                          <td class="cell" :class="role=='PabrikTransport' || disabled ? 'unselectable' : ''">
+                          <td class="cell" :class="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled ? 'unselectable' : ''">
                             <div class="w-full h-full flex items-center justify-center">
-                              <div v-if="role=='PabrikTransport' || disabled" class="text-3xl">
+                              <div v-if="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled" class="text-3xl">
                                 <IconsTimes v-if="detail.for_remarks==0" class="text-red-800"/>
                                 <IconsCheck v-else class="text-green-800"/>                                           
                               </div>
@@ -152,7 +141,7 @@
                         </tr>
                       </template>
                       
-                      <tr v-if="role!='PabrikTransport' && !disabled">
+                      <tr v-if="useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) && !disabled">
                         <td class="tools cell">
                           <button type="button" name="button" @click="addList()">
                             <IconsPlus />
@@ -772,7 +761,7 @@ const replyAction2=(act = "")=>{
 
 const role = useCookie('role');
 const disabled = computed(()=>{
-  return (ujalan.value.val && ujalan.value.val1) || (role.value == "Logistic" && ujalan.value.val) || (role.value == "PabrikTransport" && ujalan.value.val1);
+  return (ujalan.value.val && ujalan.value.val1) || (useUtils().checkPermission('ujalan.val') && ujalan.value.val) || (useUtils().checkPermissions('ujalan.val1') && ujalan.value.val1);
 });
 
 

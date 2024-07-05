@@ -3,30 +3,18 @@
     <Header :title="'List Permission Group'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
-        <button v-if="!useUtils().checkRole(['Logistic'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermission('permission_group.create')" type="button" name="button" class="m-1 text-2xl "
           @click="form_copy()">
           <IconsCopy />
         </button>
-        <button v-if="!useUtils().checkRole(['Logistic'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermission('permission_group.create')" type="button" name="button" class="m-1 text-2xl "
           @click="form_add()">
           <IconsPlus />
         </button>
-        <button v-if="!useUtils().checkRole(['Logistic'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermission('permission_group.modify')" type="button" name="button" class="m-1 text-2xl "
           @click="form_edit()">
           <IconsEdit/>
         </button>
-        <!-- <button type="button" name="button" class="m-1 text-2xl "
-          @click="form_view()">
-          <IconsEyes/>
-        </button>
-        <button v-if="!useUtils().checkRole(['PabrikTransport'])" type="button" name="button" class="m-1 text-2xl "
-          @click="remove()">
-          <IconsDelete />
-        </button>
-        <button type="button" name="button" class="m-1 text-2xl "
-          @click="validasi()">
-          <IconsSignature />
-        </button> -->
       </div>
 
       <form action="#" class="w-full flex p-1">
@@ -101,11 +89,10 @@ definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      // if (!useAuthStore().checkScopes(['ap-permission_group-view']))
-      //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin"]))
-      return navigateTo('/');
-
+      if (!useAuthStore().checkPermission('permission_group.views')){
+        useCommonStore().loading_full = false;
+        return navigateTo('/');
+      }
     },
     // 'auth',
   ],

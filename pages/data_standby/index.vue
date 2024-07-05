@@ -3,27 +3,27 @@
     <Header :title="'List Standby'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
-        <button v-if="!useUtils().checkRole(['Logistic'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermission('standby_mst.create')" type="button" name="button" class="m-1 text-2xl "
           @click="form_copy()">
           <IconsCopy />
         </button>
-        <button v-if="!useUtils().checkRole(['Logistic'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermission('standby_mst.create')" type="button" name="button" class="m-1 text-2xl "
           @click="form_add()">
           <IconsPlus />
         </button>
-        <button v-if="!useUtils().checkRole(['Logistic'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermission('standby_mst.modify')" type="button" name="button" class="m-1 text-2xl "
           @click="form_edit()">
           <IconsEdit/>
         </button>
-        <button type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermission('standby_mst.view')" type="button" name="button" class="m-1 text-2xl "
             @click="form_view()">
             <IconsEyes/>
           </button>
-        <button v-if="!useUtils().checkRole(['PabrikTransport'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermission('standby_mst.remove')" type="button" name="button" class="m-1 text-2xl "
           @click="remove()">
           <IconsDelete />
         </button>
-        <button type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermissions(['standby_mst.val','standby_mst.val1'])" type="button" name="button" class="m-1 text-2xl "
           @click="validasi()">
           <IconsSignature />
         </button>
@@ -136,11 +136,10 @@ definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      // if (!useAuthStore().checkScopes(['ap-standby_mst-view']))
-      //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","ViewOnly","Logistic",'PabrikTransport']))
-      return navigateTo('/');
-
+      if (!useAuthStore().checkPermission('standby_mst.views')){
+        useCommonStore().loading_full = false;
+        return navigateTo('/');
+      }
     },
     // 'auth',
   ],

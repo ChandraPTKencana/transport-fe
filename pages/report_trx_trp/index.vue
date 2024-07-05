@@ -264,10 +264,10 @@ definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      // if (!useAuthStore().checkScopes(['ap-trx_trp-view']))
-      //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","ViewOnly","Logistic",'Finance','Marketing', 'MIS','Accounting']))
-      return navigateTo('/');
+      if (!useAuthStore().checkPermission('trp_trx.report.views')){
+        useCommonStore().loading_full = false;
+        return navigateTo('/');
+      }
 
     },
     // 'auth',

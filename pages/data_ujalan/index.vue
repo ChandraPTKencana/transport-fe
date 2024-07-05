@@ -11,7 +11,7 @@
           @click="form_add()">
           <IconsPlus />
         </button>
-        <button v-if="useUtils().checkPermissions(['ujalan.modify','ujalan.detail.modify','ujalan.details.modify'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermissions(['ujalan.modify','ujalan.detail.modify','ujalan.detail2.modify'])" type="button" name="button" class="m-1 text-2xl "
           @click="form_edit()">
           <IconsEdit/>
         </button>

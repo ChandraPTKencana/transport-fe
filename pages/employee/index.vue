@@ -129,10 +129,10 @@ definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      // if (!useAuthStore().checkScopes(['ap-trx_trp-view']))
-      //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","ViewOnly","Logistic"]))
-      return navigateTo('/');
+      if (!useAuthStore().checkPermission('employee.views')){
+        useCommonStore().loading_full = false;
+        return navigateTo('/');
+      }
     },
     // 'auth',
   ],

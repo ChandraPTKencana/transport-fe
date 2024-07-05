@@ -158,10 +158,7 @@ const field_errors = ref({})
 const date = ref({ from: "", to: "" });
 
 const token = useCookie('token');
-const role = useCookie('role'); // useCookie new hook in nuxt 3
-const checkRole=(list)=>{
-  return (list).includes(role.value);
-};
+
 // const { data: dt_async } = await useAsyncData(async () => {
 //   useCommonStore().loading_full = true;
 //   let trx_trps = [];

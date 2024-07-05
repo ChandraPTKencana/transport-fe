@@ -14,7 +14,7 @@
             </select>
           </div>
 
-          <button v-if="['pv_not_done','all'].indexOf(filter_status) > -1" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_add" type="button" name="button" class="m-1 text-2xl "
             @click="form_add()">
             <IconsPlus />
           </button>
@@ -22,7 +22,7 @@
             @click="form_edit()">
             <IconsEdit/>
           </button>
-          <button v-if="selected > -1" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_view" type="button" name="button" class="m-1 text-2xl "
             @click="form_view()">
             <IconsEyes/>
           </button>
@@ -183,10 +183,10 @@ definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      // if (!useAuthStore().checkScopes(['ap-trx_trp-view']))
-      //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","ViewOnly",'PabrikTransport','PabrikMandor']))
-      return navigateTo('/');
+      if (!useAuthStore().checkPermission('trp_trx.views')){
+        useCommonStore().loading_full = false;
+        return navigateTo('/');
+      }
 
     },
     // 'auth',
@@ -721,13 +721,26 @@ const fields_thead=ref([
   {key:"req_deleted_reason",label:"Req Delete Reason", tbl_show:0,type:'string',filter_on:1},
 ]);
 
+const enabled_add = computed(()=>{  
+  let result = ['pv_not_done','all'].indexOf(filter_status.value) > -1
+  && useUtils().checkPermission('trp_trx.create');
+  return result;
+})
+
+const enabled_view = computed(()=>{ 
+  let result = selected.value > -1
+  && useUtils().checkPermission('trp_trx.view');
+  return result;
+})
+
 
 const enabled_edit = computed(()=>{  
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.val1) > -1
-  && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1;
+  && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1
+  && useUtils().checkPermission('trp_trx.modify');
   return result;
 })
 
@@ -736,7 +749,8 @@ const enabled_validasi = computed(()=>{
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.val) > -1
-  && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1;
+  && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1
+  && useUtils().checkPermissions(['trp_trx.val','trp_trx.val1']);
   return result;
 })
 
@@ -744,7 +758,8 @@ const enabled_remove = computed(()=>{
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
-  && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1;
+  && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1
+  && useUtils().checkPermission('trp_trx.remove');
   return result;
 })
 
@@ -752,14 +767,16 @@ const enabled_void = computed(()=>{
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
-  && dt_selected.value.pvr_id != '';
+  && dt_selected.value.pvr_id != ''
+  && useUtils().checkPermission('trp_trx.request_remove');
   return result;
 })
 
 const enabled_print_preview = computed(()=>{  
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1;
+  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
+  && useUtils().checkPermission('trp_trx.preview_file');
   return result;
 })
 </script>

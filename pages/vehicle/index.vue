@@ -106,10 +106,10 @@ definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      // if (!useAuthStore().checkScopes(['ap-trx_trp-view']))
-      //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin",'ViewOnly',"PabrikTransport","Logistic"]))
-      return navigateTo('/');
+      if (!useAuthStore().checkPermission('vehicle.views')){
+        useCommonStore().loading_full = false;
+        return navigateTo('/');
+      }
     },
     // 'auth',
   ],

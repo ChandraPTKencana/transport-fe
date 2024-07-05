@@ -47,17 +47,17 @@
             <IconsPrinterEye />
           </button>
         </div>
-        <div v-if="checkRole(['PabrikTransport','PabrikMandor'])" class="flex">
+        <div  class="flex">
 
-          <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+          <button v-if="useUtils().checkPermission('standby_trx.generate_pvr')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="generatePVR()">
             Gen/Update PVR
           </button>
-          <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+          <button v-if="useUtils().checkPermission('standby_trx.get_pv')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="updatePV()">
             Update PV
           </button>
-          <div class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
+          <div v-if="useUtils().checkPermissions(['standby_trx.create','standby_trx.modify'])" class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
             <span class="text-xs">Mode</span> : <span class="font-bold" :class="online_status?'text-green-600' : 'text-red-600'">{{ online_status ? "ONLINE" : "OFFLINE" }} </span>
           </div>
         </div>
@@ -205,11 +205,10 @@ definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      // if (!useAuthStore().checkScopes(['ap-standby_trx-view']))
-      //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","ViewOnly","Logistic",'PabrikTransport','PabrikMandor']))
-      return navigateTo('/');
-
+      if (!useAuthStore().checkPermission('standby_trx.views')){
+        useCommonStore().loading_full = false;
+        return navigateTo('/');
+      }
     },
     // 'auth',
   ],
@@ -261,10 +260,7 @@ const date = ref({
 });
 
 const token = useCookie('token');
-const role = useCookie('role'); // useCookie new hook in nuxt 3
-const checkRole=(list)=>{
-  return (list).includes(role.value);
-};
+
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
   let standby_trxs = [];
@@ -810,17 +806,17 @@ const fields_thead=ref([
 
 const enabled_add = computed(()=>{  
   let result = ['trx_not_done','all'].indexOf(filter_status.value) > -1  
-  && checkRole(['PabrikTransport','PabrikMandor']);
+  && useUtils().checkPermission('standby_trx.create');
   return result;
 })
 
 const enabled_edit = computed(()=>{  
-  let result = checkRole(['PabrikTransport','PabrikMandor']) 
-  && selected.value > -1 
+  let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.val) > -1
-  && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1;
+  && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1
+  && useUtils().checkPermission('standby_trx.modify');
   return result;
 })
 
@@ -832,19 +828,19 @@ const enabled_validasi = computed(()=>{
     (
       [undefined,""].indexOf(dt_selected.value.pvr_id) > -1 && 
       (
-        checkRole(['PabrikTransport']) && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
-        checkRole(['PabrikMandor']) && [undefined,0].indexOf(dt_selected.value.val1) > -1
+        useUtils().checkPermission('standby_trx.val') && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
+        useUtils().checkPermission('standby_trx.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1
       )
     )|| 
     (
-      dt_selected.value.pvr_id > -1 &&  checkRole(['Logistic']) && [undefined,0].indexOf(dt_selected.value.val2) > -1
+      dt_selected.value.pvr_id > -1 &&  useUtils().checkPermission('standby_trx.val2') && [undefined,0].indexOf(dt_selected.value.val2) > -1
     )
   );
   return result;
 })
 
 const enabled_remove = computed(()=>{  
-  let result = checkRole(['PabrikTransport','PabrikMandor']) 
+  let result = useUtils().checkPermission('standby_trx.remove') 
   && selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
@@ -853,7 +849,7 @@ const enabled_remove = computed(()=>{
 })
 
 const enabled_void = computed(()=>{  
-  let result = checkRole(['PabrikTransport','PabrikMandor']) 
+  let result = useUtils().checkPermission('standby_trx.request_remove') 
   && selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
@@ -862,7 +858,7 @@ const enabled_void = computed(()=>{
 })
 
 const enabled_approve_void = computed(()=>{  
-  let result = checkRole(['Logistic']) 
+  let result = useUtils().checkPermission('standby_trx.approve_request_remove')
   && selected.value > -1 
   && dt_selected.value.deleted == 0
   && dt_selected.value.req_deleted == 1
@@ -870,8 +866,8 @@ const enabled_approve_void = computed(()=>{
   return result;
 })
 
-const enabled_print_preview = computed(()=>{  
-  let result = checkRole(['PabrikTransport','PabrikMandor'])  
+const enabled_print_preview = computed(()=>{
+  let result = useUtils().checkPermission('standby_trx.preview_file') 
   && selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1

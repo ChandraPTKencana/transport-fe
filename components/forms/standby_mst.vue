@@ -445,7 +445,7 @@ const replyAction=(act = "")=>{
 
 const role = useCookie('role');
 const disabled = computed(()=>{
-  return (standby_mst.value.val && standby_mst.value.val1) || (role.value == "Logistic" && standby_mst.value.val) || (role.value == "PabrikTransport" && standby_mst.value.val1);
+  return (standby_mst.value.val && standby_mst.value.val1) || (useUtils().checkPermission('standby_mst.val') && standby_mst.value.val) || (useUtils().checkPermission('standby_mst.val1') && standby_mst.value.val1);
 });
 
 

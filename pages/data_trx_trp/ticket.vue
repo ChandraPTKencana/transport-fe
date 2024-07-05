@@ -18,7 +18,7 @@
             @click="form_edit()">
             <IconsEdit/>
           </button>
-          <button v-if="selected > -1" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_view" type="button" name="button" class="m-1 text-2xl "
             @click="form_view()">
             <IconsEyes/>
           </button>
@@ -211,11 +211,10 @@ definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      // if (!useAuthStore().checkScopes(['ap-trx_trp-view']))
-      //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","ViewOnly","Logistic",'PabrikTransport','PabrikMandor']))
-      return navigateTo('/');
-
+      if (!useAuthStore().checkPermission('trp_trx.ticket.views')){
+        useCommonStore().loading_full = false;
+        return navigateTo('/');
+      }
     },
     // 'auth',
   ],
@@ -269,10 +268,6 @@ const date = ref({
 });
 
 const token = useCookie('token');
-const role = useCookie('role'); // useCookie new hook in nuxt 3
-const checkRole=(list)=>{
-  return (list).includes(role.value);
-};
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
   let trx_trps = [];
@@ -612,30 +607,36 @@ const fields_thead=ref([
   {key:"req_deleted_reason",label:"Req Delete Reason", tbl_show:0,type:'string',filter_on:1},
 ]);
 
+const enabled_view = computed(()=>{ 
+  let result = selected.value > -1
+  && useUtils().checkPermission('trp_trx.ticket.view');
+  return result;
+})
 
 const enabled_edit = computed(()=>{  
   let result = selected.value > -1 
   && dt_selected.value.deleted == 0
   && dt_selected.value.req_deleted == 0
-  && dt_selected.value.val2 == 0;
+  && dt_selected.value.val2 == 0
+  && useUtils().checkPermission('trp_trx.ticket.modify');
   return result;
 })
 
 const enabled_validasi = computed(()=>{  
-  let result = !checkRole(['PabrikTransport']) 
-  && selected.value > -1 
+  let result = selected.value > -1 
   && dt_selected.value.deleted == 0
   && dt_selected.value.req_deleted == 0
-  && dt_selected.value.val2 == 0;
+  && dt_selected.value.val2 == 0
+  && useUtils().checkPermission('trp_trx.ticket.val2');
   return result;
 })
 
-const enabled_approve_void = computed(()=>{  
-  let result = !checkRole(['PabrikTransport']) 
-  && selected.value > -1 
+const enabled_approve_void = computed(()=>{
+  let result = selected.value > -1 
   && dt_selected.value.deleted == 0
   && dt_selected.value.req_deleted == 1
-  && dt_selected.value.val2 == 0;
+  && dt_selected.value.val2 == 0
+  && useUtils().checkPermission('trp_trx.approve_request_remove');
   return result;
 })
 </script>
