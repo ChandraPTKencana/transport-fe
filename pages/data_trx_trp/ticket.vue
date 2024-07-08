@@ -37,6 +37,12 @@
             @click="cogs_show=true">
             <IconsCog />
           </button>
+
+          <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+            @click="updateTicket()">
+            Update Ticket
+          </button>
+
           <div class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
             <span class="text-xs">Mode</span> : <span class="font-bold" :class="online_status?'text-green-600' : 'text-red-600'">{{ online_status ? "ONLINE" : "OFFLINE" }} </span>
           </div>
@@ -561,6 +567,59 @@ const handleDate = (source)=>{
   }
 }
 
+const updateTicket = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("online_status", online_status.value);  
+
+  const { data, error, status } = await useMyFetch("/trx_trp_do_update_ticket", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  data.value.data.forEach(e => {
+    let idx = trx_trps.value.map((x)=>x.id).indexOf(e.id);
+    if(idx !== -1) {
+      let dt = trx_trps.value[idx];
+      dt.ticket_a_id = e.ticket_a_id;
+      dt.ticket_a_no = e.ticket_a_no;
+      dt.ticket_a_bruto = e.ticket_a_bruto;
+      dt.ticket_a_tara = e.ticket_a_tara;
+      dt.ticket_a_netto = e.ticket_a_netto;
+      dt.ticket_a_supir = e.ticket_a_supir;
+      dt.ticket_a_no_pol = e.ticket_a_no_pol;
+      dt.ticket_a_in_at = e.ticket_a_in_at;
+      dt.ticket_a_out_at = e.ticket_a_out_at;
+
+      dt.ticket_b_id = e.ticket_b_id;
+      dt.ticket_b_no = e.ticket_b_no;
+      dt.ticket_b_bruto = e.ticket_b_bruto;
+      dt.ticket_b_tara = e.ticket_b_tara;
+      dt.ticket_b_netto = e.ticket_b_netto;
+      dt.ticket_b_supir = e.ticket_b_supir;
+      dt.ticket_b_no_pol = e.ticket_b_no_pol;
+      dt.ticket_b_in_at = e.ticket_b_in_at;
+      dt.ticket_b_out_at = e.ticket_b_out_at;
+      dt.updated_at = e.updated_at;
+      
+      trx_trps.value.splice(idx,1,{...dt});
+    }
+    
+  });
+
+  display({ show: true, status: "Success", message: "Update PV Done" });
+}
 
 const fields_thead=ref([
   {key:"no",label:"No",isai:true},
