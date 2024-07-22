@@ -49,13 +49,13 @@
 
             <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
               <label for="">Supir</label>
-              <WidthMiniList :arr="list_emp" :selected="selected_supir" @setSelected="selected_supir=$event"/>
+              <WidthMiniList :arr="list_emp" :selected="selected_supir" :pure="selected_mini_temp" @setSelected="selected_supir=$event" :disabled="trx_trp_loaded.supir_id > 1 "/>
               <p class="text-red-500">{{ field_errors.supir_id }}</p>
             </div>
 
             <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
               <label for="">Kernet</label>
-              <WidthMiniList :arr="list_emp" :selected="selected_kernet" @setSelected="selected_kernet=$event"/>
+              <WidthMiniList :arr="list_emp" :selected="selected_kernet" :pure="selected_mini_temp" @setSelected="selected_kernet=$event" :disabled="trx_trp_loaded.kernet_id > 1 "/>
               <p class="text-red-500">{{ field_errors.kernet_id }}</p>
             </div>
 
@@ -207,7 +207,9 @@ const trx_trp_temp = {
     pv_no:"",
     pv_total:0,
 
+    supir_id: "",
     supir: "",
+    kernet_id: "",
     kernet: "",
     no_pol: '',
     cost_center_code:"",
@@ -328,6 +330,7 @@ const list_tipe = computed(()=>{
 })
 
 const selected_mini_temp={
+  _raw:{},
   _:{
     id:{
       tcon:"IconsBaselineNumbers",
@@ -353,6 +356,7 @@ const selected_mini_temp={
   id:"",
   name:"",
   title:"",
+  note:""
 };
 
 const selected_supir = ref(JSON.parse(JSON.stringify(selected_mini_temp)));
@@ -370,11 +374,19 @@ const list_emp = computed(()=>{
     temp.id = x.id,
     temp.name = x.name,
     temp.title = (x.rek_no || '')+" "+(x.rek_name || ''),
+    temp.note = createPotonganNote(x),
+
     
+    temp._raw = x;
     results.push(JSON.parse(JSON.stringify(temp)));
   });
   return results;
 })
+
+const createPotonganNote = (x)=>{
+  return x.potongan ? "Akan ada potong sebesar :"+useUtils().pointFormat(x.potongan.nominal_cut) : '';
+  // +", Dari sisa potongan :"+useUtils().pointFormat(x.potongan.remaining_cut) : "";
+}
 
 const disabled = computed(()=>{
   return false;
@@ -412,15 +424,33 @@ const callData = async () => {
   selected_supir.value.name=dt.supir;
   selected_supir.value.rek_no=(dt.supir_rek_no || '')+" "+(dt.supir_rek_name || '');
 
-
   selected_kernet.value._.id.val=dt.kernet_id;
   selected_kernet.value._.name.val=dt.kernet;
   selected_kernet.value._.rek_no.val=dt.kernet_rek_no;
   selected_kernet.value._.rek_name.val=dt.kernet_rek_name;
+
   selected_kernet.value.id=dt.kernet_id;
   selected_kernet.value.name=dt.kernet;
   selected_kernet.value.rek_no=(dt.kernet_rek_no || '')+" "+(dt.kernet_rek_name || '');
 
+  let $ttl_cut_fs =0;
+  let $ttl_cut_fk =0;
+
+  dt.potongan.forEach((e)=>{
+    if(e.potongan_mst.employee_id == dt.supir_id){
+      $ttl_cut_fs += parseInt(e.nominal_cut);
+    }
+    if(e.potongan_mst.employee_id == dt.kernet_id){
+      $ttl_cut_fk += parseInt(e.nominal_cut);
+    }
+  })
+
+  if($ttl_cut_fs > 0 ){
+    selected_supir.value.note="Telah di potong sebesar :"+useUtils().pointFormat($ttl_cut_fs);
+  }
+  if($ttl_cut_fk > 0 ){
+    selected_kernet.value.note="Telah di potong sebesar :"+useUtils().pointFormat($ttl_cut_fk);
+  }
   props.fnLoadDBData();
 }
 
@@ -458,6 +488,7 @@ watch(() => props.show, async(newVal, oldVal) => {
     await props.fnLoadDBData();
 
     trx_trp.value = {...trx_trp_temp};
+    trx_trp_loaded = {...trx_trp_temp};
     selected_supir.value = JSON.parse(JSON.stringify(selected_mini_temp));
     selected_kernet.value = JSON.parse(JSON.stringify(selected_mini_temp));
 

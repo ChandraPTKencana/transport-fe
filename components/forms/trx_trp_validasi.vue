@@ -31,14 +31,14 @@
 
             <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
               <label for="">Supir</label>
-              <div class="card-border !flex">
+              <div class="card-border">
                 <WidthMiniPart :selected="selected_supir"/>
               </div>
             </div>
 
             <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
               <label for="">Kernet</label>
-              <div class="card-border !flex">
+              <div class="card-border">
                 <WidthMiniPart :selected="selected_kernet"/>
               </div>
             </div>
@@ -119,7 +119,7 @@
             <div>
               Di Validasi oleh : 
             </div>
-            <div v-if="trx_trp.val || trx_trp.val1 || trx_trp.val2" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
+            <div v-if="trx_trp.val || trx_trp.val1 || trx_trp.val2 || trx_trp.val3 || trx_trp.val4 || trx_trp.val5" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
               <div v-if="trx_trp.val">
                 App 1 : {{ trx_trp.val_by.username}} ( {{ trx_trp.val_at ? $moment(trx_trp.val_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
               </div>
@@ -128,6 +128,15 @@
               </div>
               <div v-if="trx_trp.val2">
                 App 3 : {{ trx_trp.val2_by.username}} ( {{ trx_trp.val2_at ? $moment(trx_trp.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+              </div>
+              <div v-if="trx_trp.val3">
+                App 4 : {{ trx_trp.val3_by.username}} ( {{ trx_trp.val3_at ? $moment(trx_trp.val3_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+              </div>
+              <div v-if="trx_trp.val4">
+                App 5 : {{ trx_trp.val4_by.username}} ( {{ trx_trp.val4_at ? $moment(trx_trp.val4_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+              </div>
+              <div v-if="trx_trp.val5">
+                App 6 : {{ trx_trp.val5_by.username}} ( {{ trx_trp.val5_at ? $moment(trx_trp.val5_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
               </div>
             </div>
           </div>
@@ -202,6 +211,15 @@ const trx_trp_temp = {
     val2:0,
     val2_by:{ username:"" },
     val2_at:"",
+    val3:0,
+    val3_by:{ username:"" },
+    val3_at:"",
+    val4:0,
+    val4_by:{ username:"" },
+    val4_at:"",
+    val5:0,
+    val5_by:{ username:"" },
+    val5_at:"",
     cost_center_code:"",
     cost_center_desc:"",
     pvr_id:"",
@@ -240,6 +258,8 @@ const selected_mini_temp={
   id:-1,
   name:"",
   title:"",
+  note:""
+
 };
 
 const selected_supir = ref(JSON.parse(JSON.stringify(selected_mini_temp)));
@@ -289,6 +309,21 @@ const doSave = async () => {
   trx_trp.value.val2_by = data.value.val2_by;
   trx_trp.value.val2_at = data.value.val2_at;
 
+  trx_trp.value.val3 = data.value.val3;
+  trx_trp.value.val3_user = data.value.val3_user;
+  trx_trp.value.val3_by = data.value.val3_by;
+  trx_trp.value.val3_at = data.value.val3_at;
+
+  trx_trp.value.val4 = data.value.val4;
+  trx_trp.value.val4_user = data.value.val4_user;
+  trx_trp.value.val4_by = data.value.val4_by;
+  trx_trp.value.val4_at = data.value.val4_at;
+
+  trx_trp.value.val5 = data.value.val5;
+  trx_trp.value.val5_user = data.value.val5_user;
+  trx_trp.value.val5_by = data.value.val5_by;
+  trx_trp.value.val5_at = data.value.val5_at;
+
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
   if(idx>=-1){
     props.p_data.splice(idx,1,{...trx_trp.value});    
@@ -335,6 +370,25 @@ const callData = async () => {
   selected_kernet.value.id=dt.kernet_id;
   selected_kernet.value.name=dt.kernet;
   selected_kernet.value.rek_no=(dt.kernet_rek_no || '')+" "+(dt.kernet_rek_name || '');
+
+  let $ttl_cut_fs =0;
+  let $ttl_cut_fk =0;
+
+  dt.potongan.forEach((e)=>{
+    if(e.potongan_mst.employee_id == dt.supir_id){
+      $ttl_cut_fs += parseInt(e.nominal_cut);
+    }
+    if(e.potongan_mst.employee_id == dt.kernet_id){
+      $ttl_cut_fk += parseInt(e.nominal_cut);
+    }
+  })
+
+  if($ttl_cut_fs > 0 ){
+    selected_supir.value.note="Telah di potong sebesar :"+useUtils().pointFormat($ttl_cut_fs);
+  }
+  if($ttl_cut_fk > 0 ){
+    selected_kernet.value.note="Telah di potong sebesar :"+useUtils().pointFormat($ttl_cut_fk);
+  }
 
 }
 

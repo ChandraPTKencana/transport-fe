@@ -1,17 +1,17 @@
 <template>
   <div class="relative">
+    <div v-if="disabled" class="absolute w-full h-full">
+
+    </div>
     <div v-if="selected.id==''"  class="card-border cursor-pointer" @click="openSearch()">
 
 
     </div>
     <div v-else class="card-border cursor-pointer !flex flex-row flex-nowrap">
       <div class="flex flex-wrap items-center grow" @click="openSearch()">
-        <div class="w-full flex flex-row flex-wrap">
-          <WidthMiniPart :selected="selected" />
-        </div>
-        
+        <WidthMiniPart :selected="selected" />
       </div>
-      <div class="flex items-center">
+      <div v-if="!disabled" class="flex items-center">
         <button type="button" class="bg-red-500 text-white border-none" @click="clearIt()">
           <IconsTimes />
         </button>
@@ -49,10 +49,15 @@ const props = defineProps({
     required: true,
     default: [],
   },
-  list: {
-    type: Array,
-    required: false,
+  pure: {
+    type: Object,
+    required: true,
     default: [],
+  },
+  disabled: {
+    type: Boolean,
+    required: false,
+    default: false,
   },
   selected:{
     type:Object,
@@ -62,8 +67,10 @@ const props = defineProps({
       id:"",
       name:"",
       title:"",
+      note:""
     }
-  }
+  },
+
   
 })
 
@@ -111,12 +118,12 @@ const source = computed(()=>{
   return props.arr;
 });
 
-const temp_selected = {
-  _:{},
-  id:'',
-  name:"",
-  title:"",
-};
+// const temp_selected = {
+//   _:{},
+//   id:'',
+//   name:"",
+//   title:"",
+// };
 
 const selectIt = (a:any)=>{
   emit('setSelected',a);
@@ -124,14 +131,15 @@ const selectIt = (a:any)=>{
 }
 
 const clearIt =()=>{
-  let tmp:any = {...temp_selected};
+  // let tmp:any = {...temp_selected};
   
-  Object.keys(props.selected._).forEach((x)=>{
-    tmp._[x]=props.selected._[x];
-    tmp._[x].val="";
-  });
-
-  emit('setSelected',{...temp_selected});
+  // belum tahu apakah akan dipakai atau enggak
+  // Object.keys(props.selected._).forEach((x)=>{
+  //   tmp._[x]=props.selected._[x];
+  //   tmp._[x].val="";
+  // });
+  
+  emit('setSelected',JSON.parse(JSON.stringify(props.pure)));
 }
 </script>
 <style scoped>

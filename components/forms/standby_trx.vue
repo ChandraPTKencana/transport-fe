@@ -73,13 +73,13 @@
               <div class="w-full flex flex-wrap">
                 <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                   <label for="">Supir</label>
-                  <WidthMiniList :arr="list_emp" :selected="selected_supir" @setSelected="selected_supir=$event"/>
+                  <WidthMiniList :arr="list_emp" :selected="selected_supir" :pure="selected_mini_temp" @setSelected="selected_supir=$event"/>
                   <p class="text-red-500">{{ field_errors.supir_id }}</p>
                 </div>
 
                 <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                   <label for="">Kernet</label>
-                  <WidthMiniList :arr="list_emp" :selected="selected_kernet" @setSelected="selected_kernet=$event"/>
+                  <WidthMiniList :arr="list_emp" :selected="selected_kernet" :pure="selected_mini_temp" @setSelected="selected_kernet=$event"/>
                   <p class="text-red-500">{{ field_errors.kernet_id }}</p>
                 </div>
   

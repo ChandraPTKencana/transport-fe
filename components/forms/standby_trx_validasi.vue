@@ -66,14 +66,14 @@
               <div class="w-full flex flex-wrap">
                 <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                   <label for="">Supir</label>
-                  <div class="card-border !flex">
+                  <div class="card-border">
                     <WidthMiniPart :selected="selected_supir"/>
                   </div>
                 </div>
 
                 <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                   <label for="">Kernet</label>
-                  <div class="card-border !flex">
+                  <div class="card-border">
                     <WidthMiniPart :selected="selected_kernet"/>
                   </div>
                 </div>

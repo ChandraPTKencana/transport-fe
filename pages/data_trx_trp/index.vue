@@ -131,6 +131,18 @@
           <IconsLine v-if="!item.val2"/>
           <IconsCheck v-else/>
         </template>
+        <template #[`val3`]="{item}">
+          <IconsLine v-if="!item.val3"/>
+          <IconsCheck v-else/>
+        </template>
+        <template #[`val4`]="{item}">
+          <IconsLine v-if="!item.val4"/>
+          <IconsCheck v-else/>
+        </template>
+        <template #[`val5`]="{item}">
+          <IconsLine v-if="!item.val5"/>
+          <IconsCheck v-else/>
+        </template>
         <template #[`pvr_had_detail`]="{item}">
           <IconsLine v-if="!item.pvr_had_detail"/><IconsCheck v-else/>
         </template>
@@ -683,6 +695,9 @@ const fields_thead=ref([
   {key:"val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"val2",label:"App 3",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val3",label:"App 4",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val4",label:"App 5",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val5",label:"App 6",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"absen",label:"Absen"},
   {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1,sort:{priority:1,type:"desc"}},
@@ -772,10 +787,11 @@ const enabled_void = computed(()=>{
   return result;
 })
 
-const enabled_print_preview = computed(()=>{  
+const enabled_print_preview = computed(()=>{ 
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
+  && dt_selected.value.val1 == 1
   && useUtils().checkPermission('trp_trx.preview_file');
   return result;
 })

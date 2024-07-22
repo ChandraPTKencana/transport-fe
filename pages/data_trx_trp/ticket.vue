@@ -118,8 +118,8 @@
           <IconsLine v-if="!item.val1"/>
           <IconsCheck v-else/>
         </template>
-        <template #[`val2`]="{item}">
-          <IconsLine v-if="!item.val2"/>
+        <template #[`val_ticket`]="{item}">
+          <IconsLine v-if="!item.val_ticket"/>
           <IconsCheck v-else/>
         </template>
 
@@ -625,7 +625,7 @@ const fields_thead=ref([
   {key:"no",label:"No",isai:true},
   {key:"val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"val2",label:"App 3",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val_ticket",label:"App 3",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1,sort:{priority:1,type:"desc"}},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
@@ -676,7 +676,7 @@ const enabled_edit = computed(()=>{
   let result = selected.value > -1 
   && dt_selected.value.deleted == 0
   && dt_selected.value.req_deleted == 0
-  && dt_selected.value.val2 == 0
+  && dt_selected.value.val_ticket == 0
   && useUtils().checkPermission('trp_trx.ticket.modify');
   return result;
 })
@@ -685,8 +685,8 @@ const enabled_validasi = computed(()=>{
   let result = selected.value > -1 
   && dt_selected.value.deleted == 0
   && dt_selected.value.req_deleted == 0
-  && dt_selected.value.val2 == 0
-  && useUtils().checkPermission('trp_trx.ticket.val2');
+  && dt_selected.value.val_ticket == 0
+  && useUtils().checkPermission('trp_trx.ticket.val_ticket');
   return result;
 })
 
@@ -694,7 +694,7 @@ const enabled_approve_void = computed(()=>{
   let result = selected.value > -1 
   && dt_selected.value.deleted == 0
   && dt_selected.value.req_deleted == 1
-  && dt_selected.value.val2 == 0
+  && dt_selected.value.val_ticket == 0
   && useUtils().checkPermission('trp_trx.approve_request_remove');
   return result;
 })

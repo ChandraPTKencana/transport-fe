@@ -94,6 +94,13 @@
                 Pekerja
               </nuxt-link>
             </li>
+            <li v-if="useUtils().checkPermission('potongan_mst.views')" :class="activeMenu == '/potongan'?'active':''" >
+              <nuxt-link to="/potongan"  class="cursor-pointer" @click="goTo('/potongan')">
+                <IconsPerson class="mr-1"/>
+                Potongan
+              </nuxt-link>
+            </li>
+
             <li v-if="useUtils().checkPermission('user.views')" :class="activeMenu == '/user'?'active':''" >
               <nuxt-link to="/user"  class="cursor-pointer" @click="goTo('/user')">
                 <IconsPerson class="mr-1"/>

@@ -225,15 +225,15 @@
               <div>
                 Di Validasi oleh : 
               </div>
-              <div v-if="trx_trp.val || trx_trp.val1 || trx_trp.val2" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
+              <div v-if="trx_trp.val || trx_trp.val1 || trx_trp.val_ticket" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
                 <div v-if="trx_trp.val">
                   App 1 : {{ trx_trp.val_by.username}} ( {{ trx_trp.val_at ? $moment(trx_trp.val_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
                 <div v-if="trx_trp.val1">
                   App 2 : {{ trx_trp.val1_by.username}} ( {{ trx_trp.val1_at ? $moment(trx_trp.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
-                <div v-if="trx_trp.val2">
-                  App 3 : {{ trx_trp.val2_by.username}} ( {{ trx_trp.val2_at ? $moment(trx_trp.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                <div v-if="trx_trp.val_ticket">
+                  App 3 : {{ trx_trp.val_ticket_by.username}} ( {{ trx_trp.val_ticket_at ? $moment(trx_trp.val_ticket_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
               </div>
             </div>
@@ -326,9 +326,9 @@ const trx_trp_temp = {
     val1:0,
     val1_by:{ username:"" },
     val1_at:"",
-    val2:0,
-    val2_by:{ username:"" },
-    val2_at:"",
+    val_ticket:0,
+    val_ticket_by:{ username:"" },
+    val_ticket_at:"",
 };
 const trx_trp = ref({...trx_trp_temp});
 
@@ -380,10 +380,9 @@ const doSave = async () => {
   trx_trp.value.val1_by = data.value.val1_by;
   trx_trp.value.val1_at = data.value.val1_at;
 
-  trx_trp.value.val2 = data.value.val2;
-  trx_trp.value.val2_user = data.value.val2_user;
-  trx_trp.value.val2_by = data.value.val2_by;
-  trx_trp.value.val2_at = data.value.val2_at;
+  trx_trp.value.val_ticket = data.value.val_ticket;
+  trx_trp.value.val_ticket_by = data.value.val_ticket_by;
+  trx_trp.value.val_ticket_at = data.value.val_ticket_at;
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
   if(idx>=-1){
