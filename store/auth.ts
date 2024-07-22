@@ -120,6 +120,17 @@ export const useAuthStore = defineStore('auth', {
             const scopes = useCookie('scopes'); // useCookie new hook in nuxt 3
             scopes.value = data?.value?.user?.scopes; // set token to cookie
 
+            let info = data?.value?.user?.company_info;
+            let info1 = info.map((x:any)=>x.dkey);
+            let cn = info1.indexOf('company_name');
+            let ce = info1.indexOf('company_email');
+
+            const company_name = useCookie('company_name'); // useCookie new hook in nuxt 3
+            company_name.value = (cn > -1 ? info[cn].dval : ''); // set token to cookie
+
+            const company_email = useCookie('company_email'); // useCookie new hook in nuxt 3
+            company_email.value = (ce > -1 ? info[ce].dval : ''); // set token to cookie
+
             this.done_get_user_info = true;
           }
           resolve(data);
@@ -190,6 +201,13 @@ export const useAuthStore = defineStore('auth', {
 
       const locs = useCookie('locs'); // useCookie new hook in nuxt 3
       locs.value = null;
+
+      const company_name = useCookie('company_name'); // useCookie new hook in nuxt 3
+      company_name.value = null; // set token to cookie
+
+      const company_email = useCookie('company_email'); // useCookie new hook in nuxt 3
+      company_email.value = null; // set token to cookie
+
 
       const router = useRouter();
       router.push('/login');
