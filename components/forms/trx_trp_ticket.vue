@@ -250,6 +250,12 @@
                 </div>
               </div>
 
+
+              <div class="w-full flex flex-col flex-wrap p-1">
+                <label for="">Note</label>
+                <textarea class="w-full h-32" v-model="trx_trp.ticket_note"></textarea>
+              </div>
+
             </div>
           </div>
           
@@ -348,6 +354,7 @@ const trx_trp_temp = {
     supir: "",
     kernet: "",
     no_pol: '',
+    ticket_note: '',
     transition_target:"",
     transition_type:"",
 };
@@ -410,6 +417,7 @@ const doSave = async () => {
   data_in.append("supir", trx_trp.value.supir);
   data_in.append("kernet", trx_trp.value.kernet);
   data_in.append("no_pol", trx_trp.value.no_pol);
+  data_in.append("ticket_note", trx_trp.value.ticket_note);
   
   let $method = "post";
 

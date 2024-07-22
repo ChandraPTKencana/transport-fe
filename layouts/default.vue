@@ -139,15 +139,15 @@
     <div class="grow flex flex-col overflow-hidden">
       <slot />
       <div class="w-full text-xs bg-slate-700 text-white p-1 flex justify-evenly">
-        <div>
+        <!-- <div>
           Copyright &copy; {{ new Date().getFullYear() }}
-        </div>
+        </div> -->
         <div>
           {{ company_name }}
         </div>
-        <div>
+        <!-- <div>
           Email : {{company_email}}
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

@@ -217,6 +217,13 @@
                 </div>
               </div>
 
+              <div class="w-full flex flex-col flex-wrap p-1">
+                <label for="">Note</label>
+                <div class="card-border">
+                  {{ trx_trp.ticket_note }}
+                </div>
+              </div>
+
             </div>
           </div>
           
@@ -320,6 +327,7 @@ const trx_trp_temp = {
     supir: "",
     kernet: "",
     no_pol: '',
+    ticket_note: '',
     val:0,
     val_by:{ username:"" },
     val_at:"",
