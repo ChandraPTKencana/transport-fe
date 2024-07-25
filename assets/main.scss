@@ -19,8 +19,15 @@ div#__nuxt>div {
 }
 
 // input,select,textarea{
-//     @apply flex-grow;
+//     // @apply flex-grow;
 // }
+input:not([type='checkbox']){
+    @apply min-h-[36px];
+}
+
+input[type='checkbox']{
+    @apply ring-opacity-0 #{!important};
+}
 
 table .dp__main , table .dp__main > :first-child,table .dp__input_wrap,table .dp__input_wrap input{
     @apply h-full;

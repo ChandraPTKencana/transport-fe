@@ -219,7 +219,7 @@
                   App 2 : {{ standby_trx.val1_by.username}} ( {{ standby_trx.val1_at ? $moment(standby_trx.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
                 <div v-if="standby_trx.val2">
-                  App 2 : {{ standby_trx.val2_by.username}} ( {{ standby_trx.val2_at ? $moment(standby_trx.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                  App 3 : {{ standby_trx.val2_by.username}} ( {{ standby_trx.val2_at ? $moment(standby_trx.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
               </div>
             </div>

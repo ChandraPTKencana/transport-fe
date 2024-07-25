@@ -101,6 +101,20 @@
               </nuxt-link>
             </li>
 
+            <li v-if="useUtils().checkPermission('salary_paid.views')" :class="activeMenu == '/salary_paid'?'active':''" >
+              <nuxt-link to="/salary_paid"  class="cursor-pointer" @click="goTo('/salary_paid')">
+                <IconsMoney class="mr-1"/>
+                Salary Paid
+              </nuxt-link>
+            </li>
+
+            <li v-if="useUtils().checkPermission('salary_bonus.views')" :class="activeMenu == '/salary_bonus'?'active':''" >
+              <nuxt-link to="/salary_bonus"  class="cursor-pointer" @click="goTo('/salary_bonus')">
+                <IconsMoney class="mr-1"/>
+                Salary Bonus
+              </nuxt-link>
+            </li>
+
             <li v-if="useUtils().checkPermission('user.views')" :class="activeMenu == '/user'?'active':''" >
               <nuxt-link to="/user"  class="cursor-pointer" @click="goTo('/user')">
                 <IconsPerson class="mr-1"/>

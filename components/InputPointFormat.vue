@@ -68,9 +68,11 @@ const blur=(val:any)=>{
   let result = typeof val == 'object' ? val.target.value : val;
   result = result || props.value;
   let [rn,hn] = humanNumber(result);
-
-  // console.log("rn",rn,"hn",hn);
-
+  // console.log("rn",rn,"hn",hn,"val",result);
+  if(hn!=result) {
+    hn=0;
+    rn=0;
+  };
   inputVal.value = hn;
   emit('input',rn);
   
@@ -151,9 +153,11 @@ const change=(val,outsider=false)=>{
   }else{
     [rn,hn] = humanNumber(val);
   }
-  // console.log("vrn",rn,"vhn",hn);
+  // console.log("vrn",rn,"vhn",hn,"vval",val);
 
-  inputVal.value = hn;
+  if(hn!=""){
+    inputVal.value = hn;
+  }
 
  
 
