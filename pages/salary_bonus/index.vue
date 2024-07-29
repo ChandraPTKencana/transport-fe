@@ -7,12 +7,12 @@
           @click="form_add()">
           <IconsPlus />
         </button>
-        <button v-if="useUtils().checkPermissions(['salary_bonus.modify']) && selected > -1 && salary_bonuses[selected].val1==0" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermissions(['salary_bonus.modify']) && selected > -1 && [undefined,0].indexOf(salary_bonuses[selected].val1)>-1" type="button" name="button" class="m-1 text-2xl "
           @click="form_edit()">
           <IconsEdit/>
         </button>
 
-        <button v-if="useUtils().checkPermissions(['salary_bonus.view']) && selected > -1 && salary_bonuses[selected].val1==1" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermissions(['salary_bonus.view']) && selected > -1 && [undefined,0].indexOf(salary_bonuses[selected].val1)>-1" type="button" name="button" class="m-1 text-2xl "
           @click="form_view()">
           <IconsEyes/>
         </button>
@@ -79,7 +79,7 @@
                 <th>No SIM</th>
                 <th>Nominal</th>
                 <th>Note</th>
-                <th>Lampiran</th>
+                <th>File</th>
                 <th>Created At</th>
                 <th>Updated At</th>
               </tr>
@@ -107,7 +107,9 @@
                 <td>{{ salary_bonus.employee?.sim_no }}</td>
                 <td>{{ pointFormat(salary_bonus.nominal || 0) }}</td>
                 <td>{{ salary_bonus.note }}</td>
-                <td>{{ salary_bonus.attachment_1 }}</td>
+                <td> 
+                  <TypeIcon :value="salary_bonus.attachment_1_preview"/>
+                </td>
                 <td>{{ salary_bonus.created_at ? $moment(salary_bonus.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <td>{{ salary_bonus.updated_at ? $moment(salary_bonus.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
               </tr>

@@ -35,6 +35,10 @@
                   {{ salary_bonus.note }}
                 </div>
               </div>
+
+              <div class="p-1 w-full">
+                <AttachmentSingle :label="'Attachment'" :value="salary_bonus.attachment_1_preview" @setFile="salary_bonus.attachment_1=$event"  @setPreview="salary_bonus.attachment_1_preview=$event"/>
+              </div>
             </div>
           </div>
           
@@ -113,7 +117,9 @@ const salary_bonus_temp = {
     tanggal: new Date(),
     type:"Kerajinan",
     nominal:0,
-    note:""
+    note:"",
+    attachment_1:"",
+    attachment_1_preview:"",
 };
 
 const salary_bonus = ref({...salary_bonus_temp});

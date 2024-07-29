@@ -45,6 +45,10 @@
                 </div>
                 <p class="text-red-500">{{ field_errors.nominal }}</p>
               </div>
+
+              <div class="p-1 w-full">
+                <AttachmentSingle :label="'Attachment'" :value="salary_bonus.attachment_1_preview" @setFile="salary_bonus.attachment_1=$event"  @setPreview="salary_bonus.attachment_1_preview=$event" :can_remove="true"/>
+              </div>
             </div>
           </div>
           
@@ -119,7 +123,9 @@ const salary_bonus_temp = {
     tanggal: new Date(),
     type:"Kerajinan",
     nominal:0,
-    note:""
+    note:"",
+    attachment_1:"",
+    attachment_1_preview:"",
 };
 
 const salary_bonus = ref({...salary_bonus_temp});
@@ -218,6 +224,8 @@ const doSave = async () => {
   data_in.append("employee_id", selected_employee.value.id);
   data_in.append("nominal", salary_bonus.value.nominal);
   data_in.append("note", salary_bonus.value.note);
+  data_in.append("attachment_1", salary_bonus.value.attachment_1);
+  data_in.append("attachment_1_preview", salary_bonus.value.attachment_1_preview);
   
   let $method = "post";
 
