@@ -33,6 +33,12 @@
           
         </div>
         <div class="flex">
+
+          <button v-if="checkbox_arr.length > 0" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+            @click="multiVal()">
+            Multi Val
+          </button>
+          
           <button type="button" name="button" class="m-1 text-2xl "
             @click="cogs_show=true">
             <IconsCog />
@@ -106,7 +112,7 @@
       </form> -->
       
 
-      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event"  @doFilter="searching()">
+      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event"  @doFilter="searching()" @setCheckbox="checkbox_arr=$event">
         <template #[`absen`]="{item,index}">
           <IconsImage v-if="item.trx_absens && item.trx_absens.length > 0" class="cursor-pointer" @click="form_absen(index)"/>
         </template>
@@ -546,6 +552,40 @@ const confirmedReqDeleted = async() => {
   req_deleted_box.value = false;
 }
 
+const multiVal = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("ids", JSON.stringify(checkbox_arr.value));  
+  data_in.append("_method", "PUT");
+
+  const { data, error, status } = await useMyFetch("/trx_trp_val_tickets", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  data.value.val_lists.forEach(e => {
+    let idx = trx_trps.value.map((x)=>x.id).indexOf(e.id);
+    if(idx>-1){
+      let sd = trx_trps.value[idx];
+      sd.val_ticket = e.val_ticket;
+      sd.val_ticket_by = e.val_ticket_by;
+      sd.val_ticket_at = e.val_ticket_at;
+      trx_trps.value.splice(idx,1,{...sd});
+    }
+  });
+}
+
 
 
 const cogs_show=ref(false);
@@ -621,7 +661,10 @@ const updateTicket = async() => {
   display({ show: true, status: "Success", message: "Update PV Done" });
 }
 
+const checkbox_arr = ref([]);
+
 const fields_thead=ref([
+  {key:"cb",label:"",checkbox:'id'},
   {key:"no",label:"No",isai:true},
   {key:"val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},

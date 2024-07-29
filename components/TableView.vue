@@ -212,6 +212,9 @@
                       <template v-else>
                         {{ tb[tf.key] ? checkType(tb[tf.key],tf.type)  : "" }}
                       </template>
+                      <template v-if="tf.checkbox">
+                        <input type="checkbox" @click="checkbox_set(tb[tf.checkbox])">
+                      </template>
                     </slot>
                   </div>
                 </component>
@@ -527,7 +530,7 @@ watch(()=>changeableData.value,(newVal, oldVal) => {
 });
 
 
-const emit = defineEmits(['doFilter','setSelected','setScrollingPage']);
+const emit = defineEmits(['doFilter','setSelected','setScrollingPage','setCheckbox']);
 
 const { pointFormat } = useUtils();
 
@@ -774,6 +777,17 @@ const global_keyword=ref("");
 useCommonStore()._tv.global_keyword = global_keyword;
 
 
+const checkbox_arr = ref([]);
+
+const checkbox_set = ($val)=>{
+  let idx = checkbox_arr.value.indexOf($val);
+  if(idx == -1){
+    checkbox_arr.value.push($val);
+  }else{
+    checkbox_arr.value.splice(idx,1);
+  }
+  emit('setCheckbox',checkbox_arr.value );
+}
 // for example
 // const fields_thead=ref([
 //   {key:"status",label:"Status"},

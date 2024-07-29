@@ -131,6 +131,9 @@
           <IconsLine v-if="!item.val2"/>
           <IconsCheck v-else/>
         </template>
+        <template #[`detail_dates`]="{item}">
+          {{item.details.map((x)=>this.$moment(x.tanggal).format("DD-MM-YYYY")).join(" , ")}}
+        </template>
         <template #[`standby_mst_name`]="{item}">
           {{item.standby_mst_?.name}}
         </template>
@@ -763,6 +766,7 @@ const fields_thead=ref([
   {key:"val2",label:"App 3",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
+  {key:"detail_dates",label:"Detail Dates",type:'string'},
   {key:"supir",label:"Supir",filter_on:1,type:'string'},
   {key:"supir_rek_no",label:"No Rek Supir",filter_on:1,type:'string'},
   {key:"supir_rek_name",label:"Nama Rek Supir",filter_on:1,type:'string'},
