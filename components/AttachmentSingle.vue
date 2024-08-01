@@ -27,8 +27,8 @@ const props = defineProps({
   },
   label: {
     type: String,
-    required: true,
-    default:"File"
+    required: false,
+    default:""
   },
   can_remove: {
     type: Boolean,

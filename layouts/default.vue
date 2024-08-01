@@ -45,6 +45,13 @@
               </nuxt-link>
             </li>
 
+            <li v-if="useUtils().checkPermission('trp_trx.absen.views')" :class="activeMenu == '/data_trx_trp/absen'?'active':''" >
+              <nuxt-link to="/data_trx_trp/absen"  class="cursor-pointer" @click="goTo('/data_trx_trp/absen')">
+                <IconsProduct class="mr-1"/>
+                Trx Absen
+              </nuxt-link>
+            </li>
+
             <li v-if="useUtils().checkPermission('standby_mst.views')"  :class="activeMenu == '/data_standby'?'active':''" >
               <nuxt-link to="/data_standby"  class="cursor-pointer" @click="goTo('/data_standby')">
                 <IconsMoney class="mr-1"/>
