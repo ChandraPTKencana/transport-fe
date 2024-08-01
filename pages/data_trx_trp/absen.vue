@@ -77,8 +77,8 @@ definePageMeta({
 
 const checkStatus=(data)=>{
   if(data.deleted==1) return "!bg-red-400";
-  if(data.pvr_id > 0 && data.req_deleted == 1) return "!bg-yellow-300"; 
-  if(data.pv_id > 0) return "!bg-blue-300"; 
+  if(data.req_deleted == 1) return "!bg-yellow-300"; 
+  if(data.ritase_leave_at != "" && data.ritase_arrive_at != "" && data.ritase_return_at != "" && data.ritase_till_at != "") return "!bg-blue-300"; 
   return "";
 }
 const addClassToTbody=(data)=>{
@@ -328,7 +328,6 @@ const enabled_edit = computed(()=>{
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.ritase_val) > -1
-  && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1
   && useUtils().checkPermission('trp_trx.absen.modify');
   return result;
 })
@@ -341,7 +340,6 @@ const enabled_validasi = computed(()=>{
     [undefined,0].indexOf(dt_selected.value.ritase_val) > -1 && 
     [undefined,0].indexOf(dt_selected.value.ritase_val1) > -1
   )
-  && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1
   && useUtils().checkPermissions(['trp_trx.absen.val','trp_trx.absen.val1']);
   return result;
 })
