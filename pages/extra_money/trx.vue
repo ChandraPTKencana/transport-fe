@@ -6,8 +6,8 @@
         <div class="grow flex">
           <div class="m-1">
             <select class="" v-model="filter_status" >
-              <option value="trx_not_done">Undone</option>
-              <option value="trx_done">Done</option>
+              <option value="undone">Undone</option>
+              <option value="done">Done</option>
               <option value="deleted">Trash</option>
               <option value="all">All</option>
               <option value="req_deleted">Req Delete</option>
@@ -49,80 +49,21 @@
         </div>
         <div  class="flex">
 
-          <button v-if="useUtils().checkPermission('standby_trx.generate_pvr')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+          <button v-if="useUtils().checkPermission('extra_money_trx.generate_pvr')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="generatePVR()">
             Gen/Update PVR
           </button>
-          <button v-if="useUtils().checkPermission('standby_trx.get_pv')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+          <button v-if="useUtils().checkPermission('extra_money_trx.get_pv')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="updatePV()">
             Update PV
           </button>
-          <div v-if="useUtils().checkPermissions(['standby_trx.create','standby_trx.modify'])" class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
+          <div v-if="useUtils().checkPermissions(['extra_money_trx.create','extra_money_trx.modify'])" class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
             <span class="text-xs">Mode</span> : <span class="font-bold" :class="online_status?'text-green-600' : 'text-red-600'">{{ online_status ? "ONLINE" : "OFFLINE" }} </span>
           </div>
         </div>
       </div>
 
-      <!-- <form action="#" class="w-full flex flex-wrap text-xs">
-        <div class="w-6/12 p-1 sm:w-4/12 md:w-3/12 lg:w-2/12 flex flex-col">
-          <div class="font-bold"> Tgl Dari </div>
-          <ClientOnly>
-            <vue-date-picker  v-model="date.from" 
-            type="datetime" 
-            format="dd-MM-yyyy" 
-            :enable-time-picker = "false" 
-            text-input
-            teleport-center
-            class="flex-grow"></vue-date-picker>
-          </ClientOnly>
-          <p class="text-red-500">{{ field_errors.date_from }}</p>
-        </div>
-        <div class="w-6/12 p-1 sm:w-4/12 md:w-3/12 lg:w-2/12 flex flex-col">
-          <div class="font-bold"> Tgl Sampai </div>
-          <ClientOnly>
-            <vue-date-picker  v-model="date.to" 
-            type="datetime" 
-            format="dd-MM-yyyy" 
-            :enable-time-picker = "false" 
-            text-input
-            teleport-center
-            class="flex-grow"></vue-date-picker>
-          </ClientOnly>
-          <p class="text-red-500">{{ field_errors.date_to }}</p>
-        </div>
-        <div class="w-6/12 p-1 sm:w-4/12 md:w-2/12 lg:w-4/12 flex flex-col">
-          <div class="font-bold"> Keyword </div>
-          <input class="flex-grow" type="text" v-model="search" name="search"
-            placeholder="Keyword">
-        </div>
-        <div class="w-6/12 p-1 sm:w-4/12 md:w-1/12 lg:w-2/12 flex flex-col">
-          <div class="font-bold"> Sort By </div>
-          <select class="flex-grow" v-model="sort.field">
-            <option value=""></option>
-            <option value="id">ID</option>
-            <option value="created_at">Tgl Dibuat</option>
-          </select>
-        </div>
-        <div class="w-6/12 p-1 sm:w-4/12 md:w-2/12 lg:w-1/12 flex flex-col">
-          <div class="font-bold"> Sort Order </div>
-          <select class="flex-grow" v-model="sort.by">
-            <option value="asc">Asc</option>
-            <option value="desc">Desc</option>
-          </select>
-        </div>
-        <div class="w-2/12 md:w-1/12 lg:w-1/12 p-1 flex items-end">
-          <button class="" type="submit" name="button" @click.prevent="searching()">
-            <IconsSearch class="text-2xl" />
-          </button>
-        </div>
-      </form> -->
-      
-
-      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="standby_trxs" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event"  @doFilter="searching()">
-        <template #[`val`]="{item}">
-          <IconsLine v-if="!item.val"/>
-          <IconsCheck v-else/>
-        </template>
+      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="extra_money_trxs" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event"  @doFilter="searching()">
         <template #[`val1`]="{item}">
           <IconsLine v-if="!item.val1"/>
           <IconsCheck v-else/>
@@ -131,23 +72,56 @@
           <IconsLine v-if="!item.val2"/>
           <IconsCheck v-else/>
         </template>
-        <template #[`detail_dates`]="{item}">
-          {{item.details.map((x)=>$moment(x.tanggal).format("DD-MM-YYYY")).join(" , ")}}
+        <template #[`val3`]="{item}">
+          <IconsLine v-if="!item.val3"/>
+          <IconsCheck v-else/>
         </template>
-        <template #[`standby_mst_name`]="{item}">
-          {{item.standby_mst_?.name}}
+        <template #[`val4`]="{item}">
+          <IconsLine v-if="!item.val4"/>
+          <IconsCheck v-else/>
         </template>
-        <template #[`standby_mst_type`]="{item}">
-          {{item.standby_mst_?.tipe}}
+        <template #[`val5`]="{item}">
+          <IconsLine v-if="!item.val5"/>
+          <IconsCheck v-else/>
         </template>
-        <template #[`standby_mst_amount`]="{item}">
-          Rp. {{ pointFormat(item.standby_mst_?.amount || 0) }}
+        <template #[`val6`]="{item}">
+          <IconsLine v-if="!item.val6"/>
+          <IconsCheck v-else/>
         </template>
-        <template #[`sb_total`]="{item}">
-          Rp. {{ pointFormat(item.standby_mst_?.amount * item.details_count || 0) }}
+
+        <template #[`employee_name`]="{item}">
+          {{item.employee?.name}}
         </template>
-        <template #[`pvr_had_detail`]="{item}">
-          <IconsLine v-if="!item.pvr_had_detail"/><IconsCheck v-else/>
+        <template #[`employee_rek_no`]="{item}">
+          {{item.employee?.rek_no}}
+        </template>
+        <template #[`employee_rek_name`]="{item}">
+          {{item.employee?.rek_name}}
+        </template>
+
+        <template #[`extra_money_transition_target`]="{item}">
+          {{item.extra_money?.transition_target}}
+        </template>
+        <template #[`extra_money_transition_type`]="{item}">
+          {{item.extra_money?.transition_type}}
+        </template>
+        <template #[`extra_money_xto`]="{item}">
+          {{item.extra_money?.xto}}
+        </template>
+        <template #[`extra_money_jenis`]="{item}">
+          {{item.extra_money?.jenis}}
+        </template>
+        <template #[`extra_money_nominal`]="{item}">
+          Rp. {{ pointFormat(item.extra_money?.nominal || 0) }}
+        </template>
+        <template #[`extra_money_qty`]="{item}">
+          {{ pointFormat(item.extra_money?.qty || 0) }}
+        </template>
+        <template #[`extra_money_total`]="{item}">
+          Rp. {{ pointFormat(item.extra_money?.total || 0) }}
+        </template>
+        <template #[`pvr_complete`]="{item}">
+          <IconsLine v-if="!item.pvr_complete"/><IconsCheck v-else/>
         </template>
         <template #[`deleted_by_username`]="{item}">
           {{ item.deleted_by?.username }}
@@ -187,8 +161,8 @@
       </template>
     </PopupMini>
 
-    <FormsStandbyTrx :show="forms_standby_trx_show" :fnClose="()=>{forms_standby_trx_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_standby_trx_id" :p_data="standby_trxs" :list_cost_center="list_cost_center" :online_status="online_status"/>
-    <FormsStandbyTrxValidasi :show="forms_standby_trx_valid_show" :fnClose="()=>{forms_standby_trx_valid_show=false}" :id="forms_standby_trx_valid_id" :p_data="standby_trxs" :is_view="forms_standby_trx_is_view"/>
+    <FormsExtraMoneyTrx :show="forms_extra_money_trx_show" :fnClose="()=>{forms_extra_money_trx_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_extra_money_trx_id" :p_data="extra_money_trxs" :list_cost_center="list_cost_center" :online_status="online_status"/>
+    <FormsExtraMoneyTrxValidasi :show="forms_extra_money_trx_valid_show" :fnClose="()=>{forms_extra_money_trx_valid_show=false}" :id="forms_extra_money_trx_valid_id" :p_data="extra_money_trxs" :is_view="forms_extra_money_trx_is_view"/>
   
   </div>
 </template>
@@ -208,7 +182,7 @@ definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      if (!useAuthStore().checkPermission('standby_trx.views')){
+      if (!useAuthStore().checkPermission('extra_money_trx.views')){
         useCommonStore().loading_full = false;
         return navigateTo('/');
       }
@@ -231,7 +205,7 @@ const addClassToTbody=(data)=>{
 }
 
 
-const filter_status = ref("trx_not_done")
+const filter_status = ref("undone")
 watch(()=>filter_status.value,(newval)=>{
   fields_thead.value.map((x)=>{
     let in_list=["deleted_by_username","deleted_at","deleted_reason","req_deleted_by_username","req_deleted_at","req_deleted_reason"].indexOf(x.key) > -1;
@@ -266,10 +240,10 @@ const token = useCookie('token');
 
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  let standby_trxs = [];
+  let extra_money_trxs = [];
 
   const [data1, data2] = await Promise.all([
-    useMyFetch("/standby_trxs", {
+    useMyFetch("/extra_money_trxs", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -291,24 +265,24 @@ const { data: dt_async } = await useAsyncData(async () => {
   
 
   if (data1.status.value !== 'error') {
-    standby_trxs = addClassToTbody(data1.data.value.data);
+    extra_money_trxs = addClassToTbody(data1.data.value.data);
   }
 
   if (data1.status.value === 'error') {
     useErrorStore().trigger(data1.error);
-    return { standby_trxs };
+    return { extra_money_trxs };
   }
 
   useCommonStore().loading_full = false;
-  return { standby_trxs };
+  return { extra_money_trxs };
 });
 
-const standby_trxs = ref(dt_async.value.standby_trxs || []);
+const extra_money_trxs = ref(dt_async.value.extra_money_trxs || []);
 const list_cost_center = ref([]);
 const online_status=ref(false);
 const fnLoadDBData = async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/standby_trx_load_sqlsrv", {
+  const { data, error, status } = await useMyFetch("/extra_money_trx_load_sqlsrv", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -333,7 +307,7 @@ const sort = ref({
 });
 const selected = ref(-1);
 const dt_selected = computed(()=>{  
-  return standby_trxs.value[selected.value];
+  return extra_money_trxs.value[selected.value];
 })
 
 const scrolling = ref({
@@ -367,14 +341,14 @@ const callData = async () => {
 
   scrolling.value.may_get_data = false;
   params.page = scrolling.value.page;
-  if (params.page == 1) standby_trxs.value = [];
+  if (params.page == 1) extra_money_trxs.value = [];
   if(params.first_row) delete params.first_row;
   if(params.page > 1){
-    params.first_row = JSON.stringify(standby_trxs.value[0]);
+    params.first_row = JSON.stringify(extra_money_trxs.value[0]);
   }
   params.filter_status = filter_status.value;
 
-  const { data, error, status } = await useMyFetch("/standby_trxs", {
+  const { data, error, status } = await useMyFetch("/extra_money_trxs", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -392,9 +366,9 @@ const callData = async () => {
   }
 
   if (scrolling.value.page == 1) {
-    standby_trxs.value = addClassToTbody(data.value.data);
+    extra_money_trxs.value = addClassToTbody(data.value.data);
   } else if (scrolling.value.page > 1) {
-    standby_trxs.value = [...standby_trxs.value, ...addClassToTbody(data.value.data)];
+    extra_money_trxs.value = [...extra_money_trxs.value, ...addClassToTbody(data.value.data)];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
@@ -410,11 +384,11 @@ const searching = () => {
   callData();
 }
 
-const forms_standby_trx_show =  ref(false);
-const forms_standby_trx_id = ref(0);
+const forms_extra_money_trx_show =  ref(false);
+const forms_extra_money_trx_id = ref(0);
 const form_add = () => {
-  forms_standby_trx_id.value = 0;
-  forms_standby_trx_show.value = true;
+  forms_extra_money_trx_id.value = 0;
+  forms_extra_money_trx_show.value = true;
 }
 
 const { display } = useAlertStore();
@@ -424,21 +398,21 @@ const form_edit = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    forms_standby_trx_id.value = standby_trxs.value[selected.value].id;
-    forms_standby_trx_show.value = true;
+    forms_extra_money_trx_id.value = extra_money_trxs.value[selected.value].id;
+    forms_extra_money_trx_show.value = true;
   }
 };
 
-const forms_standby_trx_valid_show =  ref(false);
-const forms_standby_trx_valid_id = ref(0);
-const forms_standby_trx_is_view = ref(false);
+const forms_extra_money_trx_valid_show =  ref(false);
+const forms_extra_money_trx_valid_id = ref(0);
+const forms_extra_money_trx_is_view = ref(false);
 const validasi = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    forms_standby_trx_valid_id.value = standby_trxs.value[selected.value].id;
-    forms_standby_trx_valid_show.value = true;
-    forms_standby_trx_is_view.value = false;
+    forms_extra_money_trx_valid_id.value = extra_money_trxs.value[selected.value].id;
+    forms_extra_money_trx_valid_show.value = true;
+    forms_extra_money_trx_is_view.value = false;
   }
 };
 
@@ -446,9 +420,9 @@ const form_view = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    forms_standby_trx_valid_id.value = standby_trxs.value[selected.value].id;
-    forms_standby_trx_valid_show.value = true;
-    forms_standby_trx_is_view.value = true;
+    forms_extra_money_trx_valid_id.value = extra_money_trxs.value[selected.value].id;
+    forms_extra_money_trx_valid_show.value = true;
+    forms_extra_money_trx_is_view.value = true;
   }
 };
 
@@ -468,7 +442,7 @@ const remove = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     deleted_reason.value = '';
-    delete_data.value = {id : standby_trxs.value[selected.value].id, "no pol":standby_trxs.value[selected.value].no_pol, "tujuan":standby_trxs.value[selected.value].xto};
+    delete_data.value = {id : extra_money_trxs.value[selected.value].id, "no pol":extra_money_trxs.value[selected.value].no_pol, "tujuan":extra_money_trxs.value[selected.value].extra_money.xto};
     delete_box.value = true;
   }
 };
@@ -484,11 +458,11 @@ const confirmed_delete = async() => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
-  data_in.append("id", standby_trxs.value[selected.value].id);  
+  data_in.append("id", extra_money_trxs.value[selected.value].id);  
   data_in.append("deleted_reason", deleted_reason.value);  
   data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useMyFetch("/standby_trx", {
+  const { data, error, status } = await useMyFetch("/extra_money_trx", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -503,7 +477,7 @@ const confirmed_delete = async() => {
     return;
   }
 
-  let old = {...standby_trxs.value[selected.value]};
+  let old = {...extra_money_trxs.value[selected.value]};
   old['deleted'] = data.value.deleted;
   old['deleted_user'] = data.value.deleted_user;
   old['deleted_at'] = data.value.deleted_at;
@@ -511,9 +485,9 @@ const confirmed_delete = async() => {
   old['deleted_reason'] = data.value.deleted_reason;
   old['class_h'] = checkStatus(old);
   if(filter_status.value!='all'){
-    standby_trxs.value.splice(selected.value,1);
+    extra_money_trxs.value.splice(selected.value,1);
   }else{
-    standby_trxs.value.splice(selected.value,1,{...old});
+    extra_money_trxs.value.splice(selected.value,1,{...old});
   }
 
   selected.value = -1;
@@ -537,7 +511,7 @@ const for_remove = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     req_deleted_reason.value = '';
-    req_deleted_data.value = {id : standby_trxs.value[selected.value].id, "no pol":standby_trxs.value[selected.value].no_pol, "tujuan":standby_trxs.value[selected.value].xto};
+    req_deleted_data.value = {id : extra_money_trxs.value[selected.value].id, "no pol":extra_money_trxs.value[selected.value].no_pol, "tujuan":extra_money_trxs.value[selected.value].extra_money.xto};
     req_deleted_box.value = true;
   }
 };
@@ -557,11 +531,11 @@ const approveVoid = () => {
   } else {
     approve_void_reason.value = '';
     approve_void_data.value = {
-      id : standby_trxs.value[selected.value].id, 
-      "no pol":standby_trxs.value[selected.value].no_pol, 
-      "tujuan":standby_trxs.value[selected.value].xto,
-      "permintaan":standby_trxs.value[selected.value].approve_void_by?.username,
-      "alasan":standby_trxs.value[selected.value].approve_void_reason,
+      id : extra_money_trxs.value[selected.value].id, 
+      "no pol":extra_money_trxs.value[selected.value].no_pol, 
+      "tujuan":extra_money_trxs.value[selected.value].extra_money.xto,
+      "permintaan":extra_money_trxs.value[selected.value].approve_void_by?.username,
+      "alasan":extra_money_trxs.value[selected.value].approve_void_reason,
     };
     approve_void_box.value = true;
   }
@@ -571,10 +545,10 @@ const confirmedApproveVoid = async() => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
-  data_in.append("id", standby_trxs.value[selected.value].id);  
+  data_in.append("id", extra_money_trxs.value[selected.value].id);  
   data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useMyFetch("/standby_trx_approve_void", {
+  const { data, error, status } = await useMyFetch("/extra_money_trx_approve_void", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -589,7 +563,7 @@ const confirmedApproveVoid = async() => {
     return;
   }
 
-  let old = {...standby_trxs.value[selected.value]};
+  let old = {...extra_money_trxs.value[selected.value]};
   old['deleted'] = data.value.deleted;
   old['deleted_user'] = data.value.deleted_user;
   old['deleted_at'] = data.value.deleted_at;
@@ -597,9 +571,9 @@ const confirmedApproveVoid = async() => {
   old['deleted_reason'] = data.value.deleted_reason;
   old['class_h'] = checkStatus(old);
   if(filter_status.value!='all'){
-    standby_trxs.value.splice(selected.value,1);
+    extra_money_trxs.value.splice(selected.value,1);
   }else{
-    standby_trxs.value.splice(selected.value,1,{...old});
+    extra_money_trxs.value.splice(selected.value,1,{...old});
   }
   selected.value = -1;
   approve_void_box.value = false;
@@ -616,11 +590,11 @@ const confirmedReqDeleted = async() => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
-  data_in.append("id", standby_trxs.value[selected.value].id);  
+  data_in.append("id", extra_money_trxs.value[selected.value].id);  
   data_in.append("req_deleted_reason", req_deleted_reason.value);  
   data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useMyFetch("/standby_trx_req_delete", {
+  const { data, error, status } = await useMyFetch("/extra_money_trx_req_delete", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -634,7 +608,7 @@ const confirmedReqDeleted = async() => {
     useErrorStore().trigger(error);
     return;
   }
-  let old = {...standby_trxs.value[selected.value]};
+  let old = {...extra_money_trxs.value[selected.value]};
   old['req_deleted'] = data.value.req_deleted;
   old['req_deleted_user'] = data.value.req_deleted_user;
   old['req_deleted_by'] = data.value.req_deleted_by;
@@ -642,9 +616,9 @@ const confirmedReqDeleted = async() => {
   old['req_deleted_reason'] = data.value.req_deleted_reason;
   old['class_h'] = checkStatus(old);
   if(filter_status.value!='all'){
-    standby_trxs.value.splice(selected.value,1);
+    extra_money_trxs.value.splice(selected.value,1);
   }else{
-    standby_trxs.value.splice(selected.value,1,{...old});
+    extra_money_trxs.value.splice(selected.value,1,{...old});
   }
   selected.value = -1;
   req_deleted_box.value = false;
@@ -660,13 +634,13 @@ const printPreview = async()=>{
   } 
   
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/standby_trx_preview_file", {
+  const { data, error, status } = await useMyFetch("/extra_money_trx_preview_file", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
-    params: {id : standby_trxs.value[selected.value].id},
+    params: {id : extra_money_trxs.value[selected.value].id},
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -684,10 +658,10 @@ const generatePVR = async() => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
-  // data_in.append("id", standby_trxs.value[selected.value].id);  
+  // data_in.append("id", extra_money_trxs.value[selected.value].id);  
   data_in.append("online_status", online_status.value);  
 
-  const { data, error, status } = await useMyFetch("/standby_trx_do_gen_pvr", {
+  const { data, error, status } = await useMyFetch("/extra_money_trx_do_gen_pvr", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -703,16 +677,16 @@ const generatePVR = async() => {
   }
 
   data.value.forEach(e => {
-    let idx = standby_trxs.value.map((x)=>x.id).indexOf(e.id);
+    let idx = extra_money_trxs.value.map((x)=>x.id).indexOf(e.id);
     if(idx !== -1) {
-      let dt = standby_trxs.value[idx];
+      let dt = extra_money_trxs.value[idx];
       dt.pvr_id = e.pvr_id;
       dt.pvr_no = e.pvr_no;
       dt.pvr_total = e.pvr_total;
-      dt.pvr_had_detail = e.pvr_had_detail;
+      dt.pvr_complete = e.pvr_complete;
       dt.updated_at = e.updated_at;
       
-      standby_trxs.value.splice(idx,1,{...dt});
+      extra_money_trxs.value.splice(idx,1,{...dt});
     }
     
   });
@@ -726,7 +700,7 @@ const updatePV = async() => {
   const data_in = new FormData();
   data_in.append("online_status", online_status.value);  
 
-  const { data, error, status } = await useMyFetch("/standby_trx_do_update_pv", {
+  const { data, error, status } = await useMyFetch("/extra_money_trx_do_update_pv", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -742,16 +716,16 @@ const updatePV = async() => {
   }
 
   data.value.data.forEach(e => {
-    let idx = standby_trxs.value.map((x)=>x.id).indexOf(e.id);
+    let idx = extra_money_trxs.value.map((x)=>x.id).indexOf(e.id);
     if(idx !== -1) {
-      let dt = standby_trxs.value[idx];
+      let dt = extra_money_trxs.value[idx];
       dt.pv_id = e.pv_id;
       dt.pv_no = e.pv_no;
       dt.pv_total = e.pv_total;
       dt.pv_datetime = e.pv_datetime;
       dt.updated_at = e.updated_at;
       
-      standby_trxs.value.splice(idx,1,{...dt});
+      extra_money_trxs.value.splice(idx,1,{...dt});
     }
     
   });
@@ -761,28 +735,26 @@ const updatePV = async() => {
 
 const fields_thead=ref([
   {key:"no",label:"No",isai:true},
-  {key:"val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"val2",label:"App 3",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val1",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val2",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val3",label:"App 3",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val4",label:"App 4",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val5",label:"App 5",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val6",label:"App 6",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"id",label:"ID",filter_on:1,type:"number"},
+  {key:"tanggal",label:"Tanggal",type:'datetime',dateformat:"DD-MM-Y",filter_on:1},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
-  {key:"detail_dates",label:"Detail Dates",type:'string'},
-  {key:"supir",label:"Supir",filter_on:1,type:'string'},
-  {key:"supir_rek_no",label:"No Rek Supir",filter_on:1,type:'string'},
-  {key:"supir_rek_name",label:"Nama Rek Supir",filter_on:1,type:'string'},
-  {key:"kernet",label:"Kernet",filter_on:1,type:'string'},
-  {key:"kernet_rek_no",label:"No Rek Kernet",filter_on:1,type:'string'},
-  {key:"kernet_rek_name",label:"Nama Rek Kernet",filter_on:1,type:'string'},
-  {key:"xto",label:"Tujuan",filter_on:1,type:'string'},
-  {key:"standby_mst_name",label:"Nama Standby",filter_on:1,type:'string'},
-  {key:"standby_mst_type",label:"Tipe Standby",filter_on:1,type:'string'},
-  {key:"standby_mst_amount",label:"Nilai SB",class:" justify-end",type:'number'},
-  {key:"details_count",label:"Jlh SB",class:" justify-end",type:'number'},
-  {key:"sb_total",label:"Total SB",class:" justify-end",type:'number'},
-  {key:"note_for_remarks",label:"Note untuk Remarks"},
-  {key:"ref",label:"Ref"},
-  {key:"transition_target",label:"Pengalihan",filter_on:1,type:"select",select_item:useCommonStore().list_pabrik},
-  {key:"transition_type",label:"Tipe Pengalihan",type:"select",select_item:[{k:'From',v:'Dari'},{k:'To',v:'Ke'}]},
+  {key:"employee_name",label:"Nama Pekerja",type:'string'},
+  {key:"employee_rek_no",label:"No rek Pekerja",type:'string'},
+  {key:"employee_rek_name",label:"Nama Rek Pekerja",type:'string'},
+  {key:"note",label:"Note",filter_on:1,type:'string'},
+  {key:"extra_money_xto",label:"Tujuan",filter_on:1,type:'string'},
+  {key:"extra_money_jenis",label:"Jenis",filter_on:1,type:'string'},
+  {key:"extra_money_nominal",label:"Nominal",class:" justify-end",type:'number'},
+  {key:"extra_money_qty",label:"Qty",class:" justify-end",type:'number'},
+  {key:"extra_money_total",label:"Total",class:" justify-end",type:'number'},
+  {key:"extra_money_transition_target",label:"Pengalihan",filter_on:1,type:"select",select_item:useCommonStore().list_pabrik},
+  {key:"extra_money_transition_type",label:"Tipe Pengalihan",type:"select",select_item:[{k:'From',v:'Dari'},{k:'To',v:'Ke'}]},
   {key:"cost_center",label:"Cost Center",childs:[
     {key:"cost_center_code",label:"Code",type:'string', class:" justify-start",filter_on:1},
     {key:"cost_center_desc",label:"Desc",filter_on:1,type:'string'},
@@ -790,7 +762,7 @@ const fields_thead=ref([
   {key:"pvr",label:"PVR",childs:[
     {key:"pvr_no",label:"No",filter_on:1,type:'string'},
     {key:"pvr_total",label:"Total",filter_on:1,type:'number'},
-    {key:"pvr_had_detail",label:"Completed",filter_on:1,type:"select",select_item:[{k:'1',v:'Completed'},{k:'0',v:'Uncompleted'}]},
+    {key:"pvr_complete",label:"Completed",filter_on:1,type:"select",select_item:[{k:'1',v:'Completed'},{k:'0',v:'Uncompleted'}]},
   ]},
   {key:"pv",label:"PV",childs:[
     {key:"pv_datetime",label:"Date",type:'date',dateformat:"DD-MM-Y",filter_on:1},
@@ -809,8 +781,8 @@ const fields_thead=ref([
 
 
 const enabled_add = computed(()=>{  
-  let result = ['trx_not_done','all'].indexOf(filter_status.value) > -1  
-  && useUtils().checkPermission('standby_trx.create');
+  let result = ['undone','all'].indexOf(filter_status.value) > -1  
+  && useUtils().checkPermission('extra_money_trx.create');
   return result;
 })
 
@@ -818,9 +790,9 @@ const enabled_edit = computed(()=>{
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.val) > -1
+  && [undefined,0].indexOf(dt_selected.value.val1) > -1
   && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1
-  && useUtils().checkPermission('standby_trx.modify');
+  && useUtils().checkPermission('extra_money_trx.modify');
   return result;
 })
 
@@ -832,19 +804,25 @@ const enabled_validasi = computed(()=>{
     (
       [undefined,""].indexOf(dt_selected.value.pvr_id) > -1 && 
       (
-        useUtils().checkPermission('standby_trx.val') && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
-        useUtils().checkPermission('standby_trx.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1
+        useUtils().checkPermission('extra_money_trx.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1 ||
+        useUtils().checkPermission('extra_money_trx.val2') && [undefined,0].indexOf(dt_selected.value.val2) > -1 
       )
-    )|| 
+    )
+    || 
     (
-      dt_selected.value.pvr_id > -1 &&  useUtils().checkPermission('standby_trx.val2') && [undefined,0].indexOf(dt_selected.value.val2) > -1
+      dt_selected.value.pvr_id > -1 && (
+        useUtils().checkPermission('extra_money_trx.val3') && [undefined,0].indexOf(dt_selected.value.val3) > -1 ||
+        useUtils().checkPermission('extra_money_trx.val4') && [undefined,0].indexOf(dt_selected.value.val4) > -1 ||
+        useUtils().checkPermission('extra_money_trx.val5') && [undefined,0].indexOf(dt_selected.value.val5) > -1 ||
+        useUtils().checkPermission('extra_money_trx.val6') && [undefined,0].indexOf(dt_selected.value.val6) > -1
+      )
     )
   );
   return result;
 })
 
 const enabled_remove = computed(()=>{  
-  let result = useUtils().checkPermission('standby_trx.remove') 
+  let result = useUtils().checkPermission('extra_money_trx.remove') 
   && selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
@@ -853,7 +831,7 @@ const enabled_remove = computed(()=>{
 })
 
 const enabled_void = computed(()=>{  
-  let result = useUtils().checkPermission('standby_trx.request_remove') 
+  let result = useUtils().checkPermission('extra_money_trx.request_remove') 
   && selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
@@ -862,7 +840,7 @@ const enabled_void = computed(()=>{
 })
 
 const enabled_approve_void = computed(()=>{  
-  let result = useUtils().checkPermission('standby_trx.approve_request_remove')
+  let result = useUtils().checkPermission('extra_money_trx.approve_request_remove')
   && selected.value > -1 
   && dt_selected.value.deleted == 0
   && dt_selected.value.req_deleted == 1
@@ -871,11 +849,11 @@ const enabled_approve_void = computed(()=>{
 })
 
 const enabled_print_preview = computed(()=>{
-  let result = useUtils().checkPermission('standby_trx.preview_file') 
+  let result = useUtils().checkPermission('extra_money_trx.preview_file') 
   && selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
-  && dt_selected.value.val == 1;
+  && dt_selected.value.val1 == 1;
   return result;
 })
 

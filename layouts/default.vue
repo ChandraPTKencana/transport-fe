@@ -52,6 +52,20 @@
               </nuxt-link>
             </li>
 
+            <li v-if="useUtils().checkPermission('extra_money.views')" :class="activeMenu == '/extra_money'?'active':''" >
+              <nuxt-link to="/extra_money"  class="cursor-pointer" @click="goTo('/extra_money')">
+                <IconsMoney class="mr-1"/>
+                Extra Money
+              </nuxt-link>
+            </li>
+
+            <li v-if="useUtils().checkPermission('extra_money_trx.views')" :class="activeMenu == '/extra_money/trx'?'active':''" >
+              <nuxt-link to="/extra_money/trx"  class="cursor-pointer" @click="goTo('/extra_money/trx')">
+                <IconsMoney class="mr-1"/>
+                Extra Money Trx
+              </nuxt-link>
+            </li>
+            
             <li v-if="useUtils().checkPermission('standby_mst.views')"  :class="activeMenu == '/data_standby'?'active':''" >
               <nuxt-link to="/data_standby"  class="cursor-pointer" @click="goTo('/data_standby')">
                 <IconsMoney class="mr-1"/>
