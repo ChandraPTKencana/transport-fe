@@ -701,6 +701,7 @@ const fields_thead=ref([
   {key:"kernet",label:"Kernet",filter_on:1,type:'string'},
   {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   {key:"updated_at",label:"Updated At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
+  {key:"pv_no",label:"PV No",type:'string'},
   {key:"deleted_by_username",label:"Deleted By",tbl_show:0},
   {key:"deleted_at",label:"Deleted At",dateformat:"DD-MM-Y HH:mm:ss", tbl_show:0,type:'datetime',filter_on:1},
   {key:"deleted_reason",label:"Deleted Reason", tbl_show:0,type:'string',filter_on:1},
