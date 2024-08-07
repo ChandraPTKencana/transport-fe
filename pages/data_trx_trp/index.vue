@@ -143,6 +143,9 @@
           <IconsLine v-if="!item.val5"/>
           <IconsCheck v-else/>
         </template>
+        <template #[`payment_method_name`]="{item}">
+          {{ item.payment_method?.name }}
+        </template>
         <template #[`pvr_had_detail`]="{item}">
           <IconsLine v-if="!item.pvr_had_detail"/><IconsCheck v-else/>
         </template>
@@ -726,6 +729,7 @@ const fields_thead=ref([
   {key:"kernet",label:"Kernet",filter_on:1,type:'string'},
   {key:"kernet_rek_no",label:"No Rek Kernet",filter_on:1,type:'string'},
   {key:"kernet_rek_name",label:"Nama Rek Kernet",filter_on:1,type:'string'},
+  {key:"payment_method_name",label:"Payment Method Name",type:'string'},
   {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   {key:"updated_at",label:"Updated At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   {key:"deleted_by_username",label:"Deleted By",tbl_show:0},

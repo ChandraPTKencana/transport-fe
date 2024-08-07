@@ -39,6 +39,14 @@
             </div>
 
             <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <label for="">Payment Method</label>
+              <select v-model="trx_trp.payment_method_id" :disabled="trx_trp.val==1">
+                <option v-for="pm in list_payment_methods" :value="pm.id">{{pm.name}}</option>
+              </select>
+              <p class="text-red-500">{{ field_errors.payment_method_id }}</p>
+            </div>
+
+            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">No Pol</label>
               <input type="text" list="vehicle"  v-model="trx_trp.no_pol" :disabled="trx_trp.val==1"/>
               <datalist id="vehicle">
@@ -219,6 +227,11 @@ const trx_trp_temp = {
     pvr_total:0,
     pvr_had_detail:"",
     transition_target:"",
+    payment_method_id:1,
+    payment_method:{
+      id:0,
+      name:"",
+    },
 };
 let trx_trp_loaded = {...trx_trp_temp};
 const trx_trp = ref({...trx_trp_temp});
@@ -269,6 +282,7 @@ const doSave = async () => {
   data_in.append("cost_center_code", trx_trp.value.cost_center_code);
   data_in.append("online_status", props.online_status);
   data_in.append("transition_target", trx_trp.value.transition_target);
+  data_in.append("payment_method_id", trx_trp.value.payment_method_id);
 
   data_in.append("no_pol", trx_trp.value.no_pol);
   data_in.append("supir_id", selected_supir.value.id);
@@ -304,6 +318,8 @@ const doSave = async () => {
   trx_trp.value.kernet          = selected_kernet.value.name;
   trx_trp.value.kernet_rek_no   = selected_kernet.value._.rek_no.val;
   trx_trp.value.kernet_rek_name = selected_kernet.value._.rek_name.val;
+  let pm_idx = list_payment_methods.value.map((x)=>x.id).indexOf(trx_trp.value.payment_method_id);
+  trx_trp.value.payment_method  = {...list_payment_methods.value[pm_idx]};
 
   trx_trp.value.updated_at = data.value.updated_at;
   if(props.id<=0){
@@ -457,6 +473,7 @@ const callData = async () => {
 const list_ujalan = ref([]);
 const list_vehicle = ref([]);
 const list_employee = ref([]);
+const list_payment_methods = ref([]);
 
 const loadLocalDT = async () => {
   useCommonStore().loading_full = true;
@@ -478,6 +495,7 @@ const loadLocalDT = async () => {
   list_ujalan.value = data.value.list_ujalan;
   list_vehicle.value = data.value.list_vehicle;
   list_employee.value = data.value.list_employee;
+  list_payment_methods.value = data.value.list_payment_methods;
 }
 
 
