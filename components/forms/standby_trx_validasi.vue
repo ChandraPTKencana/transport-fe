@@ -178,12 +178,11 @@
                       <tr class="sticky top-7 !z-[2]">
                         <th class="!min-w-[50px] !w-[50px] !max-w-[50px] ">No</th>
                         <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Tanggal</th>
-                        <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Keterangan</th>
+                        <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Foto</th>
                       </tr>
                     </thead>
                     <tbody ref="to_move">
                       <template v-for="(detail, index) in details" :key="index">
-                        <!-- <tr v-if="detail.p_status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)"> -->
                         <tr v-if="detail.p_status!='Remove'"  :data-index="index">
                           <td>{{ index + 1 }}.</td>
                           <td class="cell">
@@ -192,8 +191,8 @@
                             </div>
                           </td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center">
-                              {{ detail.note }}
+                            <div style="width:70vw;" class="h-full flex items-center justify-center">
+                              <AttachmentSingle :value="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event"/>
                             </div>
                           </td>
                         </tr>

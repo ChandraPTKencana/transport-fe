@@ -15,6 +15,11 @@
           @click="remove()">
           <IconsDelete />
         </button>
+
+        <button type="button" name="button" class="m-1 text-xs "
+          @click="call2FAQR()">
+          SET 2FA
+        </button>
         <!-- <button type="button" name="button" style="margin:4px; " @click="cetak()">
           <fa :icon="['fas','print']"/>
         </button> -->
@@ -86,6 +91,7 @@
   </div>
   <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
   <FormsUser :show="forms_user_show" :fnClose="()=>{forms_user_show=false}" :id="forms_user_id" :p_data="users"/>
+  <GAQR :show="qr_popup" :fnClose="()=>{qr_popup=false}" :qrCodeUrl="qr_img"/>
 
 </template>
 
@@ -294,6 +300,46 @@ const confirmed_delete = async() => {
   users.value.splice(selected.value,1);
   selected.value = -1;
   delete_box.value = false;
+}
+
+
+const qr_img = ref("");
+const qr_popup = ref(false);
+
+const call2FAQR = async () => {
+
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+    return;
+  }
+
+  params.id = users.value[selected.value].id;
+
+  useCommonStore().loading_full = true;
+
+  const { data, error, status } = await useMyFetch("/ga_qr", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    params: params,
+    // body: {
+    //   sort: "updated_at:desc"
+    // },
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  qr_img.value = data.value;
+  qr_popup.value = true;
 }
 
 // const form_permission = () => {

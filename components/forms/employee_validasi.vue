@@ -36,9 +36,9 @@
               </div>
 
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Nama Bank</label>
+                <label for="">Bank Code</label>
                 <div class="card-border">
-                  {{ employee.bank_name }}
+                  {{ employee.bank?.code }}
                 </div>
               </div>
 
@@ -61,6 +61,9 @@
                 <div class="card-border">
                   {{ employee.phone_number }}
                 </div>
+              </div>
+              <div class="p-1 w-full">
+                <AttachmentSingle :label="'Attachment'" :value="employee.attachment_1_preview" @setFile="employee.attachment_1=$event"  @setPreview="employee.attachment_1_preview=$event"/>
               </div>
             </div>
           </div>
@@ -145,6 +148,8 @@ const employee_temp = {
     val1:0,
     val1_by:{ username:"" },
     val1_at:"",
+    attachment_1:"",
+    attachment_1_preview:"",
 };
 
 const employee = ref({...employee_temp});

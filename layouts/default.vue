@@ -31,6 +31,13 @@
               </nuxt-link>
             </li>
 
+            <li v-if="useUtils().checkPermission('trp_trx.transfer.views')" :class="activeMenu == '/data_trx_trp/transfer'?'active':''" >
+              <nuxt-link to="/data_trx_trp/transfer"  class="cursor-pointer" @click="goTo('/data_trx_trp/transfer')">
+                <IconsProduct class="mr-1"/>
+                Trx Transfer
+              </nuxt-link>
+            </li>
+
             <li v-if="useUtils().checkPermission('trp_trx.ticket.views')" :class="activeMenu == '/data_trx_trp/ticket'?'active':''" >
               <nuxt-link to="/data_trx_trp/ticket"  class="cursor-pointer" @click="goTo('/data_trx_trp/ticket')">
                 <IconsProduct class="mr-1"/>
@@ -132,7 +139,7 @@
             <li v-if="useUtils().checkPermission('salary_bonus.views')" :class="activeMenu == '/salary_bonus'?'active':''" >
               <nuxt-link to="/salary_bonus"  class="cursor-pointer" @click="goTo('/salary_bonus')">
                 <IconsMoney class="mr-1"/>
-                Salary Bonus
+                Salary Additional
               </nuxt-link>
             </li>
 

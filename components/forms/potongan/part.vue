@@ -8,7 +8,7 @@
           @click="form_add()">
           <IconsPlus />
         </button>
-        <button v-if="useUtils().checkPermissions(['potongan_trx.modify','potongan_trx.create','potongan_trx.modify','potongan_trx.remove'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermissions(['potongan_trx.modify']) && selected > -1 && !potongan_trxs[selected]?.trx_trp_id" type="button" name="button" class="m-1 text-2xl "
           @click="form_edit()">
           <IconsEdit/>
         </button>
@@ -58,9 +58,9 @@
                 <th>Note</th>
                 <th>Created At</th>
                 <th>Updated At</th>
-                <th>Deleted At</th>
+                <!-- <th>Deleted At</th>
                 <th>Deleted By</th>
-                <th>Deleted Reason</th>
+                <th>Deleted Reason</th> -->
               </tr>
             </thead>
             <tbody>
@@ -84,9 +84,9 @@
                 <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.note }}</td>
                 <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.created_at ? $moment(potongan_trx.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.updated_at ? $moment(potongan_trx.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
-                <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.deleted_at ? $moment(potongan_trx.deleted_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
+                <!-- <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.deleted_at ? $moment(potongan_trx.deleted_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.deleted_by?.username }}</td>
-                <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.deleted_reason }}</td>
+                <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.deleted_reason }}</td> -->
 
               </tr>
             </tbody>
@@ -104,7 +104,7 @@
       </template>
     </PopupMini> -->
     <FormsPotonganTrx :show="forms_potongan_trx_show" :fnClose="()=>{forms_potongan_trx_show=false}" :id="forms_potongan_trx_id" :potongan_mst_id="props.id" :p_data="potongan_trxs" @updateRemainingCut="$emit('updateRemainingCut',$event)"/>
-    <!-- <FormsUjalanValidasi :show="forms_potongan_trx_valid_show" :fnClose="()=>{forms_potongan_trx_valid_show=false}" :id="forms_potongan_trx_valid_id" :p_data="potongan_trxs"/> -->
+    <FormsPotonganTrxValidasi :show="forms_potongan_trx_valid_show" :fnClose="()=>{forms_potongan_trx_valid_show=false}" :id="forms_potongan_trx_valid_id" :p_data="potongan_trxs"/>
   
   </div>
 </template>

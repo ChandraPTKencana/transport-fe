@@ -192,7 +192,7 @@
                         </th> 
                         <th class="!min-w-[50px] !w-[50px] !max-w-[50px] ">No</th>
                         <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Tanggal</th>
-                        <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Keterangan</th>
+                        <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Foto</th>
                       </tr>
                     </thead>
                     <tbody ref="to_move">
@@ -221,8 +221,8 @@
                             </div>
                           </td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center">
-                              <textarea :disabled="disabled" class="p-1 w-full" v-model="detail.note" cols="7" rows="2"></textarea>
+                            <div style="width:70vw;" class="h-full flex items-center justify-center">
+                              <AttachmentSingle :value="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event" :can_remove="true"/>
                             </div>
                           </td>
                         </tr>
@@ -353,7 +353,9 @@ const detail = ref({
   id:"",
   tanggal: new Date(),
   note:"",
-  p_status:""
+  p_status:"",
+  attachment_1:"",
+  attachment_1_preview:"",
 });
 
 let standby_trx_loaded = {...standby_trx_temp};
@@ -385,8 +387,10 @@ const doSave = async () => {
   data_in.append("online_status", props.online_status);
 
   let tDetails = [...details.value];
-  tDetails = tDetails.map(x=>{
+  tDetails = tDetails.map((x,k)=>{
     x.tanggal = (x.tanggal) ? $moment(x.tanggal).format("Y-MM-DD") : '';
+    x.attachment_1_preview = x.attachment_1_preview ? "Exists" : null;
+    data_in.append(`attachments[${k}]`, x.attachment_1);
     return x;
   });
   data_in.append("details", JSON.stringify(tDetails));

@@ -60,28 +60,59 @@ export const useDownload = () => {
 
     let el:HTMLIFrameElement | null=null;
 
-    const printHtml = (html:any,width:any) =>{
-        if(document.getElementById("print_target")){
-            document.getElementById("print_target")?.remove();
+    // const printHtml = (html:any,width:any) =>{
+    //     if(document.getElementById("print_target")){
+    //         document.getElementById("print_target")?.remove();
+    //     }
+    //     el = document.createElement('iframe');
+    //     el.setAttribute("id", "print_target");
+    //     el.style.cssText=`width:${width}px`;  
+    //     el.style.cssText=`height:inherit`;  
+    //     document.body.appendChild(el);
+    //     if(el.contentWindow){
+    //         el.contentWindow.document.open();
+    //         el.contentWindow.document.write(html);
+    //     }
+    //     window.print();
+    //     window.onafterprint = function() {
+    //         if(el!=null) {
+    //             document.body.removeChild(el)
+    //             el = null;
+    //         };
+    //         console.log('Printing has been completed or the print preview mode has been closed');
+    //     };
+    // }
+
+    const printHtml = (html:any, width:any) => {
+        if (document.getElementById("print_target")) {
+          document.getElementById("print_target")?.remove();
         }
-        el = document.createElement('iframe');
+        let el = document.createElement('iframe');
         el.setAttribute("id", "print_target");
-        el.style.cssText=`width:${width}px`;  
-        el.style.cssText=`height:inherit`;  
+        el.style.cssText = `width:${width}px`;
+        el.style.cssText = `height:inherit`;
         document.body.appendChild(el);
-        if(el.contentWindow){
-            el.contentWindow.document.open();
-            el.contentWindow.document.write(html);
-        }
-        window.print();
-        window.onafterprint = function() {
-            if(el!=null) {
-                document.body.removeChild(el)
-                el = null;
+        if (el.contentWindow) {
+          el.contentWindow.document.open();
+          el.contentWindow.document.write(html);
+          el.contentWindow.document.close(); // add this line to ensure the document is fully loaded
+          const img = el.contentWindow.document.querySelector('img');
+          if (img) {
+            img.onload = function() {
+              window.print();
             };
-            console.log('Printing has been completed or the print preview mode has been closed');
+          } else {
+            window.print(); // if no img tag, print immediately
+          }
+        }
+        window.onafterprint = function() {
+          if (el != null) {
+            document.body.removeChild(el)
+            el = null;
+          };
+          console.log('Printing has been completed or the print preview mode has been closed');
         };
-    }
+      };
 
     return {
         toBlob,

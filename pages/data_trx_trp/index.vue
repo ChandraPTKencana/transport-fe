@@ -42,6 +42,11 @@
             @click="printPreview()">
             <IconsPrinterEye />
           </button>
+
+          <button v-if="enabled_print_preview_bt" type="button" name="button" class="m-1 text-2xl "
+            @click="printPreviewBT()">
+            <IconsPrinterEye />
+          </button>
         </div>
         <div class="flex">
           <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
@@ -614,6 +619,33 @@ const printPreview = async()=>{
   printHtml(data.value.html,318);
 }
 
+
+const printPreviewBT = async()=>{
+  
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+    return;
+  } 
+  
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/trx_trp_preview_file_bt", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json'
+    },
+    params: {id : trx_trps.value[selected.value].id},
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  printHtml(data.value.html,318);
+}
+
 const generatePVR = async() => {
   useCommonStore().loading_full = true;
 
@@ -695,12 +727,14 @@ const updatePV = async() => {
 
 const fields_thead=ref([
   {key:"no",label:"No",isai:true},
-  {key:"val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"val2",label:"App 3",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"val3",label:"App 4",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"val4",label:"App 5",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"val5",label:"App 6",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val",label:"APP",childs:[
+    {key:"val",label:"Kasir",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+    {key:"val1",label:"Mandor",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+    {key:"val2",label:"KTU/W",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+    {key:"val3",label:"Marketing",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+    {key:"val4",label:"Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+    {key:"val5",label:"SPV Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  ]},
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"absen",label:"Absen"},
   {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1,sort:{priority:1,type:"desc"}},
@@ -752,12 +786,11 @@ const enabled_view = computed(()=>{
   return result;
 })
 
-
 const enabled_edit = computed(()=>{  
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.val1) > -1
+  && [undefined,0].indexOf(dt_selected.value.val4) > -1
   && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1
   && useUtils().checkPermission('trp_trx.modify');
   return result;
@@ -767,9 +800,9 @@ const enabled_validasi = computed(()=>{
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.val) > -1
+  // && [undefined,0].indexOf(dt_selected.value.val) > -1
   && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1
-  && useUtils().checkPermissions(['trp_trx.val','trp_trx.val1']);
+  && useUtils().checkPermissions(['trp_trx.val','trp_trx.val1','trp_trx.val2','trp_trx.val3','trp_trx.val4','trp_trx.val5']);
   return result;
 })
 
@@ -796,6 +829,16 @@ const enabled_print_preview = computed(()=>{
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && dt_selected.value.val1 == 1
+  && useUtils().checkPermission('trp_trx.preview_file');
+  return result;
+})
+
+const enabled_print_preview_bt = computed(()=>{ 
+  let result = selected.value > -1 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
+  && dt_selected.value.payment_method_id == 2
+  && dt_selected.value.received_payment == 1
   && useUtils().checkPermission('trp_trx.preview_file');
   return result;
 })

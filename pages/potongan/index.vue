@@ -3,10 +3,10 @@
     <Header :title="'List Potongan'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
-        <button v-if="useUtils().checkPermission('potongan_mst.create')" type="button" name="button" class="m-1 text-2xl "
+        <!-- <button v-if="useUtils().checkPermission('potongan_mst.create')" type="button" name="button" class="m-1 text-2xl "
           @click="form_copy()">
           <IconsCopy />
-        </button>
+        </button> -->
         <button v-if="useUtils().checkPermission('potongan_mst.create')" type="button" name="button" class="m-1 text-2xl "
           @click="form_add()">
           <IconsPlus />
@@ -15,10 +15,10 @@
           @click="form_edit()">
           <IconsEdit/>
         </button>
-        <button v-if="useUtils().checkPermission('potongan_mst.remove')" type="button" name="button" class="m-1 text-2xl "
+        <!-- <button v-if="useUtils().checkPermission('potongan_mst.remove')" type="button" name="button" class="m-1 text-2xl "
           @click="remove()">
           <IconsDelete />
-        </button>
+        </button> -->
         <button v-if="useUtils().checkPermissions(['potongan_mst.val','potongan_mst.val1','potongan_trx.val','potongan_trx.val1'])" type="button" name="button" class="m-1 text-2xl "
           @click="validasi()">
           <IconsSignature />
@@ -119,7 +119,7 @@
       </template>
     </PopupMini> -->
     <FormsPotonganMst :show="forms_potongan_mst_show" :fnClose="()=>{forms_potongan_mst_show=false}" :id="forms_potongan_mst_id" :p_data="potongan_msts" :is_copy="forms_potongan_mst_copy"/>
-    <!-- <FormsUjalanValidasi :show="forms_potongan_mst_valid_show" :fnClose="()=>{forms_potongan_mst_valid_show=false}" :id="forms_potongan_mst_valid_id" :p_data="potongan_msts"/> -->
+    <FormsPotonganValidasi :show="forms_potongan_mst_valid_show" :fnClose="()=>{forms_potongan_mst_valid_show=false}" :id="forms_potongan_mst_valid_id" :p_data="potongan_msts"/>
   
   </div>
 </template>

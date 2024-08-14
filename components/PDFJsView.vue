@@ -1,7 +1,8 @@
 <template>
 <div class="max-h-full overflow-y-auto">
     <div v-for="(np,k) in numPages" class="border-solid border-black border-[1px]" >
-        <canvas :id="'pdf_canvas'+k" />
+        <!-- <canvas :id="'pdf_canvas'+k" /> -->
+        <canvas ref="pdf_canvas"/>
     </div>
 </div>
 </template>
@@ -43,7 +44,8 @@ const getAllPage=async(pdf,$page)=>{
     const page = await pdf.getPage($page+1); // Get the first page
 
     const viewport = page.getViewport({ scale: 1.0 });
-    const canvas = document.getElementById('pdf_canvas'+$page);
+    // const canvas = document.getElementById('pdf_canvas'+$page);
+    const canvas = pdf_canvas.value[$page];
     canvas.width = viewport.width;
     canvas.height = viewport.height;
 

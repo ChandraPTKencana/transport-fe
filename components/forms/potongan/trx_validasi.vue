@@ -1,43 +1,25 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Form Salary Additional Validation'" :fn="fnClose" class="w-100 flex align-items-center"
+      <HeaderPopup :title="'Form Transaction Standby Validation'" :fn="fnClose" class="w-100 flex align-items-center"
         style="color:white;" />
 
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
           <div class="w-full flex flex-col items-center grow overflow-auto">
-            <div class="w-full flex flex-row flex-wrap">
-
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Tanggal</label>
-                <div class="card-border">
-                  {{ $moment(salary_bonus.tanggal).format("DD-MM-Y") }}
+            <div class="w-full p-1">
+              <div class="w-full flex flex-row flex-wrap bg-white">
+                <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">Nominal Potong</label>
+                  <div class="card-border">
+                    {{ useUtils().pointFormat(potongan_trx.nominal_cut) }}
+                  </div>
                 </div>
-              </div>
-
-              <div class="w-full sm:w-8/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
-                <label for="">Pekerja</label>
-                <div class="card-border">
-                  <WidthMiniPart :selected="selected_employee"/>
+                <div class="w-full flex flex-col flex-wrap p-1">
+                  <label for="">Keterangan</label>
+                  <div class="card-border">
+                    {{ potongan_trx.note }}
+                  </div>
                 </div>
-              </div>
-
-              <div class="w-full sm:w-6/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Nominal</label>
-                <div class="card-border">
-                  {{ pointFormat(salary_bonus.nominal || 0) }}
-                </div>
-              </div>
-
-              <div class="w-full sm:w-6/12 md:w-full lg:w-full flex flex-col flex-wrap p-1">
-                <label for="">Note</label>
-                <div class="card-border">
-                  {{ salary_bonus.note }}
-                </div>
-              </div>
-
-              <div class="p-1 w-full">
-                <AttachmentSingle :label="'Attachment'" :value="salary_bonus.attachment_1_preview" @setFile="salary_bonus.attachment_1=$event"  @setPreview="salary_bonus.attachment_1_preview=$event"/>
               </div>
             </div>
           </div>
@@ -47,12 +29,12 @@
               <div>
                 Di Validasi oleh : 
               </div>
-              <div v-if="salary_bonus.val1 || salary_bonus.val2" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
-                <div v-if="salary_bonus.val1">
-                  App 1 : {{ salary_bonus.val1_by.username}} ( {{ salary_bonus.val1_at ? $moment(salary_bonus.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+              <div v-if="potongan_trx.val || potongan_trx.val1 || potongan_trx.val2" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
+                <div v-if="potongan_trx.val">
+                  App 1 : {{ potongan_trx.val_by.username}} ( {{ potongan_trx.val_at ? $moment(potongan_trx.val_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
-                <div v-if="salary_bonus.val2">
-                  App 2 : {{ salary_bonus.val2_by.username}} ( {{ salary_bonus.val2_at ? $moment(salary_bonus.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                <div v-if="potongan_trx.val1">
+                  App 2 : {{ potongan_trx.val1_by.username}} ( {{ potongan_trx.val1_at ? $moment(potongan_trx.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
               </div>
             </div>
@@ -112,17 +94,32 @@ const props = defineProps({
   },
 })
 
-const salary_bonus_temp = {
-    id: "",
-    tanggal: new Date(),
-    type:"Kerajinan",
-    nominal:0,
-    note:"",
-    attachment_1:"",
-    attachment_1_preview:"",
+const potongan_trx_temp = {
+  id: -1,
+  kejadian:"",
+  employee:{
+    id: -1,
+    name: '',
+  },
+  no_pol: '',
+  
+  nominal:0,
+  nominal_cut:0,
+  remaining_cut:0,
+  status:"Open",
+
+  val:0,
+  val_by:{ username:"" },
+  val_at:"",
+  val1:0,
+  val1_by:{ username:"" },
+  val1_at:"",
+  val2:0,
+  val2_by:{ username:"" },
+  val2_at:"",
 };
 
-const salary_bonus = ref({...salary_bonus_temp});
+const potongan_trx = ref({...potongan_trx_temp});
 
 const token = useCookie('token');
 const field_errors = ref({});
@@ -142,22 +139,21 @@ const selected_mini_temp={
       text:"Nama",
       val:"",
     },
-    ktp_no:{
+    rek_no:{
       tcon:"IconsNumber",
-      text:"No KTP",
+      text:"No Rek",
       val:"",
     },
-    sim_no:{
+    rek_name:{
       tcon:"IconsCreditCard",
-      text:"No SIM",
+      text:"Nama Rek",
       val:"",
     },
   },
-  id:"",
+  id:-1,
   name:"",
   title:"",
 };
-
 
 const selected_employee = ref(JSON.parse(JSON.stringify(selected_mini_temp)));
 
@@ -179,7 +175,7 @@ const doSave = async () => {
     data_in.append("_method", "PUT");
   }
 
-  const { data, error, status } = await useMyFetch("/salary_bonus_validasi", {
+  const { data, error, status } = await useMyFetch("/potongan_trx_validasi", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -197,27 +193,20 @@ const doSave = async () => {
     return;
   }
 
+  potongan_trx.value.val = data.value.val;
+  potongan_trx.value.val_user = data.value.val_user;
+  potongan_trx.value.val_by = data.value.val_by;
+  potongan_trx.value.val_at = data.value.val_at;
 
-  salary_bonus.value.val = data.value.val;
-  salary_bonus.value.val_user = data.value.val_user;
-  salary_bonus.value.val_by = data.value.val_by;
-  salary_bonus.value.val_at = data.value.val_at;
-
-  salary_bonus.value.val1 = data.value.val1;
-  salary_bonus.value.val1_user = data.value.val1_user;
-  salary_bonus.value.val1_by = data.value.val1_by;
-  salary_bonus.value.val1_at = data.value.val1_at;
-
-  salary_bonus.value.val2 = data.value.val2;
-  salary_bonus.value.val2_user = data.value.val2_user;
-  salary_bonus.value.val2_by = data.value.val2_by;
-  salary_bonus.value.val2_at = data.value.val2_at;
-
+  potongan_trx.value.val1 = data.value.val1;
+  potongan_trx.value.val1_user = data.value.val1_user;
+  potongan_trx.value.val1_by = data.value.val1_by;
+  potongan_trx.value.val1_at = data.value.val1_at;
 
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
   if(idx>=-1){
-    props.p_data.splice(idx,1,{...salary_bonus.value});    
+    props.p_data.splice(idx,1,{...potongan_trx.value});    
   }
 
 
@@ -227,7 +216,7 @@ const doSave = async () => {
 
 const callData = async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/salary_bonus", {
+  const { data, error, status } = await useMyFetch("/potongan_trx", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -250,16 +239,16 @@ const callData = async () => {
 
   let dt =data.value.data;
 
-  salary_bonus.value = dt;
+  potongan_trx.value = dt;
 
-  selected_employee.value._.id.val=dt.employee.id;
-  selected_employee.value._.name.val=dt.employee.name;
-  selected_employee.value._.ktp_no.val=dt.employee.ktp_no;
-  selected_employee.value._.sim_no.val=dt.employee.sim_no;
+  selected_employee.value._.id.val=dt.employee?.id;
+  selected_employee.value._.name.val=dt.employee?.name;
+  selected_employee.value._.rek_no.val=dt.employee?.rek_no;
+  selected_employee.value._.rek_name.val=dt.employee?.rek_name;
 
-  selected_employee.value.id=dt.employee.id;
-  selected_employee.value.name=dt.employee.name;
-  selected_employee.value.ktp_no=(dt.employee.ktp_no || '')+" "+(dt.employee.sim_no || '');
+  selected_employee.value.id=dt.employee?.id;
+  selected_employee.value.name=dt.employee?.name;
+  selected_employee.value.rek_no=(dt.employee?.rek_no || '')+" "+(dt.employee?.rek_name || '');
 
 }
 

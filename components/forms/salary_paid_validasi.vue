@@ -46,7 +46,7 @@
                         <td>{{ detail.employee?.sim_no }}</td>
                         <td>{{ detail.employee?.rek_no }}</td>
                         <td>{{ detail.employee?.rek_name }}</td>
-                        <td>{{ detail.employee?.bank_name }}</td>
+                        <td>{{ detail.employee?.bank?.code }}</td>
                         <td>{{ pointFormat(detail.standby_nominal) }}</td>
                         <td>{{ pointFormat(detail.salary_bonus_nominal) }}</td>
                         <td>{{ pointFormat(parseFloat(detail.standby_nominal) + parseFloat(detail.salary_bonus_nominal)) }}</td>

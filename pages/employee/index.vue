@@ -70,6 +70,7 @@
                 <th>No Rek</th>
                 <th>Nama Rek</th>
                 <th>Phone Number</th>
+                <th>File</th>
                 <th>Tanggal Dibuat</th>
                 <th>Tanggal Diubah</th>
               </tr>
@@ -88,10 +89,13 @@
                 <td>{{ employee.role }}</td>
                 <td>{{ employee.ktp_no }}</td>
                 <td>{{ employee.sim_no }}</td>
-                <td>{{ employee.bank_name }}</td>
+                <td>{{ employee.bank?.code }}</td>
                 <td>{{ employee.rek_no }}</td>
                 <td>{{ employee.rek_name }}</td>
                 <td>{{ employee.phone_number }}</td>
+                <td> 
+                  <TypeIcon :value="employee.attachment_1_preview"/>
+                </td>
                 <td>{{ $moment(employee.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td>{{ $moment(employee.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
               </tr>

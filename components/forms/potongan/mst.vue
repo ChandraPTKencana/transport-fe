@@ -10,19 +10,19 @@
               <div class="w-full flex flex-row flex-wrap bg-white">
                 <div class="w-full flex flex-col flex-wrap p-1">
                   <label for="">Kejadian</label>
-                  <textarea v-model="potongan_mst.kejadian" rows="10"> </textarea>
+                  <textarea v-model="potongan_mst.kejadian" rows="10" :disabled="disabled"> </textarea>
                   <p class="text-red-500">{{ field_errors.kejadian }}</p>
                 </div>
   
                 <div class="w-full sm:w-9/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                   <label for="">Pekerja</label>
-                  <WidthMiniList :arr="list_emp" :selected="selected_employee" :pure="selected_mini_temp" @setSelected="selected_employee=$event"/>
+                  <WidthMiniList :arr="list_emp" :selected="selected_employee" :pure="selected_mini_temp" @setSelected="selected_employee=$event" :disabled="disabled2"/>
                   <p class="text-red-500">{{ field_errors.employee_id }}</p>
                 </div>
                
                 <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">No Pol</label>
-                  <input type="text" list="vehicle"  v-model="potongan_mst.no_pol" />
+                  <input type="text" list="vehicle"  v-model="potongan_mst.no_pol" :disabled="disabled2"/>
                   <datalist id="vehicle">
                     <option v-for="lv in list_vehicle" :value="lv.no_pol" >{{lv.no_pol}}</option>
                   </datalist>
@@ -39,7 +39,7 @@
                     :value="potongan_mst.nominal || 0" 
                     @input="potongan_mst.nominal = $event"
                     :show="show" 
-                    :disabled="disabled"/>
+                    :disabled="disabled2"/>
                   </div>
                   <p class="text-red-500">{{ field_errors.ref }}</p>
                 </div>
@@ -60,30 +60,43 @@
 
                 <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">Sisa Potongan</label>
-                  {{useUtils().pointFormat(potongan_mst.remaining_cut)}}
+                  <div class="card-border">
+                    {{useUtils().pointFormat(potongan_mst.remaining_cut)}}
+                  </div>
                 </div>
   
   
                 <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">Status</label>
-                  <select v-model="potongan_mst.status">
+                  <select v-model="potongan_mst.status" :disabled="disabled">
                     <option value="Open">Open</option>
                     <option value="Close Clear">Close Clear</option>
                     <option value="Close UnClear">Close UnClear</option>
                   </select>
                   <p class="text-red-500">{{ field_errors.ref }}</p>
                 </div>
+
+                <div class="w-full flex flex-col flex-wrap p-1">
+                  <AttachmentSingle :label="'Lampiran Pertama'" :value="potongan_mst.attachment_1_preview" @setFile="potongan_mst.attachment_1=$event"  @setPreview="potongan_mst.attachment_1_preview=$event" :can_remove="!disabled2"/>
+                  <p class="text-red-500">{{ field_errors.attachment_1 }}</p>
+                </div>
+
+                <div class="w-full flex flex-col flex-wrap p-1">
+                  <AttachmentSingle :label="'Lampiran Lanjutan'" :value="potongan_mst.attachment_2_preview" @setFile="potongan_mst.attachment_2=$event"  @setPreview="potongan_mst.attachment_2_preview=$event" :can_remove="!disabled"/>
+                  <p class="text-red-500">{{ field_errors.attachment_2 }}</p>
+                </div>
+
   
                 <div class="w-full flex flex-row flex-wrap p-1 justify-end">
                   <button v-if="!disabled" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
-                    Save
+                    Save 
                   </button>
                 </div>
 
               </div>
             </div>
             
-            <div v-if="potongan_mst.id>0" class="w-full h-full p-1">
+            <div v-if="disabled" class="w-full h-full p-1">
               <FormsPotonganPart :id="id" :show="show" @updateRemainingCut="potongan_mst.remaining_cut=$event"/>
             </div>
 
@@ -141,6 +154,11 @@ const potongan_mst_temp = {
     nominal_cut:0,
     remaining_cut:0,
     status:"Open",
+    attachment_1:"",
+    attachment_1_preview:"",
+    attachment_2:"",
+    attachment_2_preview:"",
+    val_at:""
 };
 const details = ref([]);
 
@@ -171,6 +189,11 @@ const doSave = async () => {
   
   data_in.append("employee_id", selected_employee.value.id);
   data_in.append("no_pol", potongan_mst.value.no_pol);
+
+  data_in.append("attachment_1", potongan_mst.value.attachment_1);
+  data_in.append("attachment_1_preview", potongan_mst.value.attachment_1_preview);
+  data_in.append("attachment_2", potongan_mst.value.attachment_2);
+  data_in.append("attachment_2_preview", potongan_mst.value.attachment_2_preview);
 
   let $method = "post";
 
@@ -266,7 +289,12 @@ const list_emp = computed(()=>{
 })
 
 const disabled = computed(()=>{
-  return false;
+  return potongan_mst.value.val1==1;
+  // return potongan_mst.value.confirmed_by || potongan_mst.value.ref_id != null;
+});
+
+const disabled2 = computed(()=>{
+  return potongan_mst.value.val_at;
   // return potongan_mst.value.confirmed_by || potongan_mst.value.ref_id != null;
 });
 

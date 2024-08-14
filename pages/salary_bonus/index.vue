@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full flex flex-col">
-    <Header :title="'List Salary Bonus'" />
+    <Header :title="'List Salary Additional'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
         <button v-if="useUtils().checkPermission('salary_bonus.create')" type="button" name="button" class="m-1 text-2xl "

@@ -34,9 +34,12 @@
             </div>
 
             <div class="w-full flex flex-col flex-wrap p-1">
-              <label for="">Nama Bank</label>
-              <input type="text" v-model="employee.bank_name">
-              <p class="text-red-500">{{ field_errors.bank_name }}</p>
+              <label for="">Pilih Bank</label>
+              <select v-model="employee.bank_id">
+                <option value=""></option>
+                <option v-for="bank in banks" :value="bank.id">{{ bank.code }}</option>
+              </select>
+              <p class="text-red-500">{{ field_errors.bank_id }}</p>
             </div>
 
             <div class="w-full flex flex-col flex-wrap p-1">
@@ -55,6 +58,10 @@
               <label for="">Phone Number</label>
               <input type="text" v-model="employee.phone_number">
               <p class="text-red-500">{{ field_errors.phone_number }}</p>
+            </div>
+
+            <div class="p-1 w-full">
+              <AttachmentSingle :label="'Attachment'" :value="employee.attachment_1_preview" @setFile="employee.attachment_1=$event"  @setPreview="employee.attachment_1_preview=$event" :can_remove="true"/>
             </div>
 
           </div>
@@ -104,10 +111,12 @@ const employee_temp = {
   role: "Supir",
   ktp_no: "",
   sim_no: "",
-  bank_name: "",
+  bank_id: 1,
   rek_no: "",
   rek_name: "",
   phone_number: "",
+  attachment_1:"",
+  attachment_1_preview:"",
 };
 
 const employee = ref({...employee_temp});
@@ -125,10 +134,12 @@ const doSave = async () => {
   data_in.append("role", employee.value.role);
   data_in.append("ktp_no", employee.value.ktp_no);
   data_in.append("sim_no", employee.value.sim_no);
-  data_in.append("bank_name", employee.value.bank_name);
+  data_in.append("bank_id", employee.value.bank_id);
   data_in.append("rek_no", employee.value.rek_no);
   data_in.append("rek_name", employee.value.rek_name);
   data_in.append("phone_number", employee.value.phone_number);
+  data_in.append("attachment_1", employee.value.attachment_1);
+  data_in.append("attachment_1_preview", employee.value.attachment_1_preview);
 
   let $method = "post";
 
@@ -154,6 +165,8 @@ const doSave = async () => {
     return;
   }
 
+  let bidx = banks.value.map((x)=>x.id).indexOf(employee.value.bank_id);
+  employee.value.bank = {...banks.value[bidx]};
   employee.value.updated_at = data.value.updated_at;
   
   if(props.id<=0){
@@ -196,12 +209,40 @@ const callData = async () => {
   employee.value = data.value.data;
 }
 
-watch(() => props.show, (newVal, oldVal) => {
+const banks = ref([]);
+const getBanks = async () => {
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/banks", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    params: {id:props.id},
+    // body: {
+    //   sort: "updated_at:desc"
+    // },
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  banks.value = data.value.data;
+}
+
+watch(() => props.show, async(newVal, oldVal) => {
   if (newVal == true){
     employee.value = {...employee_temp};
     field_errors.value = {};
+
+    await getBanks();
     if(props.id!=0)
-    callData();
+    await callData();
   }
 }, {
   immediate: true
