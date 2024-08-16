@@ -49,9 +49,9 @@
             Update Ticket
           </button>
 
-          <div class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
+          <!-- <div class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
             <span class="text-xs">Mode</span> : <span class="font-bold" :class="online_status?'text-green-600' : 'text-red-600'">{{ online_status ? "ONLINE" : "OFFLINE" }} </span>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -145,7 +145,8 @@
       </template>
     </PopupMini>
     <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
-    <FormsTrxTrpTicket :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ticket="list_ticket" :online_status="online_status"/>
+    <!-- <FormsTrxTrpTicket :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ticket="list_ticket" :online_status="online_status"/> -->
+      <FormsTrxTrpTicket :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ticket="list_ticket"/>
     <FormsTrxTrpTicketValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" :is_view="forms_trx_trp_is_view"/>
     <FormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
 
@@ -250,17 +251,17 @@ const addClassToTbody=(data)=>{
 
 const filter_status = ref("ticket_not_done")
 watch(()=>filter_status.value,(newval)=>{
-  fields_thead.value.map((x)=>{
-    let in_list=["deleted_by_username","deleted_at","deleted_reason","req_deleted_by_username","req_deleted_at","req_deleted_reason"].indexOf(x.key) > -1;
-    if(["all","deleted","req_deleted"].indexOf(newval) > -1){
-      if( in_list )
-        x.tbl_show =  1; 
-    }else{
-      if( in_list )
-        x.tbl_show =  0; 
-    }
-    return x;
-  });
+  // fields_thead.value.map((x)=>{
+  //   let in_list=["deleted_by_username","deleted_at","deleted_reason","req_deleted_by_username","req_deleted_at","req_deleted_reason"].indexOf(x.key) > -1;
+  //   if(["all","deleted","req_deleted"].indexOf(newval) > -1){
+  //     if( in_list )
+  //       x.tbl_show =  1; 
+  //   }else{
+  //     if( in_list )
+  //       x.tbl_show =  0; 
+  //   }
+  //   return x;
+  // });
 
 
   searching();
@@ -329,7 +330,7 @@ const { data: dt_async } = await useAsyncData(async () => {
 const trx_trps = ref(dt_async.value.trx_trps || []);
 // const list_ticket = ref(dt_async.value.list_ticket);
 const list_ticket = ref([]);
-const online_status=ref(false);
+// const online_status=ref(false);
 const fnLoadDBData = async (jenis,transition_target="") => {
   useCommonStore().loading_full = true;
   let from = loadDBData.value.from ? $moment(loadDBData.value.from).format("Y-MM-DD") : "";
@@ -340,7 +341,7 @@ const fnLoadDBData = async (jenis,transition_target="") => {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
-    params: {jenis,"online_status":online_status.value,from,to,transition_target},
+    params: {jenis,from,to,transition_target},
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -611,8 +612,6 @@ const updateTicket = async() => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
-  data_in.append("online_status", online_status.value);  
-
   const { data, error, status } = await useMyFetch("/trx_trp_do_update_ticket", {
     method: "post",
     headers: {
@@ -702,12 +701,12 @@ const fields_thead=ref([
   {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   {key:"updated_at",label:"Updated At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   {key:"pv_no",label:"PV No",type:'string'},
-  {key:"deleted_by_username",label:"Deleted By",tbl_show:0},
-  {key:"deleted_at",label:"Deleted At",dateformat:"DD-MM-Y HH:mm:ss", tbl_show:0,type:'datetime',filter_on:1},
-  {key:"deleted_reason",label:"Deleted Reason", tbl_show:0,type:'string',filter_on:1},
-  {key:"req_deleted_by_username",label:"Req Deleted By",tbl_show:0},
-  {key:"req_deleted_at",label:"Req Delete At",dateformat:"DD-MM-Y HH:mm:ss", tbl_show:0,type:'datetime',filter_on:1},
-  {key:"req_deleted_reason",label:"Req Delete Reason", tbl_show:0,type:'string',filter_on:1},
+  {key:"deleted_by_username",label:"Deleted By",tbl_show:1},
+  {key:"deleted_at",label:"Deleted At",dateformat:"DD-MM-Y HH:mm:ss", tbl_show:1,type:'datetime',filter_on:1},
+  {key:"deleted_reason",label:"Deleted Reason", tbl_show:1,type:'string',filter_on:1},
+  {key:"req_deleted_by_username",label:"Req Deleted By",tbl_show:1},
+  {key:"req_deleted_at",label:"Req Delete At",dateformat:"DD-MM-Y HH:mm:ss", tbl_show:1,type:'datetime',filter_on:1},
+  {key:"req_deleted_reason",label:"Req Delete Reason", tbl_show:1,type:'string',filter_on:1},
 ]);
 
 const enabled_view = computed(()=>{ 

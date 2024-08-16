@@ -383,6 +383,8 @@ const callData = async () => {
     }
   })
 
+  selected_supir.value.note="";
+  selected_kernet.value.note="";
   if($ttl_cut_fs > 0 ){
     selected_supir.value.note="Telah di potong sebesar :"+useUtils().pointFormat($ttl_cut_fs);
   }

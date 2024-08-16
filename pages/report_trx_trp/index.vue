@@ -3,14 +3,37 @@
     <Header :title="'Report Transaction'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
-        <button type="button" name="button" class="m-1 text-2xl "
-          @click="printPreview()">
+        <!-- <button type="button" name="button" class="m-1 text-2xl "
+          @click="pdfPreview()">
           <IconsPrinterEye />
         </button>
         <button type="button" name="button" class="m-1 text-2xl "
           @click="downloadExcel()">
           <IconsTable2Column />
-        </button>
+        </button> -->
+
+        <div class="flex flex-wrap p-1">
+          <button type="button" name="button" class="m-1 text-2xl flex items-center "
+            @click="pdfPreview('reportSusutPDF')">
+            <IconsPrinterEye /> <span class="text-xs ml-1"> SUSUT </span>
+          </button>
+          <button type="button" name="button" class="m-1 text-2xl flex items-center "
+            @click="downloadExcel('reportSusutExcel')">
+            <IconsTable2Column />  <span class="text-xs ml-1"> SUSUT </span>
+          </button>
+        </div>
+
+        <div class="flex flex-wrap p-1">
+          <button type="button" name="button" class="m-1 text-2xl flex items-center "
+            @click="pdfPreview('reportPVPDF')">
+            <IconsPrinterEye /> <span class="text-xs ml-1"> PV </span>
+          </button>
+          <button type="button" name="button" class="m-1 text-2xl flex items-center "
+            @click="downloadExcel('reportPVExcel')">
+            <IconsTable2Column />  <span class="text-xs ml-1"> PV </span>
+          </button>
+        </div>
+
         <button type="button" name="button" class="m-1 text-2xl "
           @click="lookUj()">
           <IconsEyes />
@@ -135,7 +158,7 @@
       <div class="relative" style="width:95%; height: 90%;">
         <div class="absolute -top-7 right-0 bg-white"
           style="position: absolute; padding:5px 10px; border: solid 1px #ccc; border-bottom: none; border-top-right-radius: 5px;  border-top-left-radius: 5px;">
-          <IconsTimes  style="color:black; cursor:pointer;" @click="printPreview()"/>
+          <IconsTimes  style="color:black; cursor:pointer;" @click="pdfPreview()"/>
         </div>
         <iframe ref="iframe" width='100%' height='100%' :src='pdfContent.dataBase64'></iframe>
         <div
@@ -502,14 +525,14 @@ const { downloadFile, viewFile } = useDownload();
 const prtView = ref(false);
 const pdfContent = ref("");
 
-const printPreview = async()=>{
+const pdfPreview = async($link="")=>{
   if (prtView.value==true) {
     prtView.value = false;
     return;
   }
   inject_params();
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/trx_trps_preview_file", {
+  const { data, error, status } = await useMyFetch("/trx_trps/"+$link, {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -528,10 +551,10 @@ const printPreview = async()=>{
   prtView.value = true;
 }
 
-const downloadExcel = async()=>{  
+const downloadExcel = async($link="")=>{  
   inject_params();
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/trx_trps_download_excel", {
+  const { data, error, status } = await useMyFetch("/trx_trps/"+$link, {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

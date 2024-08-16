@@ -41,7 +41,14 @@
             <li v-if="useUtils().checkPermission('trp_trx.ticket.views')" :class="activeMenu == '/data_trx_trp/ticket'?'active':''" >
               <nuxt-link to="/data_trx_trp/ticket"  class="cursor-pointer" @click="goTo('/data_trx_trp/ticket')">
                 <IconsProduct class="mr-1"/>
-                Trx Ticket
+                Ticket Logistik
+              </nuxt-link>
+            </li>
+
+            <li v-if="useUtils().checkPermission('trp_trx.ticket.views')" :class="activeMenu == '/data_trx_trp/ticket_over'?'active':''" >
+              <nuxt-link to="/data_trx_trp/ticket_over"  class="cursor-pointer" @click="goTo('/data_trx_trp/ticket_over')">
+                <IconsProduct class="mr-1"/>
+                Check Ticket
               </nuxt-link>
             </li>
 
@@ -59,19 +66,6 @@
               </nuxt-link>
             </li>
 
-            <li v-if="useUtils().checkPermission('extra_money.views')" :class="activeMenu == '/extra_money'?'active':''" >
-              <nuxt-link to="/extra_money"  class="cursor-pointer" @click="goTo('/extra_money')">
-                <IconsMoney class="mr-1"/>
-                Extra Money
-              </nuxt-link>
-            </li>
-
-            <li v-if="useUtils().checkPermission('extra_money_trx.views')" :class="activeMenu == '/extra_money/trx'?'active':''" >
-              <nuxt-link to="/extra_money/trx"  class="cursor-pointer" @click="goTo('/extra_money/trx')">
-                <IconsMoney class="mr-1"/>
-                Extra Money Trx
-              </nuxt-link>
-            </li>
             
             <li v-if="useUtils().checkPermission('standby_mst.views')"  :class="activeMenu == '/data_standby'?'active':''" >
               <nuxt-link to="/data_standby"  class="cursor-pointer" @click="goTo('/data_standby')">
@@ -95,24 +89,24 @@
             <li v-if="useUtils().checkPermission('report.ramp.views')" :class="activeMenu == '/report/ramp'?'active':''" >
               <nuxt-link to="/report/ramp"  class="cursor-pointer" @click="goTo('/report/ramp')">
                 <IconsFileCopy class="mr-1"/>
-                Report Ramp
+                Rpt Hsl Trip
               </nuxt-link>
             </li>
             <li v-if="useUtils().checkPermission('report.ast_n_driver.views')" :class="activeMenu == '/report/ast_n_driver'?'active':''" >
               <nuxt-link to="/report/ast_n_driver"  class="cursor-pointer" @click="goTo('/report/ast_n_driver')">
                 <IconsFileCopy class="mr-1"/>
-                Report Ast &amp; Driver
+                Rpt Gaji Supir &amp; Kernet
               </nuxt-link>
             </li>
-            <li v-if="useUtils().checkPermission('development')" :class="activeMenu == '/fin_payment_req'?'active':''" >
+            <!-- <li v-if="useUtils().checkPermission('development')" :class="activeMenu == '/fin_payment_req'?'active':''" >
               <nuxt-link to="/fin_payment_req"  class="cursor-pointer" @click="goTo('/fin_payment_req')">
                 <IconsFileCopy class="mr-1"/>
                 Payment Request
               </nuxt-link>
-            </li>
+            </li> -->
             <li v-if="useUtils().checkPermission('vehicle.views')" :class="activeMenu == '/vehicle'?'active':''" >
               <nuxt-link to="/vehicle"  class="cursor-pointer" @click="goTo('/vehicle')">
-                <IconsPerson class="mr-1"/>
+                <IconsTruck class="mr-1"/>
                 Kendaraan
               </nuxt-link>
             </li>
@@ -124,21 +118,33 @@
             </li>
             <li v-if="useUtils().checkPermission('potongan_mst.views')" :class="activeMenu == '/potongan'?'active':''" >
               <nuxt-link to="/potongan"  class="cursor-pointer" @click="goTo('/potongan')">
-                <IconsPerson class="mr-1"/>
+                <IconsMoneySlash class="mr-1"/>
                 Potongan
               </nuxt-link>
             </li>
+            <li v-if="useUtils().checkPermission('extra_money.views')" :class="activeMenu == '/extra_money'?'active':''" >
+              <nuxt-link to="/extra_money"  class="cursor-pointer" @click="goTo('/extra_money')">
+                <IconsMoneyMulti class="mr-1"/>
+                Extra Money
+              </nuxt-link>
+            </li>
 
+            <li v-if="useUtils().checkPermission('extra_money_trx.views')" :class="activeMenu == '/extra_money/trx'?'active':''" >
+              <nuxt-link to="/extra_money/trx"  class="cursor-pointer" @click="goTo('/extra_money/trx')">
+                <IconsMoneyMulti class="mr-1"/>
+                Extra Money Trx
+              </nuxt-link>
+            </li>
             <li v-if="useUtils().checkPermission('salary_paid.views')" :class="activeMenu == '/salary_paid'?'active':''" >
               <nuxt-link to="/salary_paid"  class="cursor-pointer" @click="goTo('/salary_paid')">
-                <IconsMoney class="mr-1"/>
+                <IconsMoneyBag class="mr-1"/>
                 Salary Paid
               </nuxt-link>
             </li>
 
             <li v-if="useUtils().checkPermission('salary_bonus.views')" :class="activeMenu == '/salary_bonus'?'active':''" >
               <nuxt-link to="/salary_bonus"  class="cursor-pointer" @click="goTo('/salary_bonus')">
-                <IconsMoney class="mr-1"/>
+                <IconsMoneyBag class="mr-1"/>
                 Salary Additional
               </nuxt-link>
             </li>

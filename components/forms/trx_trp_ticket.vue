@@ -256,6 +256,32 @@
                 <textarea class="w-full h-32" v-model="trx_trp.ticket_note"></textarea>
               </div>
 
+
+              <div class="w-full grid grid-cols-3 gap-1 p-1">
+
+                <div class="border-[1px] border-gray-300 p-1">
+                  <div class="font-bold text-center"> Bruto </div>
+                  <div class="text-right"> {{pointFormat(trx_trp.ticket_a_bruto || 0)}} </div>
+                  <div class="text-right"> {{pointFormat(trx_trp.ticket_b_bruto || 0)}} </div>
+                  <div class="text-right border-t border-gray-700"> {{pointFormat((trx_trp.ticket_a_bruto - trx_trp.ticket_b_bruto) || 0)}} </div>
+                </div>
+
+                <div class="border-[1px] border-gray-300 p-1">
+                  <div class="font-bold text-center"> Tara </div>
+                  <div class="text-right"> {{pointFormat(trx_trp.ticket_a_tara || 0)}} </div>
+                  <div class="text-right"> {{pointFormat(trx_trp.ticket_b_tara || 0)}} </div>
+                  <div class="text-right border-t border-gray-700"> {{pointFormat((trx_trp.ticket_a_tara - trx_trp.ticket_b_tara) || 0)}} </div>
+                </div>
+
+                <div class="border-[1px] border-gray-300 p-1">
+                  <div class="font-bold text-center"> Netto </div>
+                  <div class="text-right"> {{pointFormat(trx_trp.ticket_a_netto || 0)}} </div>
+                  <div class="text-right"> {{pointFormat(trx_trp.ticket_b_netto || 0)}} </div>
+                  <div class="text-right border-t border-gray-700"> {{pointFormat(((trx_trp.ticket_a_bruto - trx_trp.ticket_a_tara) - (trx_trp.ticket_b_bruto - trx_trp.ticket_b_tara)) || 0)}} </div>
+                </div>
+
+              </div>
+
             </div>
           </div>
           
@@ -316,11 +342,7 @@ const props = defineProps({
     required:true,
     default:[]
   },
-  online_status:{
-    type:Boolean,
-    required:true,
-    default:false
-  },
+
 })
 
 const trx_trp_temp = {
@@ -380,7 +402,6 @@ const doSave = async () => {
   data_in.append("jenis", trx_trp.value.jenis);
   data_in.append("id_uj", trx_trp.value.id_uj);
   data_in.append("xto", trx_trp.value.xto);
-  data_in.append("online_status", props.online_status);
   data_in.append("transition_target", trx_trp.value.transition_target);
 
   if(trx_trp.value.ticket_a_no){
@@ -390,7 +411,7 @@ const doSave = async () => {
     if(ticket.length == 0 && trx_trp.value.ticket_a_no == trx_trp_loaded.ticket_a_no)
     data_in.append("ticket_a_id", trx_trp_loaded.ticket_a_id);
     else
-    data_in.append("ticket_a_id", ticket[0].TicketID);
+    data_in.append("ticket_a_id", ticket.length > 0 ? ticket[0].TicketID : "");
   }
 
   if(trx_trp.value.ticket_b_no){
@@ -400,7 +421,7 @@ const doSave = async () => {
     if(ticket.length == 0 && trx_trp.value.ticket_b_no == trx_trp_loaded.ticket_b_no)
     data_in.append("ticket_b_id", trx_trp_loaded.ticket_b_id);
     else
-    data_in.append("ticket_b_id", ticket[0].TicketID);
+    data_in.append("ticket_b_id", ticket.length > 0 ? ticket[0].TicketID : "");
   }
 
   data_in.append("ticket_a_no", trx_trp.value.ticket_a_no);

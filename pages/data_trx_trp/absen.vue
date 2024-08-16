@@ -37,6 +37,10 @@
           <IconsLine v-if="!item.ritase_val1"/>
           <IconsCheck v-else/>
         </template>
+        <template #[`ritase_val2`]="{item}">
+          <IconsLine v-if="!item.ritase_val2"/>
+          <IconsCheck v-else/>
+        </template>
         <template #[`deleted_by_username`]="{item}">
           {{ item.deleted_by?.username }}
         </template>
@@ -297,6 +301,7 @@ const fields_thead=ref([
   {key:"no",label:"No",isai:true},
   {key:"ritase_val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"ritase_val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"ritase_val2",label:"App 3",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1,sort:{priority:1,type:"desc"}},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
@@ -336,11 +341,11 @@ const enabled_validasi = computed(()=>{
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
-  && (
-    [undefined,0].indexOf(dt_selected.value.ritase_val) > -1 && 
-    [undefined,0].indexOf(dt_selected.value.ritase_val1) > -1
-  )
-  && useUtils().checkPermissions(['trp_trx.absen.val','trp_trx.absen.val1']);
+  // && (
+  //   [undefined,0].indexOf(dt_selected.value.ritase_val) > -1 && 
+  //   [undefined,0].indexOf(dt_selected.value.ritase_val1) > -1
+  // )
+  && useUtils().checkPermissions(['trp_trx.absen.val','trp_trx.absen.val1','trp_trx.absen.val2']);
   return result;
 })
 

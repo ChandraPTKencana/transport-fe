@@ -65,6 +65,7 @@
                 <th>No.</th>
                 <th>Username</th>
                 <th>Hak Akses</th>
+                <th>Group</th>
                 <th>Status</th>
                 <th>Tanggal Dibuat</th>
                 <th>Tanggal Diubah</th>
@@ -76,6 +77,7 @@
                 <td>{{ index + 1 }}.</td>
                 <td class="bold">{{ user.username }}</td>
                 <td>{{ user.hak_akses }}</td>
+                <td>{{ name_of_groups(user) }}</td>
                 <td>{{ user.is_active ? 'Aktif' : 'Nonaktif' }}</td>
                 <td>{{ $moment(user.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td>{{ $moment(user.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
@@ -166,6 +168,16 @@ const inject_params = () => {
   if (sort.value.field) {
     params.sort = sort.value.field + ":" + sort.value.by;
   }
+};
+
+const name_of_groups = (user) => {
+  let names = [];
+  if(user.permission_group_users.length > 0){
+    user.permission_group_users.forEach((group) => {
+      names.push(group.permission_group.name);
+    });
+  }
+  return names.join(",");
 };
 
 const loadRef = ref(null);

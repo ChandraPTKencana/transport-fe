@@ -114,12 +114,15 @@
             <div>
               Di Validasi oleh : 
             </div>
-            <div v-if="trx_trp.ritase_val || trx_trp.ritase_val1 || trx_trp.ritase_val2 || trx_trp.ritase_val3 || trx_trp.ritase_val4 || trx_trp.ritase_val5" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
+            <div v-if="trx_trp.ritase_val || trx_trp.ritase_val1 || trx_trp.ritase_val2" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
               <div v-if="trx_trp.ritase_val">
                 App 1 : {{ trx_trp.ritase_val_by.username}} ( {{ trx_trp.ritase_val_at ? $moment(trx_trp.ritase_val_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
               </div>
               <div v-if="trx_trp.ritase_val1">
                 App 2 : {{ trx_trp.ritase_val1_by.username}} ( {{ trx_trp.ritase_val1_at ? $moment(trx_trp.ritase_val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+              </div>
+              <div v-if="trx_trp.ritase_val2">
+                App 3 : {{ trx_trp.ritase_val2_by.username}} ( {{ trx_trp.ritase_val2_at ? $moment(trx_trp.ritase_val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
               </div>
             </div>
           </div>
@@ -202,6 +205,11 @@ const trx_trp_temp = {
     ritase_val1:0,
     ritase_val1_by:{ username:"" },
     ritase_val1_at:"",
+
+    ritase_val2:0,
+    ritase_val2_by:{ username:"" },
+    ritase_val2_at:"",
+
 };
 const trx_trp = ref({...trx_trp_temp});
 
@@ -247,6 +255,10 @@ const doSave = async () => {
   trx_trp.value.ritase_val1_by = data.value.ritase_val1_by;
   trx_trp.value.ritase_val1_at = data.value.ritase_val1_at;
 
+  trx_trp.value.ritase_val2 = data.value.ritase_val2;
+  trx_trp.value.ritase_val2_user = data.value.ritase_val2_user;
+  trx_trp.value.ritase_val2_by = data.value.ritase_val2_by;
+  trx_trp.value.ritase_val2_at = data.value.ritase_val2_at;
 
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
