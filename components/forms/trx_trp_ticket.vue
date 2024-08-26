@@ -250,6 +250,28 @@
                 </div>
               </div>
 
+              <div class="w-full flex flex-wrap">
+                <div class="w-full sm:w-full md:w-6/12 lg:w-4/12 flex flex-col flex-wrap p-1 justify-end">
+                </div>
+                <div class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col justify-end flex-wrap p-1">
+                  <label for="" class="font-bold">Selisih Bruto </label>
+                  <div class="card-border disabled">
+                   {{ pointFormat((trx_trp.ticket_a_bruto - trx_trp.ticket_b_bruto) || 0) }}
+                  </div>
+                </div>
+                <div class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col justify-end flex-wrap p-1">
+                  <label for="" class="font-bold">Selisih Tara </label>
+                  <div class="card-border disabled">
+                    {{ pointFormat((trx_trp.ticket_a_tara - trx_trp.ticket_b_tara) || 0) }}
+                  </div>
+                </div>
+                <div class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col justify-end flex-wrap p-1">
+                  <label for="" class="font-bold">Selisih Netto </label>
+                  <div class="card-border disabled">
+                    {{ pointFormat(((trx_trp.ticket_a_bruto - trx_trp.ticket_a_tara) - (trx_trp.ticket_b_bruto - trx_trp.ticket_b_tara)) || 0) }}
+                  </div>
+                </div>
+              </div>
 
               <div class="w-full flex flex-col flex-wrap p-1">
                 <label for="">Note</label>
@@ -257,30 +279,7 @@
               </div>
 
 
-              <div class="w-full grid grid-cols-3 gap-1 p-1">
 
-                <div class="border-[1px] border-gray-300 p-1">
-                  <div class="font-bold text-center"> Bruto </div>
-                  <div class="text-right"> {{pointFormat(trx_trp.ticket_a_bruto || 0)}} </div>
-                  <div class="text-right"> {{pointFormat(trx_trp.ticket_b_bruto || 0)}} </div>
-                  <div class="text-right border-t border-gray-700"> {{pointFormat((trx_trp.ticket_a_bruto - trx_trp.ticket_b_bruto) || 0)}} </div>
-                </div>
-
-                <div class="border-[1px] border-gray-300 p-1">
-                  <div class="font-bold text-center"> Tara </div>
-                  <div class="text-right"> {{pointFormat(trx_trp.ticket_a_tara || 0)}} </div>
-                  <div class="text-right"> {{pointFormat(trx_trp.ticket_b_tara || 0)}} </div>
-                  <div class="text-right border-t border-gray-700"> {{pointFormat((trx_trp.ticket_a_tara - trx_trp.ticket_b_tara) || 0)}} </div>
-                </div>
-
-                <div class="border-[1px] border-gray-300 p-1">
-                  <div class="font-bold text-center"> Netto </div>
-                  <div class="text-right"> {{pointFormat(trx_trp.ticket_a_netto || 0)}} </div>
-                  <div class="text-right"> {{pointFormat(trx_trp.ticket_b_netto || 0)}} </div>
-                  <div class="text-right border-t border-gray-700"> {{pointFormat(((trx_trp.ticket_a_bruto - trx_trp.ticket_a_tara) - (trx_trp.ticket_b_bruto - trx_trp.ticket_b_tara)) || 0)}} </div>
-                </div>
-
-              </div>
 
             </div>
           </div>

@@ -186,7 +186,7 @@ const scrolling = ref({
 const inject_params = () => {
   params.like = "";
   if (search.value != "") {
-    params.like = `id:%${search.value}%,name:%${search.value}%`;
+    params.like = `id:%${search.value}%,name:%${search.value}%,ktp_no:%${search.value}%,sim_no:%${search.value}%,phone_number:%${search.value}%,rek_no:%${search.value}%`;
   }
   params.sort = "";
   if (sort.value.field) {

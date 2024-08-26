@@ -172,7 +172,7 @@ const inject_params = () => {
 
 const name_of_groups = (user) => {
   let names = [];
-  if(user.permission_group_users.length > 0){
+  if(user.permission_group_users && user.permission_group_users.length > 0){
     user.permission_group_users.forEach((group) => {
       names.push(group.permission_group.name);
     });
