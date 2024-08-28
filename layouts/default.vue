@@ -86,6 +86,13 @@
                 Report Trp
               </nuxt-link>
             </li>
+            <li v-if="useUtils().checkPermission('trp_trx.report.views')" :class="activeMenu == '/report_trx_trp/finance'?'active':''" >
+              <nuxt-link to="/report_trx_trp/finance"  class="cursor-pointer" @click="goTo('/report_trx_trp/finance')">
+                <IconsFileCopy class="mr-1"/>
+                Report Fin
+              </nuxt-link>
+            </li>
+
             <li v-if="useUtils().checkPermission('report.ramp.views')" :class="activeMenu == '/report/ramp'?'active':''" >
               <nuxt-link to="/report/ramp"  class="cursor-pointer" @click="goTo('/report/ramp')">
                 <IconsFileCopy class="mr-1"/>

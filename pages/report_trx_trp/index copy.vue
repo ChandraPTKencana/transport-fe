@@ -11,15 +11,8 @@
           @click="downloadExcel()">
           <IconsTable2Column />
         </button> -->
-        <div class="m-1">
-            <select class="" v-model="filter_status" >
-              <option value="ticket_not_done">Undone</option>
-              <option value="ticket_done">Done</option>
-              <option value="deleted">Trash</option>
-              <option value="all">All</option>
-              <option value="req_deleted">Req Delete</option>
-            </select>
-          </div>
+
+        <div class="flex flex-wrap p-1">
           <button type="button" name="button" class="m-1 text-2xl flex items-center "
             @click="pdfPreview('reportSusutPDF')">
             <IconsPrinterEye /> <span class="text-xs ml-1"> PDF </span>
@@ -28,6 +21,7 @@
             @click="downloadExcel('reportSusutExcel')">
             <IconsTable2Column />  <span class="text-xs ml-1"> Excel </span>
           </button>
+        </div>
 
         <!-- <div class="flex flex-wrap p-1">
           <button type="button" name="button" class="m-1 text-2xl flex items-center "
@@ -156,6 +150,8 @@
         </template>
       </TableView>
     </div>
+
+    <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
   
     <div v-if="prtView" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
       style="background-color: rgba(255,255,255,0.9);">
@@ -301,43 +297,6 @@ definePageMeta({
   ],
 });
 
-const checkStatus=(data)=>{
-  if(data.deleted==1) return "!bg-red-400";
-  if(data.req_deleted == 1) return "!bg-yellow-300"; 
-  if((["CPO","PK"].indexOf(data.jenis)>-1 && (data.ticket_a_id!="" && data.ticket_b_bruto!="" && data.ticket_b_tara!="" && data.ticket_b_netto !="" && data.ticket_b_in_at!="" && data.ticket_b_out_at!="")) ||
-    (data.jenis=="TBS" && (data.ticket_a_id!="" && data.ticket_b_id!="")) ||
-    (data.jenis=="TBSK" && data.ticket_b_id!="")) return "!bg-blue-300"; 
-  return "";
-}
-
-const addClassToTbody=(data)=>{
-  data.map(e => {    
-    e.class_h = checkStatus(e);
-  });
-  return data;
-}
-
-const filter_status = ref("ticket_not_done")
-watch(()=>filter_status.value,(newval)=>{
-  // fields_thead.value.map((x)=>{
-  //   let in_list=["deleted_by_username","deleted_at","deleted_reason","req_deleted_by_username","req_deleted_at","req_deleted_reason"].indexOf(x.key) > -1;
-  //   if(["all","deleted","req_deleted"].indexOf(newval) > -1){
-  //     if( in_list )
-  //       x.tbl_show =  1; 
-  //   }else{
-  //     if( in_list )
-  //       x.tbl_show =  0; 
-  //   }
-  //   return x;
-  // });
-
-
-  searching();
-}, {
-  immediate: false
-})
-
-
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
 params.sort ="tanggal:desc";
@@ -361,7 +320,6 @@ const { data: dt_async } = await useAsyncData(async () => {
         'Authorization': `Bearer ${token.value}`,
         'Accept': 'application/json'
       },
-      params:{filter_status},
       retry: 0,
     }),
     // useMyFetch("/trx_load_for_trp", {
@@ -377,8 +335,7 @@ const { data: dt_async } = await useAsyncData(async () => {
   
 
   if (data1.status.value !== 'error') {
-    // trx_trps = data1.data.value.data;
-    trx_trps = addClassToTbody(data1.data.value.data);
+    trx_trps = data1.data.value.data;
   }
 
   if (data1.status.value === 'error') {
@@ -439,8 +396,6 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(trx_trps.value[0]);
   }
-  params.filter_status = filter_status.value;
-
   const { data, error, status } = await useMyFetch("/trx_trps", {
     method: 'get',
     headers: {
@@ -459,14 +414,10 @@ const callData = async () => {
   }
 
   if (scrolling.value.page == 1) {
-    // trx_trps.value = data.value.data;
-    trx_trps.value = addClassToTbody(data.value.data);
-
+    trx_trps.value = data.value.data;
     if (loadRef.value) loadRef.value.scrollTop = 0;
   } else if (scrolling.value.page > 1) {
-    // trx_trps.value = [...trx_trps.value, ...data.value.data];
-    trx_trps.value = [...trx_trps.value, ...addClassToTbody(data.value.data)];
-
+    trx_trps.value = [...trx_trps.value, ...data.value.data];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
@@ -500,6 +451,73 @@ const searching = () => {
   scrolling.value.is_last_record = false;
   inject_params();
   callData();
+}
+
+const router = useRouter();
+
+const forms_trx_trp_show =  ref(false);
+const forms_trx_trp_id = ref(0);
+const form_add = () => {
+  forms_trx_trp_id.value = 0;
+  forms_trx_trp_show.value = true;
+  // router.push({ name: 'data_trx_trp-form', query: { id: "" } });
+}
+
+const { display } = useAlertStore();
+const { show, status, message } = storeToRefs(useAlertStore());
+
+const form_edit = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_trx_trp_id.value = trx_trps.value[selected.value].id;
+    forms_trx_trp_show.value = true;
+    // router.push({ name: 'data_trx_trp-form', query: { id: trx_trps.value[selected.value].id } });
+  }
+};
+
+const delete_data = ref({});
+const delete_box = ref(false);
+
+const toggleDeleteBox = async()=>{  
+  if (delete_box.value) {
+    delete_box.value = false;
+  }
+};
+
+const remove = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    delete_data.value = {id : trx_trps.value[selected.value].id};
+    delete_box.value = true;
+  }
+};
+
+const confirmed_delete = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("id", trx_trps.value[selected.value].id);  
+  data_in.append("_method", "DELETE");
+
+  const { data, error, status } = await useMyFetch("/trx_trp", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  trx_trps.value.splice(selected.value,1);
+  selected.value = -1;
+  delete_box.value = false;
 }
 
 const { downloadFile, viewFile } = useDownload();
@@ -558,12 +576,18 @@ const download = ()=>{
   downloadFile(pdfContent.value);
 }
 
-
-
+const checkStatus=(data)=>{
+  if(
+    data.pv_id<=0 ||
+    (["CPO","PK"].indexOf(data.jenis)>-1 && (data.ticket_a_id<=0 || data.ticket_b_bruto<=0 || data.ticket_b_tara<=0 || data.ticket_b_netto <=0 || data.ticket_b_in_at==""|| data.ticket_b_out_at=="")) ||
+    (data.jenis=="TBS" && (data.ticket_a_id<=0 || data.ticket_b_id<=0)) ||
+    (data.jenis=="TBSK" && data.ticket_b_id<=0)
+  ) return 0;
+  return 1;
+}
 
 const fields_thead=ref([
-  // {key:"status",label:"Status",filter_on:1,sort_off:1,type:"select",select_item:['Undone','Done']},
-  {key:"no",label:"No",isai:true},
+  {key:"status",label:"Status",filter_on:1,sort_off:1,type:"select",select_item:['Undone','Done']},
   {key:"val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"id",label:"ID",filter_on:1,type:"number"},
