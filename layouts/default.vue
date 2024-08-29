@@ -83,7 +83,7 @@
             <li v-if="useUtils().checkPermission('trp_trx.report.views')" :class="activeMenu == '/report_trx_trp'?'active':''" >
               <nuxt-link to="/report_trx_trp"  class="cursor-pointer" @click="goTo('/report_trx_trp')">
                 <IconsFileCopy class="mr-1"/>
-                Report Trp
+                Report Susut
               </nuxt-link>
             </li>
             <li v-if="useUtils().checkPermission('trp_trx.report.views')" :class="activeMenu == '/report_trx_trp/finance'?'active':''" >
