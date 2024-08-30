@@ -488,10 +488,9 @@ const filtered_data = computed(()=>{
 
 
 const potongan= (trx_trp)=>{
-  if(trx_trp.potongan)
-    return trx_trp.potongan.map((x)=>x.nominal_cut).reduce((prev,curr)=>{prev+=curr; return prev;})
-  else
-    return 0;
+  if(trx_trp.potongan && trx_trp.potongan.length > 0)
+      return trx_trp.potongan.map((x)=>x.nominal_cut).reduce((prev,curr)=>{prev+=curr; return prev;})
+  return 0;
 };
 
 const highlight=()=>{
