@@ -21,11 +21,11 @@
             </select>
           </div>
           <button type="button" name="button" class="m-1 text-2xl flex items-center "
-            @click="pdfPreview('reportSusutPDF')">
+            @click="pdfPreview('report_susut_PDF')">
             <IconsPrinterEye /> <span class="text-xs ml-1"> PDF </span>
           </button>
           <button type="button" name="button" class="m-1 text-2xl flex items-center "
-            @click="downloadExcel('reportSusutExcel')">
+            @click="downloadExcel('report_susut_excel')">
             <IconsTable2Column />  <span class="text-xs ml-1"> Excel </span>
           </button>
 
@@ -107,12 +107,8 @@
             {{checkStatus(item) ? "Done" : "Not Done" }}
           </div>
         </template>
-        <template #[`val`]="{item}">
-          <IconsLine v-if="!item.val"/>
-          <IconsCheck v-else/>
-        </template>
-        <template #[`val1`]="{item}">
-          <IconsLine v-if="!item.val1"/>
+        <template #[`val_ticket`]="{item}">
+          <IconsLine v-if="!item.val_ticket"/>
           <IconsCheck v-else/>
         </template>
         <template #[`pvr_had_detail`]="{item}">
@@ -304,9 +300,12 @@ definePageMeta({
 const checkStatus=(data)=>{
   if(data.deleted==1) return "!bg-red-400";
   if(data.req_deleted == 1) return "!bg-yellow-300"; 
-  if((["CPO","PK"].indexOf(data.jenis)>-1 && (data.ticket_a_id!="" && data.ticket_b_bruto!="" && data.ticket_b_tara!="" && data.ticket_b_netto !="" && data.ticket_b_in_at!="" && data.ticket_b_out_at!="")) ||
-    (data.jenis=="TBS" && (data.ticket_a_id!="" && data.ticket_b_id!="")) ||
-    (data.jenis=="TBSK" && data.ticket_b_id!="")) return "!bg-blue-300"; 
+  if(data.val_ticket == 1 && (
+    ( ["CPO","PK"].indexOf(data.jenis)>-1 && (data.ticket_a_id!="" && data.ticket_b_bruto!="" && data.ticket_b_tara!="" && data.ticket_b_netto !="" && data.ticket_b_in_at!="" && data.ticket_b_out_at!="")) ||
+    ( data.jenis=="TBS" && (data.ticket_a_id!="" && data.ticket_b_id!="") ) ||
+    ( data.jenis=="TBSK" && data.ticket_b_id!="")
+    )
+  ) return "!bg-blue-300"; 
   return "";
 }
 
@@ -355,7 +354,7 @@ const { data: dt_async } = await useAsyncData(async () => {
   let trx_trps = [];
 
   const [data1, data2] = await Promise.all([
-    useMyFetch("/trx_trps", {
+    useMyFetch("/trx_trp_susuts/data", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -425,6 +424,7 @@ const inject_params = () => {
   params.date_from = date.value.from ? $moment(date.value.from).format("YYYY-MM-DD") : "";
   params.date_to = date.value.to ? $moment(date.value.to).format("YYYY-MM-DD") : "";
   params.filter_model = JSON.stringify(useCommonStore()._tv.filter_model);
+  params.filter_status = filter_status.value;
 };
 
 const loadRef = ref(null);
@@ -441,7 +441,7 @@ const callData = async () => {
   }
   params.filter_status = filter_status.value;
 
-  const { data, error, status } = await useMyFetch("/trx_trps", {
+  const { data, error, status } = await useMyFetch("/trx_trp_susuts/data", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -507,14 +507,14 @@ const { downloadFile, viewFile } = useDownload();
 const prtView = ref(false);
 const pdfContent = ref("");
 
-const pdfPreview = async($link="")=>{
+const pdfPreview = async()=>{
   if (prtView.value==true) {
     prtView.value = false;
     return;
   }
   inject_params();
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/trx_trps/"+$link, {
+  const { data, error, status } = await useMyFetch("/trx_trp_susuts/report_PDF", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -533,10 +533,10 @@ const pdfPreview = async($link="")=>{
   prtView.value = true;
 }
 
-const downloadExcel = async($link="")=>{  
+const downloadExcel = async()=>{  
   inject_params();
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/trx_trps/"+$link, {
+  const { data, error, status } = await useMyFetch("/trx_trp_susuts/report_Excel", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -564,8 +564,7 @@ const download = ()=>{
 const fields_thead=ref([
   // {key:"status",label:"Status",filter_on:1,sort_off:1,type:"select",select_item:['Undone','Done']},
   {key:"no",label:"No",isai:true},
-  {key:"val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val_ticket",label:"App",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1,sort:{priority:1,type:"desc"}},
   {key:"no_pol",label:"No Pol",filter_on:1,type:'string'},

@@ -199,7 +199,7 @@
                   v-if="tf.permit" v-show="tf.tbl_show"
                   :class="tb.class_h ? tb.class_h : ''"
                 >
-                  <div class="w-full h-full flex items-center" :class="tf.class ? tf.class : 'justify-center'">
+                  <div v-if="!tf.checkbox" class="w-full h-full flex items-center" :class="tf.class ? tf.class : 'justify-center'">
                     <!-- {{ tf.id }} -->
                     <slot :name="tf.key" :item="tb" :index="index">
                       <template v-if="tf.isai">
@@ -212,11 +212,20 @@
                       <template v-else>
                         {{ tb[tf.key] ? checkType(tb[tf.key],tf.type)  : "" }}
                       </template>
-                      <template v-if="tf.checkbox">
-                        <input type="checkbox" @click="checkbox_set(tb[tf.checkbox])">
-                      </template>
+                      <!-- <template v-if="tf.checkbox">
+                        <label class="w-7 h-5 flex items-center justify-center">
+                          <input type="checkbox" @click="checkbox_set(tb[tf.checkbox])">
+                        </label>
+                      </template> -->
                     </slot>
                   </div>
+                  <slot v-else :name="tf.key" :item="tb" :index="index">
+                    <template v-if="tf.checkbox">
+                      <label class="w-7 h-5 flex items-center justify-center">
+                        <input type="checkbox" @click="checkbox_set(tb[tf.checkbox])">
+                      </label>
+                    </template>
+                  </slot>
                 </component>
               </template>
             </tr>

@@ -146,7 +146,7 @@
     </PopupMini>
     <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
     <!-- <FormsTrxTrpTicket :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ticket="list_ticket" :online_status="online_status"/> -->
-      <FormsTrxTrpTicket :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ticket="list_ticket"/>
+    <FormsTrxTrpTicket :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ticket="list_ticket"/>
     <FormsTrxTrpTicketValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" :is_view="forms_trx_trp_is_view"/>
     <FormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
 
@@ -236,9 +236,12 @@ definePageMeta({
 const checkStatus=(data)=>{
   if(data.deleted==1) return "!bg-red-400";
   if(data.req_deleted == 1) return "!bg-yellow-300"; 
-  if((["CPO","PK"].indexOf(data.jenis)>-1 && (data.ticket_a_id!="" && data.ticket_b_bruto!="" && data.ticket_b_tara!="" && data.ticket_b_netto !="" && data.ticket_b_in_at!="" && data.ticket_b_out_at!="")) ||
-    (data.jenis=="TBS" && (data.ticket_a_id!="" && data.ticket_b_id!="")) ||
-    (data.jenis=="TBSK" && data.ticket_b_id!="")) return "!bg-blue-300"; 
+  if(data.val_ticket == 1 && (
+    ( ["CPO","PK"].indexOf(data.jenis)>-1 && (data.ticket_a_id!="" && data.ticket_b_bruto!="" && data.ticket_b_tara!="" && data.ticket_b_netto !="" && data.ticket_b_in_at!="" && data.ticket_b_out_at!="")) ||
+    ( data.jenis=="TBS" && (data.ticket_a_id!="" && data.ticket_b_id!="") ) ||
+    ( data.jenis=="TBSK" && data.ticket_b_id!="")
+    )
+  ) return "!bg-blue-300"; 
   return "";
 }
 const addClassToTbody=(data)=>{
@@ -287,7 +290,7 @@ const { data: dt_async } = await useAsyncData(async () => {
   // let list_ticket = [];
 
   const [data1, data2] = await Promise.all([
-    useMyFetch("/trx_trps", {
+    useMyFetch("/trx_trp_tickets", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -402,7 +405,7 @@ const callData = async () => {
   }
   params.filter_status = filter_status.value;
 
-  const { data, error, status } = await useMyFetch("/trx_trps", {
+  const { data, error, status } = await useMyFetch("/trx_trp_tickets", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

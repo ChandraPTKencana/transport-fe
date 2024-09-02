@@ -314,6 +314,7 @@ const inject_params = () => {
   params.date_from = date.value.from ? $moment(date.value.from).format("YYYY-MM-DD") : "";
   params.date_to = date.value.to ? $moment(date.value.to).format("YYYY-MM-DD") : "";
   params.filter_model = JSON.stringify(useCommonStore()._tv.filter_model);
+  params.filter_status = filter_status.value;
 };
 
 const callData = async () => {
