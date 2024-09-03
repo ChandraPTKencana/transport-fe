@@ -4,8 +4,8 @@
       <HeaderPopup :title="'Form Employee'" :fn="fnClose" class="w-100 flex align-items-center" style="color:white;" />
 
       <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
-        <div class="w-full flex flex-col items-center grow overflow-auto">
-          <div class="w-full flex flex-row flex-wrap">
+        <div class="w-full flex flex-wrap flex-row grow overflow-auto items-start">
+          <div class="w-full sm:w-full md:w-1/2 flex flex-row flex-wrap">
             <div class="w-full flex flex-col flex-wrap p-1">
               <label for="">Nama</label>
               <input type="text" v-model="employee.name">
@@ -59,11 +59,10 @@
               <input type="text" v-model="employee.phone_number">
               <p class="text-red-500">{{ field_errors.phone_number }}</p>
             </div>
+          </div>
 
-            <div class="p-1 w-full">
+          <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
               <AttachmentSingle :label="'Attachment'" :value="employee.attachment_1_preview" @setFile="employee.attachment_1=$event"  @setPreview="employee.attachment_1_preview=$event" :can_remove="true"/>
-            </div>
-
           </div>
         </div>
         

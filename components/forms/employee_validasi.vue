@@ -5,8 +5,8 @@
         style="color:white;" />
 
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
-          <div class="w-full flex flex-col items-center grow overflow-auto">
-            <div class="w-full flex flex-row flex-wrap">
+          <div class="w-full flex flex-wrap flex-row grow overflow-auto items-start">
+            <div class="w-full sm:w-full md:w-1/2 flex flex-row flex-wrap">
 
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Name</label>
@@ -62,9 +62,9 @@
                   {{ employee.phone_number }}
                 </div>
               </div>
-              <div class="p-1 w-full">
-                <AttachmentSingle :label="'Attachment'" :value="employee.attachment_1_preview" @setFile="employee.attachment_1=$event"  @setPreview="employee.attachment_1_preview=$event"/>
-              </div>
+            </div>
+            <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
+              <AttachmentSingle :label="'Attachment'" :value="employee.attachment_1_preview" @setFile="employee.attachment_1=$event"  @setPreview="employee.attachment_1_preview=$event"/>
             </div>
           </div>
           

@@ -256,19 +256,19 @@
                 <div class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col justify-end flex-wrap p-1">
                   <label for="" class="font-bold">Selisih Bruto </label>
                   <div class="card-border disabled">
-                   {{ pointFormat((trx_trp.ticket_a_bruto - trx_trp.ticket_b_bruto) || 0) }}
+                   {{ pointFormat((trx_trp.ticket_b_bruto - trx_trp.ticket_a_bruto) || 0) }}
                   </div>
                 </div>
                 <div class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col justify-end flex-wrap p-1">
                   <label for="" class="font-bold">Selisih Tara </label>
                   <div class="card-border disabled">
-                    {{ pointFormat((trx_trp.ticket_a_tara - trx_trp.ticket_b_tara) || 0) }}
+                    {{ pointFormat((trx_trp.ticket_b_tara - trx_trp.ticket_a_tara) || 0) }}
                   </div>
                 </div>
                 <div class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col justify-end flex-wrap p-1">
                   <label for="" class="font-bold">Selisih Netto </label>
                   <div class="card-border disabled">
-                    {{ pointFormat(((trx_trp.ticket_a_bruto - trx_trp.ticket_a_tara) - (trx_trp.ticket_b_bruto - trx_trp.ticket_b_tara)) || 0) }}
+                    {{ pointFormat(((trx_trp.ticket_b_bruto - trx_trp.ticket_b_tara) - (trx_trp.ticket_a_bruto - trx_trp.ticket_a_tara)) || 0) }}
                   </div>
                 </div>
               </div>
