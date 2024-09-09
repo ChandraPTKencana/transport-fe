@@ -265,6 +265,7 @@ const callData = async () => {
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
+    salary_bonus.value = {...salary_bonus_temp};
     if(props.is_view==false){
       setTimeout(()=>{
         it_val.value.focus();

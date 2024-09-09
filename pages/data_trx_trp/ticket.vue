@@ -45,7 +45,7 @@
           </button>
 
           <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
-            @click="updateTicket()">
+            @click="frm_update_ticket = true">
             Update Ticket
           </button>
 
@@ -208,6 +208,45 @@
         </div>
       </div>
     </div>
+
+
+    <div v-if="frm_update_ticket" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-10 p-3"
+    style="background-color: rgba(255,255,255,0.9);">
+      <div class="relative" style="border: solid 1px #ccc;">
+        <div class="absolute -top-7 right-0 bg-white"
+          style="position: absolute; padding:5px 10px; border: solid 1px #ccc; border-bottom: none; border-top-right-radius: 5px;  border-top-left-radius: 5px;">
+          <IconsTimes  style="color:black; cursor:pointer;" @click="frm_update_ticket=false"/>
+        </div>
+        <div class="w-full h-full flex flex-col items-center justify-content-center bg-white">
+          <div class="w-full p-1">
+            <div class="w-full p-1">
+              <div class="w-full text-gray-600 font-bold text-center">
+                Set Mobil Yang Tidak Di Izinkan Untuk Di Update Tiketnya
+              </div>
+              <div class="w-full">
+                <SelectMulti :arr="list_vehicle"/>
+                <div class="w-full grid grid-cols-2 gap-1 p-1 mt-5">
+                  
+                  <button type="button" name="button" class="bg-blue-500 text-white"
+                    @click="updateTicket()">
+                    Set &amp; Update
+                  </button>
+                  <button type="button" name="button" class="bg-white"
+                    @click="frm_update_ticket=false">
+                    Close
+                  </button>
+
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+          
+
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -287,9 +326,11 @@ const token = useCookie('token');
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
   let trx_trps = [];
+  let list_vehicle = [];
+  let vehicles_allowed = [];
   // let list_ticket = [];
 
-  const [data1, data2] = await Promise.all([
+  const [data1, data2,data3] = await Promise.all([
     useMyFetch("/trx_trp_tickets", {
       method: 'get',
       headers: {
@@ -299,14 +340,22 @@ const { data: dt_async } = await useAsyncData(async () => {
       params:{filter_status},
       retry: 0,
     }),
-    // useMyFetch("/trx_load_for_trp", {
-    //   method: 'get',
-    //   headers: {
-    //     'Authorization': `Bearer ${token.value}`,
-    //     'Accept': 'application/json'
-    //   },
-    //   retry: 0,
-    // }),
+    useMyFetch("/vehicles_available", {
+      method: 'get',
+      headers: {
+        'Authorization': `Bearer ${token.value}`,
+        'Accept': 'application/json'
+      },
+      retry: 0,
+    }),
+    useMyFetch("/temp_data/vehiclesAllowedUpdateTicket", {
+      method: 'get',
+      headers: {
+        'Authorization': `Bearer ${token.value}`,
+        'Accept': 'application/json'
+      },
+      retry: 0,
+    }),
   ]);
 
   
@@ -321,16 +370,31 @@ const { data: dt_async } = await useAsyncData(async () => {
     return { trx_trps };
   }
 
-  // if (data2.status.value !== 'error') {
-  //   list_ticket = data2.data.value.list_ticket;
-  // }
+  if (data2.status.value !== 'error') {
+    list_vehicle = data2.data.value.data;
+  }
+
+  if (data3.status.value !== 'error') {
+    vehicles_allowed = data3.data.value.data;
+  }
   useCommonStore().loading_full = false;
 
-  // return { trx_trps, list_ticket };
-  return { trx_trps };
+  return { trx_trps, list_vehicle , vehicles_allowed};
+  // return { trx_trps };
 });
 
 const trx_trps = ref(dt_async.value.trx_trps || []);
+const list_vehicle = ref([]);
+dt_async.value.list_vehicle.forEach(e => {
+  list_vehicle.value.push({
+    id:e.id,
+    name:e.no_pol,
+    title:'',
+    checked:dt_async.value.vehicles_allowed.indexOf(e.id) > -1 ? true : false
+  })
+});
+
+// const list_vehicle = ref(dt_async.value.list_vehicle || []);
 // const list_ticket = ref(dt_async.value.list_ticket);
 const list_ticket = ref([]);
 // const online_status=ref(false);
@@ -613,8 +677,8 @@ const handleDate = (source)=>{
 
 const updateTicket = async() => {
   useCommonStore().loading_full = true;
-
   const data_in = new FormData();
+  data_in.append("vehicles",JSON.stringify(list_vehicle.value.filter((x)=>x.checked).map((x)=>x.id)));
   const { data, error, status } = await useMyFetch("/trx_trp_do_update_ticket", {
     method: "post",
     headers: {
@@ -744,4 +808,6 @@ const enabled_approve_void = computed(()=>{
   && useUtils().checkPermission('trp_trx.approve_request_remove');
   return result;
 })
+
+const frm_update_ticket=ref(false);
 </script>

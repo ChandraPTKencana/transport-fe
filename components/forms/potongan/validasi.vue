@@ -307,6 +307,7 @@ const callData = async () => {
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
+    potongan_mst.value = JSON.parse(JSON.stringify(potongan_mst_temp));
     if(props.is_view==false){
       setTimeout(()=>{
         it_val.value.focus();

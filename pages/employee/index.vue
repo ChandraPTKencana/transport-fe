@@ -94,7 +94,7 @@
                 <td>{{ employee.rek_name }}</td>
                 <td>{{ employee.phone_number }}</td>
                 <td> 
-                  <TypeIcon :value="employee.attachment_1_preview"/>
+                  <TypeIcon :value="employee.attachment_1_type"/>
                 </td>
                 <td>{{ $moment(employee.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td>{{ $moment(employee.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>

@@ -108,7 +108,7 @@
                 <td>{{ pointFormat(salary_bonus.nominal || 0) }}</td>
                 <td>{{ salary_bonus.note }}</td>
                 <td> 
-                  <TypeIcon :value="salary_bonus.attachment_1_preview"/>
+                  <TypeIcon :value="salary_bonus.attachment_1_type"/>
                 </td>
                 <td>{{ salary_bonus.created_at ? $moment(salary_bonus.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <td>{{ salary_bonus.updated_at ? $moment(salary_bonus.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>

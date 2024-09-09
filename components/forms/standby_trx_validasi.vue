@@ -495,6 +495,7 @@ const disabled = computed(()=>{
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
+    standby_trx.value = {...standby_trx_temp};
     if(props.is_view==false){
       setTimeout(()=>{
         it_val.value.focus();
