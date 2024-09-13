@@ -21,12 +21,12 @@
                 {{ trx_trp.jenis }}
               </div>
             </div>
-            <!-- <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">Payment Method</label>
               <div class="card-border">
                 {{ trx_trp.payment_method.name }}
               </div>
-            </div> -->
+            </div>
 
             <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">No Pol</label>
@@ -197,6 +197,9 @@ const props = defineProps({
 const trx_trp_temp = {
     id: -1,
     tanggal: new Date(),
+    payment_method:{
+      name:""
+    },
     id_uj: -1,
     xto: "",
     tipe: "",

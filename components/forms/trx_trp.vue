@@ -38,13 +38,13 @@
               <p class="text-red-500">{{ field_errors.jenis }}</p>
             </div>
 
-            <!-- <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">Payment Method</label>
               <select v-model="trx_trp.payment_method_id" :disabled="trx_trp.val==1">
                 <option v-for="pm in list_payment_methods" :value="pm.id">{{pm.name}}</option>
               </select>
               <p class="text-red-500">{{ field_errors.payment_method_id }}</p>
-            </div> -->
+            </div>
 
             <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">No Pol</label>

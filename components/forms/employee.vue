@@ -5,14 +5,14 @@
 
       <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
         <div class="w-full flex flex-wrap flex-row grow overflow-auto items-start">
-          <div class="w-full sm:w-full md:w-1/2 flex flex-row flex-wrap">
-            <div class="w-full flex flex-col flex-wrap p-1">
+          <div class="w-full sm:w-full md:w-1/3 flex flex-row flex-wrap">
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
               <label for="">Nama</label>
               <input type="text" v-model="employee.name">
               <p class="text-red-500">{{ field_errors.name }}</p>
             </div>
 
-            <div class="w-full flex flex-col flex-wrap p-1">
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
               <label for="">Jabatan</label>
               <select v-model="employee.role">
                 <option value="Supir">Supir</option>
@@ -21,19 +21,19 @@
               <p class="text-red-500">{{ field_errors.role }}</p>
             </div>
 
-            <div class="w-full flex flex-col flex-wrap p-1">
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
               <label for="">No KTP</label>
               <input type="text" v-model="employee.ktp_no">
               <p class="text-red-500">{{ field_errors.ktp_no }}</p>
             </div>
 
-            <div class="w-full flex flex-col flex-wrap p-1">
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
               <label for="">No SIM</label>
               <input type="text" v-model="employee.sim_no">
               <p class="text-red-500">{{ field_errors.sim_no }}</p>
             </div>
 
-            <div class="w-full flex flex-col flex-wrap p-1">
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
               <label for="">Pilih Bank</label>
               <select v-model="employee.bank_id">
                 <option value=""></option>
@@ -42,26 +42,26 @@
               <p class="text-red-500">{{ field_errors.bank_id }}</p>
             </div>
 
-            <div class="w-full flex flex-col flex-wrap p-1">
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
               <label for="">No Rek</label>
               <input type="text" v-model="employee.rek_no">
               <p class="text-red-500">{{ field_errors.rek_no }}</p>
             </div>
 
-            <div class="w-full flex flex-col flex-wrap p-1">
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
               <label for="">Nama Rek</label>
               <input type="text" v-model="employee.rek_name">
               <p class="text-red-500">{{ field_errors.rek_name }}</p>
             </div>
 
-            <div class="w-full flex flex-col flex-wrap p-1">
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
               <label for="">Phone Number</label>
               <input type="text" v-model="employee.phone_number">
               <p class="text-red-500">{{ field_errors.phone_number }}</p>
             </div>
           </div>
 
-          <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
+          <div class="p-1 w-full sm:w-full md:w-2/3 md:overflow-auto max-h-full">
               <AttachmentSingle :label="'Attachment'" :value="employee.attachment_1_preview" @setFile="employee.attachment_1=$event"  @setPreview="employee.attachment_1_preview=$event" :can_remove="true"/>
           </div>
         </div>

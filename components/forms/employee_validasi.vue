@@ -6,64 +6,64 @@
 
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
           <div class="w-full flex flex-wrap flex-row grow overflow-auto items-start">
-            <div class="w-full sm:w-full md:w-1/2 flex flex-row flex-wrap">
+            <div class="w-full sm:w-full md:w-1/3 flex flex-row flex-wrap">
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
                 <label for="">Name</label>
                 <div class="card-border">
                   {{ employee.name }}
                 </div>
               </div>
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
                 <label for="">Role</label>
                 <div class="card-border">
                   {{ employee.role }}
                 </div>
               </div>
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
                 <label for="">No KTP</label>
                 <div class="card-border">
                   {{ employee.ktp_no }}
                 </div>
               </div>
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
                 <label for="">No SIM</label>
                 <div class="card-border">
                   {{ employee.sim_no }}
                 </div>
               </div>
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
                 <label for="">Bank Code</label>
                 <div class="card-border">
                   {{ employee.bank?.code }}
                 </div>
               </div>
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
                 <label for="">No Rek</label>
                 <div class="card-border">
                   {{ employee.rek_no }}
                 </div>
               </div>
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
                 <label for="">Nama Rek</label>
                 <div class="card-border">
                   {{ employee.rek_name }}
                 </div>
               </div>
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
                 <label for="">Phone Number</label>
                 <div class="card-border">
                   {{ employee.phone_number }}
                 </div>
               </div>
             </div>
-            <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
+            <div class="p-1 w-full sm:w-full md:w-2/3 md:overflow-auto max-h-full">
               <AttachmentSingle :label="'Attachment'" :value="employee.attachment_1_preview" @setFile="employee.attachment_1=$event"  @setPreview="employee.attachment_1_preview=$event"/>
             </div>
           </div>
