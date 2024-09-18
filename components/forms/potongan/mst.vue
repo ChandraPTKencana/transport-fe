@@ -294,7 +294,7 @@ const disabled = computed(()=>{
 });
 
 const disabled2 = computed(()=>{
-  return potongan_mst.value.val_at;
+  return potongan_mst.value.val_at!="";
   // return potongan_mst.value.confirmed_by || potongan_mst.value.ref_id != null;
 });
 

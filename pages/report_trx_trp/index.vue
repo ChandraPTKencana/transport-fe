@@ -586,7 +586,10 @@ const fields_thead=ref([
     {key:"pv_no",label:"No",filter_on:1,type:'string'},
     {key:"pv_total",label:"Total",filter_on:1,type:'number'},
   ]},
-  {key:"transition_target",label:"Peralihan",filter_on:1,type:"select",select_item:useCommonStore().list_pabrik},
+  {key:"transition",label:"Peralihan",childs:[
+    {key:"transition_type",label:"Type",type:'select', filter_on:1,select_item:['To','From']},
+    {key:"transition_target",label:"Target",type:'select',filter_on:1,select_item:useCommonStore().list_pabrik},
+  ]},
   {key:"ticket_a",label:"Ticket A",childs:[
     {key:"ticket_a_no",label:"No",filter_on:1,type:'string'},
     {key:"ticket_a_bruto",label:"Bruto",filter_on:1,type:'number'},

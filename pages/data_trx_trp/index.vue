@@ -743,6 +743,10 @@ const fields_thead=ref([
   {key:"tipe",label:"Tipe",filter_on:1,type:'string'},
   {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK']},
   {key:"amount",label:"Amount",class:" justify-end",filter_on:1,type:"number"},
+  {key:"transition",label:"Peralihan",childs:[
+    {key:"transition_type",label:"Type",type:'select', filter_on:1,select_item:['To','From']},
+    {key:"transition_target",label:"Target",type:'select',filter_on:1,select_item:useCommonStore().list_pabrik},
+  ]},
   {key:"cost_center",label:"Cost Center",childs:[
     {key:"cost_center_code",label:"Code",type:'string', class:" justify-start",filter_on:1},
     {key:"cost_center_desc",label:"Desc",filter_on:1,type:'string'},
