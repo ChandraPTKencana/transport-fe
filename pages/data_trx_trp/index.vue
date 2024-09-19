@@ -805,8 +805,17 @@ const enabled_validasi = computed(()=>{
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   // && [undefined,0].indexOf(dt_selected.value.val) > -1
-  && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1
-  && useUtils().checkPermissions(['trp_trx.val','trp_trx.val1','trp_trx.val2','trp_trx.val3','trp_trx.val4','trp_trx.val5']);
+  && (
+    (
+      [undefined,""].indexOf(dt_selected.value.pvr_id) > -1
+      && 
+      useUtils().checkPermissions(['trp_trx.val','trp_trx.val1','trp_trx.val2','trp_trx.val4','trp_trx.val5'])
+    )
+    || 
+    (
+      useUtils().checkPermissions(['trp_trx.val3'])
+    )
+  );
   return result;
 })
 
