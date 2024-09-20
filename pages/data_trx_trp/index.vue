@@ -812,11 +812,9 @@ const enabled_validasi = computed(()=>{
       useUtils().checkPermissions(['trp_trx.val','trp_trx.val1','trp_trx.val2','trp_trx.val4','trp_trx.val5'])
     )
     || 
-    (
-      dt_selected.value.val3 == 0
-      &&
-      useUtils().checkPermissions(['trp_trx.val3'])
-    )
+    ( dt_selected.value.val3 == 0 && useUtils().checkPermissions(['trp_trx.val3']) ) ||
+    ( dt_selected.value.val4 == 0 && useUtils().checkPermissions(['trp_trx.val4']) ) ||
+    ( dt_selected.value.val5 == 0 && useUtils().checkPermissions(['trp_trx.val5']) )
   );
   return result;
 })

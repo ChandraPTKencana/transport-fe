@@ -3,6 +3,9 @@ import { useAuthStore } from '~/store/auth';
 import { useCommonStore } from '~/store/common';
 
 export default defineNuxtRouteMiddleware(async (to) => {
+  // without login
+  if(to?.name=='nolog') return;
+
   // console.log("from global middleware", to);
   const { authenticated, done_get_user_info } = storeToRefs(useAuthStore()); // make authenticated state reactive
   const token = useCookie('token'); // get token from cookies
