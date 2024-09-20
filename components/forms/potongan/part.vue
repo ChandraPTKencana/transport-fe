@@ -4,11 +4,11 @@
     <div class="w-full flex grow flex-col">
       <div class="w-full flex">
         
-        <button v-if="useUtils().checkPermission('potongan_trx.create')" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="!is_view && useUtils().checkPermission('potongan_trx.create')" type="button" name="button" class="m-1 text-2xl "
           @click="form_add()">
           <IconsPlus />
         </button>
-        <button v-if="useUtils().checkPermissions(['potongan_trx.modify']) && selected > -1 && !potongan_trxs[selected]?.trx_trp_id" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="!is_view && useUtils().checkPermissions(['potongan_trx.modify']) && selected > -1 && !potongan_trxs[selected]?.trx_trp_id" type="button" name="button" class="m-1 text-2xl "
           @click="form_edit()">
           <IconsEdit/>
         </button>
@@ -16,7 +16,7 @@
           @click="remove()">
           <IconsDelete />
         </button> -->
-        <button v-if="useUtils().checkPermissions(['potongan_trx.val','potongan_trx.val1'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="!is_view && useUtils().checkPermissions(['potongan_trx.val','potongan_trx.val1'])" type="button" name="button" class="m-1 text-2xl "
           @click="validasi()">
           <IconsSignature />
         </button>
@@ -129,6 +129,11 @@ const props = defineProps({
     type: Number,
     required: false,
     default: 0,
+  },
+  is_view:{
+    type:Boolean,
+    required:false,
+    default:false
   },
 })
 

@@ -97,7 +97,7 @@
             </div>
             
             <div v-if="disabled" class="w-full h-full p-1">
-              <FormsPotonganPart :id="id" :show="show" @updateRemainingCut="potongan_mst.remaining_cut=$event"/>
+              <FormsPotonganPart :id="id" :show="show" @updateRemainingCut="potongan_mst.remaining_cut=$event" :is_view="is_view"/>
             </div>
 
           </div>
@@ -138,6 +138,11 @@ const props = defineProps({
     type:Array,
     required:true,
     default:[]
+  },
+  is_view:{
+    type:Boolean,
+    required:false,
+    default:false
   },
 })
 
@@ -289,12 +294,12 @@ const list_emp = computed(()=>{
 })
 
 const disabled = computed(()=>{
-  return potongan_mst.value.val1==1;
+  return potongan_mst.value.val1==1 || props.is_view;
   // return potongan_mst.value.confirmed_by || potongan_mst.value.ref_id != null;
 });
 
 const disabled2 = computed(()=>{
-  return potongan_mst.value.val_at!="";
+  return potongan_mst.value.val_at!="" || props.is_view;
   // return potongan_mst.value.confirmed_by || potongan_mst.value.ref_id != null;
 });
 
@@ -373,7 +378,7 @@ const loadLocalDT = async () => {
 
 watch(() => props.show, async(newVal, oldVal) => {
   if (newVal == true){
-    await loadLocalDT();
+    if(!props.is_view) await loadLocalDT();
 
     potongan_mst.value = JSON.parse(JSON.stringify(potongan_mst_temp));
     selected_employee.value = JSON.parse(JSON.stringify(selected_mini_temp));

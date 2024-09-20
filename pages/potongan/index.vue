@@ -15,6 +15,10 @@
           @click="form_edit()">
           <IconsEdit/>
         </button>
+        <button v-if="selected > -1 && useUtils().checkPermission('potongan_mst.view')" type="button" name="button" class="m-1 text-2xl "
+          @click="form_view()">
+          <IconsEyes/>
+        </button>
         <!-- <button v-if="useUtils().checkPermission('potongan_mst.remove')" type="button" name="button" class="m-1 text-2xl "
           @click="remove()">
           <IconsDelete />
@@ -118,7 +122,7 @@
         </div>
       </template>
     </PopupMini> -->
-    <FormsPotonganMst :show="forms_potongan_mst_show" :fnClose="()=>{forms_potongan_mst_show=false}" :id="forms_potongan_mst_id" :p_data="potongan_msts" :is_copy="forms_potongan_mst_copy"/>
+    <FormsPotonganMst :show="forms_potongan_mst_show" :fnClose="()=>{forms_potongan_mst_show=false}" :id="forms_potongan_mst_id" :p_data="potongan_msts" :is_copy="forms_potongan_mst_copy" :is_view="forms_potongan_mst_is_view"/>
     <FormsPotonganValidasi :show="forms_potongan_mst_valid_show" :fnClose="()=>{forms_potongan_mst_valid_show=false}" :id="forms_potongan_mst_valid_id" :p_data="potongan_msts"/>
   
   </div>
@@ -307,12 +311,25 @@ const form_copy = () => {
 
 const forms_potongan_mst_valid_show =  ref(false);
 const forms_potongan_mst_valid_id = ref(0);
+const forms_potongan_mst_is_view = ref(false);
+
 const validasi = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_potongan_mst_valid_id.value = potongan_msts.value[selected.value].id;
     forms_potongan_mst_valid_show.value = true;
+    // forms_potongan_mst_is_view.value = false;
+  }
+};
+
+const form_view = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_potongan_mst_id.value = potongan_msts.value[selected.value].id;
+    forms_potongan_mst_show.value = true;
+    forms_potongan_mst_is_view.value = true;
   }
 };
 

@@ -813,6 +813,8 @@ const enabled_validasi = computed(()=>{
     )
     || 
     (
+      dt_selected.value.val3 == 0
+      &&
       useUtils().checkPermissions(['trp_trx.val3'])
     )
   );
