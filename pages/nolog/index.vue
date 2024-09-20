@@ -25,29 +25,59 @@
         <template #[`absen`]="{item,index}">
           <IconsImage v-if="item.trx_absens && item.trx_absens.length > 0" class="cursor-pointer" @click="form_absen(index)"/>
         </template>
+        <template #[`created_at`]="{item}">
+          <div class="text-xs w-full text-center">
+            {{$moment(item.created_at).format("DD-MM-YYYY")}} <br>
+            {{$moment(item.created_at).format("HH:mm")}}
+          </div>
+        </template>
         <template #[`val`]="{item}">
-          <IconsLine v-if="!item.val"/>
-          <IconsCheck v-else/>
+          <IconsTimes v-if="!item.val"/>
+          <div class="text-xs" v-else>
+            {{item.val_by?.username}} <br>
+            {{$moment(item.val_at).format("DD/MM")}} <br>
+            {{$moment(item.val_at).format("HH:mm")}}
+          </div>
         </template>
         <template #[`val1`]="{item}">
-          <IconsLine v-if="!item.val1"/>
-          <IconsCheck v-else/>
+          <IconsTimes v-if="!item.val1"/>
+          <div class="text-xs" v-else>
+            {{item.val1_by?.username}} <br>
+            {{$moment(item.val1_at).format("DD/MM")}} <br>
+            {{$moment(item.val1_at).format("HH:mm")}}
+          </div>
         </template>
         <template #[`val2`]="{item}">
-          <IconsLine v-if="!item.val2"/>
-          <IconsCheck v-else/>
+          <IconsTimes v-if="!item.val2"/>
+          <div class="text-xs" v-else>
+            {{item.val2_by?.username}} <br>
+            {{$moment(item.val2_at).format("DD/MM")}} <br>
+            {{$moment(item.val2_at).format("HH:mm")}}
+          </div>
         </template>
         <template #[`val3`]="{item}">
-          <IconsLine v-if="!item.val3"/>
-          <IconsCheck v-else/>
+          <IconsTimes v-if="!item.val3"/>
+          <div class="text-xs" v-else>
+            {{item.val3_by?.username}} <br>
+            {{$moment(item.val3_at).format("DD/MM")}} <br>
+            {{$moment(item.val3_at).format("HH:mm")}}
+          </div>
         </template>
         <template #[`val4`]="{item}">
-          <IconsLine v-if="!item.val4"/>
-          <IconsCheck v-else/>
+          <IconsTimes v-if="!item.val4"/>
+          <div class="text-xs" v-else>
+            {{item.val4_by?.username}} <br>
+            {{$moment(item.val4_at).format("DD/MM")}} <br>
+            {{$moment(item.val4_at).format("HH:mm")}}
+          </div>
         </template>
         <template #[`val5`]="{item}">
-          <IconsLine v-if="!item.val5"/>
-          <IconsCheck v-else/>
+          <IconsTimes v-if="!item.val5"/>
+          <div class="text-xs" v-else>
+            {{item.val5_by?.username}} <br>
+            {{$moment(item.val5_at).format("DD/MM")}} <br>
+            {{$moment(item.val5_at).format("HH:mm")}}
+          </div>
         </template>
         <template #[`payment_method_name`]="{item}">
           {{ item.payment_method?.name }}
@@ -272,6 +302,7 @@ const form_view = () => {
 
 const fields_thead=ref([
   {key:"no",label:"No",isai:true},
+  {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm",filter_on:1,class:"text-xs"},
   {key:"val",label:"APP",childs:[
     {key:"val",label:"Kasir",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
     {key:"val1",label:"Mandor",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
@@ -313,7 +344,6 @@ const fields_thead=ref([
   {key:"kernet_rek_no",label:"No Rek Kernet",filter_on:1,type:'string'},
   {key:"kernet_rek_name",label:"Nama Rek Kernet",filter_on:1,type:'string'},
   {key:"payment_method_name",label:"Payment Method Name",type:'string'},
-  {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   {key:"updated_at",label:"Updated At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   {key:"deleted_by_username",label:"Deleted By",tbl_show:0},
   {key:"deleted_at",label:"Deleted At",dateformat:"DD-MM-Y HH:mm:ss", tbl_show:0,type:'datetime',filter_on:1},
