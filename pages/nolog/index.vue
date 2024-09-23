@@ -56,7 +56,8 @@
           </div>
         </template>
         <template #[`val3`]="{item}">
-          <IconsTimes v-if="!item.val3"/>
+          <IconsCheck v-if="['TBS','TBSK'].indexOf(item.jenis) > -1"/>
+          <IconsTimes v-else-if="!item.val3"/>
           <div class="text-xs" v-else>
             {{item.val3_by?.username}} <br>
             {{$moment(item.val3_at).format("DD/MM")}} <br>
@@ -311,13 +312,13 @@ const fields_thead=ref([
     {key:"val4",label:"Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
     {key:"val5",label:"SPV Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   ]},
+  {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK']},
   {key:"id",label:"ID",filter_on:1,type:"number"},
   // {key:"absen",label:"Absen"},
   {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1,sort:{priority:1,type:"desc"}},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
   {key:"xto",label:"Tujuan",filter_on:1,type:'string'},
   {key:"tipe",label:"Tipe",filter_on:1,type:'string'},
-  {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK']},
   {key:"amount",label:"Amount",class:" justify-end",filter_on:1,type:"number"},
   {key:"transition",label:"Peralihan",childs:[
     {key:"transition_type",label:"Type",type:'select', filter_on:1,select_item:['To','From']},

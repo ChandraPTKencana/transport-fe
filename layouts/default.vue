@@ -169,6 +169,14 @@
                 Permission Group
               </nuxt-link>
             </li>
+
+            <li :class="activeMenu == '/upload_image'?'active':''" >
+              <nuxt-link to="/upload_image"  class="cursor-pointer" @click="goTo('/upload_image')">
+                <IconsImage class="mr-1"/>
+                Upload Gambar
+              </nuxt-link>
+            </li>
+            
           </ul>
           <div id="panel" class="h-7 text-xs relative">
             <div v-show="is_panel_open"
