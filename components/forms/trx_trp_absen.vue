@@ -8,6 +8,12 @@
           <div class="w-full">
             <div class="w-full flex flex-wrap p-3 items-center text-xs">
               <div>
+                <label for="">ID</label>
+                <div class="border-solid border-2 w-fit p-1 bg-slate-700 text-white">
+                  {{ trx_trp.id }}
+                </div>               
+              </div>
+              <div>
                 <label for="">U.jalan Per</label>
                 <div class="border-solid border-2 w-fit p-1 bg-slate-700 text-white">
                   {{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-YYYY") : "" }}

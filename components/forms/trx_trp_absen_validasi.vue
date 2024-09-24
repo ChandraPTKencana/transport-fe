@@ -9,6 +9,12 @@
           <div class="w-full">
             <div class="w-full flex flex-wrap p-3 items-center text-xs">
               <div>
+                <label for="">ID</label>
+                <div class="border-solid border-2 w-fit p-1 bg-slate-700 text-white">
+                  {{ trx_trp.id }}
+                </div>               
+              </div>
+              <div>
                 <label for="">U.jalan Per</label>
                 <div class="border-solid border-2 w-fit p-1 bg-slate-700 text-white">
                   {{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-YYYY") : "" }}
@@ -126,11 +132,22 @@
               </div>
             </div>
           </div>
+
+          <button type="button" name="button" class="w-36 h-9 m-1 grid place-items-center" @click="loadTop()">
+            <IconsCaretTop class="black"/>
+          </button>
           <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
             Cancel
           </button>
-          <button v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+          <button v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm flex items-center justify-center" @click.prevent="doSave()">
             Validasi
+            <br>
+            <span v-if="save_state!=''">
+              {{ save_state }}
+            </span>
+          </button>
+          <button type="button" name="button" class="w-36 h-9 m-1 grid place-items-center" @click="loadDown()">
+            <IconsCaretDown class="black"/>
           </button>
         </div>
       </form>
@@ -171,6 +188,25 @@ const props = defineProps({
     required:false,
     default:false
   },
+})
+
+let keydownListener = (event)=>{
+
+  console.log(event.key)
+  if(event.key =='ArrowUp'){
+    loadTop();
+  }
+  if(event.key =='ArrowDown'){
+    loadDown();
+  }
+};
+
+// onMounted(async()=>{
+//   document.addEventListener('keydown', keydownListener);
+// })
+
+onBeforeUnmount(()=>{
+  document.removeEventListener('keydown', keydownListener);
 })
 
 const trx_trp_temp = {
@@ -214,8 +250,9 @@ const trx_trp_temp = {
 const trx_trp = ref({...trx_trp_temp});
 
 const token = useCookie('token');
-
+const save_state = ref("");
 const doSave = async () => {
+  save_state.value = "PROSES...";
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
@@ -240,23 +277,24 @@ const doSave = async () => {
   });
   useCommonStore().loading_full = false;
   if (status.value === 'error') {
+    save_state.value = "GAGAL";
     useErrorStore().trigger(error);
     return;
   }
   
 
   trx_trp.value.ritase_val = data.value.ritase_val;
-  trx_trp.value.ritase_val_user = data.value.ritase_val_user;
+  // trx_trp.value.ritase_val_user = data.value.ritase_val_user;
   trx_trp.value.ritase_val_by = data.value.ritase_val_by;
   trx_trp.value.ritase_val_at = data.value.ritase_val_at;
 
   trx_trp.value.ritase_val1 = data.value.ritase_val1;
-  trx_trp.value.ritase_val1_user = data.value.ritase_val1_user;
+  // trx_trp.value.ritase_val1_user = data.value.ritase_val1_user;
   trx_trp.value.ritase_val1_by = data.value.ritase_val1_by;
   trx_trp.value.ritase_val1_at = data.value.ritase_val1_at;
 
   trx_trp.value.ritase_val2 = data.value.ritase_val2;
-  trx_trp.value.ritase_val2_user = data.value.ritase_val2_user;
+  // trx_trp.value.ritase_val2_user = data.value.ritase_val2_user;
   trx_trp.value.ritase_val2_by = data.value.ritase_val2_by;
   trx_trp.value.ritase_val2_at = data.value.ritase_val2_at;
 
@@ -265,8 +303,9 @@ const doSave = async () => {
   if(idx>=-1){
     props.p_data.splice(idx,1,{...trx_trp.value});    
   }
+  save_state.value = "BERHASIL";
 
-  props.fnClose();
+  // props.fnClose();
 }
 
 const callData = async () => {
@@ -292,11 +331,43 @@ const callData = async () => {
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
+    document.addEventListener('keydown', keydownListener);
     callData();
+  }else{
+    document.removeEventListener('keydown', keydownListener);
   }
 }, {
   immediate: true
 });
+
+
+const emit = defineEmits(['setID','setIndex']);
+
+const loadDown=()=>{
+  let $idx = props.p_data.map((x)=>x.id).indexOf(props.id);
+  if($idx==props.p_data.length-1){
+    return;
+  }
+  $idx++;
+  emit('setID',props.p_data[$idx].id);
+  emit('setIndex',$idx);
+  setTimeout(()=>{
+    callData();
+  },100);
+};
+
+const loadTop=()=>{
+  let $idx = props.p_data.map((x)=>x.id).indexOf(props.id);
+  if($idx==0){
+    return;
+  }
+  $idx--;
+  emit('setID',props.p_data[$idx].id);
+  emit('setIndex',$idx);
+  setTimeout(()=>{
+    callData();
+  },100);
+};
 </script>
 
 <style scoped="">
