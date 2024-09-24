@@ -82,7 +82,8 @@ definePageMeta({
 const checkStatus=(data)=>{
   if(data.deleted==1) return "!bg-red-400";
   if(data.req_deleted == 1) return "!bg-yellow-300"; 
-  if(data.ritase_leave_at != "" && data.ritase_arrive_at != "" && data.ritase_return_at != "" && data.ritase_till_at != "") return "!bg-blue-300"; 
+  if(data.ritase_val2 == 1) return "!bg-blue-300"; 
+  // if(data.ritase_leave_at != "" && data.ritase_arrive_at != "" && data.ritase_return_at != "" && data.ritase_till_at != "") return "!bg-blue-300"; 
   return "";
 }
 const addClassToTbody=(data)=>{

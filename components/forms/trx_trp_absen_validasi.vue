@@ -61,7 +61,7 @@
             <div class="w-full sm:w-1/2 text-center p-1">
               <div class="border-[1px] p-1">
                 <label class="font-bold">Berangkat : {{ trx_trp.img_leave_ts ? $moment(trx_trp.img_leave_ts).format("DD-MM-YYYY HH:mm") : "" }}</label>
-                <div>
+                <div class="w-full flex justify-center items-center">
                   <img :src="trx_trp.img_leave" alt="">
                 </div>
               </div>
@@ -71,7 +71,7 @@
               <div class="border-[1px] p-1">
                 <div class="border-[1px] p-1">
                   <label class="font-bold">Tiba : {{ trx_trp.img_arrive_ts ? $moment(trx_trp.img_arrive_ts).format("DD-MM-YYYY HH:mm") : "" }}</label>
-                  <div>
+                  <div class="w-full flex justify-center items-center">
                     <img :src="trx_trp.img_arrive" alt="">
                   </div>
                 </div>
@@ -82,7 +82,7 @@
               <div class="border-[1px] p-1">
                 <div class="border-[1px] p-1">
                   <label class="font-bold">Kembali : {{ trx_trp.img_return_ts ? $moment(trx_trp.img_return_ts).format("DD-MM-YYYY HH:mm") : "" }}</label>
-                  <div>
+                  <div class="w-full flex justify-center items-center">
                     <img :src="trx_trp.img_return" alt="">
                   </div>
                 </div>
@@ -93,7 +93,7 @@
               <div class="border-[1px] p-1">
                 <div class="border-[1px] p-1">
                   <label class="font-bold">Sampai : {{ trx_trp.img_till_ts ? $moment(trx_trp.img_till_ts).format("DD-MM-YYYY HH:mm") : "" }}</label>
-                  <div>
+                  <div class="w-full flex justify-center items-center">
                     <img :src="trx_trp.img_till" alt="">
                   </div>
                 </div>
