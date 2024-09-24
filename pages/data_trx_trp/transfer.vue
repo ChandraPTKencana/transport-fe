@@ -83,93 +83,116 @@
     </section>
 
     <div v-show="pop_show" class="w-full h-full fixed top-0 left-0 bg-gray-100 bg-opacity-80 flex items-center justify-center z-10">
-      <div class="w-full sm:w-10/12 md:w-10/12 lg:w-6/12 bg-white flex flex-col border-solid border-gray-200 max-w-full max-h-full" style="border-width: 1px;">
+      <div class="w-full sm:w-10/12 md:w-10/12 lg:w-8/12 bg-white flex flex-col border-solid border-gray-200 max-w-full max-h-full overflow-auto" style="border-width: 1px;">
         <HeaderPopup :title="'Detail Information'" :fn="()=>{pop_show = false, show_confirm = false}" class="w-100 flex align-items-center"
           style="color:white;" />
         <div class="p-1 flex flex-wrap overflow-auto items-start">
-          <div class="w-full sm:w-1/2  flex flex-wrap">
-            <div class="flex flex-col m-2">
-              <span class="text-xs font-bold">
-                ID
-              </span>
-              <div class="">
-                {{ trx_trp.id }}
-              </div>
-            </div>
-
-            <div class="flex flex-col m-2">
-              <span class="text-xs font-bold">
-                Tgl Terima U.Jalan
-              </span>
-              <div class="">
-                {{ $moment(trx_trp.tanggal).format("DD-MM-YYYY") }}
-              </div>
-            </div>
-  
-            <div class="flex flex-col m-2">
-              <span class="text-xs font-bold">
-                Nomor Kendaraan
-              </span>
-              <div class="">
-                {{ trx_trp.no_pol }}
-              </div>
-            </div>
-  
-            <div class="flex flex-col m-2">
-              <span class="text-xs font-bold">
-                Nama Supir
-              </span>
-              <div class="">
-                {{ trx_trp.supir }}
-              </div>
-            </div>
-  
-            <div v-if="trx_trp.kernet" class="flex flex-col m-2">
-              <span class="text-xs font-bold">
-                Nama Kernet
-              </span>
-              <div class="">
-                {{ trx_trp.kernet }}
-              </div>
-            </div>
-  
-            <div class="flex flex-col m-2">
-              <span class="text-xs font-bold">
-                Tujuan
-              </span>
-              <div class="">
-                {{ trx_trp.xto }}
-              </div>
-            </div>
-  
-            <div class="flex flex-col m-2">
-              <span class="text-xs font-bold">
-                Tipe
-              </span>
-              <div class="">
-                {{ trx_trp.tipe }}
-              </div>
-            </div>
-  
-            <div class="flex flex-col m-2">
-              <span class="text-xs font-bold">
-                Jenis
-              </span>
-              <div class="">
-                {{ trx_trp.jenis }}
-              </div>
-            </div>
-
-            <div v-if="trx_trp.transition_type=='From'" class="flex flex-col m-2">
-              <span class="text-xs font-bold">
-                Pengalihan
-              </span>
-              <div class="">
-                {{ trx_trp.transition_target }}
-              </div>
-            </div>
-
+          <div class="w-full flex flex-wrap">
             <div class="w-full flex flex-wrap">
+
+              <div class="flex flex-col m-2 border-solid border-l-4 border-blue-400 px-2 bg-gray-200">
+                <span class="text-xs font-bold">
+                  ID
+                </span>
+                <div class="">
+                  {{ trx_trp.id }}
+                </div>
+              </div>
+  
+              <div class="flex flex-col m-1 border-solid border-l-4 border-blue-400 px-2 py-1 bg-gray-200">
+                <span class="text-xs font-bold">
+                  Tgl Terima U.Jalan
+                </span>
+                <div class="">
+                  {{ $moment(trx_trp.tanggal).format("DD-MM-YYYY") }}
+                </div>
+              </div>
+    
+              <div class="flex flex-col m-1 border-solid border-l-4 border-blue-400 px-2 py-1 bg-gray-200">
+                <span class="text-xs font-bold">
+                  Nomor Kendaraan
+                </span>
+                <div class="">
+                  {{ trx_trp.no_pol }}
+                </div>
+              </div>
+    
+              <div class="flex flex-row flex-wrap m-1 border-solid border-l-4 border-blue-400 px-2 py-1 bg-gray-200">
+                <div class="flex flex-col">
+                  <span class="text-xs font-bold">
+                    Nama Supir
+                  </span>
+                  <div class="">
+                    {{ trx_trp.supir }}
+                  </div>
+                </div>
+                <div class="flex flex-col pl-2">
+                  <span class="text-xs font-bold">
+                    No rek
+                  </span>
+                  <div class="">
+                    {{ trx_trp.supir_rek_no }}
+                  </div>
+                </div>
+              </div>
+  
+              <div v-if="trx_trp.kernet" class="flex flex-row flex-wrap m-1 border-solid border-l-4 border-blue-400 px-2 py-1 bg-gray-200">
+                <div class="flex flex-col">
+                  <span class="text-xs font-bold">
+                    Nama Kernet
+                  </span>
+                  <div class="">
+                    {{ trx_trp.kernet }}
+                  </div>
+                </div>
+                <div class="flex flex-col pl-2">
+                  <span class="text-xs font-bold">
+                    No rek
+                  </span>
+                  <div class="">
+                    {{ trx_trp.kernet_rek_no }}
+                  </div>
+                </div>
+              </div>
+    
+              <div class="flex flex-col m-1 border-solid border-l-4 border-blue-400 px-2 py-1 bg-gray-200">
+                <span class="text-xs font-bold">
+                  Tujuan
+                </span>
+                <div class="">
+                  {{ trx_trp.xto }}
+                </div>
+              </div>
+    
+              <div class="flex flex-col m-1 border-solid border-l-4 border-blue-400 px-2 py-1 bg-gray-200">
+                <span class="text-xs font-bold">
+                  Tipe
+                </span>
+                <div class="">
+                  {{ trx_trp.tipe }}
+                </div>
+              </div>
+    
+              <div class="flex flex-col m-1 border-solid border-l-4 border-blue-400 px-2 py-1 bg-gray-200">
+                <span class="text-xs font-bold">
+                  Jenis
+                </span>
+                <div class="">
+                  {{ trx_trp.jenis }}
+                </div>
+              </div>
+  
+              <div v-if="trx_trp.transition_type=='From'" class="flex flex-col m-1 border-solid border-l-4 border-blue-400 px-2 py-1 bg-gray-200">
+                <span class="text-xs font-bold">
+                  Pengalihan
+                </span>
+                <div class="">
+                  {{ trx_trp.transition_target }}
+                </div>
+              </div>
+            </div>
+
+            <div class="w-full flex flex-wrap justify-center">
 
               <div v-if="trx_trp.val" class="flex flex-col m-2 ring-1 ring-gray-400 p-1 text-center justify-center items-center rounded text-xs">
                 <span class="text-xs font-bold">
@@ -248,9 +271,6 @@
                   {{ $moment(trx_trp.val5_at).format("DD-MM-YYYY HH:mm:ss") }}
                 </div>
               </div>
-
-
-
             </div>
             
           </div>
@@ -270,8 +290,19 @@
                 <th class="p-1 text-right" >Rp.</th>
                 <th class="p-1 text-right"> {{ pointFormat(trx_trp.amount) }} </th>
               </tr>
+              <tr v-if="potongan_supir(trx_trp) > 0" class="text-red-500 font-bold">
+                <td colspan="2" class="text-right">Potongan Supir</td>
+                <td class="p-1 text-right" >Rp.</td>
+                <td class="p-1 text-right"> {{ pointFormat(potongan_supir(trx_trp)) }} </td>
+              </tr>
+              <tr v-if="potongan_kernet(trx_trp) > 0" class="text-red-500 font-bold">
+                <td colspan="2" class="text-right">Potongan Kernet</td>
+                <td class="p-1 text-right" >Rp.</td>
+                <td class="p-1 text-right"> {{ pointFormat(potongan_kernet(trx_trp)) }} </td>
+              </tr>
+
               <tr v-if="potongan(trx_trp) > 0" class="text-red-500 font-bold">
-                <td colspan="2" class="text-right">Potongan</td>
+                <td colspan="2" class="text-right">Total Potongan</td>
                 <td class="p-1 text-right" >Rp.</td>
                 <td class="p-1 text-right"> {{ pointFormat(potongan(trx_trp)) }} </td>
               </tr>
@@ -282,7 +313,16 @@
               </tr>
             </table>
           </div>
+
+          <div class="w-full sm:w-1/2 h-full">
+            <img  v-if="trx_trp.trx_absens?.length > 0" class="w-full" :src="trx_trp.trx_absens[0].gambar">
+            <div v-else class="flex flex-col justify-center items-center px-2 py-8 border border-gray-700 bg-gray-300">
+              <IconsImage />
+              Tidak Ada Foto Berangkat
+            </div>
+          </div>
         </div>
+
         <div v-show="!show_confirm" class="flex p-1 justify-end flex-wrap">
           <button class="rounded m-1" @click="pop_show = false"> Cancel </button>
           <button class="rounded m-1 text-white bg-blue-500" @click="show_confirm = true"> Transfer </button>
@@ -486,10 +526,21 @@ const filtered_data = computed(()=>{
   return trx_trps.value;
 })
 
-
 const potongan= (trx_trp)=>{
   if(trx_trp.potongan && trx_trp.potongan.length > 0)
-      return trx_trp.potongan.map((x)=>x.nominal_cut).reduce((prev,curr)=>{prev+=curr; return prev;})
+      return trx_trp.potongan.map((x)=>parseInt(x.nominal_cut)).reduce((prev,curr)=>{prev+=curr; return prev;})
+  return 0;
+};
+
+const potongan_supir= (trx_trp)=>{
+  if(trx_trp.potongan && trx_trp.potongan.length > 0)
+      return trx_trp.potongan.filter((x)=>x.potongan_mst.employee_id == trx_trp.supir_id).map((x)=>parseInt(x.nominal_cut)).reduce((prev,curr)=>{prev+=curr; return prev;})
+  return 0;
+};
+
+const potongan_kernet= (trx_trp)=>{
+  if(trx_trp.potongan && trx_trp.potongan.length > 0)
+      return trx_trp.potongan.filter((x)=>x.potongan_mst.employee_id == trx_trp.kernet_id).map((x)=>parseInt(x.nominal_cut)).reduce((prev,curr)=>{prev+=curr; return prev;})
   return 0;
 };
 
