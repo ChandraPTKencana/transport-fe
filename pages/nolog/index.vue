@@ -170,6 +170,7 @@ const date = ref({
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
   let trx_trps = [];
+  let pabrik_name = "";
 
   const [data1, data2] = await Promise.all([
     useMyFetch("/trx_trp_nologs", {
@@ -191,19 +192,21 @@ const { data: dt_async } = await useAsyncData(async () => {
 
   if (data1.status.value !== 'error') {
     trx_trps = addClassToTbody(data1.data.value.data);
+    pabrik_name = data1.data.value.pabrik_name;
   }
 
   if (data1.status.value === 'error') {
     useErrorStore().trigger(data1.error);
-    return { trx_trps };
+    return { trx_trps,pabrik_name };
   }
 
   useCommonStore().loading_full = false;
 
-  return { trx_trps };
+  return { trx_trps,pabrik_name };
 });
 
 const trx_trps = ref(dt_async.value.trx_trps || []);
+const pabrik_name = ref(dt_async.value.pabrik_name || "");
 const list_cost_center = ref([]);
 const online_status=ref(false);
 
@@ -304,7 +307,7 @@ const form_view = () => {
 const fields_thead=ref([
   {key:"no",label:"No",isai:true},
   {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm",filter_on:1,class:"text-xs"},
-  {key:"val",label:"APP",childs:[
+  {key:"val",label:pabrik_name.value,childs:[
     {key:"val",label:"Kasir",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
     {key:"val1",label:"Mandor",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
     {key:"val2",label:"KTU/W",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},

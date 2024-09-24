@@ -286,6 +286,7 @@ const form_add = () => {
 
 const { display } = useAlertStore();
 const { show, status, message } = storeToRefs(useAlertStore());
+const forms_potongan_mst_is_view = ref(false);
 
 const form_edit = () => {
   if (selected.value == -1) {
@@ -294,6 +295,7 @@ const form_edit = () => {
     forms_potongan_mst_id.value = potongan_msts.value[selected.value].id;
     forms_potongan_mst_show.value = true;
     forms_potongan_mst_copy.value = false;
+    forms_potongan_mst_is_view.value = false;
     // router.push({ name: 'data_potongan_mst-form', query: { id: potongan_msts.value[selected.value].id } });
   }
 };
@@ -311,7 +313,6 @@ const form_copy = () => {
 
 const forms_potongan_mst_valid_show =  ref(false);
 const forms_potongan_mst_valid_id = ref(0);
-const forms_potongan_mst_is_view = ref(false);
 
 const validasi = () => {
   if (selected.value == -1) {
@@ -319,7 +320,7 @@ const validasi = () => {
   } else {
     forms_potongan_mst_valid_id.value = potongan_msts.value[selected.value].id;
     forms_potongan_mst_valid_show.value = true;
-    // forms_potongan_mst_is_view.value = false;
+    forms_potongan_mst_is_view.value = true;
   }
 };
 

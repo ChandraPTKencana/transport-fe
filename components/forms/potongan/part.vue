@@ -8,7 +8,7 @@
           @click="form_add()">
           <IconsPlus />
         </button>
-        <button v-if="!is_view && useUtils().checkPermissions(['potongan_trx.modify']) && selected > -1 && !potongan_trxs[selected]?.trx_trp_id" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="!is_view && useUtils().checkPermissions(['potongan_trx.modify']) && selected > -1" type="button" name="button" class="m-1 text-2xl "
           @click="form_edit()">
           <IconsEdit/>
         </button>

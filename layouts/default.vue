@@ -38,6 +38,13 @@
               </nuxt-link>
             </li>
 
+            <!-- <li v-if="useUtils().checkPermission('trp_trx.transfer.views')" :class="activeMenu == '/data_trx_trp/transfer_mandiri'?'active':''" >
+              <nuxt-link to="/data_trx_trp/transfer_mandiri"  class="cursor-pointer" @click="goTo('/data_trx_trp/transfer_mandiri')">
+                <IconsProduct class="mr-1"/>
+                Trx Transfer Mandiri
+              </nuxt-link>
+            </li> -->
+
             <li v-if="useUtils().checkPermission('trp_trx.ticket.views')" :class="activeMenu == '/data_trx_trp/ticket'?'active':''" >
               <nuxt-link to="/data_trx_trp/ticket"  class="cursor-pointer" @click="goTo('/data_trx_trp/ticket')">
                 <IconsProduct class="mr-1"/>

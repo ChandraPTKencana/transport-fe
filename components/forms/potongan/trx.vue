@@ -14,7 +14,8 @@
                 type="text" 
                 :value="potongan_trx.nominal_cut || 0" 
                 @input="potongan_trx.nominal_cut = $event"
-                :show="show" 
+                :show="show"
+                :disabled="potongan_trx.trx_trp_id"
                 />
               </div>
               <p class="text-red-500">{{ field_errors.ref }}</p>
