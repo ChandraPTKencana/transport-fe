@@ -10,7 +10,7 @@
 <script setup>
 const props = defineProps({
   value: {
-    type: [String],
+    type: [String , null],
     required: true,
     default: "",
   },

@@ -1,20 +1,20 @@
 <template lang="html">
   <!-- <div></div> -->
   <div v-if="show == 0" class="flex items-center justify-center absolute top-0 left-0 z-10 p-3 w-full h-full bg-black bg-opacity-80">
-    <div class="flex items-center max-w-xs w-full relative bg-white border-solid border-gray-600 border-2 p-3 flex-col flex-wrap">
+    <form action="#" class="flex items-center max-w-xs w-full relative bg-white border-solid border-gray-600 border-2 p-3 flex-col flex-wrap">
 
       <div class="w-full">
         Enter PIN
-        <input type="text" class="w-full" v-model="pin">
+        <input ref="it_pin" type="text" class="w-full" v-model="pin">
       </div>
 
       <div class="flex w-full justify-between mt-5">
-        <button @click="timeoutStart()" class="w-full bg-blue-500 border-blue-500 border-solid border-2 p-1 text-white mr-2"> 
+        <button type="submit" @click.prevent="timeoutStart()" class="w-full bg-blue-500 border-blue-500 border-solid border-2 p-1 text-white mr-2"> 
           Submit 
         </button>
       </div>
 
-    </div>
+    </form>
   </div>
 </template>
 
@@ -30,6 +30,14 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(['setTimeout']);
+const it_pin = ref(null);
+
+onMounted(()=>{
+  setTimeout(()=>{
+    it_pin.value.focus();
+  },1);
+})
+
 const field_errors = ref({})
 const token = useCookie('token');
 

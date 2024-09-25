@@ -192,7 +192,7 @@ const props = defineProps({
 
 let keydownListener = (event)=>{
 
-  console.log(event.key)
+  // console.log(event.key)
   if(event.key =='ArrowUp'){
     loadTop();
   }
