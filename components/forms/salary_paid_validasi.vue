@@ -15,7 +15,7 @@
               </div>
             </div>
 
-            <div v-if="details.length" class="w-full flex p-1 2xl:overflow-hidden justify-between flex-wrap">
+            <div v-if="details.length" class="w-full flex p-1 justify-between flex-wrap">
               <div class="w-full" role="sticky">
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
                   <thead >

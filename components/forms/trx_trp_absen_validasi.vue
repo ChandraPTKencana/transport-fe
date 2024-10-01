@@ -139,12 +139,11 @@
           <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
             Cancel
           </button>
-          <button v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm flex items-center justify-center" @click.prevent="doSave()">
-            Validasi
-            <br>
-            <span v-if="save_state!=''">
+          <button v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm flex flex-col items-center justify-center" @click.prevent="doSave()">
+            <div> Validasi </div>            
+            <div class="text-xs font-bold" v-if="save_state!=''">
               {{ save_state }}
-            </span>
+            </div>
           </button>
           <button type="button" name="button" class="w-36 h-9 m-1 grid place-items-center" @click="loadDown()">
             <IconsCaretDown class="black"/>
@@ -309,6 +308,8 @@ const doSave = async () => {
 }
 
 const callData = async () => {
+  save_state.value = '';
+
   useCommonStore().loading_full = true;
   const { data, error, status } = await useMyFetch("/trx_trp/absen", {
     method: 'get',

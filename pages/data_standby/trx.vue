@@ -47,7 +47,7 @@
             <IconsPrinterEye />
           </button>
         </div>
-        <div  class="flex">
+        <!-- <div  class="flex">
 
           <button v-if="useUtils().checkPermission('standby_trx.generate_pvr')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="generatePVR()">
@@ -60,7 +60,7 @@
           <div v-if="useUtils().checkPermissions(['standby_trx.create','standby_trx.modify'])" class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
             <span class="text-xs">Mode</span> : <span class="font-bold" :class="online_status?'text-green-600' : 'text-red-600'">{{ online_status ? "ONLINE" : "OFFLINE" }} </span>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <!-- <form action="#" class="w-full flex flex-wrap text-xs">
@@ -187,7 +187,8 @@
       </template>
     </PopupMini>
 
-    <FormsStandbyTrx :show="forms_standby_trx_show" :fnClose="()=>{forms_standby_trx_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_standby_trx_id" :p_data="standby_trxs" :list_cost_center="list_cost_center" :online_status="online_status"/>
+    <!-- <FormsStandbyTrx :show="forms_standby_trx_show" :fnClose="()=>{forms_standby_trx_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_standby_trx_id" :p_data="standby_trxs" :list_cost_center="list_cost_center" :online_status="online_status"/> -->
+      <FormsStandbyTrx :show="forms_standby_trx_show" :fnClose="()=>{forms_standby_trx_show=false}" :id="forms_standby_trx_id" :p_data="standby_trxs"/>
     <FormsStandbyTrxValidasi :show="forms_standby_trx_valid_show" :fnClose="()=>{forms_standby_trx_valid_show=false}" :id="forms_standby_trx_valid_id" :p_data="standby_trxs" :is_view="forms_standby_trx_is_view"/>
   
   </div>
@@ -304,28 +305,28 @@ const { data: dt_async } = await useAsyncData(async () => {
 });
 
 const standby_trxs = ref(dt_async.value.standby_trxs || []);
-const list_cost_center = ref([]);
-const online_status=ref(false);
-const fnLoadDBData = async () => {
-  useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/standby_trx_load_sqlsrv", {
-    method: 'get',
-    headers: {
-      'Authorization': `Bearer ${token.value}`,
-      'Accept': 'application/json'
-    },
-    params: {"online_status":online_status.value},
-    retry: 0,
-  });
-  useCommonStore().loading_full = false;
+// const list_cost_center = ref([]);
+// const online_status=ref(false);
+// const fnLoadDBData = async () => {
+//   useCommonStore().loading_full = true;
+//   const { data, error, status } = await useMyFetch("/standby_trx_load_sqlsrv", {
+//     method: 'get',
+//     headers: {
+//       'Authorization': `Bearer ${token.value}`,
+//       'Accept': 'application/json'
+//     },
+//     // params: {"online_status":online_status.value},
+//     retry: 0,
+//   });
+//   useCommonStore().loading_full = false;
 
-  if (status.value === 'error') {
-    useErrorStore().trigger(error);
-    return;
-  }
+//   if (status.value === 'error') {
+//     useErrorStore().trigger(error);
+//     return;
+//   }
 
-  list_cost_center.value = data.value.list_cost_center;
-}
+//   list_cost_center.value = data.value.list_cost_center;
+// }
 
 const sort = ref({
   field: "tanggal",
@@ -680,84 +681,84 @@ const printPreview = async()=>{
 }
 
 
-const generatePVR = async() => {
-  useCommonStore().loading_full = true;
+// const generatePVR = async() => {
+//   useCommonStore().loading_full = true;
 
-  const data_in = new FormData();
-  // data_in.append("id", standby_trxs.value[selected.value].id);  
-  data_in.append("online_status", online_status.value);  
+//   const data_in = new FormData();
+//   // data_in.append("id", standby_trxs.value[selected.value].id);  
+//   data_in.append("online_status", online_status.value);  
 
-  const { data, error, status } = await useMyFetch("/standby_trx_do_gen_pvr", {
-    method: "post",
-    headers: {
-      'Authorization': `Bearer ${token.value}`,
-      'Accept': 'application/json',
-    },
-    body: data_in,
-    retry: 0,
-  });
-  useCommonStore().loading_full = false;
-  if (status.value === 'error') {
-    useErrorStore().trigger(error);
-    return;
-  }
+//   const { data, error, status } = await useMyFetch("/standby_trx_do_gen_pvr", {
+//     method: "post",
+//     headers: {
+//       'Authorization': `Bearer ${token.value}`,
+//       'Accept': 'application/json',
+//     },
+//     body: data_in,
+//     retry: 0,
+//   });
+//   useCommonStore().loading_full = false;
+//   if (status.value === 'error') {
+//     useErrorStore().trigger(error);
+//     return;
+//   }
 
-  data.value.forEach(e => {
-    let idx = standby_trxs.value.map((x)=>x.id).indexOf(e.id);
-    if(idx !== -1) {
-      let dt = standby_trxs.value[idx];
-      dt.pvr_id = e.pvr_id;
-      dt.pvr_no = e.pvr_no;
-      dt.pvr_total = e.pvr_total;
-      dt.pvr_had_detail = e.pvr_had_detail;
-      dt.updated_at = e.updated_at;
+//   data.value.forEach(e => {
+//     let idx = standby_trxs.value.map((x)=>x.id).indexOf(e.id);
+//     if(idx !== -1) {
+//       let dt = standby_trxs.value[idx];
+//       dt.pvr_id = e.pvr_id;
+//       dt.pvr_no = e.pvr_no;
+//       dt.pvr_total = e.pvr_total;
+//       dt.pvr_had_detail = e.pvr_had_detail;
+//       dt.updated_at = e.updated_at;
       
-      standby_trxs.value.splice(idx,1,{...dt});
-    }
+//       standby_trxs.value.splice(idx,1,{...dt});
+//     }
     
-  });
+//   });
 
-  display({ show: true, status: "Success", message: "Generate Or Update PVR Done" });
-}
+//   display({ show: true, status: "Success", message: "Generate Or Update PVR Done" });
+// }
 
-const updatePV = async() => {
-  useCommonStore().loading_full = true;
+// const updatePV = async() => {
+//   useCommonStore().loading_full = true;
 
-  const data_in = new FormData();
-  data_in.append("online_status", online_status.value);  
+//   const data_in = new FormData();
+//   data_in.append("online_status", online_status.value);  
 
-  const { data, error, status } = await useMyFetch("/standby_trx_do_update_pv", {
-    method: "post",
-    headers: {
-      'Authorization': `Bearer ${token.value}`,
-      'Accept': 'application/json',
-    },
-    body: data_in,
-    retry: 0,
-  });
-  useCommonStore().loading_full = false;
-  if (status.value === 'error') {
-    useErrorStore().trigger(error);
-    return;
-  }
+//   const { data, error, status } = await useMyFetch("/standby_trx_do_update_pv", {
+//     method: "post",
+//     headers: {
+//       'Authorization': `Bearer ${token.value}`,
+//       'Accept': 'application/json',
+//     },
+//     body: data_in,
+//     retry: 0,
+//   });
+//   useCommonStore().loading_full = false;
+//   if (status.value === 'error') {
+//     useErrorStore().trigger(error);
+//     return;
+//   }
 
-  data.value.data.forEach(e => {
-    let idx = standby_trxs.value.map((x)=>x.id).indexOf(e.id);
-    if(idx !== -1) {
-      let dt = standby_trxs.value[idx];
-      dt.pv_id = e.pv_id;
-      dt.pv_no = e.pv_no;
-      dt.pv_total = e.pv_total;
-      dt.pv_datetime = e.pv_datetime;
-      dt.updated_at = e.updated_at;
+//   data.value.data.forEach(e => {
+//     let idx = standby_trxs.value.map((x)=>x.id).indexOf(e.id);
+//     if(idx !== -1) {
+//       let dt = standby_trxs.value[idx];
+//       dt.pv_id = e.pv_id;
+//       dt.pv_no = e.pv_no;
+//       dt.pv_total = e.pv_total;
+//       dt.pv_datetime = e.pv_datetime;
+//       dt.updated_at = e.updated_at;
       
-      standby_trxs.value.splice(idx,1,{...dt});
-    }
+//       standby_trxs.value.splice(idx,1,{...dt});
+//     }
     
-  });
+//   });
 
-  display({ show: true, status: "Success", message: "Update PV Done" });
-}
+//   display({ show: true, status: "Success", message: "Update PV Done" });
+// }
 
 const fields_thead=ref([
   {key:"no",label:"No",isai:true},

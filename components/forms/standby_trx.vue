@@ -114,7 +114,7 @@
               </div>
 
 
-              <div class="w-full sm:w-6/12 md:w-6/12 lg:w-4/12 flex px-2 py-3">                
+              <!-- <div class="w-full sm:w-6/12 md:w-6/12 lg:w-4/12 flex px-2 py-3">                
                 <div class="w-full flex flex-wrap ring-1 ring-gray-500 p-2 relative">
                   <div class="absolute bg-white -top-3"> Cost Center </div>
                   <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
@@ -133,9 +133,9 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
-              <div class="w-full sm:w-6/12 md:w-6/12 lg:w-4/12 flex px-2 py-3">                
+              <!-- <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex px-2 py-3">                
                 <div class="w-full flex flex-wrap ring-1 ring-gray-500 p-2 relative">
                   <div class="absolute bg-white -top-3"> PVR </div>
                     <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
@@ -154,7 +154,7 @@
                 </div>
               </div>
 
-              <div class="w-full sm:w-6/12 md:w-6/12 lg:w-4/12 flex px-2 py-3">                
+              <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex px-2 py-3">                
                 <div class="w-full flex flex-wrap ring-1 ring-gray-500 p-2 relative">
                   <div class="absolute bg-white -top-3"> PV </div>
                   
@@ -173,7 +173,7 @@
                   </div>
                   
                 </div>
-              </div>
+              </div> -->
 
               <div class="w-full flex grow p-1 overflow-auto 2xl:overflow-hidden justify-between flex-wrap">
                 <div class="w-full" role="sticky">
@@ -278,10 +278,10 @@ const props = defineProps({
     type: Function,
     required: false,
   },
-  fnLoadDBData: {
-    type: Function,
-    required: false,
-  },
+  // fnLoadDBData: {
+  //   type: Function,
+  //   required: false,
+  // },
   id:{
     type: Number,
     required: false,
@@ -292,16 +292,16 @@ const props = defineProps({
     required:true,
     default:[]
   },
-  list_cost_center:{
-    type:Array,
-    required:true,
-    default:[]
-  },
-  online_status:{
-    type:Boolean,
-    required:true,
-    default:false
-  },
+  // list_cost_center:{
+  //   type:Array,
+  //   required:true,
+  //   default:[]
+  // },
+  // online_status:{
+  //   type:Boolean,
+  //   required:true,
+  //   default:false
+  // },
   
 })
 
@@ -325,8 +325,8 @@ const standby_trx_temp = {
     note_for_remarks: "",
     ref: "",
     
-    cost_center_code:"",
-    cost_center_desc:"",
+    // cost_center_code:"",
+    // cost_center_desc:"",
 
     pvr_id: "",
     pvr_no:"",
@@ -382,9 +382,9 @@ const doSave = async () => {
   data_in.append("xto", standby_trx.value.xto);
   data_in.append("note_for_remarks", standby_trx.value.note_for_remarks);
   data_in.append("ref", standby_trx.value.ref);
-  data_in.append("cost_center_code", standby_trx.value.cost_center_code);
+  // data_in.append("cost_center_code", standby_trx.value.cost_center_code);
 
-  data_in.append("online_status", props.online_status);
+  // data_in.append("online_status", props.online_status);
 
   let tDetails = [...details.value];
   tDetails = tDetails.map((x,k)=>{
@@ -640,7 +640,7 @@ const replyAction=(act = "")=>{
 watch(() => props.show, async(newVal, oldVal) => {
   if (newVal == true){
     await loadLocalDT();
-    await props.fnLoadDBData();
+    // await props.fnLoadDBData();
 
     standby_trx.value = {...standby_trx_temp};
     selected_supir.value = JSON.parse(JSON.stringify(selected_mini_temp));
@@ -687,27 +687,27 @@ watch(()=>standby_trx.value.standby_mst_id, (newVal, oldVal) => {
   // immediate: true
 });
 
-watch(()=>standby_trx.value.cost_center_code, (newVal, oldVal) => {
-  let $desc = "";
+// watch(()=>standby_trx.value.cost_center_code, (newVal, oldVal) => {
+//   let $desc = "";
 
-  if(newVal==""){
-    standby_trx.value.cost_center_desc = "";
-  }
+//   if(newVal==""){
+//     standby_trx.value.cost_center_desc = "";
+//   }
 
-  if (newVal){
-    let dt = props.list_cost_center.filter(
-      (x)=>x.CostCenter == newVal
-    );
+//   if (newVal){
+//     let dt = props.list_cost_center.filter(
+//       (x)=>x.CostCenter == newVal
+//     );
 
-    if(dt.length  > 0) 
-    standby_trx.value.cost_center_desc = dt[0].Description;
-    else if(standby_trx.value.cost_center_code == standby_trx_loaded.cost_center_code) 
-    standby_trx.value.cost_center_desc = standby_trx_loaded.cost_center_desc;
-  }
-}, {
-  deep:true,
-  immediate: true
-});
+//     if(dt.length  > 0) 
+//     standby_trx.value.cost_center_desc = dt[0].Description;
+//     else if(standby_trx.value.cost_center_code == standby_trx_loaded.cost_center_code) 
+//     standby_trx.value.cost_center_desc = standby_trx_loaded.cost_center_desc;
+//   }
+// }, {
+//   deep:true,
+//   immediate: true
+// });
 
 </script>
 <style scoped="">
