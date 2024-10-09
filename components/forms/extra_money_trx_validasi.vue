@@ -15,7 +15,12 @@
                   {{ $moment(extra_money_trx.tanggal).format("DD-MM-YYYY") }}
                 </div>
               </div>
-
+              <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <label for="">Payment Method</label>
+                <div class="card-border">
+                  {{ extra_money_trx.payment_method.name }}
+                </div>
+              </div>
               <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">No Pol</label>
                 <div class="card-border">
@@ -39,9 +44,9 @@
               </div>
 
               <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
-                <label for="">Note</label>
-                <textarea v-model="extra_money_trx.note"></textarea>
-                <p class="text-red-500">{{ field_errors.note }}</p>
+                <label for="">Note For Remarks</label>
+                <textarea disabled="disabled" v-model="extra_money_trx.note_for_remarks"></textarea>
+                <p class="text-red-500">{{ field_errors.note_for_remarks }}</p>
               </div>
 
 
@@ -169,26 +174,28 @@ const props = defineProps({
 
 const extra_money_trx_temp = {
   id: -1,
-    tanggal: new Date(),
-    employee:{
-      id:0,
-    },
-    extra_money_trx:{
-      id:0,
-    },
+  tanggal: new Date(),
+  employee:{
+    id:0,
+  },
+  extra_money_trx:{
+    id:0,
+  },
+  payment_method:{
+    name:""
+  },
+  pv_id: -1,
+  pv_no:"",
+  pv_total:0,
 
-    pv_id: -1,
-    pv_no:"",
-    pv_total:0,
-
-    no_pol: '',
-    note:"",
-    cost_center_code:"",
-    cost_center_desc:"",
-    pvr_id:"",
-    pvr_no:"",
-    pvr_total:0,
-    pvr_complete:"",
+  no_pol: '',
+  note:"",
+  cost_center_code:"",
+  cost_center_desc:"",
+  pvr_id:"",
+  pvr_no:"",
+  pvr_total:0,
+  pvr_complete:"",
 };
 
 const extra_money_trx = ref({...extra_money_trx_temp});

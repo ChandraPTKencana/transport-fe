@@ -7,7 +7,7 @@
         <div class="w-full flex flex-col items-center grow overflow-auto">
           <div class="w-full flex flex-row flex-wrap">
 
-            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+            <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">Tanggal</label>
               <div class="grow">
                 <ClientOnly>
@@ -21,8 +21,14 @@
               </div>
               <p class="text-red-500">{{ field_errors.tanggal }}</p>
             </div>
-
-            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+            <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <label for="">Payment Method</label>
+              <select v-model="extra_money_trx.payment_method_id" :disabled="extra_money_trx.val==1">
+                <option v-for="pm in list_payment_methods" :value="pm.id">{{pm.name}}</option>
+              </select>
+              <p class="text-red-500">{{ field_errors.payment_method_id }}</p>
+            </div>
+            <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">No Pol</label>
               <input type="text" list="vehicle"  v-model="extra_money_trx.no_pol" :disabled="extra_money_trx.val==1"/>
               <datalist id="vehicle">
@@ -44,61 +50,10 @@
             </div>
 
             <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
-              <label for="">Note</label>
-              <textarea v-model="extra_money_trx.note"></textarea>
-              <p class="text-red-500">{{ field_errors.note }}</p>
+              <label for="">Note For Remarks</label>
+              <textarea v-model="extra_money_trx.note_for_remarks"></textarea>
+              <p class="text-red-500">{{ field_errors.note_for_remarks }}</p>
             </div>
-
-
-            
-            <div class="w-full flex flex-wrap">
-
-              <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">Cost Center Code</label>
-                <input list="cost_center"  v-model="extra_money_trx.cost_center_code" @blur="blurCostCenterCode($event)" :disabled="extra_money_trx.pvr_no!=''">
-                <datalist id="cost_center">
-                  <option v-for="lcc in list_cost_center" :value="lcc.CostCenter">{{lcc.CostCenter +'-'+ lcc.Description}}</option>
-                </datalist>
-                <p class="text-red-500">{{ field_errors.cost_center_code }}</p>
-              </div>
-
-              <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                <label for="">Cost Center Desc</label>
-                <div class="card-border disabled">
-                  {{  extra_money_trx.cost_center_desc }}
-                </div>
-              </div>
-
-              <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                <label for="">PVR No</label>
-                <div class="card-border disabled">
-                  {{  extra_money_trx.pvr_no }}
-                </div>
-              </div>
-
-              <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">PVR Total</label>
-                <div class="card-border disabled">
-                  {{ pointFormat(extra_money_trx.pvr_total || 0) }}
-                </div>
-              </div>
-
-
-              <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                <label for="">PV</label>
-                <div class="card-border disabled">
-                  {{  extra_money_trx.pv_no }}
-                </div>
-              </div>
-
-              <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">PV Amount</label>
-                <div class="card-border disabled">
-                  {{  pointFormat(extra_money_trx.pv_total) }}
-                </div>
-              </div>
-            </div>
-
 
           </div>
         </div>
@@ -135,10 +90,7 @@ const props = defineProps({
     type: Function,
     required: false,
   },
-  fnLoadDBData: {
-    type: Function,
-    required: false,
-  },
+  
   id:{
     type: Number,
     required: false,
@@ -148,18 +100,7 @@ const props = defineProps({
     type:Array,
     required:true,
     default:[]
-  },
-  list_cost_center:{
-    type:Array,
-    required:true,
-    default:[]
-  },
-  online_status:{
-    type:Boolean,
-    required:true,
-    default:false
-  },
-  
+  },  
 })
 
 const extra_money_trx_temp = {
@@ -177,37 +118,24 @@ const extra_money_trx_temp = {
     pv_total:0,
 
     no_pol: '',
-    note:"",
+    note_for_remarks:"",
     cost_center_code:"",
     cost_center_desc:"",
     pvr_id:"",
     pvr_no:"",
     pvr_total:0,
     pvr_complete:"",
+    payment_method_id:2,
+    payment_method:{
+      id:0,
+      name:"",
+    },
 };
 let extra_money_trx_loaded = {...extra_money_trx_temp};
 const extra_money_trx = ref({...extra_money_trx_temp});
-
+const list_payment_methods = ref([]);
 const token = useCookie('token');
 const field_errors = ref({})
-
-const blurCostCenterCode=($e)=>{
-  let val = $e.target.value;
-  if(!val) {
-    extra_money_trx.value.cost_center_code='';
-    extra_money_trx.value.cost_center_desc="";
-    return;
-  }
-  let match = props.list_cost_center.filter(
-    (x)=>x.CostCenter == val
-  );
-
-  if(match.length==0){
-    extra_money_trx.value.cost_center_code='112';
-    extra_money_trx.value.cost_center_desc="Transport";
-  }
-}
-
 
 const doSave = async () => {
 
@@ -216,14 +144,12 @@ const doSave = async () => {
 
   const data_in = new FormData();
   data_in.append("tanggal", $moment(extra_money_trx.value.tanggal).format("Y-MM-DD"));  
-  data_in.append("cost_center_code", extra_money_trx.value.cost_center_code);
-  data_in.append("online_status", props.online_status);
   data_in.append("no_pol", extra_money_trx.value.no_pol);
-  data_in.append("note", extra_money_trx.value.note);
+  data_in.append("note_for_remarks", extra_money_trx.value.note_for_remarks);
   data_in.append("employee_id", selected_employee.value.id);
   data_in.append("extra_money_id", selected_extra_money.value.id);
+  data_in.append("payment_method_id", trx_trp.value.payment_method_id);
 
-  
   let $method = "post";
 
   let id = props.id;
@@ -251,6 +177,9 @@ const doSave = async () => {
   extra_money_trx.value.employee        = JSON.parse(JSON.stringify(selected_employee.value._raw));
 
   extra_money_trx.value.extra_money     = JSON.parse(JSON.stringify(selected_extra_money.value._raw));
+
+  let pm_idx = list_payment_methods.value.map((x)=>x.id).indexOf(extra_money_trx.value.payment_method_id);
+  extra_money_trx.value.payment_method  = {...list_payment_methods.value[pm_idx]};
 
   extra_money_trx.value.updated_at = data.value.updated_at;
   if(props.id<=0){
@@ -419,7 +348,6 @@ const callData = async () => {
   selected_extra_money.value.name=dt.extra_money.xto;
   selected_extra_money.value.title=(pointFormat(dt.extra_money.total) || '')+" "+(dt.extra_money.description || '');
 
-  props.fnLoadDBData();
 }
 
 const list_vehicle = ref([]);
@@ -446,6 +374,7 @@ const loadLocalDT = async () => {
   list_vehicle.value = data.value.list_vehicle;
   list_employee.value = data.value.list_employee;
   list_extra_money.value = data.value.list_extra_money;
+  list_payment_methods.value = data.value.list_payment_methods;
 }
 
 
@@ -453,7 +382,6 @@ const loadLocalDT = async () => {
 watch(() => props.show, async(newVal, oldVal) => {
   if (newVal == true){
     await loadLocalDT();
-    await props.fnLoadDBData();
 
     extra_money_trx.value = {...extra_money_trx_temp};
     extra_money_trx_loaded = {...extra_money_trx_temp};
@@ -467,26 +395,5 @@ watch(() => props.show, async(newVal, oldVal) => {
 }, {
   immediate: true
 });
-
-watch(()=>extra_money_trx.value.cost_center_code, (newVal, oldVal) => {
-  let $desc = "";
-  if (newVal=="" || newVal){
-    let dt = props.list_cost_center.filter(
-      (x)=>x.CostCenter == extra_money_trx.value.cost_center_code
-    );
-
-    if(dt.length  > 0) 
-    $desc = dt[0].Description;
-    else if(extra_money_trx.value.cost_center_code == extra_money_trx_loaded.cost_center_code) 
-    $desc = extra_money_trx_loaded.cost_center_desc;
-
-    extra_money_trx.value.cost_center_desc = $desc;
-  }
-}, {
-  deep:true,
-  immediate: true
-});
-
-
 
 </script>

@@ -15,6 +15,15 @@
               </div>
             </div>
 
+            <div class="w-full flex flex-row flex-wrap">
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">Period Part</label>
+                <div class="card-border">
+                  {{ salary_paid.period_part }}
+                </div>
+              </div>
+            </div>
+
             <div v-if="details.length" class="w-full flex p-1 justify-between flex-wrap">
               <div class="w-full" role="sticky">
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
@@ -69,12 +78,12 @@
                 <div v-if="salary_paid.val1">
                   App 1 : {{ salary_paid.val1_by.username}} ( {{ salary_paid.val1_at ? $moment(salary_paid.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
-                <div v-if="salary_paid.val2">
+                <!-- <div v-if="salary_paid.val2">
                   App 2 : {{ salary_paid.val2_by.username}} ( {{ salary_paid.val2_at ? $moment(salary_paid.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
                 <div v-if="salary_paid.val3">
                   App 3 : {{ salary_paid.val3_by.username}} ( {{ salary_paid.val3_at ? $moment(salary_paid.val3_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
-                </div>
+                </div> -->
               </div>
             </div>
 

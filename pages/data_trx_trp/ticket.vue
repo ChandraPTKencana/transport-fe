@@ -129,6 +129,43 @@
           <IconsCheck v-else/>
         </template>
 
+        <!-- <template #[`susut_bruto_a`]="{item}">
+          {{pointFormat(item.ticket_a_bruto)}}
+        </template>
+        <template #[`susut_tara_a`]="{item}">
+          {{pointFormat(item.ticket_a_tara)}}
+        </template>
+        <template #[`susut_netto_a`]="{item}">
+          {{pointFormat(item.ticket_a_netto)}}
+        </template>
+        <template #[`susut_bruto_b`]="{item}">
+          {{pointFormat(item.ticket_b_bruto)}}
+        </template>
+        <template #[`susut_tara_b`]="{item}">
+          {{pointFormat(item.ticket_b_tara)}}
+        </template>
+        <template #[`susut_netto_b`]="{item}">
+          {{pointFormat(item.ticket_b_netto)}}
+        </template> -->
+        <template #[`susut_bruto_b_a`]="{item}">
+          {{calculateSelisih(item.ticket_a_bruto,item.ticket_b_bruto)}}
+        </template>
+        <template #[`susut_tara_b_a`]="{item}">
+          {{calculateSelisih(item.ticket_a_tara,item.ticket_b_tara)}}
+        </template>
+        <template #[`susut_netto_b_a`]="{item}">
+          {{calculateSelisih(item.ticket_a_netto,item.ticket_b_netto)}}
+        </template>
+        <template #[`susut_bruto_b_a_persen`]="{item}">          
+          {{calculateSusut(item.ticket_a_bruto,item.ticket_b_bruto)}}
+        </template>
+        <template #[`susut_tara_b_a_persen`]="{item}">          
+          {{calculateSusut(item.ticket_a_tara,item.ticket_b_tara)}}
+        </template>
+        <template #[`susut_netto_b_a_persen`]="{item}">          
+          {{calculateSusut(item.ticket_a_netto,item.ticket_b_netto)}}
+        </template>
+
         <template #[`deleted_by_username`]="{item}">
           {{ item.deleted_by?.username }}
         </template>
@@ -258,6 +295,7 @@ import { useAuthStore } from '~/store/auth';
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
+const { pointFormat } = useUtils();
 
 definePageMeta({
   // layout: "clear",
@@ -766,6 +804,26 @@ const fields_thead=ref([
     {key:"ticket_b_in_at",label:"In At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
     {key:"ticket_b_out_at",label:"Out At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   ]},
+  {key:"susut",label:"Susut",childs:[
+    {key:"susut_bruto",label:"Bruto",childs:[
+      // {key:"susut_bruto_a",label:"Berangkat"},
+      // {key:"susut_bruto_b",label:"Kembali"},
+      {key:"susut_bruto_b_a",label:"Selisih"},
+      {key:"susut_bruto_b_a_persen",label:"%"},
+    ]},
+    {key:"susut_tara",label:"Tara",childs:[
+      // {key:"susut_tara_a",label:"Berangkat"},
+      // {key:"susut_tara_b",label:"Kembali"},
+      {key:"susut_tara_b_a",label:"Selisih"},
+      {key:"susut_tara_b_a_persen",label:"%"},
+    ]},
+    {key:"susut_netto",label:"Netto",childs:[
+      // {key:"susut_netto_a",label:"Berangkat"},
+      // {key:"susut_netto_b",label:"Kembali"},
+      {key:"susut_netto_b_a",label:"Selisih"},
+      {key:"susut_netto_b_a_persen",label:"%"},
+    ]},
+  ]},
   {key:"supir",label:"Supir",filter_on:1,type:'string'},
   {key:"kernet",label:"Kernet",filter_on:1,type:'string'},
   {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
@@ -813,4 +871,27 @@ const enabled_approve_void = computed(()=>{
 })
 
 const frm_update_ticket=ref(false);
+
+
+const calculateSusut=(a,b)=>{
+  a = parseFloat(a) || 0;
+  b = parseFloat(b) || 0;
+  
+  let diff=parseFloat(b-a);
+  let bigger = diff > 0 ? b : a;
+
+  if(bigger==0) return 0;
+  let result = useUtils().round(diff / bigger * 100,2);
+  if(result<0) return "("+Math.abs(result*100)/100+")";
+  return result;
+}
+
+const calculateSelisih=(a,b)=>{
+  a = parseFloat(a) || 0;
+  b = parseFloat(b) || 0;
+  
+  let diff=parseFloat(b-a);
+  if(diff<0) return "("+pointFormat(Math.abs(diff))+")";
+  return pointFormat(diff);
+}
 </script>

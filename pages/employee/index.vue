@@ -70,6 +70,11 @@
                 <th>No Rek</th>
                 <th>Nama Rek</th>
                 <th>Phone Number</th>
+                <th>Tempat Lahir</th>
+                <th>Tanggal Lahir</th>
+                <th>TMK</th>
+                <th>Alamat</th>
+                <th>Status</th>
                 <th>File</th>
                 <th>Tanggal Dibuat</th>
                 <th>Tanggal Diubah</th>
@@ -93,6 +98,11 @@
                 <td>{{ employee.rek_no }}</td>
                 <td>{{ employee.rek_name }}</td>
                 <td>{{ employee.phone_number }}</td>
+                <td>{{ employee.birth_date ?? $moment(employee.birth_date).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ employee.birth_place }}</td>
+                <td>{{ employee.tmk ?? $moment(employee.tmk).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ employee.address }}</td>
+                <td>{{ employee.status }}</td>
                 <td> 
                   <TypeIcon :value="employee.attachment_1_type"/>
                 </td>

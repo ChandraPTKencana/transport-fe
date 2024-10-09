@@ -129,8 +129,13 @@
           <IconsCheck v-else/>
         </template>
         <template #[`val1`]="{item}">
-          <IconsLine v-if="!item.val1"/>
-          <IconsCheck v-else/>
+          <div class="w-full flex flex-col items-center justify-center">
+            <IconsLine v-if="!item.val1"/>
+            <IconsCheck v-else/>
+            <div class="text-xs" v-if="item.absen_not_done && item.absen_not_done.length > 0"> 
+              {{ item.absen_not_done.join(",") }}
+            </div>
+          </div>
         </template>
         <template #[`val2`]="{item}">
           <IconsLine v-if="!item.val2"/>
@@ -216,6 +221,7 @@ definePageMeta({
 const checkStatus=(data)=>{
   if(data.deleted==1) return "!bg-red-400";
   if(data.pvr_id > 0 && data.req_deleted == 1) return "!bg-yellow-300"; 
+  if(data.absen_not_done && data.absen_not_done.length > 0) return "!bg-gray-300"; 
   if(data.pv_id > 0) return "!bg-blue-300"; 
   return "";
 }
@@ -815,6 +821,7 @@ const enabled_validasi = computed(()=>{
     ( dt_selected.value.val3 == 0 && useUtils().checkPermissions(['trp_trx.val3']) ) ||
     ( dt_selected.value.val4 == 0 && useUtils().checkPermissions(['trp_trx.val4']) ) ||
     ( dt_selected.value.val5 == 0 && useUtils().checkPermissions(['trp_trx.val5']) )
+    ( dt_selected.value.val6 == 0 && useUtils().checkPermissions(['trp_trx.val6']) )
   );
   return result;
 })

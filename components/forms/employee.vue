@@ -59,6 +59,63 @@
               <input type="text" v-model="employee.phone_number">
               <p class="text-red-500">{{ field_errors.phone_number }}</p>
             </div>
+
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+              <label for="">Tanggal Lahir</label>
+              <div class="grow">
+                <ClientOnly>
+                  <vue-date-picker  v-model="employee.birth_date" 
+                  type="datetime" 
+                  format="dd-MM-yyyy"
+                  :enable-time-picker = "false" 
+                  text-input
+                  teleport-center></vue-date-picker>
+                </ClientOnly>
+              </div>
+              <p class="text-red-500">{{ field_errors.birth_date }}</p>
+            </div>
+
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+              <label for="">Tempat Lahir</label>
+              <input type="text" v-model="employee.birth_place">
+              <p class="text-red-500">{{ field_errors.birth_place }}</p>
+            </div>
+
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+              <label for="">TMK</label>
+              <div class="grow">
+                <ClientOnly>
+                  <vue-date-picker  v-model="employee.tmk" 
+                  type="datetime" 
+                  format="dd-MM-yyyy"
+                  :enable-time-picker = "false" 
+                  text-input
+                  teleport-center></vue-date-picker>
+                </ClientOnly>
+              </div>
+              <p class="text-red-500">{{ field_errors.tmk }}</p>
+            </div>
+
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+              <label for="">Alamat</label>
+              <textarea  v-model="employee.address"></textarea>
+              <p class="text-red-500">{{ field_errors.address }}</p>
+            </div>
+
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+              <label for="">Status</label>
+              <select v-model="employee.status">
+                <option value="TK/0">TK/0</option>
+                <option value="TK/1">TK/1</option>
+                <option value="TK/2">TK/2</option>
+                <option value="TK/3">TK/3</option>
+                <option value="K/0">K/0</option>
+                <option value="K/1">K/1</option>
+                <option value="K/2">K/2</option>
+                <option value="K/3">K/3</option>
+              </select>
+              <p class="text-red-500">{{ field_errors.status }}</p>
+            </div>
           </div>
 
           <div class="p-1 w-full sm:w-full md:w-2/3 md:overflow-auto max-h-full">
@@ -82,6 +139,7 @@
 <script setup>
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
+const { $moment } = useNuxtApp()
 
 const props = defineProps({
   show: {
@@ -116,6 +174,11 @@ const employee_temp = {
   phone_number: "",
   attachment_1:"",
   attachment_1_preview:"",
+  birth_date: new Date(),
+  birth_place:"",
+  tmk: new Date(),
+  address:"",
+  status:"TK/0",
 };
 
 const employee = ref({...employee_temp});
@@ -139,6 +202,11 @@ const doSave = async () => {
   data_in.append("phone_number", employee.value.phone_number);
   data_in.append("attachment_1", employee.value.attachment_1);
   data_in.append("attachment_1_preview", employee.value.attachment_1_preview);
+  data_in.append("birth_date", employee.value.birth_date ? $moment(employee.value.birth_date).format("Y-MM-DD") : "");  
+  data_in.append("birth_place", employee.value.birth_place);
+  data_in.append("tmk", employee.value.tmk ? $moment(employee.value.tmk).format("Y-MM-DD") : "");  
+  data_in.append("address", employee.value.address);
+  data_in.append("status", employee.value.status);
 
   let $method = "post";
 

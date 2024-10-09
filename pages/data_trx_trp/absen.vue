@@ -41,6 +41,43 @@
           <IconsLine v-if="!item.ritase_val2"/>
           <IconsCheck v-else/>
         </template>
+
+        <template #[`ritase_leave_at`]="{item}">
+          <div class="bg-red-700 rounded-sm" v-if="!item.ritase_leave_at">
+            <IconsTimes  class="text-white text-xl font-bold"/>
+          </div>
+          <div class="bg-green-500 rounded-sm" v-else>
+            <IconsCheck class="text-white text-xl font-bold"/>
+          </div>
+        </template>
+
+        <template #[`ritase_arrive_at`]="{item}">
+          <div class="bg-red-700 rounded-sm" v-if="!item.ritase_arrive_at">
+            <IconsTimes  class="text-white text-xl font-bold"/>
+          </div>
+          <div class="bg-green-500 rounded-sm" v-else>
+            <IconsCheck class="text-white text-xl font-bold"/>
+          </div>
+        </template>
+
+        <template #[`ritase_return_at`]="{item}">
+          <div class="bg-red-700 rounded-sm" v-if="!item.ritase_return_at">
+            <IconsTimes  class="text-white text-xl font-bold"/>
+          </div>
+          <div class="bg-green-500 rounded-sm" v-else>
+            <IconsCheck class="text-white text-xl font-bold"/>
+          </div>
+        </template>
+
+        <template #[`ritase_till_at`]="{item}">
+          <div class="bg-red-700 rounded-sm" v-if="!item.ritase_till_at">
+            <IconsTimes  class="text-white text-xl font-bold"/>
+          </div>
+          <div class="bg-green-500 rounded-sm" v-else>
+            <IconsCheck class="text-white text-xl font-bold"/>
+          </div>
+        </template>
+
         <template #[`deleted_by_username`]="{item}">
           {{ item.deleted_by?.username }}
         </template>
@@ -306,6 +343,11 @@ const fields_thead=ref([
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1,sort:{priority:1,type:"desc"}},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
+  {key:"ritase_leave_at",label:"B"},
+  {key:"ritase_arrive_at",label:"T"},
+  {key:"ritase_return_at",label:"K"},
+  {key:"ritase_till_at",label:"S"},
+  {key:"ritase_note",label:"Note"},
   {key:"xto",label:"Tujuan",filter_on:1,type:'string'},
   {key:"tipe",label:"Tipe",filter_on:1,type:'string'},
   {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK']},

@@ -230,7 +230,7 @@ const trx_trp_temp = {
     pvr_total:0,
     pvr_had_detail:"",
     transition_target:"",
-    payment_method_id:1,
+    payment_method_id:2,
     payment_method:{
       id:0,
       name:"",

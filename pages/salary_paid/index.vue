@@ -15,11 +15,11 @@
           @click="validasi()">
           <IconsSignature />
         </button>
-        <button type="button" name="button" class="m-1 text-2xl "
+        <!-- <button v-if="selected>-1 && salary_paids[selected].val1==1" type="button" name="button" class="m-1 text-2xl "
           @click="printPreview()">
           <IconsPrinterEye />
-        </button>
-        <button type="button" name="button" class="m-1 text-2xl "
+        </button> -->
+        <button v-if="selected>-1 && salary_paids[selected].val1==1" type="button" name="button" class="m-1 text-2xl "
           @click="downloadExcel()">
           <IconsTable2Column />
         </button>
@@ -64,11 +64,12 @@
           <table class="tacky">
             <thead>
               <tr class="sticky top-0 !z-[2]">
-                <th>App 1</th>
-                <th>App 2</th>
-                <th>App 3</th>
+                <th>Logistik</th>
+                <!-- <th>App 2</th>
+                <th>App 3</th> -->
                 <th>ID</th>
-                <th>Period</th>
+                <th>Period End</th>
+                <th>Period Part</th>
                 <th>Created At</th>
                 <th>Updated At</th>
               </tr>
@@ -82,7 +83,7 @@
                     <IconsCheck v-else/>
                   </div>
                 </td>
-                <td>
+                <!-- <td>
                   <div class="flex items-center justify-center">
                     <IconsLine v-if="!salary_paid.val2"/>
                     <IconsCheck v-else/>
@@ -93,9 +94,10 @@
                     <IconsLine v-if="!salary_paid.val3"/>
                     <IconsCheck v-else/>
                   </div>
-                </td>
+                </td> -->
                 <td class="bold">{{ salary_paid.id }}</td>
                 <td>{{ salary_paid.period_end ? $moment(salary_paid.period_end).format("MM-Y") : "" }}</td>
+                <td>{{ salary_paid.period_part }}</td>
                 <td>{{ salary_paid.created_at ? $moment(salary_paid.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <td>{{ salary_paid.updated_at ? $moment(salary_paid.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
               </tr>

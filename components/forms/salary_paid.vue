@@ -7,7 +7,7 @@
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Period End</label>
                 <div v-if="salary_paid.id" class="card-border">
                   {{ $moment(salary_paid.period_end).format("MM-Y") }}
@@ -24,6 +24,19 @@
                 </div>
                 <p class="text-red-500">{{ field_errors.period_end }}</p>
               </div>
+              <div class="w-1/2 sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">Period Part</label>
+                <div v-if="salary_paid.id" class="card-border">
+                  {{ salary_paid.period_part }}
+                </div>
+                <div v-else>
+                  <select v-model="salary_paid.period_part">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                  </select>
+                </div>
+                <p class="text-red-500">{{ field_errors.period_part }}</p>
+              </div>
             </div>
 
             <div v-if="details.length" class="w-full flex p-1 justify-between flex-wrap">
@@ -31,36 +44,42 @@
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
                   <thead >
                     <tr class="sticky -top-1 !z-[2]">
-                      <td colspan="10" class="!bg-slate-800 text-white font-bold">
+                      <td colspan="11" class="!bg-slate-800 text-white font-bold">
                         Detail
                       </td>
                     </tr>
                     <tr class="sticky top-7 !z-[2]">
                       <th >No</th>
+                      <th >Jabatan</th>
                       <th >Nama Pekerja</th>
                       <th >No KTP</th>
-                      <th >No SIM</th>
+                      <!-- <th >No SIM</th> -->
                       <th >Rek No</th>
                       <th >Rek Nama</th>
                       <th >Bank Name</th>
-                      <th >Nominal Standby <span class="text-sm">({{pointFormat(total_standby || 0) }})</span></th>
+                      <th >SB.Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji || 0) }})</span></th>
+                      <th >SB.Makan <span class="text-sm">({{pointFormat(ttl_sb_makan || 0) }})</span></th>
+                      <!-- <th >Nominal Standby <span class="text-sm">({{pointFormat(total_standby || 0) }})</span></th> -->
                       <th >Nominal Bonus <span class="text-sm">({{pointFormat(total_bonus || 0) }})</span></th>
-                      <th >Total <span class="text-sm">({{pointFormat((total_standby + total_bonus) || 0) }})</span></th>
+                      <th >Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + total_bonus) || 0) }})</span></th>
                     </tr>
                   </thead>
                   <tbody ref="to_move">
                     <template v-for="(detail, index) in details" :key="index">
                       <tr v-if="detail.p_status!='Remove'"  :data-index="index">
                         <td>{{ index + 1 }}.</td>
+                        <td>{{ detail.employee?.role }}</td>
                         <td>{{ detail.employee?.name }}</td>
                         <td>{{ detail.employee?.ktp_no }}</td>
-                        <td>{{ detail.employee?.sim_no }}</td>
+                        <!-- <td>{{ detail.employee?.sim_no }}</td> -->
                         <td>{{ detail.employee?.rek_no }}</td>
                         <td>{{ detail.employee?.rek_name }}</td>
                         <td>{{ detail.employee?.bank?.code }}</td>
-                        <td>{{ pointFormat(detail.standby_nominal) }}</td>
+                        <td>{{ pointFormat(detail.sb_gaji) }}</td>
+                        <td>{{ pointFormat(detail.sb_makan) }}</td>
+                        <!-- <td>{{ pointFormat(detail.standby_nominal) }}</td> -->
                         <td>{{ pointFormat(detail.salary_bonus_nominal) }}</td>
-                        <td>{{ pointFormat(parseFloat(detail.standby_nominal) + parseFloat(detail.salary_bonus_nominal)) }}</td>
+                        <td>{{ pointFormat(parseFloat(detail.sb_gaji) + parseFloat(detail.sb_makan) + parseFloat(detail.salary_bonus_nominal)) }}</td>
                       </tr>
                     </template>
                   </tbody>
@@ -138,6 +157,7 @@ const props = defineProps({
 const salary_paid_temp = {
     id: "",
     period_end: new Date(),
+    period_part: 1,
 };
 
 const salary_paid = ref({...salary_paid_temp});
@@ -156,6 +176,7 @@ const doSave = async () => {
   const data_in = new FormData();
 
   data_in.append("period_end", (salary_paid.value.period_end) ? $moment(salary_paid.value.period_end).format("Y-MM") : '');
+  data_in.append("period_part", salary_paid.value.period_part);
   
   let $method = "post";
 
@@ -211,6 +232,25 @@ const total_standby = computed(()=>{
   });
   return temp;
 })
+
+const ttl_sb_gaji = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.sb_gaji); 
+  });
+  return temp;
+})
+
+const ttl_sb_makan = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.sb_makan); 
+  });
+  return temp;
+})
+
 
 const total_bonus = computed(()=>{
   let temp = 0;

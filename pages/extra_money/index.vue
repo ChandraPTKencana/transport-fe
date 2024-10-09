@@ -10,7 +10,6 @@
               <option value="unapprove">Unapprove</option>
               <option value="deleted">Trash</option>
               <option value="all">All</option>
-              <option value="req_deleted">Req Delete</option>
             </select>
           </div>
           <button v-if="enabled_copy" type="button" name="button" class="m-1 text-2xl "
@@ -32,14 +31,6 @@
           <button  v-if="enabled_remove" type="button" name="button" class="m-1 text-2xl "
             @click="remove()">
             <IconsDelete />
-          </button>
-          <button  v-if="enabled_void" type="button" name="button" class="m-1 text-2xl "
-            @click="for_remove()">
-            <IconsVoid />
-          </button>
-          <button  v-if="enabled_approve_void " type="button" name="button" class="m-1 text-2xl "
-            @click="approveVoid()">
-            <IconsVoid />
           </button>
           <button v-if="enabled_validasi" type="button" name="button" class="m-1 text-2xl "
             @click="validasi()">
@@ -67,9 +58,6 @@
         <template #[`deleted_by_username`]="{item}">
           {{ item.deleted_by?.username }}
         </template>
-        <template #[`req_deleted_by_username`]="{item}">
-          {{ item.req_deleted_by?.username }}
-        </template>
       </TableView>
     </div>
 
@@ -79,24 +67,6 @@
         <div class="grow mb-5" >
           <textarea  v-model="deleted_reason"></textarea>
         </div>
-      </template>
-    </PopupMini>
-
-    <PopupMini :type="'custome'" :show="req_deleted_box" :data="req_deleted_data" :fnClose="toggleReqDeleteBox" :fnConfirm="confirmedReqDeleted" :enabledOk="enabledOk1" >
-      <template #words>
-        Data akan diproses dan <b>tidak dapat dibatalkan lagi</b>, yakin untuk melanjutkan ?
-      </template>
-      <template #footer>
-          Masukkan Alasan Permintaan Penghapusan:
-        <div class="grow mb-5" >
-          <textarea  v-model="req_deleted_reason"></textarea>
-        </div>
-      </template>
-    </PopupMini>
-
-    <PopupMini :type="'custome'" :show="approve_void_box" :data="approve_void_data" :fnClose="toggleApproveVoidBox" :fnConfirm="confirmedApproveVoid">      
-      <template #words>
-        Data akan diproses dan <b>tidak dapat dibatalkan lagi</b>, apakah Anda menyetujui permintaan penghapusan data berikut?
       </template>
     </PopupMini>
 
@@ -131,7 +101,7 @@ definePageMeta({
 
 const checkStatus=(data)=>{
   if(data.deleted==1) return "!bg-red-400";
-  if(data.pvr_id > 0 && data.req_deleted == 1) return "!bg-yellow-300"; 
+  // if(data.pvr_id > 0 && data.req_deleted == 1) return "!bg-yellow-300"; 
   if(data.pv_id > 0) return "!bg-blue-300"; 
   return "";
 }
@@ -146,8 +116,8 @@ const addClassToTbody=(data)=>{
 const filter_status = ref("available")
 watch(()=>filter_status.value,(newval)=>{
   fields_thead.value.map((x)=>{
-    let in_list=["deleted_by_username","deleted_at","deleted_reason","req_deleted_by_username","req_deleted_at","req_deleted_reason"].indexOf(x.key) > -1;
-    if(["all","deleted","req_deleted"].indexOf(newval) > -1){
+    let in_list=["deleted_by_username","deleted_at","deleted_reason"].indexOf(x.key) > -1;
+    if(["all","deleted"].indexOf(newval) > -1){
       if( in_list )
         x.tbl_show =  1; 
     }else{
@@ -215,8 +185,6 @@ const { data: dt_async } = await useAsyncData(async () => {
 });
 
 const extra_moneys = ref(dt_async.value.extra_moneys || []);
-const online_status=ref(false);
-
 
 const sort = ref({
   field: "tanggal",
@@ -425,135 +393,6 @@ const confirmed_delete = async() => {
   delete_box.value = false;
 }
 
-
-
-const enabledOk1 = ref(false);
-const req_deleted_data = ref({});
-const req_deleted_box = ref(false);
-const req_deleted_reason = ref("");
-const toggleReqDeleteBox = async()=>{  
-  if (req_deleted_box.value) {
-    req_deleted_box.value = false;
-  }
-};
-
-const for_remove = () => {
-  if (selected.value == -1) {
-    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
-  } else {
-    req_deleted_reason.value = '';
-    req_deleted_data.value = {id : extra_moneys.value[selected.value].id, "tujuan":extra_moneys.value[selected.value].xto};
-    req_deleted_box.value = true;
-  }
-};
-
-const approve_void_data = ref({});
-const approve_void_box = ref(false);
-const approve_void_reason = ref("");
-const toggleApproveVoidBox = async()=>{  
-  if (approve_void_box.value) {
-    approve_void_box.value = false;
-  }
-};
-
-const approveVoid = () => {
-  if (selected.value == -1) {
-    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
-  } else {
-    approve_void_reason.value = '';
-    approve_void_data.value = {
-      id : extra_moneys.value[selected.value].id, 
-      "tujuan":extra_moneys.value[selected.value].xto,
-      "permintaan":extra_moneys.value[selected.value].approve_void_by?.username,
-      "alasan":extra_moneys.value[selected.value].approve_void_reason,
-    };
-    approve_void_box.value = true;
-  }
-};
-
-const confirmedApproveVoid = async() => {
-  useCommonStore().loading_full = true;
-
-  const data_in = new FormData();
-  data_in.append("id", extra_moneys.value[selected.value].id);  
-  data_in.append("_method", "DELETE");
-
-  const { data, error, status } = await useMyFetch("/extra_money_approve_void", {
-    method: "post",
-    headers: {
-      'Authorization': `Bearer ${token.value}`,
-      'Accept': 'application/json',
-    },
-    body: data_in,
-    retry: 0,
-  });
-  useCommonStore().loading_full = false;
-  if (status.value === 'error') {
-    useErrorStore().trigger(error);
-    return;
-  }
-
-  let old = {...extra_moneys.value[selected.value]};
-  old['deleted'] = data.value.deleted;
-  old['deleted_user'] = data.value.deleted_user;
-  old['deleted_at'] = data.value.deleted_at;
-  old['deleted_by'] = data.value.deleted_by;
-  old['deleted_reason'] = data.value.deleted_reason;
-  old['class_h'] = checkStatus(old);
-  if(filter_status.value!='all'){
-    extra_moneys.value.splice(selected.value,1);
-  }else{
-    extra_moneys.value.splice(selected.value,1,{...old});
-  }
-  selected.value = -1;
-  approve_void_box.value = false;
-}
-
-watch(()=>req_deleted_reason.value,(newval)=>{
-  if( newval.trim().length > 0 ) enabledOk1.value = true;
-  else enabledOk1.value = false;
-}, {
-  immediate: false
-})
-
-const confirmedReqDeleted = async() => {
-  useCommonStore().loading_full = true;
-
-  const data_in = new FormData();
-  data_in.append("id", extra_moneys.value[selected.value].id);  
-  data_in.append("req_deleted_reason", req_deleted_reason.value);  
-  data_in.append("_method", "DELETE");
-
-  const { data, error, status } = await useMyFetch("/extra_money_req_delete", {
-    method: "post",
-    headers: {
-      'Authorization': `Bearer ${token.value}`,
-      'Accept': 'application/json',
-    },
-    body: data_in,
-    retry: 0,
-  });
-  useCommonStore().loading_full = false;
-  if (status.value === 'error') {
-    useErrorStore().trigger(error);
-    return;
-  }
-  let old = {...extra_moneys.value[selected.value]};
-  old['req_deleted'] = data.value.req_deleted;
-  old['req_deleted_user'] = data.value.req_deleted_user;
-  old['req_deleted_by'] = data.value.req_deleted_by;
-  old['req_deleted_at'] = data.value.req_deleted_at;
-  old['req_deleted_reason'] = data.value.req_deleted_reason;
-  old['class_h'] = checkStatus(old);
-  if(filter_status.value!='all'){
-    extra_moneys.value.splice(selected.value,1);
-  }else{
-    extra_moneys.value.splice(selected.value,1,{...old});
-  }
-  selected.value = -1;
-  req_deleted_box.value = false;
-}
-
 const { printHtml } = useDownload();
 
 const printPreview = async()=>{
@@ -581,86 +420,6 @@ const printPreview = async()=>{
   }
 
   printHtml(data.value.html,318);
-}
-
-
-const generatePVR = async() => {
-  useCommonStore().loading_full = true;
-
-  const data_in = new FormData();
-  // data_in.append("id", extra_moneys.value[selected.value].id);  
-  data_in.append("online_status", online_status.value);  
-
-  const { data, error, status } = await useMyFetch("/extra_money_do_gen_pvr", {
-    method: "post",
-    headers: {
-      'Authorization': `Bearer ${token.value}`,
-      'Accept': 'application/json',
-    },
-    body: data_in,
-    retry: 0,
-  });
-  useCommonStore().loading_full = false;
-  if (status.value === 'error') {
-    useErrorStore().trigger(error);
-    return;
-  }
-
-  data.value.forEach(e => {
-    let idx = extra_moneys.value.map((x)=>x.id).indexOf(e.id);
-    if(idx !== -1) {
-      let dt = extra_moneys.value[idx];
-      dt.pvr_id = e.pvr_id;
-      dt.pvr_no = e.pvr_no;
-      dt.pvr_total = e.pvr_total;
-      dt.pvr_had_detail = e.pvr_had_detail;
-      dt.updated_at = e.updated_at;
-      
-      extra_moneys.value.splice(idx,1,{...dt});
-    }
-    
-  });
-
-  display({ show: true, status: "Success", message: "Generate Or Update PVR Done" });
-}
-
-const updatePV = async() => {
-  useCommonStore().loading_full = true;
-
-  const data_in = new FormData();
-  data_in.append("online_status", online_status.value);  
-
-  const { data, error, status } = await useMyFetch("/extra_money_do_update_pv", {
-    method: "post",
-    headers: {
-      'Authorization': `Bearer ${token.value}`,
-      'Accept': 'application/json',
-    },
-    body: data_in,
-    retry: 0,
-  });
-  useCommonStore().loading_full = false;
-  if (status.value === 'error') {
-    useErrorStore().trigger(error);
-    return;
-  }
-
-  data.value.data.forEach(e => {
-    let idx = extra_moneys.value.map((x)=>x.id).indexOf(e.id);
-    if(idx !== -1) {
-      let dt = extra_moneys.value[idx];
-      dt.pv_id = e.pv_id;
-      dt.pv_no = e.pv_no;
-      dt.pv_total = e.pv_total;
-      dt.pv_datetime = e.pv_datetime;
-      dt.updated_at = e.updated_at;
-      
-      extra_moneys.value.splice(idx,1,{...dt});
-    }
-    
-  });
-
-  display({ show: true, status: "Success", message: "Update PV Done" });
 }
 
 const fields_thead=ref([
@@ -740,24 +499,6 @@ const enabled_remove = computed(()=>{
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1;
-  return result;
-})
-
-const enabled_void = computed(()=>{  
-  let result = useUtils().checkPermission('extra_money.request_remove') 
-  && selected.value > -1 
-  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
-  && dt_selected.value.pvr_id != '';
-  return result;
-})
-
-const enabled_approve_void = computed(()=>{  
-  let result = useUtils().checkPermission('extra_money.approve_request_remove')
-  && selected.value > -1 
-  && dt_selected.value.deleted == 0
-  && dt_selected.value.req_deleted == 1
-  && dt_selected.value.val2 == 0;
   return result;
 })
 
