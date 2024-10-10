@@ -121,6 +121,9 @@
       
 
       <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event" @doFilter="searching()">
+        <template #[`id`]="{item}">
+          {{item.id}}<span v-if="item.potongan && item.potongan.length > 0">*</span>
+        </template>
         <template #[`absen`]="{item,index}">
           <IconsImage v-if="item.trx_absens && item.trx_absens.length > 0" class="cursor-pointer" @click="form_absen(index)"/>
         </template>
@@ -153,6 +156,10 @@
           <IconsLine v-if="!item.val5"/>
           <IconsCheck v-else/>
         </template>
+        <template #[`val6`]="{item}">
+          <IconsLine v-if="!item.val6"/>
+          <IconsCheck v-else/>
+        </template>
         <template #[`payment_method_name`]="{item}">
           {{ item.payment_method?.name }}
         </template>
@@ -165,6 +172,20 @@
 
         <template #[`req_deleted_by_username`]="{item}">
           {{ item.req_deleted_by?.username }}
+        </template>
+
+        <template #[`supir`]="{item}">
+          {{ item.supir }} 
+          <span v-if="item.potongan && item.potongan.length > 0 && item.potongan.map((ii)=>ii.potongan_mst.employee_id).indexOf(item.supir_id) > -1">
+            *
+          </span>
+        </template>
+
+        <template #[`kernet`]="{item}">
+          {{ item.kernet }} 
+          <span v-if="item.potongan && item.potongan.length > 0 && item.potongan.map((ii)=>ii.potongan_mst.employee_id).indexOf(item.kernet_id) > -1">
+            *
+          </span>
         </template>
       </TableView>
     </div>
@@ -740,6 +761,7 @@ const fields_thead=ref([
     {key:"val3",label:"Marketing",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
     {key:"val4",label:"Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
     {key:"val5",label:"SPV Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+    {key:"val6",label:"MGR Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   ]},
   {key:"id",label:"ID",filter_on:1,type:"number",sort:{priority:2,type:"desc"}},
   {key:"absen",label:"Absen"},
@@ -815,12 +837,12 @@ const enabled_validasi = computed(()=>{
     (
       [undefined,""].indexOf(dt_selected.value.pvr_id) > -1
       && 
-      useUtils().checkPermissions(['trp_trx.val','trp_trx.val1','trp_trx.val2','trp_trx.val4','trp_trx.val5'])
+      useUtils().checkPermissions(['trp_trx.val','trp_trx.val1','trp_trx.val2'])
     )
-    || 
+    ||
     ( dt_selected.value.val3 == 0 && useUtils().checkPermissions(['trp_trx.val3']) ) ||
     ( dt_selected.value.val4 == 0 && useUtils().checkPermissions(['trp_trx.val4']) ) ||
-    ( dt_selected.value.val5 == 0 && useUtils().checkPermissions(['trp_trx.val5']) )
+    ( dt_selected.value.val5 == 0 && useUtils().checkPermissions(['trp_trx.val5']) ) ||
     ( dt_selected.value.val6 == 0 && useUtils().checkPermissions(['trp_trx.val6']) )
   );
   return result;

@@ -125,25 +125,29 @@
             <div>
               Di Validasi oleh : 
             </div>
-            <div v-if="trx_trp.val || trx_trp.val1 || trx_trp.val2 || trx_trp.val3 || trx_trp.val4 || trx_trp.val5" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
+            <div v-if="trx_trp.val || trx_trp.val1 || trx_trp.val2 || trx_trp.val3 || trx_trp.val4 || trx_trp.val5 || trx_trp.val6" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
               <div v-if="trx_trp.val">
-                App 1 : {{ trx_trp.val_by.username}} ( {{ trx_trp.val_at ? $moment(trx_trp.val_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                Kasir : {{ trx_trp.val_by.username}} ( {{ trx_trp.val_at ? $moment(trx_trp.val_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
               </div>
               <div v-if="trx_trp.val1">
-                App 2 : {{ trx_trp.val1_by.username}} ( {{ trx_trp.val1_at ? $moment(trx_trp.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                Mandor : {{ trx_trp.val1_by.username}} ( {{ trx_trp.val1_at ? $moment(trx_trp.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
               </div>
               <div v-if="trx_trp.val2">
-                App 3 : {{ trx_trp.val2_by.username}} ( {{ trx_trp.val2_at ? $moment(trx_trp.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                KTU/W : {{ trx_trp.val2_by.username}} ( {{ trx_trp.val2_at ? $moment(trx_trp.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
               </div>
               <div v-if="trx_trp.val3">
-                App 4 : {{ trx_trp.val3_by.username}} ( {{ trx_trp.val3_at ? $moment(trx_trp.val3_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                Marketing : {{ trx_trp.val3_by.username}} ( {{ trx_trp.val3_at ? $moment(trx_trp.val3_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
               </div>
               <div v-if="trx_trp.val4">
-                App 5 : {{ trx_trp.val4_by.username}} ( {{ trx_trp.val4_at ? $moment(trx_trp.val4_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                Logistik : {{ trx_trp.val4_by.username}} ( {{ trx_trp.val4_at ? $moment(trx_trp.val4_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
               </div>
               <div v-if="trx_trp.val5">
-                App 6 : {{ trx_trp.val5_by.username}} ( {{ trx_trp.val5_at ? $moment(trx_trp.val5_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                SPV Logistik : {{ trx_trp.val5_by.username}} ( {{ trx_trp.val5_at ? $moment(trx_trp.val5_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
               </div>
+              <div v-if="trx_trp.val6">
+                MGR Logistik : {{ trx_trp.val6_by.username}} ( {{ trx_trp.val6_at ? $moment(trx_trp.val6_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+              </div>
+
             </div>
           </div>
 
@@ -229,6 +233,9 @@ const trx_trp_temp = {
     val5:0,
     val5_by:{ username:"" },
     val5_at:"",
+    val6:0,
+    val6_by:{ username:"" },
+    val6_at:"",
     cost_center_code:"",
     cost_center_desc:"",
     pvr_id:"",
@@ -332,6 +339,11 @@ const doSave = async () => {
   trx_trp.value.val5_user = data.value.val5_user;
   trx_trp.value.val5_by = data.value.val5_by;
   trx_trp.value.val5_at = data.value.val5_at;
+
+  trx_trp.value.val6 = data.value.val6;
+  trx_trp.value.val6_user = data.value.val6_user;
+  trx_trp.value.val6_by = data.value.val6_by;
+  trx_trp.value.val6_at = data.value.val6_at;
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
   if(idx>=-1){

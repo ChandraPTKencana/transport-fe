@@ -149,10 +149,25 @@
                 Extra Money Trx
               </nuxt-link>
             </li>
+
+            <!-- <li v-if="useUtils().checkPermission('extra_money_trx.transfer.views')" :class="activeMenu == '/extra_money/transfer'?'active':''" >
+              <nuxt-link to="/extra_money/transfer"  class="cursor-pointer" @click="goTo('/extra_money/transfer')">
+                <IconsProduct class="mr-1"/>
+                Extra Money Transfer
+              </nuxt-link>
+            </li> -->
+
             <li v-if="useUtils().checkPermission('salary_paid.views')" :class="activeMenu == '/salary_paid'?'active':''" >
               <nuxt-link to="/salary_paid"  class="cursor-pointer" @click="goTo('/salary_paid')">
                 <IconsMoneyBag class="mr-1"/>
                 Salary Paid
+              </nuxt-link>
+            </li>
+
+            <li v-if="useUtils().checkPermission('rpt_salary.views')" :class="activeMenu == '/salary_paid/rpt'?'active':''" >
+              <nuxt-link to="/salary_paid/rpt"  class="cursor-pointer" @click="goTo('/salary_paid/rpt')">
+                <IconsFileCopy class="mr-1"/>
+                Report Salary
               </nuxt-link>
             </li>
 

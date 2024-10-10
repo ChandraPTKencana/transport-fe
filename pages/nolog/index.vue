@@ -80,6 +80,14 @@
             {{$moment(item.val5_at).format("HH:mm")}}
           </div>
         </template>
+        <template #[`val6`]="{item}">
+          <IconsTimes v-if="!item.val6"/>
+          <div class="text-xs" v-else>
+            {{item.val6_by?.username}} <br>
+            {{$moment(item.val6_at).format("DD/MM")}} <br>
+            {{$moment(item.val6_at).format("HH:mm")}}
+          </div>
+        </template>
         <template #[`payment_method_name`]="{item}">
           {{ item.payment_method?.name }}
         </template>
@@ -314,6 +322,7 @@ const fields_thead=ref([
     {key:"val3",label:"Marketing",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
     {key:"val4",label:"Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
     {key:"val5",label:"SPV Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+    {key:"val6",label:"MGR Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   ]},
   {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK']},
   {key:"id",label:"ID",filter_on:1,type:"number"},

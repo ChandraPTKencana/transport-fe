@@ -10,16 +10,7 @@
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Period End</label>
                 <div class="card-border">
-                  {{ $moment(salary_paid.period_end).format("MM-Y") }}
-                </div>
-              </div>
-            </div>
-
-            <div class="w-full flex flex-row flex-wrap">
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                <label for="">Period Part</label>
-                <div class="card-border">
-                  {{ salary_paid.period_part }}
+                  {{ $moment(rpt_salary.period_end).format("MM-Y") }}
                 </div>
               </div>
             </div>
@@ -29,42 +20,58 @@
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
                   <thead >
                     <tr class="sticky -top-1 !z-[2]">
-                      <td colspan="11" class="!bg-slate-800 text-white font-bold">
+                      <td colspan="19" class="!bg-slate-800 text-white font-bold">
                         Detail
                       </td>
                     </tr>
                     <tr class="sticky top-7 !z-[2]">
-                      <th >No</th>
-                      <th >Jabatan</th>
-                      <th >Nama Pekerja</th>
-                      <th >No KTP</th>
-                      <!-- <th >No SIM</th> -->
-                      <th >Rek No</th>
-                      <th >Rek Nama</th>
-                      <th >Bank Name</th>
+                      <th rowspan="2">No</th>
+                      <th rowspan="2">ID</th>
+                      <th rowspan="2">Nama Pekerja</th>
+                      <th rowspan="2">Jabatan</th>
+                      <th rowspan="2">Tmpt Lahir</th>
+                      <th rowspan="2">Tgl Lahir</th>
+                      <th rowspan="2">TMK</th>
+                      <th rowspan="2">No KTP</th>
+                      <th rowspan="2">Alamat</th>
+                      <th rowspan="2">Status</th>
+                      <th rowspan="2">No Rek</th>
+                      <th rowspan="2">Nama Bank</th>
+                      <th colspan="2">Standby <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan)  || 0) }})</span></th>
+                      <th colspan="2">Trip <span class="text-sm">({{pointFormat((ttl_uj_gaji + ttl_uj_makan) || 0) }})</span></th>
+                      <th rowspan="2">Potongan <span class="text-sm">({{pointFormat(ttl_potongan || 0) }})</span></th>
+                      <th rowspan="2">U.Kerajinan <span class="text-sm">({{pointFormat(ttl_bonus || 0) }})</span></th>
+                      <th rowspan="2">Grand Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_uj_gaji + ttl_uj_makan - ttl_potongan + ttl_bonus ) || 0) }})</span></th>
+                    </tr>
+                    <tr class="sticky top-[60px] !z-[2]">
                       <th >SB.Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji || 0) }})</span></th>
                       <th >SB.Makan <span class="text-sm">({{pointFormat(ttl_sb_makan || 0) }})</span></th>
-                      <!-- <th >Nominal Standby <span class="text-sm">({{pointFormat(total_standby || 0) }})</span></th> -->
-                      <th >Nominal Bonus <span class="text-sm">({{pointFormat(total_bonus || 0) }})</span></th>
-                      <th >Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + total_bonus) || 0) }})</span></th>
+                      <th >UJ.Gaji <span class="text-sm">({{pointFormat(ttl_uj_gaji || 0) }})</span></th>
+                      <th >UJ.Makan <span class="text-sm">({{pointFormat(ttl_uj_makan || 0) }})</span></th>
                     </tr>
                   </thead>
                   <tbody ref="to_move">
                     <template v-for="(detail, index) in details" :key="index">
                       <tr v-if="detail.p_status!='Remove'"  :data-index="index">
                         <td>{{ index + 1 }}.</td>
-                        <td>{{ detail.employee?.role }}</td>
-                        <td>{{ detail.employee?.name }}</td>
-                        <td>{{ detail.employee?.ktp_no }}</td>
-                        <!-- <td>{{ detail.employee?.sim_no }}</td> -->
-                        <td>{{ detail.employee?.rek_no }}</td>
-                        <td>{{ detail.employee?.rek_name }}</td>
-                        <td>{{ detail.employee?.bank?.code }}</td>
+                        <td>{{ detail.employee_id }}</td>
+                        <td>{{ detail.employee_name }}</td>
+                        <td>{{ detail.employee_role }}</td>
+                        <td>{{ detail.employee_birth_place }}</td>
+                        <td>{{ detail.employee_birth_date ? $moment(detail.employee_birth_date).format("DD-MM-Y") : "" }}</td>
+                        <td>{{ detail.employee_tmk ? $moment(detail.employee_tmk).format("DD-MM-Y") : "" }}</td>
+                        <td>{{ detail.employee_ktp_no }}</td>
+                        <td>{{ detail.employee_address }}</td>
+                        <td>{{ detail.employee_status }}</td>
+                        <td>{{ detail.employee_rek_no }}</td>
+                        <td>{{ detail.employee_bank_name }}</td>
                         <td>{{ pointFormat(detail.sb_gaji) }}</td>
                         <td>{{ pointFormat(detail.sb_makan) }}</td>
-                        <!-- <td>{{ pointFormat(detail.standby_nominal) }}</td> -->
+                        <td>{{ pointFormat(detail.uj_gaji) }}</td>
+                        <td>{{ pointFormat(detail.uj_makan) }}</td>
+                        <td>{{ pointFormat(detail.nominal_cut) }}</td>
                         <td>{{ pointFormat(detail.salary_bonus_nominal) }}</td>
-                        <td>{{ pointFormat(parseFloat(detail.sb_gaji) + parseFloat(detail.sb_makan) + parseFloat(detail.salary_bonus_nominal)) }}</td>
+                        <td>{{ pointFormat(parseFloat(detail.sb_gaji) + parseFloat(detail.sb_makan) +parseFloat(detail.uj_gaji) + parseFloat(detail.uj_makan) - parseFloat(detail.nominal_cut) + parseFloat(detail.salary_bonus_nominal)) }}</td>
                       </tr>
                     </template>
                   </tbody>
@@ -80,15 +87,15 @@
               <div>
                 Di Validasi oleh : 
               </div>
-              <div v-if="salary_paid.val1 || salary_paid.val2 || salary_paid.val3" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
-                <div v-if="salary_paid.val1">
-                  App 1 : {{ salary_paid.val1_by.username}} ( {{ salary_paid.val1_at ? $moment(salary_paid.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+              <div v-if="rpt_salary.val1 || rpt_salary.val2 || rpt_salary.val3" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
+                <div v-if="rpt_salary.val1">
+                  App 1 : {{ rpt_salary.val1_by.username}} ( {{ rpt_salary.val1_at ? $moment(rpt_salary.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
-                <!-- <div v-if="salary_paid.val2">
-                  App 2 : {{ salary_paid.val2_by.username}} ( {{ salary_paid.val2_at ? $moment(salary_paid.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                <!-- <div v-if="rpt_salary.val2">
+                  App 2 : {{ rpt_salary.val2_by.username}} ( {{ rpt_salary.val2_at ? $moment(rpt_salary.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
-                <div v-if="salary_paid.val3">
-                  App 3 : {{ salary_paid.val3_by.username}} ( {{ salary_paid.val3_at ? $moment(salary_paid.val3_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                <div v-if="rpt_salary.val3">
+                  App 3 : {{ rpt_salary.val3_by.username}} ( {{ rpt_salary.val3_at ? $moment(rpt_salary.val3_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div> -->
               </div>
             </div>
@@ -148,7 +155,7 @@ const props = defineProps({
   },
 })
 
-const salary_paid_temp = {
+const rpt_salary_temp = {
     id: -1,
     name: "",
     tipe: "",
@@ -166,7 +173,7 @@ const salary_paid_temp = {
     val3_at:"",
 };
 
-const salary_paid = ref({...salary_paid_temp});
+const rpt_salary = ref({...rpt_salary_temp});
 
 const token = useCookie('token');
 const field_errors = ref({});
@@ -190,7 +197,7 @@ const doSave = async () => {
     data_in.append("_method", "PUT");
   }
 
-  const { data, error, status } = await useMyFetch("/salary_paid_validasi", {
+  const { data, error, status } = await useMyFetch("/rpt_salary_validasi", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -205,24 +212,24 @@ const doSave = async () => {
     return;
   }
 
-  salary_paid.value.val1 = data.value.val1;
-  salary_paid.value.val1_user = data.value.val1_user;
-  salary_paid.value.val1_by = data.value.val1_by;
-  salary_paid.value.val1_at = data.value.val1_at;
+  rpt_salary.value.val1 = data.value.val1;
+  rpt_salary.value.val1_user = data.value.val1_user;
+  rpt_salary.value.val1_by = data.value.val1_by;
+  rpt_salary.value.val1_at = data.value.val1_at;
 
-  salary_paid.value.val2 = data.value.val2;
-  salary_paid.value.val2_user = data.value.val2_user;
-  salary_paid.value.val2_by = data.value.val2_by;
-  salary_paid.value.val2_at = data.value.val2_at;
+  rpt_salary.value.val2 = data.value.val2;
+  rpt_salary.value.val2_user = data.value.val2_user;
+  rpt_salary.value.val2_by = data.value.val2_by;
+  rpt_salary.value.val2_at = data.value.val2_at;
 
-  salary_paid.value.val3 = data.value.val3;
-  salary_paid.value.val3_user = data.value.val3_user;
-  salary_paid.value.val3_by = data.value.val3_by;
-  salary_paid.value.val3_at = data.value.val3_at;
+  rpt_salary.value.val3 = data.value.val3;
+  rpt_salary.value.val3_user = data.value.val3_user;
+  rpt_salary.value.val3_by = data.value.val3_by;
+  rpt_salary.value.val3_at = data.value.val3_at;
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
   if(idx>=-1){
-    props.p_data.splice(idx,1,{...salary_paid.value});    
+    props.p_data.splice(idx,1,{...rpt_salary.value});    
   }
 
 
@@ -256,8 +263,37 @@ const ttl_sb_makan = computed(()=>{
   return temp;
 })
 
+const ttl_uj_gaji = computed(()=>{
+  let temp = 0;
 
-const total_bonus = computed(()=>{
+  details.value.forEach(e => {
+    temp += parseFloat(e.uj_gaji); 
+  });
+  return temp;
+})
+
+const ttl_uj_makan = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.uj_makan); 
+  });
+  return temp;
+})
+
+
+const ttl_potongan = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.nominal_cut); 
+  });
+  return temp;
+})
+
+
+
+const ttl_bonus = computed(()=>{
   let temp = 0;
 
   details.value.forEach(e => {
@@ -268,7 +304,7 @@ const total_bonus = computed(()=>{
 
 const callData = async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/salary_paid", {
+  const { data, error, status } = await useMyFetch("/rpt_salary", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -289,7 +325,7 @@ const callData = async () => {
     return;
   }
 
-  salary_paid.value = data.value.data;
+  rpt_salary.value = data.value.data;
   details.value = data.value.data.details;
 }
 
@@ -305,7 +341,7 @@ const total_amount = computed(()=>{
 
 const disabled = computed(()=>{
   return false;
-  // return salary_paid.value.confirmed_by || salary_paid.value.ref_id != null;
+  // return rpt_salary.value.confirmed_by || rpt_salary.value.ref_id != null;
 });
 
 watch(() => props.show, (newVal, oldVal) => {

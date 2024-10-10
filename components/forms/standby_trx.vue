@@ -344,7 +344,7 @@ const standby_trx_temp = {
     rv_had_detail:"",
 
     details: [],
-
+    details_count:0
 };
 const details = ref([]);
 
@@ -385,7 +385,8 @@ const doSave = async () => {
   // data_in.append("cost_center_code", standby_trx.value.cost_center_code);
 
   // data_in.append("online_status", props.online_status);
-
+  standby_trx.value.details = [...details.value];
+  standby_trx.value.details_count = details.value.length; 
   let tDetails = [...details.value];
   tDetails = tDetails.map((x,k)=>{
     x.tanggal = (x.tanggal) ? $moment(x.tanggal).format("Y-MM-DD") : '';
