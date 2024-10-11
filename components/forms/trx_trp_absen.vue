@@ -323,6 +323,10 @@ const doSave = async () => {
     return;
   }
 
+  trx_trp.value.ritase_leave_at   = trx_trp.value.img_leave_ts;
+  trx_trp.value.ritase_arrive_at  = trx_trp.value.img_arrive_ts;
+  trx_trp.value.ritase_return_at  = trx_trp.value.img_return_ts;
+  trx_trp.value.ritase_till_at    = trx_trp.value.img_till_ts;
 
   trx_trp.value.updated_at = data.value.updated_at;
   if(props.id<=0){

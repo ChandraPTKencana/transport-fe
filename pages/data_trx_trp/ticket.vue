@@ -35,6 +35,11 @@
         <div class="flex">
 
           <button v-if="checkbox_arr.length > 0" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+            @click="multiClearTicket()">
+            Multi Clear Ticket
+          </button>
+
+          <button v-if="checkbox_arr.length > 0" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="multiVal()">
             Multi Val
           </button>
@@ -687,12 +692,47 @@ const multiVal = async() => {
       sd.val_ticket = e.val_ticket;
       sd.val_ticket_by = e.val_ticket_by;
       sd.val_ticket_at = e.val_ticket_at;
+      sd.updated_at = e.updated_at;
       trx_trps.value.splice(idx,1,{...sd});
     }
   });
 }
 
+const multiClearTicket = async() => {
+  useCommonStore().loading_full = true;
 
+  const data_in = new FormData();
+  data_in.append("ids", JSON.stringify(checkbox_arr.value));  
+  data_in.append("_method", "PUT");
+
+  const { data, error, status } = await useMyFetch("/trx_trp_clear_tickets", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  data.value.clear_lists.forEach(e => {
+    let idx = trx_trps.value.map((x)=>x.id).indexOf(e.id);
+    if(idx>-1){
+      let sd = trx_trps.value[idx];
+      sd.ticket_a_id = e.ticket_a_id;
+      sd.ticket_a_no = e.ticket_a_no;
+      sd.ticket_b_id = e.ticket_b_id;
+      sd.ticket_b_no = e.ticket_b_no;
+      sd.updated_at = e.updated_at;
+      trx_trps.value.splice(idx,1,{...sd});
+    }
+  });
+}
 
 const cogs_show=ref(false);
 
