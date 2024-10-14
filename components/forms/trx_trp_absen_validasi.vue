@@ -117,6 +117,9 @@
         
         <div class="w-full flex items-center justify-end">
           <div class="w-full flex flex-wrap p-3 items-center">
+            <button v-if="useUtils().checkPermissions(['trp_trx.absen.clear_valval1']) && trx_trp.ritase_val2==0" type="button" name="button" class="w-36 m-1 bg-yellow-600" @click="clearVal()">
+              Clear Val
+            </button>
             <div>
               Di Validasi oleh : 
             </div>
@@ -139,7 +142,7 @@
           <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
             Cancel
           </button>
-          <button v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm flex flex-col items-center justify-center" @click.prevent="doSave()">
+          <button ref="it_val" v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm flex flex-col items-center justify-center" @click.prevent="doSave()">
             <div> Validasi </div>            
             <div class="text-xs font-bold" v-if="save_state!=''">
               {{ save_state }}
@@ -249,6 +252,7 @@ const trx_trp_temp = {
 const trx_trp = ref({...trx_trp_temp});
 
 const token = useCookie('token');
+const it_val = ref(null);
 const save_state = ref("");
 const doSave = async () => {
   save_state.value = "PROSES...";
@@ -307,6 +311,46 @@ const doSave = async () => {
   // props.fnClose();
 }
 
+const clearVal = async () => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  
+  let $method = "post";
+
+  let id = props.id;
+  if (id == 0) {
+  } else {
+    data_in.append("id", id);
+    data_in.append("_method", "PUT");
+  }
+
+  const { data, error, status } = await useMyFetch("/trx_trp/absen/clear_valval1", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  
+  trx_trp.value.ritase_val = 0;
+  trx_trp.value.ritase_val1 = 0;
+
+  let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
+  if(idx>=-1){
+    props.p_data.splice(idx,1,{...trx_trp.value});    
+  }
+
+  // props.fnClose();
+}
+
 const callData = async () => {
   save_state.value = '';
 
@@ -333,6 +377,11 @@ const callData = async () => {
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
     document.addEventListener('keydown', keydownListener);
+    if(props.is_view==false){
+      setTimeout(()=>{
+        it_val.value.focus();
+      },1);
+    }
     callData();
   }else{
     document.removeEventListener('keydown', keydownListener);

@@ -223,11 +223,20 @@
               </div>
             </div>
 
+            <button type="button" name="button" class="w-36 h-9 m-1 grid place-items-center" @click="loadTop()">
+              <IconsCaretTop class="black"/>
+            </button>
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
             <button ref="it_val" v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
               Validasi
+              <div class="text-xs font-bold" v-if="save_state!=''">
+                {{ save_state }}
+              </div>
+            </button>
+            <button type="button" name="button" class="w-36 h-9 m-1 grid place-items-center" @click="loadDown()">
+              <IconsCaretDown class="black"/>
             </button>
           </div>
         </form>
@@ -363,11 +372,31 @@ const selected_mini_temp={
   title:"",
 };
 
+let keydownListener = (event)=>{
+  // console.log(event.key)
+  if(event.key =='ArrowUp'){
+    loadTop();
+  }
+  if(event.key =='ArrowDown'){
+    loadDown();
+  }
+};
+
+// onMounted(async()=>{
+//   document.addEventListener('keydown', keydownListener);
+// })
+
+onBeforeUnmount(()=>{
+  document.removeEventListener('keydown', keydownListener);
+})
+
 const selected_supir = ref(JSON.parse(JSON.stringify(selected_mini_temp)));
 const selected_kernet = ref(JSON.parse(JSON.stringify(selected_mini_temp)));
 
+const save_state = ref("");
 
 const doSave = async () => {
+  save_state.value = "PROSES...";
   useCommonStore().loading_full = true;
   field_errors.value = {};
 
@@ -398,6 +427,7 @@ const doSave = async () => {
   });
   useCommonStore().loading_full = false;
   if (status.value === 'error') {
+    save_state.value = "GAGAL";
     useErrorStore().trigger(error, field_errors);
     return;
   }
@@ -425,12 +455,15 @@ const doSave = async () => {
     props.p_data.splice(idx,1,{...standby_trx.value});    
   }
 
+  save_state.value = "BERHASIL";
 
-  props.fnClose();
+  // props.fnClose();
 }
 
 
 const callData = async () => {
+  save_state.value = '';
+
   useCommonStore().loading_full = true;
   const { data, error, status } = await useMyFetch("/standby_trx", {
     method: 'get',
@@ -495,6 +528,7 @@ const disabled = computed(()=>{
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
+    document.addEventListener('keydown', keydownListener);
     standby_trx.value = {...standby_trx_temp};
     if(props.is_view==false){
       setTimeout(()=>{
@@ -502,10 +536,40 @@ watch(() => props.show, (newVal, oldVal) => {
       },1);
     }
     callData();
+  }else{
+    document.removeEventListener('keydown', keydownListener);
   }
 }, {
   immediate: true
 });
+
+const emit = defineEmits(['setID','setIndex']);
+
+const loadDown=()=>{
+  let $idx = props.p_data.map((x)=>x.id).indexOf(props.id);
+  if($idx==props.p_data.length-1){
+    return;
+  }
+  $idx++;
+  emit('setID',props.p_data[$idx].id);
+  emit('setIndex',$idx);
+  setTimeout(()=>{
+    callData();
+  },100);
+};
+
+const loadTop=()=>{
+  let $idx = props.p_data.map((x)=>x.id).indexOf(props.id);
+  if($idx==0){
+    return;
+  }
+  $idx--;
+  emit('setID',props.p_data[$idx].id);
+  emit('setIndex',$idx);
+  setTimeout(()=>{
+    callData();
+  },100);
+};
 
 </script>
 <style scoped="">

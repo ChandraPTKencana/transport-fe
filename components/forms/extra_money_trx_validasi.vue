@@ -55,7 +55,7 @@
 
                 <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
                   <label for="">Cost Center Code</label>
-                  <div class="card-border">
+                  <div class="card-border disabled">
                     {{  extra_money_trx.cost_center_code  }}
                   </div>
                 </div>

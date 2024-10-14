@@ -193,6 +193,8 @@
                         <th class="!min-w-[50px] !w-[50px] !max-w-[50px] ">No</th>
                         <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Tanggal</th>
                         <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Foto</th>
+                        <!-- <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Note</th>
+                        <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Dibayar</th> -->
                       </tr>
                     </thead>
                     <tbody ref="to_move">
@@ -218,6 +220,7 @@
                                   text-input
                                   teleport-center></vue-date-picker>
                                 </ClientOnly>
+                                <!-- {{ $moment(detail.tanggal).format("DD-MM-YYYY") }} -->
                             </div>
                           </td>
                           <td class="cell">
@@ -255,6 +258,7 @@
   </section>
 
   <ToolsPopup :show="tools_popup" :coor="coor" :fn="closeToolsPopup" :data="details" :data_index="row" @replyAct="replyAction($event)" />
+  <!-- <ToolsPopup :show="tools_popup" :coor="coor" :fn="closeToolsPopup" :data="details" :data_index="row" @replyAct="replyAction($event)" :except="except_toolbars" /> -->
 
 </template>
 
@@ -352,6 +356,7 @@ const detail = ref({
   ordinal:0,
   id:"",
   tanggal: new Date(),
+  // tanggal: new Date(new Date().setDate(new Date().getDate()-1)),
   note:"",
   p_status:"",
   attachment_1:"",
@@ -385,8 +390,6 @@ const doSave = async () => {
   // data_in.append("cost_center_code", standby_trx.value.cost_center_code);
 
   // data_in.append("online_status", props.online_status);
-  standby_trx.value.details = [...details.value];
-  standby_trx.value.details_count = details.value.length; 
   let tDetails = [...details.value];
   tDetails = tDetails.map((x,k)=>{
     x.tanggal = (x.tanggal) ? $moment(x.tanggal).format("Y-MM-DD") : '';
@@ -422,6 +425,12 @@ const doSave = async () => {
     useErrorStore().trigger(error, field_errors);
     return;
   }
+  standby_trx.value.details = [...details.value].map((x,k)=>{
+    x.attachment_1_type = x.attachment_1_preview ? "Exists" : "";
+    return x;
+  });
+
+  standby_trx.value.details_count = details.value.length; 
 
   standby_trx.value.supir           = selected_supir.value.name;
   standby_trx.value.supir_rek_no    = selected_supir.value._.rek_no.val;
@@ -591,7 +600,13 @@ const coor = ref({
   left:0,
   top:0
 });
+// const except_toolbars = ref([]);
 const showAction=(e, index)=>{
+  // if(details.value[index].p_status=='Edit')
+  //   except_toolbars.value=['delete'];
+  // else
+  //   except_toolbars.value=[];
+
   row.value = index;
   tools_popup.value = true;
   coor.value = { left: e.clientX, top: e.clientY };

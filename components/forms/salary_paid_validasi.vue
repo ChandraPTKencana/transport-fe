@@ -7,16 +7,13 @@
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Period End</label>
                 <div class="card-border">
                   {{ $moment(salary_paid.period_end).format("MM-Y") }}
                 </div>
               </div>
-            </div>
-
-            <div class="w-full flex flex-row flex-wrap">
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Period Part</label>
                 <div class="card-border">
                   {{ salary_paid.period_part }}
@@ -24,7 +21,13 @@
               </div>
             </div>
 
-            <div v-if="details.length" class="w-full flex p-1 justify-between flex-wrap">
+            <div v-if="source.length" class="w-full p-1">
+              <div class="font-bold"> Filter Nama </div>
+              <input class="" type="text" v-model="search" name="search"
+                placeholder="Nama">
+            </div>
+
+            <div v-if="source.length" class="w-full flex p-1 justify-between flex-wrap">
               <div class="w-full" role="sticky">
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
                   <thead >
@@ -50,7 +53,7 @@
                     </tr>
                   </thead>
                   <tbody ref="to_move">
-                    <template v-for="(detail, index) in details" :key="index">
+                    <template v-for="(detail, index) in source" :key="index">
                       <tr v-if="detail.p_status!='Remove'"  :data-index="index">
                         <td>{{ index + 1 }}.</td>
                         <td>{{ detail.employee?.role }}</td>
@@ -306,6 +309,18 @@ const total_amount = computed(()=>{
 const disabled = computed(()=>{
   return false;
   // return salary_paid.value.confirmed_by || salary_paid.value.ref_id != null;
+});
+
+const search = ref("");
+
+const source = computed(()=>{
+  if(search.value!="")  
+  return details.value.filter(
+    (x)=>
+    x.employee.name.toLowerCase().includes(search.value.toLowerCase())
+  );
+  else
+  return details.value;
 });
 
 watch(() => props.show, (newVal, oldVal) => {

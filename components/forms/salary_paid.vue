@@ -39,7 +39,13 @@
               </div>
             </div>
 
-            <div v-if="details.length" class="w-full flex p-1 justify-between flex-wrap">
+            <div v-if="source.length" class="w-full p-1">
+              <div class="font-bold"> Filter Nama </div>
+              <input class="" type="text" v-model="search" name="search"
+                placeholder="Nama">
+            </div>
+
+            <div v-if="source.length" class="w-full flex p-1 justify-between flex-wrap">
               <div class="w-full" role="sticky">
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
                   <thead >
@@ -65,7 +71,7 @@
                     </tr>
                   </thead>
                   <tbody ref="to_move">
-                    <template v-for="(detail, index) in details" :key="index">
+                    <template v-for="(detail, index) in source" :key="index">
                       <tr v-if="detail.p_status!='Remove'"  :data-index="index">
                         <td>{{ index + 1 }}.</td>
                         <td>{{ detail.employee?.role }}</td>
@@ -301,6 +307,18 @@ const callData = async () => {
 
   details.value = data.value.data.details;
 }
+
+const search = ref("");
+
+const source = computed(()=>{
+  if(search.value!="")  
+  return details.value.filter(
+    (x)=>
+    x.employee.name.toLowerCase().includes(search.value.toLowerCase())
+  );
+  else
+  return details.value;
+});
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){

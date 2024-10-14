@@ -11,7 +11,7 @@
       </div>
 
       <button v-if="can_remove" type="button" v-show="previewFile" class="bg-gray-600 w-36 text-white" @click="clearFile()">Clear</button>
-      <input v-if="can_remove" class="w-full" v-show="!previewFile" @change="changeFile($event)" ref="photo_input" type="file" name="photo" value="">
+      <input v-if="can_remove" class="w-full" v-show="!previewFile" @change="changeFile($event)" ref="photo_input" type="file" name="photo">
 
       <!-- <small>Upload file image : jpg, jpeg</small> -->
       <!-- <p class="help-err">{{ field_errors.photo }}</p> -->
@@ -21,9 +21,9 @@
 <script setup>
 const props = defineProps({
   value: {
-    type: [String],
+    type: [String,null],
     required: true,
-    default: "",
+    default: null,
   },
   label: {
     type: String,

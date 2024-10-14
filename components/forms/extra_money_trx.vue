@@ -148,7 +148,7 @@ const doSave = async () => {
   data_in.append("note_for_remarks", extra_money_trx.value.note_for_remarks);
   data_in.append("employee_id", selected_employee.value.id);
   data_in.append("extra_money_id", selected_extra_money.value.id);
-  data_in.append("payment_method_id", trx_trp.value.payment_method_id);
+  data_in.append("payment_method_id", extra_money_trx.value.payment_method_id);
 
   let $method = "post";
 

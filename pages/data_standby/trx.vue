@@ -132,7 +132,10 @@
           <IconsCheck v-else/>
         </template>
         <template #[`detail_dates`]="{item}">
-          {{item.details.map((x)=>$moment(x.tanggal).format("DD-MM-YYYY")).join(" , ")}}
+          <div v-for="itdtl in item.details" class="btn p-1 rounded-sm text-white text-xs mr-1" :class="itdtl.attachment_1_type ? 'bg-green-600' : 'bg-red-500'">
+            {{ $moment(itdtl.tanggal).format("DD-MM") }}
+          </div>
+          <!-- {{item.details.map((x)=>$moment(x.tanggal).format("DD-MM-YYYY")).join(" , ")}} -->
         </template>
         <template #[`standby_mst_name`]="{item}">
           {{item.standby_mst_?.name}}
@@ -188,8 +191,8 @@
     </PopupMini>
 
     <!-- <FormsStandbyTrx :show="forms_standby_trx_show" :fnClose="()=>{forms_standby_trx_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_standby_trx_id" :p_data="standby_trxs" :list_cost_center="list_cost_center" :online_status="online_status"/> -->
-      <FormsStandbyTrx :show="forms_standby_trx_show" :fnClose="()=>{forms_standby_trx_show=false}" :id="forms_standby_trx_id" :p_data="standby_trxs"/>
-    <FormsStandbyTrxValidasi :show="forms_standby_trx_valid_show" :fnClose="()=>{forms_standby_trx_valid_show=false}" :id="forms_standby_trx_valid_id" :p_data="standby_trxs" :is_view="forms_standby_trx_is_view"/>
+    <FormsStandbyTrx :show="forms_standby_trx_show" :fnClose="()=>{forms_standby_trx_show=false}" :id="forms_standby_trx_id" :p_data="standby_trxs"/>
+    <FormsStandbyTrxValidasi :show="forms_standby_trx_valid_show" :fnClose="()=>{forms_standby_trx_valid_show=false}" :id="forms_standby_trx_valid_id" :p_data="standby_trxs" :is_view="forms_standby_trx_is_view" @setID="forms_standby_trx_valid_id=$event" @setIndex="selected=$event"/>
   
   </div>
 </template>

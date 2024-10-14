@@ -62,6 +62,7 @@
               <tr class="sticky top-0 !z-[2]">
                 <th>App</th>
                 <th>No.</th>
+                <th>ID.</th>
                 <th>Nama</th>
                 <th>Jabatan</th>
                 <th>No KTP</th>
@@ -90,6 +91,7 @@
                   </div>
                 </td>
                 <td>{{ index + 1 }}.</td>
+                <td>{{ employee.id }}</td>
                 <td class="bold">{{ employee.name }}</td>
                 <td>{{ employee.role }}</td>
                 <td>{{ employee.ktp_no }}</td>
