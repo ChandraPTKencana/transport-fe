@@ -55,6 +55,9 @@
               <p class="text-red-500">{{ field_errors.note_for_remarks }}</p>
             </div>
 
+            <div class="p-1 w-full sm:w-full md:w-2/3 md:overflow-auto max-h-full">
+              <AttachmentSingle :label="'Attachment'" :value="extra_money_trx.attachment_1_preview" @setFile="extra_money_trx.attachment_1=$event"  @setPreview="extra_money_trx.attachment_1_preview=$event" :can_remove="true"/>
+            </div>
           </div>
         </div>
         
@@ -125,11 +128,13 @@ const extra_money_trx_temp = {
     pvr_no:"",
     pvr_total:0,
     pvr_complete:"",
-    payment_method_id:2,
+    payment_method_id:1,
     payment_method:{
       id:0,
       name:"",
     },
+    attachment_1:"",
+    attachment_1_preview:"",
 };
 let extra_money_trx_loaded = {...extra_money_trx_temp};
 const extra_money_trx = ref({...extra_money_trx_temp});
@@ -149,6 +154,8 @@ const doSave = async () => {
   data_in.append("employee_id", selected_employee.value.id);
   data_in.append("extra_money_id", selected_extra_money.value.id);
   data_in.append("payment_method_id", extra_money_trx.value.payment_method_id);
+  data_in.append("attachment_1", extra_money_trx.value.attachment_1);
+  data_in.append("attachment_1_preview", extra_money_trx.value.attachment_1_preview);
 
   let $method = "post";
 

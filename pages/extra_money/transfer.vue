@@ -150,6 +150,15 @@
                   {{ extra_money_trx.extra_money.transition_target }}
                 </div>
               </div>
+
+              <div class="flex flex-col m-1 border-solid border-l-4 border-blue-400 px-2 py-1 bg-gray-200">
+                <span class="text-xs font-bold">
+                  Nominal Dibayarkan
+                </span>
+                <div class="">
+                  {{ pointFormat(extra_money_trx.extra_money.total) }}
+                </div>
+              </div>
             </div>
 
             <div class="w-full flex flex-wrap justify-center">
@@ -479,7 +488,7 @@ const highlight=()=>{
   document.querySelectorAll(".to_hl").forEach((x)=>{
     let real = x.dataset.real;
     var innerHTML = x.innerHTML;
-    var index = real.toLowerCase().indexOf(text.toLowerCase());
+    var index = real?.toLowerCase().indexOf(text.toLowerCase());
     if (index > -1 && text!="") { 
      innerHTML = real.substring(0,index) + "<span class='highlight'>" + real.substring(index,index+text.length) + "</span>" + real.substring(index + text.length);
      x.innerHTML = innerHTML;

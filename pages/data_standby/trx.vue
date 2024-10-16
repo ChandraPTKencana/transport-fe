@@ -223,8 +223,8 @@ definePageMeta({
 
 const checkStatus=(data)=>{
   if(data.deleted==1) return "!bg-red-400";
-  if(data.pvr_id > 0 && data.req_deleted == 1) return "!bg-yellow-300"; 
-  if(data.pv_id > 0) return "!bg-blue-300"; 
+  if((data.pvr_id > 0 || data.salary_paid_id > 0) && data.req_deleted == 1) return "!bg-yellow-300"; 
+  if(data.pv_id > 0 || data.salary_paid_id > 0) return "!bg-blue-300"; 
   return "";
 }
 const addClassToTbody=(data)=>{
