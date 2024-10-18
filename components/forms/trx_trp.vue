@@ -55,21 +55,6 @@
               <p class="text-red-500">{{ field_errors.no_pol }}</p>
             </div>
 
-            <div class="w-full flex flex-wrap">
-              <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
-                <label for="">Supir</label>
-                <WidthMiniList :arr="list_emp" :selected="selected_supir" :pure="selected_mini_temp" @setSelected="selected_supir=$event" :disabled="trx_trp_loaded.supir_id > 1 || trx_trp.val1==1"/>
-                <p class="text-red-500">{{ field_errors.supir_id }}</p>
-              </div>
-  
-              <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
-                <label for="">Kernet</label>
-                <WidthMiniList :arr="list_emp" :selected="selected_kernet" :pure="selected_mini_temp" @setSelected="selected_kernet=$event" :disabled="trx_trp_loaded.kernet_id > 1 || trx_trp.val1==1"/>
-                <p class="text-red-500">{{ field_errors.kernet_id }}</p>
-              </div>
-            </div>
-
-
             <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
               <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
                 <label for="">Tujuan</label>
@@ -92,6 +77,20 @@
                 <div class="card-border disabled">
                   {{pointFormat(trx_trp.amount) }}
                 </div>
+              </div>
+            </div>
+
+            <div v-if="trx_trp.uj.asst_opt" class="w-full flex flex-wrap">
+              <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+                <label for="">Supir</label>
+                <WidthMiniList :arr="list_emp" :selected="selected_supir" :pure="selected_mini_temp" @setSelected="selected_supir=$event" :disabled="trx_trp_loaded.supir_id > 1 || trx_trp.val1==1"/>
+                <p class="text-red-500">{{ field_errors.supir_id }}</p>
+              </div>
+  
+              <div v-show="trx_trp.uj.asst_opt=='DENGAN KERNET'" class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+                <label for="">Kernet</label>
+                <WidthMiniList :arr="list_emp" :selected="selected_kernet" :pure="selected_mini_temp" @setSelected="selected_kernet=$event" :disabled="trx_trp_loaded.kernet_id > 1 || trx_trp.val1==1"/>
+                <p class="text-red-500">{{ field_errors.kernet_id }}</p>
               </div>
             </div>
 
@@ -207,34 +206,35 @@ const props = defineProps({
 })
 
 const trx_trp_temp = {
-    id: -1,
-    tanggal: new Date(),
-    id_uj: -1,
-    xto: "",
-    tipe: "",
-    jenis:"",
-    amount: 0,
-    pv_id: -1,
-    pv_no:"",
-    pv_total:0,
+  id: -1,
+  tanggal: new Date(),
+  id_uj: -1,
+  xto: "",
+  tipe: "",
+  jenis:"",
+  amount: 0,
+  pv_id: -1,
+  pv_no:"",
+  pv_total:0,
 
-    supir_id: "",
-    supir: "",
-    kernet_id: "",
-    kernet: "",
-    no_pol: '',
-    cost_center_code:"",
-    cost_center_desc:"",
-    pvr_id:"",
-    pvr_no:"",
-    pvr_total:0,
-    pvr_had_detail:"",
-    transition_target:"",
-    payment_method_id:2,
-    payment_method:{
-      id:0,
-      name:"",
-    },
+  supir_id: "",
+  supir: "",
+  kernet_id: "",
+  kernet: "",
+  no_pol: '',
+  cost_center_code:"",
+  cost_center_desc:"",
+  pvr_id:"",
+  pvr_no:"",
+  pvr_total:0,
+  pvr_had_detail:"",
+  transition_target:"",
+  payment_method_id:2,
+  payment_method:{
+    id:0,
+    name:"",
+  },
+  uj:{}
 };
 let trx_trp_loaded = {...trx_trp_temp};
 const trx_trp = ref({...trx_trp_temp});
@@ -551,16 +551,22 @@ const checkAmount = (newVal, oldVal)=>{
 
     if(hrg.length  > 0)
     {
+      trx_trp.value.uj = hrg[0];
       $total = hrg[0].harga;
       $tipe = hrg[0].tipe;
     }
     else if(trx_trp.value.id_uj == trx_trp_loaded.id_uj) 
     {
+      trx_trp.value.uj = trx_trp_loaded.uj;
       $total = trx_trp_loaded.amount;
       $tipe = trx_trp_loaded.tipe;
     }
     trx_trp.value.tipe = $tipe
     trx_trp.value.amount=$total;
+
+    if(trx_trp.value.uj.asst_opt && trx_trp.value.uj.asst_opt == 'TANPA KERNET' && !(trx_trp_loaded.kernet_id > 1 || trx_trp.val1==1)){
+      selected_kernet.value = JSON.parse(JSON.stringify(selected_mini_temp));
+    }
   }
 }
 

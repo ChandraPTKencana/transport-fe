@@ -18,10 +18,10 @@
             @click="form_add()">
             <IconsPlus />
           </button>
-          <button v-if="enabled_edit" type="button" name="button" class="m-1 text-2xl "
+          <!-- <button v-if="enabled_edit" type="button" name="button" class="m-1 text-2xl "
             @click="form_edit()">
-            <IconsEdit/>
-          </button>
+            <IconsEdit/> dihapus karna ada fitur kunci supir atau kernet
+          </button> -->
           <button v-if="enabled_view" type="button" name="button" class="m-1 text-2xl "
             @click="form_view()">
             <IconsEyes/>

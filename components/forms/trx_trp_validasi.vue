@@ -35,20 +35,6 @@
               </div>
             </div>
 
-            <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
-              <label for="">Supir</label>
-              <div class="card-border">
-                <WidthMiniPart :selected="selected_supir"/>
-              </div>
-            </div>
-
-            <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
-              <label for="">Kernet</label>
-              <div class="card-border">
-                <WidthMiniPart :selected="selected_kernet"/>
-              </div>
-            </div>
-          
             <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
               <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
                 <label for="">Tujuan</label>
@@ -69,6 +55,20 @@
                 <div class="card-border ">
                   {{pointFormat(trx_trp.amount || 0) }}
                 </div>
+              </div>
+            </div>
+
+            <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+              <label for="">Supir</label>
+              <div class="card-border">
+                <WidthMiniPart :selected="selected_supir"/>
+              </div>
+            </div>
+
+            <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+              <label for="">Kernet</label>
+              <div class="card-border">
+                <WidthMiniPart :selected="selected_kernet"/>
               </div>
             </div>
 
