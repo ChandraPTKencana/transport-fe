@@ -50,7 +50,7 @@
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
                   <thead >
                     <tr class="sticky -top-1 !z-[2]">
-                      <td colspan="11" class="!bg-slate-800 text-white font-bold">
+                      <td colspan="12" class="!bg-slate-800 text-white font-bold">
                         Detail
                       </td>
                     </tr>
@@ -65,9 +65,10 @@
                       <th >Bank Name</th>
                       <th >SB.Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji || 0) }})</span></th>
                       <th >SB.Makan <span class="text-sm">({{pointFormat(ttl_sb_makan || 0) }})</span></th>
+                      <th >SB.Dinas <span class="text-sm">({{pointFormat(ttl_sb_dinas || 0) }})</span></th>
                       <!-- <th >Nominal Standby <span class="text-sm">({{pointFormat(total_standby || 0) }})</span></th> -->
                       <th >Nominal Bonus <span class="text-sm">({{pointFormat(total_bonus || 0) }})</span></th>
-                      <th >Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + total_bonus) || 0) }})</span></th>
+                      <th >Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_sb_dinas + total_bonus) || 0) }})</span></th>
                     </tr>
                   </thead>
                   <tbody ref="to_move">
@@ -83,9 +84,10 @@
                         <td>{{ detail.employee?.bank?.code }}</td>
                         <td>{{ pointFormat(detail.sb_gaji) }}</td>
                         <td>{{ pointFormat(detail.sb_makan) }}</td>
+                        <td>{{ pointFormat(detail.sb_dinas) }}</td>
                         <!-- <td>{{ pointFormat(detail.standby_nominal) }}</td> -->
                         <td>{{ pointFormat(detail.salary_bonus_nominal) }}</td>
-                        <td>{{ pointFormat(parseFloat(detail.sb_gaji) + parseFloat(detail.sb_makan) + parseFloat(detail.salary_bonus_nominal)) }}</td>
+                        <td>{{ pointFormat(parseFloat(detail.sb_gaji) + parseFloat(detail.sb_makan) + parseFloat(detail.sb_dinas) + parseFloat(detail.salary_bonus_nominal)) }}</td>
                       </tr>
                     </template>
                   </tbody>
