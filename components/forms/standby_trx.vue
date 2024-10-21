@@ -226,12 +226,12 @@
                             </div>
                           </td>
                           <td class="cell">
-                            <!-- <div style="width:70vw;" class="h-full flex items-center justify-center">
-                              <AttachmentSingle :value="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event" :can_remove="true"/>
-                            </div> -->
-                            <div class="h-full flex items-center justify-center">
+                            <div style="width:60vw;" class="h-full flex items-center justify-center">
                               <AttachmentSingle :value="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event" :can_remove="true"/>
                             </div>
+                            <!-- <div class="h-full flex items-center justify-center">
+                              <AttachmentSingle :value="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event" :can_remove="true"/>
+                            </div> -->
                           </td>
                           <td class="cell">
                             <div class="h-full flex items-center justify-center">

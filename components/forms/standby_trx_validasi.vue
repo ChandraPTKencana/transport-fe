@@ -193,7 +193,7 @@
                             </div>
                           </td>
                           <td class="cell">
-                            <div class="h-full flex items-center justify-center">
+                            <div style="width:60vw;" class="h-full flex items-center justify-center">
                               <AttachmentSingle :value="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event"/>
                             </div>
                           </td>
