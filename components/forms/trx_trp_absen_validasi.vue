@@ -117,7 +117,7 @@
         
         <div class="w-full flex items-center justify-end">
           <div class="w-full flex flex-wrap p-3 items-center">
-            <button v-if="useUtils().checkPermissions(['trp_trx.absen.clear_valval1']) && trx_trp.ritase_val2==0" type="button" name="button" class="w-36 m-1 bg-yellow-600" @click="clearVal()">
+            <button v-if="useUtils().checkPermissions(['trp_trx.absen.clear_valval1'])" type="button" name="button" class="w-36 m-1 bg-yellow-600" @click="clearVal()">
               Clear Val
             </button>
             <div>
