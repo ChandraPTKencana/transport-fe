@@ -71,18 +71,20 @@
               </div>
 
               <div class="w-full flex flex-wrap">
-                <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+                <div v-if="['SUPIR','SUPIR KERNET'].indexOf(standby_trx.standby_mst_.driver_asst_opt) > -1" class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                   <label for="">Supir</label>
                   <WidthMiniList :arr="list_emp" :selected="selected_supir" :pure="selected_mini_temp" @setSelected="selected_supir=$event"/>
                   <p class="text-red-500">{{ field_errors.supir_id }}</p>
                 </div>
 
-                <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+                <div v-if="['KERNET','SUPIR KERNET'].indexOf(standby_trx.standby_mst_.driver_asst_opt) > -1" class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                   <label for="">Kernet</label>
                   <WidthMiniList :arr="list_emp" :selected="selected_kernet" :pure="selected_mini_temp" @setSelected="selected_kernet=$event"/>
                   <p class="text-red-500">{{ field_errors.kernet_id }}</p>
                 </div>
-  
+              </div>
+              
+              <div class="w-full flex flex-wrap">
                 <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">No Pol</label>
                   <input type="text" list="vehicle"  v-model="standby_trx.no_pol" :disabled="standby_trx.pvr_no!=''"/>
