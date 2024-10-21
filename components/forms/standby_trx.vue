@@ -182,7 +182,7 @@
                   <table class="tacky w-full !table-auto" style="white-space:normal;">
                     <thead >
                       <tr class="sticky -top-1 !z-[2]">
-                        <td :colspan="!disabled  ? 4 : 3" class="!bg-slate-800 text-white font-bold">
+                        <td :colspan="!disabled  ? 6 : 5" class="!bg-slate-800 text-white font-bold">
                           Detail Transaction
                         </td>
                       </tr>
@@ -195,8 +195,8 @@
                         <th class="!min-w-[50px] !w-[50px] !max-w-[50px] ">No</th>
                         <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Tanggal</th>
                         <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Foto</th>
-                        <!-- <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Note</th>
-                        <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Dibayar</th> -->
+                        <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Note</th>
+                        <th class="!min-w-[70px] !w-[70px] !max-w-[70px] ">Dibayar</th>
                       </tr>
                     </thead>
                     <tbody ref="to_move">
@@ -226,10 +226,33 @@
                             </div>
                           </td>
                           <td class="cell">
-                            <div style="width:70vw;" class="h-full flex items-center justify-center">
+                            <!-- <div style="width:70vw;" class="h-full flex items-center justify-center">
+                              <AttachmentSingle :value="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event" :can_remove="true"/>
+                            </div> -->
+                            <div class="h-full flex items-center justify-center">
                               <AttachmentSingle :value="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event" :can_remove="true"/>
                             </div>
                           </td>
+                          <td class="cell">
+                            <div class="h-full flex items-center justify-center">
+                              <textarea class="h-full" v-model="detail.note"></textarea>
+                            </div>
+                          </td>
+                          <td class="cell" :class="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled ? 'unselectable' : ''">
+                            <div class="w-full h-full flex items-center justify-center">
+                              <div v-if="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled" class="text-3xl">
+                                <IconsTimes v-if="detail.be_paid==0" class="text-red-800"/>
+                                <IconsCheck v-else class="text-green-800"/>                                           
+                              </div>
+
+                              <button v-else type="button" @click="detail.be_paid = (detail.be_paid ? 0 : 1)" class="text-white w-auto rounded text-xl" :class="detail.be_paid?'bg-green-600' : 'bg-red-600'">
+                                <IconsTimes v-if="detail.be_paid==0"/>
+                                <IconsCheck v-else/>             
+                              </button>
+                            </div>
+                          </td>
+
+                          
                         </tr>
                       </template>
                       
@@ -360,6 +383,7 @@ const detail = ref({
   tanggal: new Date(),
   // tanggal: new Date(new Date().setDate(new Date().getDate()-1)),
   note:"",
+  be_paid:0,
   p_status:"",
   attachment_1:"",
   attachment_1_preview:"",

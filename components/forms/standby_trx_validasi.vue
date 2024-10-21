@@ -171,7 +171,7 @@
                   <table class="tacky w-full !table-auto" style="white-space:normal;">
                     <thead >
                       <tr class="sticky -top-1 !z-[2]">
-                        <td :colspan="!disabled  ? 4 : 3" class="!bg-slate-800 text-white font-bold">
+                        <td :colspan="!disabled  ? 6 : 5" class="!bg-slate-800 text-white font-bold">
                           Detail Transaction
                         </td>
                       </tr>
@@ -179,6 +179,8 @@
                         <th class="!min-w-[50px] !w-[50px] !max-w-[50px] ">No</th>
                         <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Tanggal</th>
                         <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Foto</th>
+                        <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Note</th>
+                        <th class="!min-w-[70px] !w-[70px] !max-w-[70px] ">Dibayar</th>
                       </tr>
                     </thead>
                     <tbody ref="to_move">
@@ -191,8 +193,21 @@
                             </div>
                           </td>
                           <td class="cell">
-                            <div style="width:70vw;" class="h-full flex items-center justify-center">
+                            <div class="h-full flex items-center justify-center">
                               <AttachmentSingle :value="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event"/>
+                            </div>
+                          </td>
+                          <td class="cell">
+                            <div class="h-full flex items-center justify-center">
+                              {{detail.note}}
+                            </div>
+                          </td>
+                          <td class="cell">
+                            <div class="w-full h-full flex items-center justify-center">
+                              <div class="text-3xl">
+                                <IconsTimes v-if="detail.be_paid==0" class="text-red-800"/>
+                                <IconsCheck v-else class="text-green-800"/>                                           
+                              </div>
                             </div>
                           </td>
                         </tr>
@@ -522,7 +537,8 @@ const total_amount = computed(()=>{
 })
 
 const disabled = computed(()=>{
-  return false;
+
+  return standby_trx.value.val2==1;
   // return standby_trx.value.confirmed_by || standby_trx.value.ref_id != null;
 });
 

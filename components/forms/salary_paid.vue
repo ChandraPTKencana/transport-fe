@@ -39,7 +39,7 @@
               </div>
             </div>
 
-            <div v-if="source.length" class="w-full p-1">
+            <div v-if="details.length" class="w-full p-1">
               <div class="font-bold"> Filter Nama </div>
               <input class="" type="text" v-model="search" name="search"
                 placeholder="Nama">
@@ -255,6 +255,15 @@ const ttl_sb_makan = computed(()=>{
 
   details.value.forEach(e => {
     temp += parseFloat(e.sb_makan); 
+  });
+  return temp;
+})
+
+const ttl_sb_dinas = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.sb_dinas); 
   });
   return temp;
 })

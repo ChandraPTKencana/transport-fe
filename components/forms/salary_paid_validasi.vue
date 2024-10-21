@@ -21,7 +21,7 @@
               </div>
             </div>
 
-            <div v-if="source.length" class="w-full p-1">
+            <div v-if="details.length" class="w-full p-1">
               <div class="font-bold"> Filter Nama </div>
               <input class="" type="text" v-model="search" name="search"
                 placeholder="Nama">
