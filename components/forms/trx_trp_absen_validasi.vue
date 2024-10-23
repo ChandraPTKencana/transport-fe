@@ -117,9 +117,6 @@
         
         <div class="w-full flex items-center justify-end">
           <div class="w-full flex flex-wrap p-3 items-center">
-            <button v-if="useUtils().checkPermissions(['trp_trx.absen.clear_valval1'])" type="button" name="button" class="w-36 m-1 bg-yellow-600" @click="clearVal()">
-              Clear Val
-            </button>
             <div>
               Di Validasi oleh : 
             </div>
@@ -307,46 +304,6 @@ const doSave = async () => {
     props.p_data.splice(idx,1,{...trx_trp.value});    
   }
   save_state.value = "BERHASIL";
-
-  // props.fnClose();
-}
-
-const clearVal = async () => {
-  useCommonStore().loading_full = true;
-
-  const data_in = new FormData();
-  
-  let $method = "post";
-
-  let id = props.id;
-  if (id == 0) {
-  } else {
-    data_in.append("id", id);
-    data_in.append("_method", "PUT");
-  }
-
-  const { data, error, status } = await useMyFetch("/trx_trp/absen/clear_valval1", {
-    method: $method,
-    headers: {
-      'Authorization': `Bearer ${token.value}`,
-      'Accept': 'application/json',
-    },
-    body: data_in,
-    retry: 0,
-  });
-  useCommonStore().loading_full = false;
-  if (status.value === 'error') {
-    useErrorStore().trigger(error);
-    return;
-  }
-  
-  trx_trp.value.ritase_val = 0;
-  trx_trp.value.ritase_val1 = 0;
-
-  let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
-  if(idx>=-1){
-    props.p_data.splice(idx,1,{...trx_trp.value});    
-  }
 
   // props.fnClose();
 }

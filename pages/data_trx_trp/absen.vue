@@ -26,9 +26,16 @@
             <IconsSignature />
           </button>
         </div>
+        <div class="flex">
+          <button v-if="checkbox_arr.length > 0" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+            @click="multiUnVal()">
+            Multi UnVal
+          </button>
+        </div>
       </div>
 
-      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event" @doFilter="searching()">
+
+      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event" @doFilter="searching()"  @setCheckbox="checkbox_arr=$event">
         <template #[`ritase_val`]="{item}">
           <IconsLine v-if="!item.ritase_val"/>
           <IconsCheck v-else/>
@@ -335,7 +342,45 @@ const form_absen = (index) => {
   forms_trx_absen_show.value = true;
 };
 
+const checkbox_arr = ref([]);
+
+const multiUnVal = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("ids", JSON.stringify(checkbox_arr.value));  
+  data_in.append("_method", "PUT");
+
+  const { data, error, status } = await useMyFetch("/trx_trp/absen/clear_valval1", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  data.value.val_lists.forEach(e => {
+    let idx = trx_trps.value.map((x)=>x.id).indexOf(e.id);
+    if(idx>-1){
+      let sd          = trx_trps.value[idx];
+      sd.ritase_val   = e.ritase_val;
+      sd.ritase_val1  = e.ritase_val1;
+      sd.ritase_val2  = e.ritase_val2;
+      sd.updated_at   = e.updated_at;
+      trx_trps.value.splice(idx,1,{...sd});
+    }
+  });
+}
+
 const fields_thead=ref([
+  {key:"cb",label:"",checkbox:'id'},
   {key:"no",label:"No",isai:true},
   {key:"ritase_val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"ritase_val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},

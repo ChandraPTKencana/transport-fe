@@ -424,8 +424,8 @@ const printPreview = async()=>{
 
 const fields_thead=ref([
   {key:"no",label:"No",isai:true},
-  {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"val2",label:"App 3",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val1",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val2",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"xto",label:"Tujuan",freeze:1,filter_on:1,type:'string'},
   {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK']},
@@ -477,18 +477,18 @@ const enabled_edit = computed(()=>{
 const enabled_validasi = computed(()=>{  
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && (
     (
       [undefined,""].indexOf(dt_selected.value.pvr_id) > -1 && 
       (
-        useUtils().checkPermission('extra_money.val') && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
-        useUtils().checkPermission('extra_money.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1
+        useUtils().checkPermission('extra_money.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1 || 
+        useUtils().checkPermission('extra_money.val2') && [undefined,0].indexOf(dt_selected.value.val2) > -1
       )
-    )|| 
-    (
-      dt_selected.value.pvr_id > -1 &&  useUtils().checkPermission('extra_money.val2') && [undefined,0].indexOf(dt_selected.value.val2) > -1
     )
+    // || 
+    // (
+    //   dt_selected.value.pvr_id > -1 &&  useUtils().checkPermission('extra_money.val2') && [undefined,0].indexOf(dt_selected.value.val2) > -1
+    // )
   );
   return result;
 })
