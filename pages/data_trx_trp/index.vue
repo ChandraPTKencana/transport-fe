@@ -49,15 +49,19 @@
           </button>
         </div>
         <div class="flex">
-          <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+          <button v-if="useUtils().checkPermission('trp_trx.generate_pvr')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="generatePVR()">
             Gen/Update PVR
           </button>
-          <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+          <!-- <button  v-if="useUtils().checkPermission('trp_trx.generate_pv')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+            @click="generatePV()">
+            Gen/Update PV
+          </button> -->
+          <button  v-if="useUtils().checkPermission('trp_trx.get_pv')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="updatePV()">
             Update PV
           </button>
-          <div class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
+          <div v-if="useUtils().checkPermissions(['trp_trx.generate_pvr','trp_trx.generate_pv','trp_trx.get_pv'])" class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
             <span class="text-xs">Mode</span> : <span class="font-bold" :class="online_status?'text-green-600' : 'text-red-600'">{{ online_status ? "ONLINE" : "OFFLINE" }} </span>
           </div>
         </div>
@@ -165,6 +169,9 @@
         </template>
         <template #[`pvr_had_detail`]="{item}">
           <IconsLine v-if="!item.pvr_had_detail"/><IconsCheck v-else/>
+        </template>
+        <template #[`pv_complete`]="{item}">
+          <IconsLine v-if="!item.pv_complete"/><IconsCheck v-else/>
         </template>
         <template #[`deleted_by_username`]="{item}">
           {{ item.deleted_by?.username }}
@@ -713,6 +720,47 @@ const generatePVR = async() => {
   display({ show: true, status: "Success", message: "Generate Or Update PVR Done" });
 }
 
+const generatePV = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  // data_in.append("id", trx_trps.value[selected.value].id);  
+  data_in.append("online_status", online_status.value);  
+
+  const { data, error, status } = await useMyFetch("/trx_trp_do_gen_pv", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  data.value.forEach(e => {
+    let idx = trx_trps.value.map((x)=>x.id).indexOf(e.id);
+    if(idx !== -1) {
+      let dt = trx_trps.value[idx];
+      dt.pv_id = e.pv_id;
+      dt.pv_no = e.pv_no;
+      dt.pv_total = e.pv_total;
+      dt.pv_datetime = e.pv_datetime;
+      dt.pv_complete = e.pv_complete;
+      dt.updated_at = e.updated_at;
+      
+      trx_trps.value.splice(idx,1,{...dt});
+    }
+    
+  });
+
+  display({ show: true, status: "Success", message: "Generate Or Update PV Done" });
+}
+
 const updatePV = async() => {
   useCommonStore().loading_full = true;
 
@@ -788,6 +836,7 @@ const fields_thead=ref([
     {key:"pv_datetime",label:"Date",type:'date',dateformat:"DD-MM-Y",filter_on:1},
     {key:"pv_no",label:"No",filter_on:1,type:'string'},
     {key:"pv_total",label:"Total",filter_on:1,type:'number'},
+    {key:"pv_complete",label:"Completed",filter_on:1,type:"select",select_item:[{k:'1',v:'Completed'},{k:'0',v:'Uncompleted'}]},
   ]},
   {key:"supir",label:"Supir",filter_on:1,type:'string'},
   {key:"supir_rek_no",label:"No Rek Supir",filter_on:1,type:'string'},

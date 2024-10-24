@@ -53,11 +53,15 @@
             @click="generatePVR()">
             Gen/Update PVR
           </button>
+          <button v-if="useUtils().checkPermission('extra_money_trx.generate_pv')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+            @click="generatePV()">
+            Gen/Update PV
+          </button>
           <button v-if="useUtils().checkPermission('extra_money_trx.get_pv')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="updatePV()">
             Update PV
           </button>
-          <div v-if="useUtils().checkPermissions(['extra_money_trx.create','extra_money_trx.modify'])" class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
+          <div v-if="useUtils().checkPermissions(['extra_money_trx.generate_pvr','extra_money_trx.generate_pv','extra_money_trx.get_pv'])" class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
             <span class="text-xs">Mode</span> : <span class="font-bold" :class="online_status?'text-green-600' : 'text-red-600'">{{ online_status ? "ONLINE" : "OFFLINE" }} </span>
           </div>
         </div>
@@ -124,6 +128,9 @@
         </template>
         <template #[`pvr_complete`]="{item}">
           <IconsLine v-if="!item.pvr_complete"/><IconsCheck v-else/>
+        </template>
+        <template #[`pv_complete`]="{item}">
+          <IconsLine v-if="!item.pv_complete"/><IconsCheck v-else/>
         </template>
         <template #[`deleted_by_username`]="{item}">
           {{ item.deleted_by?.username }}
@@ -696,6 +703,47 @@ const generatePVR = async() => {
   display({ show: true, status: "Success", message: "Generate Or Update PVR Done" });
 }
 
+const generatePV = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  // data_in.append("id", extra_money_trxs.value[selected.value].id);  
+  data_in.append("online_status", online_status.value);  
+
+  const { data, error, status } = await useMyFetch("/extra_money_trx_do_gen_pv", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  data.value.forEach(e => {
+    let idx = extra_money_trxs.value.map((x)=>x.id).indexOf(e.id);
+    if(idx !== -1) {
+      let dt = extra_money_trxs.value[idx];
+      dt.pv_id = e.pv_id;
+      dt.pv_no = e.pv_no;
+      dt.pv_total = e.pv_total;
+      dt.pv_datetime = e.pv_datetime;
+      dt.pv_complete = e.pv_complete;
+      dt.updated_at = e.updated_at;
+      
+      extra_money_trxs.value.splice(idx,1,{...dt});
+    }
+    
+  });
+
+  display({ show: true, status: "Success", message: "Generate Or Update PV Done" });
+}
+
 const updatePV = async() => {
   useCommonStore().loading_full = true;
 
@@ -771,6 +819,7 @@ const fields_thead=ref([
     {key:"pv_datetime",label:"Date",type:'date',dateformat:"DD-MM-Y",filter_on:1},
     {key:"pv_no",label:"No",filter_on:1,type:'string'},
     {key:"pv_total",label:"Total",filter_on:1,type:'number'},
+    {key:"pv_complete",label:"Completed",filter_on:1,type:"select",select_item:[{k:'1',v:'Completed'},{k:'0',v:'Uncompleted'}]},
   ]},
   {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   {key:"updated_at",label:"Updated At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
