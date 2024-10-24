@@ -445,15 +445,11 @@ const fields_thead=ref([
   {key:"deleted_by_username",label:"Deleted By",tbl_show:0},
   {key:"deleted_at",label:"Deleted At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1, tbl_show:0},
   {key:"deleted_reason",label:"Deleted Reason", tbl_show:0,type:'string',filter_on:1},
-  {key:"req_deleted_by_username",label:"Req Deleted By",tbl_show:0},
-  {key:"req_deleted_at",label:"Req Delete At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1, tbl_show:0},
-  {key:"req_deleted_reason",label:"Req Delete Reason", tbl_show:0,type:'string',filter_on:1},
 ]);
 
 const enabled_copy = computed(()=>{  
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && useUtils().checkPermission('extra_money.create');
   return result;
 })
@@ -467,7 +463,6 @@ const enabled_add = computed(()=>{
 const enabled_edit = computed(()=>{  
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && [undefined,0].indexOf(dt_selected.value.val) > -1
   && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1
   && useUtils().checkPermission('extra_money.modify');
@@ -497,7 +492,6 @@ const enabled_remove = computed(()=>{
   let result = useUtils().checkPermission('extra_money.remove') 
   && selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1;
   return result;
 })
@@ -506,7 +500,6 @@ const enabled_print_preview = computed(()=>{
   let result = useUtils().checkPermission('extra_money.preview_file') 
   && selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && dt_selected.value.val == 1;
   return result;
 })
