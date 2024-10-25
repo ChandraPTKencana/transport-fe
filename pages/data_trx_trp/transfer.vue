@@ -321,6 +321,66 @@
               Tidak Ada Foto Berangkat
             </div>
           </div>
+
+          <div v-for="ttemt in trx_trp.extra_money_trxs" class="w-full border-solid border-l-4 border-blue-400 px-2 py-1 bg-gray-200 mt-2 flex flex-row flex-wrap">
+            <div class="flex flex-col mr-5">
+              <span class="text-xs font-bold">
+                EM#ID
+              </span>
+              <div class="">
+                {{ ttemt.id }}
+              </div>
+            </div>
+            <div class="flex flex-col mr-5">
+              <span class="text-xs font-bold">
+                Nama Penerima
+              </span>
+              <div class="">
+                {{ ttemt.employee?.name }}
+              </div>
+            </div>
+            <div class="flex flex-col mr-5">
+              <span class="text-xs font-bold">
+                No rek
+              </span>
+              <div class="">
+                {{ ttemt.employee?.rek_no }}
+              </div>
+            </div>
+            <div class="flex flex-col mr-5">
+              <span class="text-xs font-bold">
+                Tanggal
+              </span>
+              <div class="">
+                {{ ttemt.tanggal }}
+              </div>
+            </div>
+            <div class="flex flex-col mr-5">
+              <span class="text-xs font-bold">
+                Tujuan
+              </span>
+              <div class="">
+                {{ ttemt.extra_money?.xto }}
+              </div>
+            </div>
+            <div class="flex flex-col mr-5">
+              <span class="text-xs font-bold">
+                Desc
+              </span>
+              <div class="">
+                {{ ttemt.extra_money?.description }}
+              </div>
+            </div>
+
+            <div class="flex flex-col mr-5">
+              <span class="text-xs font-bold">
+                Total
+              </span>
+              <div class="">
+                {{ pointFormat(ttemt.extra_money?.nominal * ttemt.extra_money?.qty)  }}
+              </div>
+            </div>
+          </div>
         </div>
 
         <div v-show="!show_confirm" class="flex p-1 justify-end flex-wrap">
