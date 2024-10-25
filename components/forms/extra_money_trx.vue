@@ -6,7 +6,11 @@
       <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
         <div class="w-full flex flex-col items-center grow overflow-auto">
           <div class="w-full flex flex-row flex-wrap">
-
+            <div class="w-full sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <label for="">Trx Trp #ID</label>
+              <input v-model="extra_money_trx.prev_trx_trp_id">
+              <p class="text-red-500">{{ field_errors.prev_trx_trp_id }}</p>
+            </div>
             <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">Tanggal</label>
               <div class="grow">
@@ -133,6 +137,7 @@ const extra_money_trx_temp = {
       id:0,
       name:"",
     },
+    prev_trx_trp_id:"",
     attachment_1:"",
     attachment_1_preview:"",
 };
@@ -150,6 +155,7 @@ const doSave = async () => {
   const data_in = new FormData();
   data_in.append("tanggal", $moment(extra_money_trx.value.tanggal).format("Y-MM-DD"));  
   data_in.append("no_pol", extra_money_trx.value.no_pol);
+  data_in.append("prev_trx_trp_id", extra_money_trx.value.prev_trx_trp_id);
   data_in.append("note_for_remarks", extra_money_trx.value.note_for_remarks);
   data_in.append("employee_id", selected_employee.value.id);
   data_in.append("extra_money_id", selected_extra_money.value.id);

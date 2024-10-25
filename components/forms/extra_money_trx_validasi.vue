@@ -8,7 +8,12 @@
           <div class="w-full flex flex-col items-center grow overflow-auto">
 
             <div class="w-full flex flex-row flex-wrap">
-
+              <div class="w-full sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <label for="">Trx Trp #ID</label>
+                <div class="card-border">
+                  {{ extra_money_trx.prev_trx_trp_id }}
+                </div>
+              </div>
               <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Tanggal</label>
                 <div class="card-border">
@@ -49,7 +54,9 @@
                 <p class="text-red-500">{{ field_errors.note_for_remarks }}</p>
               </div>
 
-
+              <div class="p-1 w-full sm:w-full md:w-2/3 md:overflow-auto max-h-full">
+                <AttachmentSingle :label="'Attachment'" :value="extra_money_trx.attachment_1_preview"/>
+              </div>
 
               <div class="w-full flex flex-wrap">
 
