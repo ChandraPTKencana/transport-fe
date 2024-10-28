@@ -117,6 +117,9 @@
         <template #[`extra_money_jenis`]="{item}">
           {{item.extra_money?.jenis}}
         </template>
+        <template #[`extra_money_desc`]="{item}">
+          {{item.extra_money?.description}}
+        </template>
         <template #[`extra_money_nominal`]="{item}">
           Rp. {{ pointFormat(item.extra_money?.nominal || 0) }}
         </template>
@@ -801,6 +804,7 @@ const fields_thead=ref([
   {key:"payment_method_name",label:"Payment Method Name",type:'string'},
   {key:"extra_money_xto",label:"Tujuan",filter_on:1,type:'string'},
   {key:"extra_money_jenis",label:"Jenis",filter_on:1,type:'string'},
+  {key:"extra_money_desc",label:"Desc",filter_on:1,type:'string'},
   {key:"extra_money_nominal",label:"Nominal",class:" justify-end",type:'number'},
   {key:"extra_money_qty",label:"Qty",class:" justify-end",type:'number'},
   {key:"extra_money_total",label:"Total",class:" justify-end",type:'number'},
