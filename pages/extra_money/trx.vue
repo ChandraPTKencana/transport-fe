@@ -53,10 +53,10 @@
             @click="generatePVR()">
             Gen/Update PVR
           </button>
-          <!-- <button v-if="useUtils().checkPermission('extra_money_trx.generate_pv')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+          <button v-if="useUtils().checkPermission('extra_money_trx.generate_pv')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="generatePV()">
             Gen/Update PV
-          </button> -->
+          </button>
           <button v-if="useUtils().checkPermission('extra_money_trx.get_pv')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="updatePV()">
             Update PV
