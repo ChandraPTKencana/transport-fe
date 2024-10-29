@@ -333,7 +333,7 @@ const inject_params = () => {
   params.like = "";
   let words = JSON.parse(JSON.stringify(useCommonStore()._tv.global_keyword));
   if (words != "") {
-    params.like = `id:%${words}%,transition_target:%${words}%,transition_type:%${words}%,standby_mst_name:%${words}%,standby_mst_type:%${words}%,supir:%${words}%,kernet:%${words}%,no_pol:%${words}%,xto:%${words}%,pvr_no:%${words}%,pv_no:%${words}%,pvr_no:%${words}%,tanggal:%${words}%,transition_target:%${words}%,cost_center_code:%${words}%`;
+    params.like = `id:%${words}%,tanggal:%${words}%,no_pol:%${words}%,employee_name:%${words}%,employee_rek_no:%${words}%,employee_rek_name:%${words}%,kernet:%${words}%,extra_money_xto:%${words}%,extra_money_jenis:%${words}%,extra_money_desc:%${words}%,pv_no:%${words}%,pvr_no:%${words}%,extra_money_transition_target:%${words}%,cost_center_code:%${words}%`;
   }
   params.sort = "";
   if (sort.value.field) {
@@ -797,7 +797,7 @@ const fields_thead=ref([
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"tanggal",label:"Tanggal",type:'datetime',dateformat:"DD-MM-Y",filter_on:1},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
-  {key:"employee_name",label:"Nama Pekerja",type:'string'},
+  {key:"employee_name",label:"Nama Pekerja",filter_on:1,type:'string'},
   {key:"employee_rek_no",label:"No rek Pekerja",type:'string'},
   {key:"employee_rek_name",label:"Nama Rek Pekerja",type:'string'},
   {key:"note",label:"Note",filter_on:1,type:'string'},

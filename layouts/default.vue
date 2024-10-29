@@ -21,7 +21,7 @@
             <li v-if="useUtils().checkPermission('ujalan.views')"  :class="activeMenu == '/data_ujalan'?'active':''" >
               <nuxt-link to="/data_ujalan"  class="cursor-pointer" @click="goTo('/data_ujalan')">
                 <IconsMoney class="mr-1"/>
-                U.Jalan
+                UJ Mst
               </nuxt-link>
             </li>
             <li v-if="useUtils().checkPermission('trp_trx.views')" :class="activeMenu == '/data_trx_trp'?'active':''" >
@@ -52,12 +52,12 @@
               </nuxt-link>
             </li>
 
-            <li v-if="useUtils().checkPermission('trp_trx.ticket.views')" :class="activeMenu == '/data_trx_trp/ticket_over'?'active':''" >
+            <!-- <li v-if="useUtils().checkPermission('trp_trx.ticket.views')" :class="activeMenu == '/data_trx_trp/ticket_over'?'active':''" >
               <nuxt-link to="/data_trx_trp/ticket_over"  class="cursor-pointer" @click="goTo('/data_trx_trp/ticket_over')">
                 <IconsProduct class="mr-1"/>
                 Check Ticket
               </nuxt-link>
-            </li>
+            </li> -->
 
             <li v-if="useUtils().checkPermission('trp_trx.ritase.views')" :class="activeMenu == '/data_trx_trp/ritase'?'active':''" >
               <nuxt-link to="/data_trx_trp/ritase"  class="cursor-pointer" @click="goTo('/data_trx_trp/ritase')">
@@ -77,7 +77,7 @@
             <li v-if="useUtils().checkPermission('standby_mst.views')"  :class="activeMenu == '/data_standby'?'active':''" >
               <nuxt-link to="/data_standby"  class="cursor-pointer" @click="goTo('/data_standby')">
                 <IconsMoney class="mr-1"/>
-                StandBy
+                StandBy Mst
               </nuxt-link>
             </li>
             <li v-if="useUtils().checkPermission('standby_trx.views')"  :class="activeMenu == '/data_standby/trx'?'active':''" >
@@ -121,13 +121,13 @@
             <li v-if="useUtils().checkPermission('vehicle.views')" :class="activeMenu == '/vehicle'?'active':''" >
               <nuxt-link to="/vehicle"  class="cursor-pointer" @click="goTo('/vehicle')">
                 <IconsTruck class="mr-1"/>
-                Kendaraan
+                Vehicle
               </nuxt-link>
             </li>
             <li v-if="useUtils().checkPermission('employee.views')" :class="activeMenu == '/employee'?'active':''" >
               <nuxt-link to="/employee"  class="cursor-pointer" @click="goTo('/employee')">
                 <IconsPerson class="mr-1"/>
-                Pekerja
+                Employee
               </nuxt-link>
             </li>
             <li v-if="useUtils().checkPermission('potongan_mst.views')" :class="activeMenu == '/potongan'?'active':''" >
@@ -167,7 +167,7 @@
             <li v-if="useUtils().checkPermission('rpt_salary.views')" :class="activeMenu == '/salary_paid/rpt'?'active':''" >
               <nuxt-link to="/salary_paid/rpt"  class="cursor-pointer" @click="goTo('/salary_paid/rpt')">
                 <IconsFileCopy class="mr-1"/>
-                Report Salary
+                Salary Report
               </nuxt-link>
             </li>
 
@@ -187,7 +187,7 @@
 
             <li v-if="useUtils().checkPermission('permission_group.views')" :class="activeMenu == '/permission_group'?'active':''" >
               <nuxt-link to="/permission_group"  class="cursor-pointer" @click="goTo('/permission_group')">
-                <IconsPerson class="mr-1"/>
+                <IconsPeople class="mr-1"/>
                 Permission Group
               </nuxt-link>
             </li>

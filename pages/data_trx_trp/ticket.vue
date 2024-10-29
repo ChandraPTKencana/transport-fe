@@ -43,6 +43,11 @@
             @click="multiVal()">
             Multi Val
           </button>
+
+          <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+            @click="checkTicket()">
+            Check Tickets
+          </button>
           
           <button type="button" name="button" class="m-1 text-2xl "
             @click="cogs_show=true">
@@ -191,6 +196,7 @@
     <FormsTrxTrpTicket :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ticket="list_ticket"/>
     <FormsTrxTrpTicketValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" :is_view="forms_trx_trp_is_view"/>
     <FormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
+    <FormsTrxTrpTicketOver :show="forms_trx_check_show" :fnClose="()=>{forms_trx_check_show=false}"/>
 
     <div v-if="cogs_show" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
     style="background-color: rgba(255,255,255,0.9);">
@@ -733,6 +739,12 @@ const multiClearTicket = async() => {
     }
   });
 }
+
+const forms_trx_check_show =  ref(false);
+const checkTicket = (index) => {
+  forms_trx_check_show.value = true;
+};
+
 
 const cogs_show=ref(false);
 

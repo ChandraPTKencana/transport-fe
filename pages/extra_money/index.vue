@@ -463,7 +463,7 @@ const enabled_add = computed(()=>{
 const enabled_edit = computed(()=>{  
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.val) > -1
+  && [undefined,0].indexOf(dt_selected.value.val1) > -1
   && [undefined,""].indexOf(dt_selected.value.pvr_id) > -1
   && useUtils().checkPermission('extra_money.modify');
   return result;
