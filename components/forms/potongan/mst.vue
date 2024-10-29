@@ -163,7 +163,9 @@ const potongan_mst_temp = {
     attachment_1_preview:"",
     attachment_2:"",
     attachment_2_preview:"",
-    val_at:""
+    val_at:"",
+    val:0,
+    val1:0
 };
 const details = ref([]);
 

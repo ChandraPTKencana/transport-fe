@@ -281,6 +281,7 @@ const form_add = () => {
   forms_potongan_mst_id.value = 0;
   forms_potongan_mst_show.value = true;
   forms_potongan_mst_copy.value = false;
+  forms_potongan_mst_is_view.value = false;
   // router.push({ name: 'data_potongan_mst-form', query: { id: "" } });
 }
 
