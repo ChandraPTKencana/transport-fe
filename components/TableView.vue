@@ -222,7 +222,7 @@
                   <slot v-else :name="tf.key" :item="tb" :index="index">
                     <template v-if="tf.checkbox">
                       <label class="w-7 h-5 flex items-center justify-center">
-                        <input type="checkbox" @click="checkbox_set(tb[tf.checkbox])">
+                        <input type="checkbox" @click="checkbox_set(tb[tf.checkbox])" :checked="checkbox_arr.indexOf(tb[tf.checkbox]) > -1">
                       </label>
                     </template>
                   </slot>
@@ -311,7 +311,12 @@ const props = defineProps({
       type:Function,
       required:false,
       default:null
-    }
+    },
+    deep_state:{
+      type:Object,
+      required:false,
+      default:{}
+    },
 });
 
 const tbody_fields = ref([]);
@@ -550,6 +555,17 @@ watch(()=>props.tbody,(newVal, oldVal) => {
       e.class_h = props.rowBgColor(e);
     });
     newVal = [...dt];
+  }
+}, {
+  deep:true,
+  immediate: true
+});
+
+watch(()=>props.deep_state,(newVal, oldVal) => {
+  if(newVal.clearCheckBox){
+    newVal.clearCheckBox = false;
+    checkbox_arr.value = [];
+    emit('setCheckbox',checkbox_arr.value );
   }
 }, {
   deep:true,

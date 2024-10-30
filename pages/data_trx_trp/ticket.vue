@@ -122,7 +122,7 @@
       </form> -->
       
 
-      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event"  @doFilter="searching()" @setCheckbox="checkbox_arr=$event">
+      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event"  @doFilter="searching()" @setCheckbox="checkbox_arr=$event" :deep_state="deep_state">
         <template #[`absen`]="{item,index}">
           <IconsImage v-if="item.trx_absens && item.trx_absens.length > 0" class="cursor-pointer" @click="form_absen(index)"/>
         </template>
@@ -339,6 +339,9 @@ const addClassToTbody=(data)=>{
   return data;
 }
 
+let deep_state = ref({
+  clearCheckBox:false
+});
 
 const filter_status = ref("ticket_not_done")
 watch(()=>filter_status.value,(newval)=>{
@@ -738,6 +741,8 @@ const multiClearTicket = async() => {
       trx_trps.value.splice(idx,1,{...sd});
     }
   });
+
+  // deep_state.value.clearCheckBox = true;
 }
 
 const forms_trx_check_show =  ref(false);
