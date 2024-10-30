@@ -43,7 +43,7 @@
         </div>
       </div>
 
-      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="ujalans" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event"  @doFilter="searching()">
+      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="ujalans" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event"  @doFilter="searching()" :rowBgColor="rowBgColor">
         <template #[`val`]="{item}">
           <IconsLine v-if="!item.val"/>
           <IconsCheck v-else/>
@@ -99,20 +99,13 @@ definePageMeta({
   ],
 });
 
-const checkStatus=(data)=>{
+const rowBgColor=(data)=>{
   if(data.deleted==1) return "!bg-red-400";
   // if(data.pvr_id > 0 && data.req_deleted == 1) return "!bg-yellow-300"; 
   // if(data.pv_id > 0) return "!bg-blue-300"; 
   if(data.val == 0 || data.val1 == 0) return "!bg-gray-300"; 
   return "";
 }
-const addClassToTbody=(data)=>{
-  data.map(e => {    
-    e.class_h = checkStatus(e);
-  });
-  return data;
-}
-
 
 const filter_status = ref("available")
 watch(()=>filter_status.value,(newval)=>{
@@ -173,7 +166,7 @@ const { data: dt_async } = await useAsyncData(async () => {
   
 
   if (data1.status.value !== 'error') {
-    ujalans = addClassToTbody(data1.data.value.data);
+    ujalans = data1.data.value.data;
   }
 
   if (data1.status.value === 'error') {
@@ -250,9 +243,9 @@ const callData = async () => {
   }
 
   if (scrolling.value.page == 1) {
-    ujalans.value = addClassToTbody(data.value.data);
+    ujalans.value = data.value.data;
   } else if (scrolling.value.page > 1) {
-    ujalans.value = [...ujalans.value, ...addClassToTbody(data.value.data)];
+    ujalans.value = [...ujalans.value, ...data.value.data];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
@@ -450,7 +443,7 @@ const enabled_copy = computed(()=>{
 })
 
 const enabled_add = computed(()=>{  
-  let result = ['available','all'].indexOf(filter_status.value) > -1  
+  let result = ['available','all','unapprove'].indexOf(filter_status.value) > -1  
   && useUtils().checkPermission('ujalan.create');
   return result;
 })

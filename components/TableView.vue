@@ -306,6 +306,11 @@ const props = defineProps({
       type:String,
       required:false,
       default:"scroll"
+    },
+    rowBgColor:{
+      type:Function,
+      required:false,
+      default:null
     }
 });
 
@@ -533,6 +538,19 @@ watch(()=>changeableData.value,(newVal, oldVal) => {
     let toExplode = setRowDeep(JSON.parse(JSON.stringify(newVal)));
     setTbodyFields(toExplode);
     recrusiveThead(toExplode);
+}, {
+  deep:true,
+  immediate: true
+});
+
+watch(()=>props.tbody,(newVal, oldVal) => {
+  if(props.rowBgColor){
+    let dt = [...newVal];
+    dt.map(e => {
+      e.class_h = props.rowBgColor(e);
+    });
+    newVal = [...dt];
+  }
 }, {
   deep:true,
   immediate: true
