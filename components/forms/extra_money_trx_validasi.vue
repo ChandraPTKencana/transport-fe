@@ -1,7 +1,7 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Form Transaction Salary Bonus Validation'" :fn="fnClose" class="w-100 flex align-items-center"
+      <HeaderPopup :title="'Form Transaction Extra Money Trx Validation'" :fn="fnClose" class="w-100 flex align-items-center"
         style="color:white;" />
 
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">

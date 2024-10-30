@@ -103,8 +103,8 @@
                         <option v-if="['number','string'].indexOf(fd.type)>-1" value="more_and">&gt;=</option>
                         <option v-if="['number','string'].indexOf(fd.type)>-1" value="less_then">&lt;</option>
                         <option v-if="['number','string'].indexOf(fd.type)>-1" value="less_and">&lt;=</option>
-                        <option v-if="['date','datetime'].indexOf(fd.type)>-1" value="specific">Specific</option>
-                        <option v-if="['date','datetime'].indexOf(fd.type)>-1" value="fullday">Fullday</option>
+                        <option v-if="['datetime'].indexOf(fd.type)>-1" value="specific">Specific</option>
+                        <option v-if="['date'].indexOf(fd.type)>-1" value="fullday">Fullday</option>
                       </select>
                     </td>
                     <td>
@@ -732,7 +732,7 @@ tbody_fields.value.forEach((z,k)=>{
   dt[x.key]={
     sort_priority:"",
     sort_type:"",
-    operator:['date','datetime'].indexOf(x.type) > -1 ? 'specific' :"exactly_same",
+    operator:['date'].indexOf(x.type) > -1 ? 'fullday' : (['datetime'].indexOf(x.type) > -1 ? 'specific' :"exactly_same"),
     value_1:"",
     value_2:"",
     type:x.type,
