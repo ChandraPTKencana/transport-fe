@@ -196,7 +196,7 @@
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
-            <button type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+            <button ref="it_val" v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
               Validasi
             </button>
           </div>
@@ -240,7 +240,12 @@ const props = defineProps({
     type:Array,
     required:true,
     default:[]
-  }
+  },
+  is_view:{
+    type:Boolean,
+    required:false,
+    default:false
+  },
   
 })
 
@@ -265,6 +270,7 @@ const ujalan = ref({...ujalan_temp});
 
 const token = useCookie('token');
 const field_errors = ref({});
+const it_val = ref(null);
 
 const details = ref([]);
 const details2 = ref([]);
@@ -371,6 +377,11 @@ const disabled = computed(()=>{
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
+    if(props.is_view==false){
+      setTimeout(()=>{
+        it_val.value.focus();
+      },1);
+    }
     callData();
   }
 }, {
