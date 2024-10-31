@@ -99,6 +99,18 @@
                 <div v-if="extra_money.val2">
                   App 2 : {{ extra_money.val2_by.username}} ( {{ extra_money.val2_at ? $moment(extra_money.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
+                <div v-if="extra_money.val3">
+                  App 3 : {{ extra_money.val3_by.username}} ( {{ extra_money.val3_at ? $moment(extra_money.val3_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
+                <div v-if="extra_money.val4">
+                  App 4 : {{ extra_money.val4_by.username}} ( {{ extra_money.val4_at ? $moment(extra_money.val4_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
+                <div v-if="extra_money.val5">
+                  App 5 : {{ extra_money.val5_by.username}} ( {{ extra_money.val5_at ? $moment(extra_money.val5_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
+                <div v-if="extra_money.val6">
+                  App 6 : {{ extra_money.val6_by.username}} ( {{ extra_money.val6_at ? $moment(extra_money.val6_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
               </div>
             </div>
 
