@@ -20,7 +20,8 @@ if "%1"=="" (
     call SET ROUTER_BASE=/%pabrik%/logistik
     call SET MY_API_ADDR=/%pabrik%/transport-be/a9p/
     call npm run generate
-    xcopy /s /y .\dist\* ..\%pabrik%\logistik\
+    @REM xcopy /s /y .\dist\* ..\%pabrik%\logistik\
+    xcopy /s /y .\dist\* \\192.168.1.248\htdocs\%pabrik%\logistik\
 )
 
 

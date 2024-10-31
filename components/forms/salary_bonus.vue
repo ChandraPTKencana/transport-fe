@@ -126,6 +126,7 @@ const salary_bonus_temp = {
     note:"",
     attachment_1:"",
     attachment_1_preview:"",
+    attachment_1_type:"",    
 };
 
 const salary_bonus = ref({...salary_bonus_temp});
@@ -259,6 +260,8 @@ const doSave = async () => {
     ktp_no: selected_employee.value._.ktp_no.val,
     sim_no: selected_employee.value._.sim_no.val,
   };
+
+  salary_bonus.value.attachment_1_type = data.value.attachment_1_type;
 
   details.value = data.value.details;
   if(id<=0){

@@ -132,8 +132,10 @@
           <IconsCheck v-else/>
         </template>
         <template #[`detail_dates`]="{item}">
-          <div v-for="itdtl in item.details" class="btn p-1 rounded-sm text-white text-xs mr-1" :class="itdtl.attachment_1_type ? 'bg-green-600' : 'bg-red-500'">
-            {{ $moment(itdtl.tanggal).format("DD-MM") }}
+          <div v-for="itdtl in item.details" class="btn p-1 rounded-sm text-white text-xs mr-1 relative" :class="[itdtl.attachment_1_type ? 'bg-green-600' : 'bg-red-500',itdtl.be_paid ? '' : 'unpaid']" >
+            <div class="relative z-[1]">
+              {{ $moment(itdtl.tanggal).format("DD-MM") }}
+            </div>
           </div>
           <!-- {{item.details.map((x)=>$moment(x.tanggal).format("DD-MM-YYYY")).join(" , ")}} -->
         </template>
@@ -885,3 +887,29 @@ const enabled_print_preview = computed(()=>{
 })
 
 </script>
+
+<style scoped>
+  .unpaid::before{
+    content: "";
+    position: absolute;
+    width: 109%;
+    height: 2px;
+    background-color: black;
+    top:50%;
+    left:-1.5px;
+    rotate: 30deg;
+    opacity: 100%;
+  }
+
+  .unpaid::after{
+    content: "";
+    position: absolute;
+    width: 109%;
+    height: 2px;
+    background-color: black;
+    top:50%;
+    left:-1.5px;
+    rotate: -30deg;
+    opacity: 100%;
+  }
+</style>
