@@ -48,16 +48,20 @@
                       <th rowspan="2">Status</th>
                       <th rowspan="2">No Rek</th>
                       <th rowspan="2">Nama Bank</th>
-                      <th colspan="3">Standby <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_sb_dinas)  || 0) }})</span></th>
+                      <th colspan="3">Standby 1 <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_sb_dinas)  || 0) }})</span></th>
+                      <th colspan="3">Standby 2 <span class="text-sm">({{pointFormat((ttl_sb_gaji_2 + ttl_sb_makan_2 + ttl_sb_dinas_2)  || 0) }})</span></th>
                       <th colspan="3">Trip <span class="text-sm">({{pointFormat((ttl_uj_gaji + ttl_uj_makan + ttl_uj_dinas) || 0) }})</span></th>
                       <th rowspan="2">Potongan <span class="text-sm">({{pointFormat(ttl_potongan || 0) }})</span></th>
                       <th rowspan="2">U.Kerajinan <span class="text-sm">({{pointFormat(ttl_bonus || 0) }})</span></th>
-                      <th rowspan="2">Grand Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_sb_dinas + ttl_uj_gaji + ttl_uj_makan + ttl_uj_dinas - ttl_potongan + ttl_bonus ) || 0) }})</span></th>
+                      <th rowspan="2">Grand Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_sb_dinas + ttl_sb_gaji_2 + ttl_sb_makan_2 + ttl_sb_dinas_2 + ttl_uj_gaji + ttl_uj_makan + ttl_uj_dinas - ttl_potongan + ttl_bonus ) || 0) }})</span></th>
                     </tr>
                     <tr class="sticky top-[60px] !z-[2]">
                       <th >SB.Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji || 0) }})</span></th>
                       <th >SB.Makan <span class="text-sm">({{pointFormat(ttl_sb_makan || 0) }})</span></th>
                       <th >SB.Dinas <span class="text-sm">({{pointFormat(ttl_sb_dinas || 0) }})</span></th>
+                      <th >SB.Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji_2 || 0) }})</span></th>
+                      <th >SB.Makan <span class="text-sm">({{pointFormat(ttl_sb_makan_2 || 0) }})</span></th>
+                      <th >SB.Dinas <span class="text-sm">({{pointFormat(ttl_sb_dinas_2 || 0) }})</span></th>
                       <th >UJ.Gaji <span class="text-sm">({{pointFormat(ttl_uj_gaji || 0) }})</span></th>
                       <th >UJ.Makan <span class="text-sm">({{pointFormat(ttl_uj_makan || 0) }})</span></th>
                       <th >UJ.Dinas <span class="text-sm">({{pointFormat(ttl_uj_dinas || 0) }})</span></th>
@@ -81,12 +85,15 @@
                         <td>{{ pointFormat(detail.sb_gaji) }}</td>
                         <td>{{ pointFormat(detail.sb_makan) }}</td>
                         <td>{{ pointFormat(detail.sb_dinas) }}</td>
+                        <td>{{ pointFormat(detail.sb_gaji_2) }}</td>
+                        <td>{{ pointFormat(detail.sb_makan_2) }}</td>
+                        <td>{{ pointFormat(detail.sb_dinas_2) }}</td>
                         <td>{{ pointFormat(detail.uj_gaji) }}</td>
                         <td>{{ pointFormat(detail.uj_makan) }}</td>
                         <td>{{ pointFormat(detail.uj_dinas) }}</td>
                         <td>{{ pointFormat(detail.nominal_cut) }}</td>
                         <td>{{ pointFormat(detail.salary_bonus_nominal) }}</td>
-                        <td>{{ pointFormat(parseFloat(detail.sb_gaji) + parseFloat(detail.sb_makan) + parseFloat(detail.sb_dinas) +parseFloat(detail.uj_gaji) + parseFloat(detail.uj_makan) + parseFloat(detail.uj_dinas) - parseFloat(detail.nominal_cut) + parseFloat(detail.salary_bonus_nominal)) }}</td>
+                        <td>{{ pointFormat(parseFloat(detail.sb_gaji) + parseFloat(detail.sb_makan) + parseFloat(detail.sb_dinas) + parseFloat(detail.sb_gaji_2) + parseFloat(detail.sb_makan_2) + parseFloat(detail.sb_dinas_2) + parseFloat(detail.uj_gaji) + parseFloat(detail.uj_makan) + parseFloat(detail.uj_dinas) - parseFloat(detail.nominal_cut) + parseFloat(detail.salary_bonus_nominal)) }}</td>
                       </tr>
                     </template>
                   </tbody>
@@ -261,6 +268,33 @@ const ttl_sb_dinas = computed(()=>{
 
   details.value.forEach(e => {
     temp += parseFloat(e.sb_dinas); 
+  });
+  return temp;
+})
+
+const ttl_sb_gaji_2 = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.sb_gaji_2); 
+  });
+  return temp;
+})
+
+const ttl_sb_makan_2 = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.sb_makan_2); 
+  });
+  return temp;
+})
+
+const ttl_sb_dinas_2 = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.sb_dinas_2); 
   });
   return temp;
 })
