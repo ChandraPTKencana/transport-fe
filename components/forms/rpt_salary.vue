@@ -31,7 +31,7 @@
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
                   <thead >
                     <tr class="sticky -top-1 !z-[2]">
-                      <td colspan="21" class="!bg-slate-800 text-white font-bold">
+                      <td colspan="25" class="!bg-slate-800 text-white font-bold">
                         Detail
                       </td>
                     </tr>
@@ -54,6 +54,7 @@
                       <th rowspan="2">Potongan <span class="text-sm">({{pointFormat(ttl_potongan || 0) }})</span></th>
                       <th rowspan="2">U.Kerajinan <span class="text-sm">({{pointFormat(ttl_bonus || 0) }})</span></th>
                       <th rowspan="2">Grand Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_sb_dinas + ttl_sb_gaji_2 + ttl_sb_makan_2 + ttl_sb_dinas_2 + ttl_uj_gaji + ttl_uj_makan + ttl_uj_dinas - ttl_potongan + ttl_bonus ) || 0) }})</span></th>
+                      <th rowspan="2">Total Periode 2 <span class="text-sm">({{pointFormat((ttl_sb_gaji_2 + ttl_sb_makan_2 + ttl_sb_dinas_2 + ttl_bonus ) || 0) }})</span></th>
                     </tr>
                     <tr class="sticky top-[60px] !z-[2]">
                       <th >SB.Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji || 0) }})</span></th>
@@ -94,6 +95,7 @@
                         <td>{{ pointFormat(detail.nominal_cut) }}</td>
                         <td>{{ pointFormat(detail.salary_bonus_nominal) }}</td>
                         <td>{{ pointFormat(parseFloat(detail.sb_gaji) + parseFloat(detail.sb_makan) + parseFloat(detail.sb_dinas) + parseFloat(detail.sb_gaji_2) + parseFloat(detail.sb_makan_2) + parseFloat(detail.sb_dinas_2) + parseFloat(detail.uj_gaji) + parseFloat(detail.uj_makan) + parseFloat(detail.uj_dinas) - parseFloat(detail.nominal_cut) + parseFloat(detail.salary_bonus_nominal)) }}</td>
+                        <td>{{ pointFormat(parseFloat(detail.sb_gaji_2) + parseFloat(detail.sb_makan_2) + parseFloat(detail.sb_dinas_2) + parseFloat(detail.salary_bonus_nominal)) }}</td>
                       </tr>
                     </template>
                   </tbody>
