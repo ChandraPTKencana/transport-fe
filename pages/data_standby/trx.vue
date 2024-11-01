@@ -145,6 +145,9 @@
         <template #[`standby_mst_type`]="{item}">
           {{item.standby_mst_?.tipe}}
         </template>
+        <template #[`salary_paid`]="{item}">
+          {{ (item.salary_paid) ? $moment(item.salary_paid?.period_end).format("MM-Y") + '['+item.salary_paid?.period_part+']' : "" }}
+        </template>
         <template #[`standby_mst_amount`]="{item}">
           Rp. {{ pointFormat(item.standby_mst_?.amount || 0) }}
         </template>
@@ -773,6 +776,7 @@ const fields_thead=ref([
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
   {key:"detail_dates",label:"Detail Dates",type:'string'},
+  {key:"salary_paid",label:"Salary Paid",type:'string'},
   {key:"standby_trx_dtl_tanggal",label:"Detail Date",type:'date',dateformat:"DD-MM-Y",filter_on:1, tbl_show:0},
   {key:"supir",label:"Supir",filter_on:1,type:'string'},
   {key:"supir_rek_no",label:"No Rek Supir",filter_on:1,type:'string'},
@@ -899,6 +903,7 @@ const enabled_print_preview = computed(()=>{
     left:-1.5px;
     rotate: 30deg;
     opacity: 100%;
+    z-index: 0;
   }
 
   .unpaid::after{
@@ -911,5 +916,6 @@ const enabled_print_preview = computed(()=>{
     left:-1.5px;
     rotate: -30deg;
     opacity: 100%;
+    z-index: 0;
   }
 </style>

@@ -182,7 +182,7 @@
 
       <div v-else class="w-full h-full overflow-auto" role="sticky" ref="loadRef" @scroll="loadMore">
         <table class="tacky">
-          <thead  class="sticky top-0 !z-[2]">
+          <thead  class="sticky top-0 !z-[5]">
             <tr v-for="(ts,idx) in thead_split">
                 <template v-for="th in ts" >
                   <th v-if="th.permit" v-show="th.tbl_show" :rowspan="th.rowspan" :colspan="th.colspan" :class="th.freeze==1?'freeze':''">{{ th.label }}</th>
@@ -897,7 +897,7 @@ const checkbox_set = ($val)=>{
   position: -webkit-sticky;
   position: sticky;
   left: 0;
-  z-index: 2;
+  z-index: 3;
 }
 
 .my-list{
