@@ -408,7 +408,7 @@ const doSave = async () => {
     data_in.append("_method", "PUT");
   }
 
-  const { data, error, status } = await useMyFetch("/trx_trp_validasi", {
+  const { data, error, status } = await useMyFetch("/trx_trp_val_ticket", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -425,16 +425,6 @@ const doSave = async () => {
     useErrorStore().trigger(error);
     return;
   }
-  
-  trx_trp.value.val = data.value.val;
-  trx_trp.value.val_user = data.value.val_user;
-  trx_trp.value.val_by = data.value.val_by;
-  trx_trp.value.val_at = data.value.val_at;
-
-  trx_trp.value.val1 = data.value.val1;
-  trx_trp.value.val1_user = data.value.val1_user;
-  trx_trp.value.val1_by = data.value.val1_by;
-  trx_trp.value.val1_at = data.value.val1_at;
 
   trx_trp.value.val_ticket = data.value.val_ticket;
   trx_trp.value.val_ticket_by = data.value.val_ticket_by;
