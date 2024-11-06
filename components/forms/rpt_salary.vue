@@ -53,19 +53,21 @@
                       <th colspan="3">Trip <span class="text-sm">({{pointFormat((ttl_uj_gaji + ttl_uj_makan + ttl_uj_dinas) || 0) }})</span></th>
                       <th rowspan="2">Potongan <span class="text-sm">({{pointFormat(ttl_potongan || 0) }})</span></th>
                       <th rowspan="2">U.Kerajinan <span class="text-sm">({{pointFormat(ttl_bonus || 0) }})</span></th>
+                      <th rowspan="2">BPJS Kesehatan <span class="text-sm">({{pointFormat(ttl_bpjs_kesehatan || 0) }})</span></th>
+                      <th rowspan="2">BPJS Jamsos <span class="text-sm">({{pointFormat(ttl_bpjs_jamsos || 0) }})</span></th>
                       <th rowspan="2">Grand Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_sb_dinas + ttl_sb_gaji_2 + ttl_sb_makan_2 + ttl_sb_dinas_2 + ttl_uj_gaji + ttl_uj_makan + ttl_uj_dinas - ttl_potongan + ttl_bonus ) || 0) }})</span></th>
                       <th rowspan="2">Total Periode 2 <span class="text-sm">({{pointFormat((ttl_sb_gaji_2 + ttl_sb_makan_2 + ttl_sb_dinas_2 + ttl_bonus ) || 0) }})</span></th>
                     </tr>
                     <tr class="sticky top-[60px] !z-[2]">
-                      <th >SB.Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji || 0) }})</span></th>
-                      <th >SB.Makan <span class="text-sm">({{pointFormat(ttl_sb_makan || 0) }})</span></th>
-                      <th >SB.Dinas <span class="text-sm">({{pointFormat(ttl_sb_dinas || 0) }})</span></th>
-                      <th >SB.Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji_2 || 0) }})</span></th>
-                      <th >SB.Makan <span class="text-sm">({{pointFormat(ttl_sb_makan_2 || 0) }})</span></th>
-                      <th >SB.Dinas <span class="text-sm">({{pointFormat(ttl_sb_dinas_2 || 0) }})</span></th>
-                      <th >UJ.Gaji <span class="text-sm">({{pointFormat(ttl_uj_gaji || 0) }})</span></th>
-                      <th >UJ.Makan <span class="text-sm">({{pointFormat(ttl_uj_makan || 0) }})</span></th>
-                      <th >UJ.Dinas <span class="text-sm">({{pointFormat(ttl_uj_dinas || 0) }})</span></th>
+                      <th >Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji || 0) }})</span></th>
+                      <th >Makan <span class="text-sm">({{pointFormat(ttl_sb_makan || 0) }})</span></th>
+                      <th >Dinas <span class="text-sm">({{pointFormat(ttl_sb_dinas || 0) }})</span></th>
+                      <th >Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji_2 || 0) }})</span></th>
+                      <th >Makan <span class="text-sm">({{pointFormat(ttl_sb_makan_2 || 0) }})</span></th>
+                      <th >Dinas <span class="text-sm">({{pointFormat(ttl_sb_dinas_2 || 0) }})</span></th>
+                      <th >Gaji <span class="text-sm">({{pointFormat(ttl_uj_gaji || 0) }})</span></th>
+                      <th >Makan <span class="text-sm">({{pointFormat(ttl_uj_makan || 0) }})</span></th>
+                      <th >Dinas <span class="text-sm">({{pointFormat(ttl_uj_dinas || 0) }})</span></th>
                     </tr>
                   </thead>
                   <tbody ref="to_move">
@@ -93,6 +95,8 @@
                         <td>{{ pointFormat(detail.uj_makan) }}</td>
                         <td>{{ pointFormat(detail.uj_dinas) }}</td>
                         <td>{{ pointFormat(detail.nominal_cut) }}</td>
+                        <td>{{ pointFormat(detail.employee_bpjs_kesehatan) }}</td>
+                        <td>{{ pointFormat(detail.employee_bpjs_jamsos) }}</td>
                         <td>{{ pointFormat(detail.salary_bonus_nominal) }}</td>
                         <td>{{ pointFormat(parseFloat(detail.sb_gaji) + parseFloat(detail.sb_makan) + parseFloat(detail.sb_dinas) + parseFloat(detail.sb_gaji_2) + parseFloat(detail.sb_makan_2) + parseFloat(detail.sb_dinas_2) + parseFloat(detail.uj_gaji) + parseFloat(detail.uj_makan) + parseFloat(detail.uj_dinas) - parseFloat(detail.nominal_cut) + parseFloat(detail.salary_bonus_nominal)) }}</td>
                         <td>{{ pointFormat(parseFloat(detail.sb_gaji_2) + parseFloat(detail.sb_makan_2) + parseFloat(detail.sb_dinas_2) + parseFloat(detail.salary_bonus_nominal)) }}</td>
@@ -324,6 +328,24 @@ const ttl_uj_dinas = computed(()=>{
 
   details.value.forEach(e => {
     temp += parseFloat(e.uj_dinas); 
+  });
+  return temp;
+})
+
+const ttl_bpjs_kesehatan = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.employee_bpjs_kesehatan); 
+  });
+  return temp;
+})
+
+const ttl_bpjs_jamsos = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.employee_bpjs_jamsos); 
   });
   return temp;
 })
