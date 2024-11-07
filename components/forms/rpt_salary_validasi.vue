@@ -47,9 +47,9 @@
                       <th colspan="3">Standby 2 <span class="text-sm">({{pointFormat((ttl_sb_gaji_2 + ttl_sb_makan_2 + ttl_sb_dinas_2)  || 0) }})</span></th>
                       <th colspan="3">Trip <span class="text-sm">({{pointFormat((ttl_uj_gaji + ttl_uj_makan + ttl_uj_dinas) || 0) }})</span></th>
                       <th rowspan="2">Potongan <span class="text-sm">({{pointFormat(ttl_potongan || 0) }})</span></th>
-                      <th rowspan="2">U.Kerajinan <span class="text-sm">({{pointFormat(ttl_bonus || 0) }})</span></th>
                       <th rowspan="2">BPJS Kesehatan <span class="text-sm">({{pointFormat(ttl_bpjs_kesehatan || 0) }})</span></th>
                       <th rowspan="2">BPJS Jamsos <span class="text-sm">({{pointFormat(ttl_bpjs_jamsos || 0) }})</span></th>
+                      <th rowspan="2">U.Kerajinan <span class="text-sm">({{pointFormat(ttl_bonus || 0) }})</span></th>
                       <th rowspan="2">Grand Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_sb_dinas + ttl_sb_gaji_2 + ttl_sb_makan_2 + ttl_sb_dinas_2 + ttl_uj_gaji + ttl_uj_makan + ttl_uj_dinas - ttl_potongan + ttl_bonus ) || 0) }})</span></th>
                       <th rowspan="2">Total Periode 2 <span class="text-sm">({{pointFormat((ttl_sb_gaji_2 + ttl_sb_makan_2 + ttl_sb_dinas_2 + ttl_bonus ) || 0) }})</span></th>
                     </tr>
