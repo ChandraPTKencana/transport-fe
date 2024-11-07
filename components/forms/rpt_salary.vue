@@ -417,7 +417,7 @@ const callData = async () => {
 
   details.value = data.value.data.details;
 }
-
+const search = ref("");
 const source = computed(()=>{
   if(search.value!="")  
   return details.value.filter(

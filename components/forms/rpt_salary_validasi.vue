@@ -412,7 +412,7 @@ const disabled = computed(()=>{
   return false;
   // return rpt_salary.value.confirmed_by || rpt_salary.value.ref_id != null;
 });
-
+const search = ref("");
 const source = computed(()=>{
   if(search.value!="")  
   return details.value.filter(
