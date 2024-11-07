@@ -71,6 +71,7 @@
               <tr class="sticky top-0 !z-[2]">
                 <th>App 1</th>
                 <th>App 2</th>
+                <th>App 3</th>
                 <th>ID</th>
                 <th>Tanggal</th>
                 <th>Tipe</th>
@@ -96,6 +97,12 @@
                 <td>
                   <div class="flex items-center justify-center">
                     <IconsLine v-if="!salary_bonus.val2"/>
+                    <IconsCheck v-else/>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex items-center justify-center">
+                    <IconsLine v-if="!salary_bonus.val3"/>
                     <IconsCheck v-else/>
                   </div>
                 </td>
