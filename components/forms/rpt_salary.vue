@@ -7,7 +7,7 @@
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
-              <div class="w-1/2 sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Period End</label>
                 <div v-if="rpt_salary.id" class="card-border">
                   {{ $moment(rpt_salary.period_end).format("MM-Y") }}
@@ -24,13 +24,14 @@
                 </div>
                 <p class="text-red-500">{{ field_errors.period_end }}</p>
               </div>
+              <div v-if="details.length" class="w-full sm:w-6/12 md:w-4/12 lg:w-4/12 p-1">
+                <div class="font-bold"> Filter Nama </div>
+                <input class="" type="text" v-model="search" name="search"
+                  placeholder="Nama">
+              </div>
             </div>
 
-            <div v-if="details.length" class="w-full p-1">
-              <div class="font-bold"> Filter Nama </div>
-              <input class="" type="text" v-model="search" name="search"
-                placeholder="Nama">
-            </div>
+            
 
             <div v-if="source.length" class="w-full flex p-1 justify-between flex-wrap">
               <div class="w-full" role="sticky">

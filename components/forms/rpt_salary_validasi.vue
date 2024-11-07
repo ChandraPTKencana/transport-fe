@@ -13,13 +13,13 @@
                   {{ $moment(rpt_salary.period_end).format("MM-Y") }}
                 </div>
               </div>
+              <div v-if="details.length" class="w-full sm:w-6/12 md:w-4/12 lg:w-4/12 p-1">
+                <div class="font-bold"> Filter Nama </div>
+                <input class="" type="text" v-model="search" name="search"
+                  placeholder="Nama">
+              </div>
             </div>
-
-            <div v-if="details.length" class="w-full p-1">
-              <div class="font-bold"> Filter Nama </div>
-              <input class="" type="text" v-model="search" name="search"
-                placeholder="Nama">
-            </div>
+  
 
             <div v-if="source.length" class="w-full flex p-1 justify-between flex-wrap">
               <div class="w-full" role="sticky">
