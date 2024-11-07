@@ -47,12 +47,15 @@
               <div>
                 Di Validasi oleh : 
               </div>
-              <div v-if="salary_bonus.val1 || salary_bonus.val2" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
+              <div v-if="salary_bonus.val1  || salary_bonus.val2 || salary_bonus.val3" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
                 <div v-if="salary_bonus.val1">
                   App 1 : {{ salary_bonus.val1_by.username}} ( {{ salary_bonus.val1_at ? $moment(salary_bonus.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
                 <div v-if="salary_bonus.val2">
                   App 2 : {{ salary_bonus.val2_by.username}} ( {{ salary_bonus.val2_at ? $moment(salary_bonus.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
+                <div v-if="salary_bonus.val3">
+                  App 2 : {{ salary_bonus.val3_by.username}} ( {{ salary_bonus.val3_at ? $moment(salary_bonus.val3_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
               </div>
             </div>
@@ -212,6 +215,11 @@ const doSave = async () => {
   salary_bonus.value.val2_user = data.value.val2_user;
   salary_bonus.value.val2_by = data.value.val2_by;
   salary_bonus.value.val2_at = data.value.val2_at;
+
+  salary_bonus.value.val3 = data.value.val3;
+  salary_bonus.value.val3_user = data.value.val3_user;
+  salary_bonus.value.val3_by = data.value.val3_by;
+  salary_bonus.value.val3_at = data.value.val3_at;
 
 
 
