@@ -7,12 +7,12 @@
           @click="form_add()">
           <IconsPlus />
         </button>
-        <button v-if="useUtils().checkPermissions(['salary_bonus.modify']) && selected > -1 && [undefined,0].indexOf(salary_bonuses[selected].val1)>-1" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermissions(['salary_bonus.modify']) && selected > -1 && [undefined,0].indexOf(salary_bonuses[selected].val3)>-1" type="button" name="button" class="m-1 text-2xl "
           @click="form_edit()">
           <IconsEdit/>
         </button>
 
-        <button v-if="useUtils().checkPermissions(['salary_bonus.view']) && selected > -1 && [undefined,0].indexOf(salary_bonuses[selected].val1)>-1" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermissions(['salary_bonus.view']) && selected > -1" type="button" name="button" class="m-1 text-2xl "
           @click="form_view()">
           <IconsEyes/>
         </button>

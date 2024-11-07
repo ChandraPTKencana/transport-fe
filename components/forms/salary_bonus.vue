@@ -9,20 +9,25 @@
             <div class="w-full flex flex-row flex-wrap">
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Tanggal</label>
-                <ClientOnly>
-                  <vue-date-picker  v-model="salary_bonus.tanggal" 
-                  type="datetime"
-                  format="dd-MM-yyyy"
-                  :enable-time-picker = "false" 
-                  text-input
-                  teleport-center></vue-date-picker>
-                </ClientOnly>
+                <div v-if="disabled" class="card-border">
+                  {{ $moment(salary_bonus.tanggal).format("DD-MM-Y") }}
+                </div>
+                <div v-else>
+                  <ClientOnly>
+                    <vue-date-picker  v-model="salary_bonus.tanggal" 
+                    type="datetime"
+                    format="dd-MM-yyyy"
+                    :enable-time-picker = "false" 
+                    text-input
+                    teleport-center></vue-date-picker>
+                  </ClientOnly>
+                </div>
                 <p class="text-red-500">{{ field_errors.tanggal }}</p>
               </div>
 
               <div class="w-full sm:w-8/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Pekerja</label>
-                <WidthMiniList :arr="list_emp" :selected="selected_employee" :pure="selected_mini_temp" @setSelected="selected_employee=$event"/>
+                <WidthMiniList :arr="list_emp" :selected="selected_employee" :pure="selected_mini_temp" @setSelected="selected_employee=$event" :disabled="disabled"/>
                 <p class="text-red-500">{{ field_errors.employee_id }}</p>
               </div>
 
@@ -33,7 +38,7 @@
                   class="w-full h-full p-1" 
                   type="text" 
                   :value="salary_bonus.nominal || 0" 
-                  @input="salary_bonus.nominal = $event"/>
+                  @input="salary_bonus.nominal = $event" :disabled="disabled"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.nominal }}</p>
               </div>
@@ -41,7 +46,7 @@
               <div class="w-full sm:w-6/12 md:w-full lg:w-full flex flex-col flex-wrap p-1">
                 <label for="">Note</label>
                 <div>
-                  <textarea v-model="salary_bonus.note"></textarea>
+                  <textarea v-model="salary_bonus.note" :disabled="disabled"></textarea>
                 </div>
                 <p class="text-red-500">{{ field_errors.nominal }}</p>
               </div>
@@ -56,7 +61,7 @@
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
-            <button v-if="!disabled" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+            <button type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
               Save
             </button>
           </div>
@@ -283,7 +288,7 @@ const doSave = async () => {
 }
 
 const disabled = computed(()=>{
-  return (salary_bonus.value.val && salary_bonus.value.val1) || (useUtils().checkPermission('salary_bonus.val') && salary_bonus.value.val) || (useUtils().checkPermission('salary_bonus.val1') && salary_bonus.value.val1);
+  return (salary_bonus.value.val1);
 });
 
 
