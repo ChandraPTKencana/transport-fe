@@ -238,17 +238,16 @@
                               <textarea class="h-full" v-model="detail.note"></textarea>
                             </div>
                           </td>
-                          <td class="cell" :class="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled ? 'unselectable' : ''">
+                          <td class="cell" :class="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled ? 'unselectable' : 'unselectable'">
                             <div class="w-full h-full flex items-center justify-center">
-                              <div v-if="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled" class="text-3xl">
-                                <IconsTimes v-if="detail.be_paid==0" class="text-red-800"/>
-                                <IconsCheck v-else class="text-green-800"/>                                           
-                              </div>
-
-                              <button v-else type="button" @click="detail.be_paid = (detail.be_paid ? 0 : 1)" class="text-white w-auto rounded text-xl" :class="detail.be_paid?'bg-green-600' : 'bg-red-600'">
+                              <!-- <div v-if="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled" class="text-3xl">
+                              </div> -->
+                              <IconsTimes v-if="detail.be_paid==0" class="text-red-800"/>
+                              <IconsCheck v-else class="text-green-800"/>                                           
+                              <!-- <button v-else type="button" @click="detail.be_paid = (detail.be_paid ? 0 : 1)" class="text-white w-auto rounded text-xl" :class="detail.be_paid?'bg-green-600' : 'bg-red-600'">
                                 <IconsTimes v-if="detail.be_paid==0"/>
                                 <IconsCheck v-else/>             
-                              </button>
+                              </button> -->
                             </div>
                           </td>
 

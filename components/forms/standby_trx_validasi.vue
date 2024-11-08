@@ -202,12 +202,17 @@
                               {{detail.note}}
                             </div>
                           </td>
-                          <td class="cell">
+                          <td class="cell" :class="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled || is_view ? 'unselectable' : ''">
                             <div class="w-full h-full flex items-center justify-center">
-                              <div class="text-3xl">
+                              <div v-if="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled || is_view" class="text-3xl">
                                 <IconsTimes v-if="detail.be_paid==0" class="text-red-800"/>
                                 <IconsCheck v-else class="text-green-800"/>                                           
                               </div>
+
+                              <button v-else type="button" @click="detail.be_paid = (detail.be_paid ? 0 : 1)" class="text-white w-auto rounded text-xl" :class="detail.be_paid?'bg-green-600' : 'bg-red-600'">
+                                <IconsTimes v-if="detail.be_paid==0"/>
+                                <IconsCheck v-else/>             
+                              </button>
                             </div>
                           </td>
                         </tr>
@@ -416,6 +421,7 @@ const doSave = async () => {
   field_errors.value = {};
 
   const data_in = new FormData();
+  data_in.append("details", JSON.stringify(details.value));
   
   let $method = "post";
 

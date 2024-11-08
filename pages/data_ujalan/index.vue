@@ -200,7 +200,7 @@ const inject_params = () => {
   params.like = "";
   let words = JSON.parse(JSON.stringify(useCommonStore()._tv.global_keyword));
   if (words != "") {
-    params.like = `id:%${search.value}%,xto:%${search.value}%,tipe:%${search.value}%,jenis:%${search.value}%,harga:%${search.value}%`;
+    params.like = `id:%${words}%,xto:%${words}%,tipe:%${words}%,jenis:%${words}%,harga:%${words}%`;
   }
   params.sort = "";
   if (sort.value.field) {
@@ -377,7 +377,7 @@ const confirmed_delete = async() => {
   old['deleted_at'] = data.value.deleted_at;
   old['deleted_by'] = data.value.deleted_by;
   old['deleted_reason'] = data.value.deleted_reason;
-  old['class_h'] = checkStatus(old);
+
   if(filter_status.value!='all'){
     ujalans.value.splice(selected.value,1);
   }else{
