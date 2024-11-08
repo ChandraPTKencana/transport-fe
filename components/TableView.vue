@@ -185,7 +185,7 @@
           <thead  class="sticky top-0 !z-[5]">
             <tr v-for="(ts,idx) in thead_split">
                 <template v-for="th in ts" >
-                  <th v-if="th.permit" v-show="th.tbl_show" :rowspan="th.rowspan" :colspan="th.colspan" :class="th.freeze==1?'freeze':''">{{ th.label }}</th>
+                  <th v-if="th.permit" v-show="th.tbl_show" :rowspan="th.rowspan" :colspan="th.colspan" :class="th.freeze==1?'freeze':''" :style="{left:(th.freeze && th.freeze_left?th.freeze_left:'none')}">{{ th.label }}</th>
                 </template>
             </tr>
           </thead>
@@ -198,6 +198,7 @@
                   class="my-list"
                   v-if="tf.permit" v-show="tf.tbl_show"
                   :class="tb.class_h ? tb.class_h : ''"
+                  :style="{left:(tf.freeze && tf.freeze_left?tf.freeze_left:'none')}"
                 >
                   <div v-if="!tf.checkbox" class="w-full h-full flex items-center" :class="tf.class ? tf.class : 'justify-center'">
                     <!-- {{ tf.id }} -->
