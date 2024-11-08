@@ -174,7 +174,7 @@
     </PopupMini>
 
     <FormsExtraMoneyTrx :show="forms_extra_money_trx_show" :fnClose="()=>{forms_extra_money_trx_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_extra_money_trx_id" :p_data="extra_money_trxs" :list_cost_center="list_cost_center" :online_status="online_status"/>
-    <FormsExtraMoneyTrxValidasi :show="forms_extra_money_trx_valid_show" :fnClose="()=>{forms_extra_money_trx_valid_show=false}" :id="forms_extra_money_trx_valid_id" :p_data="extra_money_trxs" :is_view="forms_extra_money_trx_is_view"/>
+    <FormsExtraMoneyTrxValidasi :show="forms_extra_money_trx_valid_show" :fnClose="()=>{forms_extra_money_trx_valid_show=false}" :id="forms_extra_money_trx_valid_id" :p_data="extra_money_trxs" :is_view="forms_extra_money_trx_is_view" @setID="forms_extra_money_trx_valid_id=$event" @setIndex="selected=$event"/>
   
   </div>
 </template>

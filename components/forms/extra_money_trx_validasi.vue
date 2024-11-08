@@ -114,21 +114,42 @@
               <div>
                 Di Validasi oleh : 
               </div>
-              <div v-if="extra_money_trx.val1 || extra_money_trx.val2" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
+              <div v-if="extra_money_trx.val1 || extra_money_trx.val2 || extra_money_trx.val3 || extra_money_trx.val4 || extra_money_trx.val5 || extra_money_trx.val6" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
                 <div v-if="extra_money_trx.val1">
-                  App 1 : {{ extra_money_trx.val1_by.username}} ( {{ extra_money_trx.val1_at ? $moment(extra_money_trx.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                  Kasir : {{ extra_money_trx.val1_by.username}} ( {{ extra_money_trx.val1_at ? $moment(extra_money_trx.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
                 <div v-if="extra_money_trx.val2">
-                  App 2 : {{ extra_money_trx.val2_by.username}} ( {{ extra_money_trx.val2_at ? $moment(extra_money_trx.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                  Mandor : {{ extra_money_trx.val2_by.username}} ( {{ extra_money_trx.val2_at ? $moment(extra_money_trx.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
+                <div v-if="extra_money_trx.val3">
+                  KTU/W : {{ extra_money_trx.val3_by.username}} ( {{ extra_money_trx.val3_at ? $moment(extra_money_trx.val3_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
+                <div v-if="extra_money_trx.val4">
+                  Logistik : {{ extra_money_trx.val4_by.username}} ( {{ extra_money_trx.val4_at ? $moment(extra_money_trx.val4_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
+                <div v-if="extra_money_trx.val5">
+                  SPV Logistik : {{ extra_money_trx.val5_by.username}} ( {{ extra_money_trx.val5_at ? $moment(extra_money_trx.val5_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
+                <div v-if="extra_money_trx.val6">
+                  MGR Logistik : {{ extra_money_trx.val6_by.username}} ( {{ extra_money_trx.val6_at ? $moment(extra_money_trx.val6_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
               </div>
             </div>
 
+            <button type="button" name="button" class="w-36 h-9 m-1 grid place-items-center" @click="loadTop()">
+              <IconsCaretTop class="black"/>
+            </button>
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
             <button ref="it_val" v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
               Validasi
+              <div class="text-xs font-bold" v-if="save_state!=''">
+                {{ save_state }}
+              </div>
+            </button>
+            <button type="button" name="button" class="w-36 h-9 m-1 grid place-items-center" @click="loadDown()">
+              <IconsCaretDown class="black"/>
             </button>
           </div>
         </form>
@@ -272,11 +293,33 @@ const selected_temp_employee={
   note:""
 };
 
+let keydownListener = (event)=>{
+  // console.log(event.key)
+  if(event.key =='ArrowUp'){
+    loadTop();
+  }
+  if(event.key =='ArrowDown'){
+    loadDown();
+  }
+};
+
+// onMounted(async()=>{
+//   document.addEventListener('keydown', keydownListener);
+// })
+
+onBeforeUnmount(()=>{
+  document.removeEventListener('keydown', keydownListener);
+})
+
+
+
 const selected_employee = ref(JSON.parse(JSON.stringify(selected_temp_employee)));
 const selected_extra_money = ref(JSON.parse(JSON.stringify(selected_temp_extra_money)));
 
+const save_state = ref("");
 
 const doSave = async () => {
+  save_state.value = "PROSES...";
   useCommonStore().loading_full = true;
   field_errors.value = {};
 
@@ -307,6 +350,7 @@ const doSave = async () => {
   });
   useCommonStore().loading_full = false;
   if (status.value === 'error') {
+    save_state.value = "GAGAL";
     useErrorStore().trigger(error, field_errors);
     return;
   }
@@ -347,12 +391,14 @@ const doSave = async () => {
     props.p_data.splice(idx,1,{...extra_money_trx.value});    
   }
 
-
-  props.fnClose();
+  save_state.value = "BERHASIL";
+  // props.fnClose();
 }
 
 
 const callData = async () => {
+  save_state.value = '';
+
   useCommonStore().loading_full = true;
   const { data, error, status } = await useMyFetch("/extra_money_trx", {
     method: 'get',
@@ -404,17 +450,49 @@ const callData = async () => {
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
+    document.addEventListener('keydown', keydownListener);
+    extra_money_trx.value = {...extra_money_trx_temp};
     if(props.is_view==false){
       setTimeout(()=>{
         it_val.value.focus();
       },1);
     }
     callData();
+  }else{
+    document.removeEventListener('keydown', keydownListener);
   }
 }, {
   immediate: true
 });
 
+
+const emit = defineEmits(['setID','setIndex']);
+
+const loadDown=()=>{
+  let $idx = props.p_data.map((x)=>x.id).indexOf(props.id);
+  if($idx==props.p_data.length-1){
+    return;
+  }
+  $idx++;
+  emit('setID',props.p_data[$idx].id);
+  emit('setIndex',$idx);
+  setTimeout(()=>{
+    callData();
+  },100);
+};
+
+const loadTop=()=>{
+  let $idx = props.p_data.map((x)=>x.id).indexOf(props.id);
+  if($idx==0){
+    return;
+  }
+  $idx--;
+  emit('setID',props.p_data[$idx].id);
+  emit('setIndex',$idx);
+  setTimeout(()=>{
+    callData();
+  },100);
+};
 </script>
 <style scoped="">
 /* table.sticky thead th:nth-child(2) {
