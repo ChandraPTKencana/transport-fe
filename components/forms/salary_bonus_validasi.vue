@@ -9,6 +9,13 @@
             <div class="w-full flex flex-row flex-wrap">
 
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">Tipe</label>
+                <div class="card-border">
+                  {{ salary_bonus.type }}
+                </div>
+              </div>
+
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Tanggal</label>
                 <div class="card-border">
                   {{ $moment(salary_bonus.tanggal).format("DD-MM-Y") }}

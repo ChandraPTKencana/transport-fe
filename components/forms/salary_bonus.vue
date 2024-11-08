@@ -8,6 +8,15 @@
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">Tipe</label>
+                <select v-model="salary_bonus.type" :disabled="disabled">
+                  <option value="Lainnya">Lainnya</option>
+                  <option value="Kerajinan">Kerajinan</option>
+                </select>
+                <p class="text-red-500">{{ field_errors.type }}</p>
+              </div>
+
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Tanggal</label>
                 <div v-if="disabled" class="card-border">
                   {{ $moment(salary_bonus.tanggal).format("DD-MM-Y") }}
@@ -288,7 +297,7 @@ const doSave = async () => {
 }
 
 const disabled = computed(()=>{
-  return (salary_bonus.value.val1);
+  return (salary_bonus.value.val1) ? true : false;
 });
 
 
