@@ -249,6 +249,12 @@
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
+            <button v-if="is_view==0 && useUtils().checkPermissions(['standby_trx.detail.decide_paid']) && standby_trx.val2=='0'" type="submit" name="button" class="w-36 m-1 bg-green-600 text-white text-xs rounded-sm" @click.prevent="doSave('paid')">
+              Paid
+            </button>
+            <button v-if="is_view==0 && useUtils().checkPermissions(['standby_trx.detail.decide_paid']) && standby_trx.val2=='0'" type="submit" name="button" class="w-36 m-1 bg-red-600 text-white text-xs rounded-sm" @click.prevent="doSave('nopaid')">
+              NoPaid
+            </button>
             <button ref="it_val" v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
               Validasi
               <div class="text-xs font-bold" v-if="save_state!=''">
@@ -415,13 +421,27 @@ const selected_kernet = ref(JSON.parse(JSON.stringify(selected_mini_temp)));
 
 const save_state = ref("");
 
-const doSave = async () => {
+const doSave = async (paid_state) => {
   save_state.value = "PROSES...";
   useCommonStore().loading_full = true;
   field_errors.value = {};
 
   const data_in = new FormData();
-  data_in.append("details", JSON.stringify(details.value));
+
+  let tDetails = [...details.value];
+  if(paid_state=='paid'){    
+    tDetails = tDetails.map((x,k)=>{
+      x.be_paid=1;
+      return x;
+    });
+  }else if(paid_state=='nopaid'){
+    tDetails = tDetails.map((x,k)=>{
+      x.be_paid=0;
+      return x;
+    });
+  }
+
+  data_in.append("details", JSON.stringify(tDetails));
   
   let $method = "post";
 
