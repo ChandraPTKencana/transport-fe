@@ -22,13 +22,13 @@
                 </div>
               </div>
               
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-4/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Amount</label>
                 <div class="card-border">
                   {{ pointFormat(standby_mst.amount||0) }}
                 </div>
               </div>
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-4/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Peralihan?</label>
                 <div class="card-border !flex flex-row items-center">
                   <input :checked="standby_mst.is_transition" disabled="disabled" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded">
@@ -36,7 +36,14 @@
                 </div>
                 <p class="text-red-500">{{ field_errors.is_transition }}</p>
               </div>
-              
+              <div class="w-1/2 sm:w-4/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <label for="">Trip?</label>
+                <div class="card-border !flex flex-row items-center">
+                  <input :checked="standby_mst.is_trip" disabled="disabled" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded">
+                  <label class="w-full ml-1"> {{standby_mst.is_trip ? 'Ya' : 'Tidak'}} </label>
+                </div>
+                <p class="text-red-500">{{ field_errors.is_trip }}</p>
+              </div>
             </div>
 
             <div class="w-full flex grow p-1 2xl:overflow-hidden justify-between flex-wrap">

@@ -99,9 +99,9 @@
                   </div>
                 </div>
                 <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                  <label for="">Referensi</label>
+                  <label for="">Trx Trp ID#</label>
                   <div class="card-border">
-                    {{ standby_trx.ref }}
+                    {{ standby_trx.trx_trp_id }}
                   </div>
                 </div>
               </div>
@@ -162,7 +162,6 @@
                       {{  pointFormat(standby_trx.pv_total) }}
                     </div>
                   </div>
-                  
                 </div>
               </div>
 
@@ -171,13 +170,14 @@
                   <table class="tacky w-full !table-auto" style="white-space:normal;">
                     <thead >
                       <tr class="sticky -top-1 !z-[2]">
-                        <td :colspan="!disabled  ? 6 : 5" class="!bg-slate-800 text-white font-bold">
+                        <td :colspan="!disabled  ? 7 : 6" class="!bg-slate-800 text-white font-bold">
                           Detail Transaction
                         </td>
                       </tr>
                       <tr class="sticky top-7 !z-[2]">
                         <th class="!min-w-[50px] !w-[50px] !max-w-[50px] ">No</th>
-                        <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Tanggal</th>
+                        <th class="!min-w-[90px] !w-[90px] !max-w-[90px] ">Tanggal</th>
+                        <th class="!min-w-[55px] !w-[55px] !max-w-[55px] ">Waktu</th>
                         <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Foto</th>
                         <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Note</th>
                         <th class="!min-w-[70px] !w-[70px] !max-w-[70px] ">Dibayar</th>
@@ -190,6 +190,11 @@
                           <td class="cell">
                             <div class="w-full h-full flex items-center justify-center relative">
                               {{ $moment(detail.tanggal).format("DD-MM-YYYY") }}
+                            </div>
+                          </td>
+                          <td class="cell">
+                            <div class="w-full h-full flex items-center justify-center relative">
+                              {{ detail.waktu.substring(0,5)  }}
                             </div>
                           </td>
                           <td class="cell">
@@ -330,7 +335,7 @@ const standby_trx_temp = {
     no_pol: '',
     xto: "",
     note_for_remarks: "",
-    ref: "",
+    trx_trp_id: "",
     
     cost_center_code:"",
     cost_center_desc:"",

@@ -48,14 +48,20 @@
                 </div>
               </div>
 
-              <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+              <div class="w-full flex flex-col flex-wrap p-1">
                 <label for="">Note For Remarks</label>
                 <textarea disabled="disabled" v-model="extra_money_trx.note_for_remarks"></textarea>
                 <p class="text-red-500">{{ field_errors.note_for_remarks }}</p>
               </div>
 
-              <div class="p-1 w-full sm:w-full md:w-2/3 md:overflow-auto max-h-full">
-                <AttachmentSingle :label="'Attachment'" :value="extra_money_trx.attachment_1_preview"/>
+              <div class="w-full flex">
+                <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
+                  <AttachmentSingle :label="'Attachment'" :value="extra_money_trx.attachment_1_preview"/>
+                </div>
+  
+                <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
+                  <AttachmentSingle :label="'Attachment'" :value="extra_money_trx.attachment_2_preview"/>
+                </div>
               </div>
 
               <div class="w-full flex flex-wrap">

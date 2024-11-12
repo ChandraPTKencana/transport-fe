@@ -109,9 +109,9 @@
                   <p class="text-red-500">{{ field_errors.note_for_remarks }}</p>
                 </div>
                 <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                  <label for="">Referensi</label>
-                  <input type="text" v-model="standby_trx.ref" :disabled="standby_trx.pvr_no!=''"/>
-                  <p class="text-red-500">{{ field_errors.ref }}</p>
+                  <label for="">Trx Trp ID#</label>
+                  <input type="text" v-model="standby_trx.trx_trp_id" :disabled="standby_trx.pvr_no!=''"/>
+                  <p class="text-red-500">{{ field_errors.trx_trp_id }}</p>
                 </div>
               </div>
 
@@ -182,7 +182,7 @@
                   <table class="tacky w-full !table-auto" style="white-space:normal;">
                     <thead >
                       <tr class="sticky -top-1 !z-[2]">
-                        <td :colspan="!disabled  ? 6 : 5" class="!bg-slate-800 text-white font-bold">
+                        <td :colspan="!disabled  ? 7 : 6" class="!bg-slate-800 text-white font-bold">
                           Detail Transaction
                         </td>
                       </tr>
@@ -194,6 +194,7 @@
                         </th> 
                         <th class="!min-w-[50px] !w-[50px] !max-w-[50px] ">No</th>
                         <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Tanggal</th>
+                        <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Waktu</th>
                         <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Foto</th>
                         <th class="!min-w-[200px] !w-[200px] !max-w-[200px] ">Note</th>
                         <th class="!min-w-[70px] !w-[70px] !max-w-[70px] ">Dibayar</th>
@@ -221,6 +222,19 @@
                                   :enable-time-picker = "false" 
                                   text-input
                                   teleport-center></vue-date-picker>
+                                </ClientOnly>
+                                <!-- {{ $moment(detail.tanggal).format("DD-MM-YYYY") }} -->
+                            </div>
+                          </td>
+                          <td class="cell">
+                            <div class="w-full h-full flex items-center justify-center relative">
+                              <ClientOnly>
+                                  <vue-date-picker  v-model="detail.waktu" 
+                                  type="time" 
+                                  format="HH:mm"
+                                  text-input
+                                  teleport-center
+                                  time-picker></vue-date-picker>
                                 </ClientOnly>
                                 <!-- {{ $moment(detail.tanggal).format("DD-MM-YYYY") }} -->
                             </div>
@@ -351,7 +365,7 @@ const standby_trx_temp = {
     no_pol: '',
     xto: "",
     note_for_remarks: "",
-    ref: "",
+    trx_trp_id: "",
     
     // cost_center_code:"",
     // cost_center_desc:"",
@@ -381,6 +395,10 @@ const detail = ref({
   id:"",
   tanggal: new Date(),
   // tanggal: new Date(new Date().setDate(new Date().getDate()-1)),
+  waktu:{
+    hours: new Date().getHours(),
+    minutes: new Date().getMinutes()
+  },
   note:"",
   be_paid:0,
   p_status:"",
@@ -411,13 +429,14 @@ const doSave = async () => {
 
   data_in.append("xto", standby_trx.value.xto);
   data_in.append("note_for_remarks", standby_trx.value.note_for_remarks);
-  data_in.append("ref", standby_trx.value.ref);
+  data_in.append("trx_trp_id", standby_trx.value.trx_trp_id);
   // data_in.append("cost_center_code", standby_trx.value.cost_center_code);
 
   // data_in.append("online_status", props.online_status);
   let tDetails = [...details.value];
   tDetails = tDetails.map((x,k)=>{
     x.tanggal = (x.tanggal) ? $moment(x.tanggal).format("Y-MM-DD") : '';
+    x.waktu = x.waktu ? x.waktu.hours+":"+x.waktu.minutes : '';
     x.attachment_1_preview = x.attachment_1_preview ? "Exists" : null;
     data_in.append(`attachments[${k}]`, x.attachment_1);
     return x;
@@ -579,6 +598,18 @@ const callData = async () => {
 
   let p_status = "Edit";
   details.value = data.value.data.details.map((x)=>{
+
+    if(x['waktu']!=""){
+      let forWaktu = x['waktu'].split(":");
+  
+      x['waktu'] = {
+        hours: forWaktu[0],
+        minutes: forWaktu[1]
+      };
+    }else{
+      x['waktu'] = null;
+    }
+
     x["p_status"]= p_status;
     x["key"] = x["ordinal"];
     return x;

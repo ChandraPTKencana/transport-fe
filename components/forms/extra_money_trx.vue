@@ -8,33 +8,38 @@
           <div class="w-full flex flex-row flex-wrap">
             <div class="w-full sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">Trx Trp #ID</label>
-              <input v-model="extra_money_trx.prev_trx_trp_id">
+              <input v-model="extra_money_trx.prev_trx_trp_id" :disabled="disabled">
               <p class="text-red-500">{{ field_errors.prev_trx_trp_id }}</p>
             </div>
             <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">Tanggal</label>
               <div class="grow">
-                <ClientOnly>
-                  <vue-date-picker  v-model="extra_money_trx.tanggal" 
-                  type="datetime" 
-                  format="dd-MM-yyyy"
-                  :enable-time-picker = "false" 
-                  text-input
-                  teleport-center></vue-date-picker>
-                </ClientOnly>
+                <div v-if="disabled" class="card-border">
+                  {{ $moment(extra_money_trx.tanggal).format("DD-MM-Y") }}
+                </div>
+                <div v-else>
+                  <ClientOnly>
+                    <vue-date-picker  v-model="extra_money_trx.tanggal" 
+                    type="datetime" 
+                    format="dd-MM-yyyy"
+                    :enable-time-picker = "false" 
+                    text-input
+                    teleport-center></vue-date-picker>
+                  </ClientOnly>
+                </div>
               </div>
               <p class="text-red-500">{{ field_errors.tanggal }}</p>
             </div>
             <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">Payment Method</label>
-              <select v-model="extra_money_trx.payment_method_id" :disabled="extra_money_trx.val==1">
+              <select v-model="extra_money_trx.payment_method_id" :disabled="disabled">
                 <option v-for="pm in list_payment_methods" :value="pm.id">{{pm.name}}</option>
               </select>
               <p class="text-red-500">{{ field_errors.payment_method_id }}</p>
             </div>
             <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">No Pol</label>
-              <input type="text" list="vehicle"  v-model="extra_money_trx.no_pol" :disabled="extra_money_trx.val==1"/>
+              <input type="text" list="vehicle"  v-model="extra_money_trx.no_pol" :disabled="disabled "/>
               <datalist id="vehicle">
                 <option v-for="lv in list_vehicle" :value="lv.no_pol" >{{lv.no_pol}}</option>
               </datalist>
@@ -43,24 +48,28 @@
 
             <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
               <label for="">Pekerja</label>
-              <WidthMiniList :arr="list_emp" :selected="selected_employee" :pure="selected_temp_employee" @setSelected="selected_employee=$event"/>
+              <WidthMiniList :arr="list_emp" :selected="selected_employee" :pure="selected_temp_employee" @setSelected="selected_employee=$event" :disabled="disabled"/>
               <p class="text-red-500">{{ field_errors.employee_id }}</p>
             </div>
 
             <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
               <label for="">Uang Tambahan</label>
-              <WidthMiniList :arr="list_emo" :selected="selected_extra_money" :pure="selected_temp_extra_money" @setSelected="selected_extra_money=$event"/>
+              <WidthMiniList :arr="list_emo" :selected="selected_extra_money" :pure="selected_temp_extra_money" @setSelected="selected_extra_money=$event" :disabled="disabled"/>
               <p class="text-red-500">{{ field_errors.extra_money_id }}</p>
             </div>
 
-            <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+            <div class="w-full flex flex-col flex-wrap p-1">
               <label for="">Note For Remarks</label>
-              <textarea v-model="extra_money_trx.note_for_remarks"></textarea>
+              <textarea v-model="extra_money_trx.note_for_remarks" :disabled="disabled"></textarea>
               <p class="text-red-500">{{ field_errors.note_for_remarks }}</p>
             </div>
+            
+            <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
+              <AttachmentSingle :label="'Attachment'" :value="extra_money_trx.attachment_1_preview" @setFile="extra_money_trx.attachment_1=$event"  @setPreview="extra_money_trx.attachment_1_preview=$event" :can_remove="!disabled" :disabled="disabled"/>
+            </div>
 
-            <div class="p-1 w-full sm:w-full md:w-2/3 md:overflow-auto max-h-full">
-              <AttachmentSingle :label="'Attachment'" :value="extra_money_trx.attachment_1_preview" @setFile="extra_money_trx.attachment_1=$event"  @setPreview="extra_money_trx.attachment_1_preview=$event" :can_remove="true"/>
+            <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
+              <AttachmentSingle :label="'Attachment'" :value="extra_money_trx.attachment_2_preview" @setFile="extra_money_trx.attachment_2=$event"  @setPreview="extra_money_trx.attachment_2_preview=$event" :can_remove="true"/>
             </div>
           </div>
         </div>
@@ -69,7 +78,7 @@
           <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
             Cancel
           </button>
-          <button v-if="!disabled" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+          <button type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
             Save
           </button>
         </div>
@@ -140,6 +149,8 @@ const extra_money_trx_temp = {
     prev_trx_trp_id:"",
     attachment_1:"",
     attachment_1_preview:"",
+    attachment_2:"",
+    attachment_2_preview:"",
 };
 let extra_money_trx_loaded = {...extra_money_trx_temp};
 const extra_money_trx = ref({...extra_money_trx_temp});
@@ -162,6 +173,8 @@ const doSave = async () => {
   data_in.append("payment_method_id", extra_money_trx.value.payment_method_id);
   data_in.append("attachment_1", extra_money_trx.value.attachment_1);
   data_in.append("attachment_1_preview", extra_money_trx.value.attachment_1_preview);
+  data_in.append("attachment_2", extra_money_trx.value.attachment_2);
+  data_in.append("attachment_2_preview", extra_money_trx.value.attachment_2_preview);
 
   let $method = "post";
 
@@ -314,7 +327,7 @@ const list_emo = computed(()=>{
 
 
 const disabled = computed(()=>{
-  return false;
+  return (extra_money_trx.value.val1) ? true : false;
 });
 
 const callData = async () => {

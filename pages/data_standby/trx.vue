@@ -791,7 +791,7 @@ const fields_thead=ref([
   {key:"details_count",label:"Jlh SB",class:" justify-end",type:'number'},
   {key:"sb_total",label:"Total SB",class:" justify-end",type:'number'},
   {key:"note_for_remarks",label:"Note untuk Remarks"},
-  {key:"ref",label:"Ref"},
+  {key:"trx_trp_id",label:"Trx Trp"},
   {key:"transition_target",label:"Pengalihan",filter_on:1,type:"select",select_item:useCommonStore().list_pabrik},
   {key:"transition_type",label:"Tipe Pengalihan",type:"select",select_item:[{k:'From',v:'Dari'},{k:'To',v:'Ke'}]},
   {key:"cost_center",label:"Cost Center",childs:[
