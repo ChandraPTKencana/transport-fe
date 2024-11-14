@@ -2,95 +2,59 @@
   <div class="w-full h-full flex flex-col">
     <Header :title="'List User'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
-      <div class="w-full flex">
-        <button type="button" name="button" class="m-1 text-2xl "
-          @click="form_add()">
-          <IconsPlus />
-        </button>
-        <button type="button" name="button" class="m-1 text-2xl "
-          @click="form_edit()">
-          <IconsEdit />
-        </button>
-        <button type="button" name="button" class="m-1 text-2xl "
-          @click="remove()">
-          <IconsDelete />
-        </button>
-
-        <button type="button" name="button" class="m-1 text-xs "
-          @click="call2FAQR()">
-          SET 2FA
-        </button>
-        <!-- <button type="button" name="button" style="margin:4px; " @click="cetak()">
-          <fa :icon="['fas','print']"/>
-        </button> -->
-      </div>
-      <form action="#"  class="w-full flex p-1">
-        <div class="grow">
-          <div class="font-bold"> Keyword </div>
-          <input class="" type="text" v-model="search" name="search"
-            placeholder="Keyword">
-        </div>
-        <div class="pl-1">
-          <div class="font-bold"> Sort By </div>
-          <select class="" v-model="sort.field">
-            <option value=""></option>
-            <option value="username">Username</option>
-            <option value="hak_akses">Hak Akses</option>
-            <option value="is_active">Status</option>
-          </select>
-        </div>
-        <div class="pl-1">
-          <div class="font-bold"> Sort Order </div>
-          <select class="" v-model="sort.by">
-            <option value="asc">Asc</option>
-            <option value="desc">Desc</option>
-          </select>
-        </div>
-        <div class="flex items-end pl-1">
-          <button class="" type="submit" name="button" @click.prevent="searching()">
-            <IconsSearch class="text-2xl" />
+      <div class="w-full flex justify-between flex-wrap">
+        <div class="grow flex">
+          <div class="m-1">
+            <select class="" v-model="filter_status" >
+              <option value="active">Active</option>
+              <option value="nonactive">Nonactive</option>
+              <!-- <option value="deleted">Trash</option> -->
+              <option value="all">All</option>
+            </select>
+          </div>
+          <button v-if="enabled_copy" type="button" name="button" class="m-1 text-2xl "
+            @click="form_copy()">
+            <IconsCopy />
           </button>
-        </div>
-      </form>
-      <div class="w-full flex justify-center items-center grow h-0 p-1">
+          <button v-if="enabled_add" type="button" name="button" class="m-1 text-2xl "
+            @click="form_add()">
+            <IconsPlus />
+          </button>
+          <button v-if="enabled_edit" type="button" name="button" class="m-1 text-2xl "
+            @click="form_edit()">
+            <IconsEdit/>
+          </button>
+          <!-- <button v-if="selected > -1" type="button" name="button" class="m-1 text-2xl "
+            @click="form_view()">
+            <IconsEyes/>
+          </button> -->
+          <button  v-if="enabled_remove" type="button" name="button" class="m-1 text-2xl "
+            @click="remove()">
+            <IconsDelete />
+          </button>
 
-        <div v-if="users.length == 0" class="">
-          Maaf Tidak Ada Record
-        </div>
-
-        <div v-else class="w-full h-full overflow-auto" role="sticky" ref="loadRef" @scroll="loadMore">
-          <table class="tacky">
-            <thead>
-              <tr class="sticky top-0 !z-[2]">
-                <th>No.</th>
-                <th>User ID</th>
-                <th>Username</th>
-                <th>Hak Akses</th>
-                <th>Group</th>
-                <th>Status</th>
-                <th>Tanggal Dibuat</th>
-                <th>Tanggal Diubah</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(user, index) in users" :key="index" @click="selected = index"
-                :class="selected == index ? 'active' : ''">
-                <td>{{ index + 1 }}.</td>
-                <td>{{ user.id }}</td>
-                <td class="bold">{{ user.username }}</td>
-                <td>{{ user.hak_akses }}</td>
-                <td>{{ name_of_groups(user) }}</td>
-                <td>{{ user.is_active ? 'Aktif' : 'Nonaktif' }}</td>
-                <td>{{ $moment(user.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ $moment(user.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <button type="button" name="button" class="m-1 text-xs "
+            @click="call2FAQR()">
+            SET 2FA
+          </button>
+          <!-- <button v-if="enabled_validasi" type="button" name="button" class="m-1 text-2xl "
+            @click="validasi()">
+            <IconsSignature />
+          </button> -->
+          <!-- <button v-if="enabled_print_preview" type="button" name="button" class="m-1 text-2xl "
+            @click="printPreview()">
+            <IconsPrinterEye />
+          </button> -->
         </div>
       </div>
-
-      <!-- {{ data.greetings }} -->
-      <!-- {{ users }} -->
+      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="users" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event"  @doFilter="searching()" :rowBgColor="rowBgColor">
+        <template #[`group`]="{item}">
+          {{ name_of_groups(item) }}
+        </template>
+        <template #[`is_active`]="{item}">
+          {{ item.is_active ? "Aktif" : "Tidak Aktif" }}
+        </template>
+      </TableView>
     </div>
   </div>
   <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
@@ -120,6 +84,32 @@ definePageMeta({
   ],
 });
 
+const rowBgColor=(data)=>{
+  if(data.is_active==0) return "!bg-red-400";
+  // if(data.pvr_id > 0 && data.req_deleted == 1) return "!bg-yellow-300"; 
+  // if(data.pv_id > 0) return "!bg-blue-300"; 
+  // if(data.val == 0 || data.val1 == 0) return "!bg-gray-300"; 
+  return "";
+}
+
+const filter_status = ref("active")
+watch(()=>filter_status.value,(newval)=>{
+  // fields_thead.value.map((x)=>{
+  //   let in_list=["deleted_by_username","deleted_at","deleted_reason"].indexOf(x.key) > -1;
+  //   if(["all","deleted"].indexOf(newval) > -1){
+  //     if( in_list )
+  //       x.tbl_show =  1; 
+  //   }else{
+  //     if( in_list )
+  //       x.tbl_show =  0; 
+  //   }
+  //   return x;
+  // });
+
+  searching();
+}, {
+  immediate: false
+})
 
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
@@ -134,7 +124,7 @@ const { data: users } = await useAsyncData(async () => {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
-    params: params,
+    params: {filter_status},
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -161,15 +151,22 @@ const scrolling = ref({
   may_get_data: true
 });
 
+const dt_selected = computed(()=>{  
+  return users.value[selected.value];
+})
+
 const inject_params = () => {
   params.like = "";
-  if (search.value != "") {
-    params.like = `id:%${search.value}%,username:%${search.value}%`;
+  let words = JSON.parse(JSON.stringify(useCommonStore()._tv.global_keyword));
+  if (words != "") {
+    params.like = `id:%${words}%,username:%${words}%`;
   }
   params.sort = "";
   if (sort.value.field) {
     params.sort = sort.value.field + ":" + sort.value.by;
   }
+  params.filter_model = JSON.stringify(useCommonStore()._tv.filter_model);
+
 };
 
 const name_of_groups = (user) => {
@@ -189,6 +186,7 @@ const callData = async () => {
   scrolling.value.may_get_data = false;
   params.page = scrolling.value.page;
   if (params.page == 1) users.value = [];
+  params.filter_status = filter_status.value;
 
   const { data, error, status } = await useMyFetch("/users", {
     method: 'get',
@@ -214,48 +212,56 @@ const callData = async () => {
 
   if (scrolling.value.page == 1) {
     users.value = data.value.data;
-    if (loadRef.value) loadRef.value.scrollTop = 0;
+    // if (loadRef.value) loadRef.value.scrollTop = 0;
   } else if (scrolling.value.page > 1) {
     users.value = [...users.value, ...data.value.data];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
   }
-}
-
-const loadMore = async () => {
-
-  if (!scrolling.value.may_get_data) return;
-  let parent = loadRef.value;
-
-  if (parent.scrollLeft != scrolling.value.scrollLeft) {
-    scrolling.value.scrollLeft = parent.scrollLeft;
-    return;
-  }
-
-  if (scrolling.value.is_last_record) return;
-
-  let stuck = Math.round(parent.scrollTop) + parent.clientHeight >= parent.scrollHeight - 1 ? true : false;
-  if (!stuck) return;
-
-  scrolling.value.page++;
-  await callData();
+  useCommonStore()._tv.filter_box = false;
 
 }
+
+// const loadMore = async () => {
+
+//   if (!scrolling.value.may_get_data) return;
+//   let parent = loadRef.value;
+
+//   if (parent.scrollLeft != scrolling.value.scrollLeft) {
+//     scrolling.value.scrollLeft = parent.scrollLeft;
+//     return;
+//   }
+
+//   if (scrolling.value.is_last_record) return;
+
+//   let stuck = Math.round(parent.scrollTop) + parent.clientHeight >= parent.scrollHeight - 1 ? true : false;
+//   if (!stuck) return;
+
+//   scrolling.value.page++;
+//   await callData();
+
+// }
 
 const searching = () => {
+  selected.value = -1;
   scrolling.value.page = 1;
   scrolling.value.is_last_record = false;
   inject_params();
   callData();
 }
 
-const router = useRouter();
+// const router = useRouter();
 
 const forms_user_show =  ref(false);
 const forms_user_id = ref(0);
+const forms_user_copy = ref(0);
+const forms_user_is_view = ref(false);
+
 const form_add = () => {
   forms_user_id.value = 0;
+  forms_user_is_view.value = false;
+  forms_user_copy.value = false;
   forms_user_show.value = true;
 }
 
@@ -267,10 +273,23 @@ const form_edit = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_user_id.value = users.value[selected.value].id;
+    forms_user_is_view.value = false;
+    forms_user_copy.value = false;
     forms_user_show.value = true;
   }
 };
 
+const form_copy = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_user_id.value = users.value[selected.value].id;
+    forms_user_is_view.value = false;
+    forms_user_copy.value = true;
+    forms_user_show.value = true;
+    // router.push({ name: 'data_trx_trp-form', query: { id: trx_trps.value[selected.value].id } });
+  }
+};
 
 const delete_data = ref({});
 const delete_box = ref(false);
@@ -311,7 +330,19 @@ const confirmed_delete = async() => {
     useErrorStore().trigger(error);
     return;
   }
-  users.value.splice(selected.value,1);
+  let old = {...users.value[selected.value]};
+  old['deleted'] = data.value.deleted;
+  old['deleted_user'] = data.value.deleted_user;
+  old['deleted_at'] = data.value.deleted_at;
+  old['deleted_by'] = data.value.deleted_by;
+  old['deleted_reason'] = data.value.deleted_reason;
+
+  if(filter_status.value!='all'){
+    users.value.splice(selected.value,1);
+  }else{
+    users.value.splice(selected.value,1,{...old});
+  }
+
   selected.value = -1;
   delete_box.value = false;
 }
@@ -355,6 +386,49 @@ const call2FAQR = async () => {
   qr_img.value = data.value;
   qr_popup.value = true;
 }
+
+
+const fields_thead=ref([
+  {key:"no",label:"No",isai:true},
+  {key:"id",label:"ID",filter_on:1,type:"number"},
+  {key:"username",label:"Username",freeze:1, filter_on:1,type:'string',sort:{priority:1,type:"asc"}},
+  {key:"hak_akses",label:"Hak Akses",filter_on:1,type:'string'},
+  {key:"group",label:"Group",filter_on:1,type:'string'},
+  {key:"is_active",label:"Status",filter_on:1,type:"select",select_item:[{k:'1',v:'Ya'},{k:'0',v:'Tidak'}]},
+  {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
+  {key:"updated_at",label:"Updated At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
+  // {key:"deleted_by_username",label:"Deleted By",tbl_show:1},
+  // {key:"deleted_at",label:"Deleted At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1, tbl_show:1},
+  // {key:"deleted_reason",label:"Deleted Reason", tbl_show:1,type:'string',filter_on:1},
+]);
+
+const enabled_copy = computed(()=>{  
+  let result = selected.value > -1 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  && useUtils().checkPermission('user.create');
+  return result;
+})
+
+const enabled_add = computed(()=>{  
+  let result = ['active','nonactive','all'].indexOf(filter_status.value) > -1  
+  && useUtils().checkPermission('user.create');
+  return result;
+})
+
+const enabled_edit = computed(()=>{  
+  let result = selected.value > -1 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  && useUtils().checkPermissions(['user.modify']);
+  return result;
+})
+
+
+const enabled_remove = computed(()=>{  
+  let result = selected.value > -1
+  && useUtils().checkPermission('user.remove') 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1;
+  return result;
+})
 
 // const form_permission = () => {
 //   if (selected.value == -1) {
