@@ -2,128 +2,82 @@
   <div class="w-full h-full flex flex-col">
     <Header :title="'List Salary Additional'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
-      <div class="w-full flex">
-        <button v-if="useUtils().checkPermission('salary_bonus.create')" type="button" name="button" class="m-1 text-2xl "
-          @click="form_add()">
-          <IconsPlus />
-        </button>
-        <button v-if="useUtils().checkPermissions(['salary_bonus.modify']) && selected > -1 && [undefined,0].indexOf(salary_bonuses[selected].val3)>-1" type="button" name="button" class="m-1 text-2xl "
-          @click="form_edit()">
-          <IconsEdit/>
-        </button>
+      <div class="w-full flex justify-between flex-wrap">
+        <div class="grow flex">
+          <div class="m-1">
+            <select class="" v-model="filter_status" >
+              <option value="undone">Undone</option>
+              <option value="done">Done</option>
+              <option value="deleted">Trash</option>
+              <option value="all">All</option>
+              <!-- <option value="req_deleted">Req Delete</option> -->
+            </select>
+          </div>
 
-        <button v-if="useUtils().checkPermissions(['salary_bonus.view']) && selected > -1" type="button" name="button" class="m-1 text-2xl "
-          @click="form_view()">
-          <IconsEyes/>
-        </button>
-
-        
-        <button v-if="useUtils().checkPermission('salary_bonus.remove') && selected > -1" type="button" name="button" class="m-1 text-2xl "
-          @click="remove()">
-          <IconsDelete />
-        </button>
-
-          
-        <button v-if="useUtils().checkPermissions(['salary_bonus.val1','salary_bonus.val2','salary_bonus.val3']) && selected > -1" type="button" name="button" class="m-1 text-2xl "
-          @click="validasi()">
-          <IconsSignature />
-        </button>
-      </div>
-
-      <!-- <form action="#" class="w-full flex p-1">
-        <div class="grow">
-          <div class="font-bold"> Keyword </div>
-          <input class="" type="text" v-model="search" name="search"
-            placeholder="Keyword">
-        </div>
-        <div class="pl-1">
-          <div class="font-bold"> Sort By </div>
-          <select class="" v-model="sort.field">
-            <option value=""></option>
-            <option value="id">ID</option>
-            <option value="xto">To</option>
-            <option value="jenis">Jenis</option>
-            <option value="tipe">Tipe</option>
-          </select>
-        </div>
-        <div class="pl-1">
-          <div class="font-bold"> Sort Order </div>
-          <select class="" v-model="sort.by">
-            <option value="asc">Asc</option>
-            <option value="desc">Desc</option>
-          </select>
-        </div>
-        <div class="flex items-end pl-1">
-          <button class="" type="submit" name="button" @click.prevent="searching()">
-            <IconsSearch class="text-2xl" />
+          <button v-if="enabled_add" type="button" name="button" class="m-1 text-2xl "
+            @click="form_add()">
+            <IconsPlus />
           </button>
-        </div>
-      </form> -->
-      <div class="w-full flex justify-center items-center grow h-0 p-1">
+          <button v-if="enabled_edit" type="button" name="button" class="m-1 text-2xl "
+            @click="form_edit()">
+            <IconsEdit/>
+          </button>
+          <button v-if="selected > -1" type="button" name="button" class="m-1 text-2xl "
+            @click="form_view()">
+            <IconsEyes/>
+          </button>
+          <button  v-if="enabled_remove" type="button" name="button" class="m-1 text-2xl "
+            @click="remove()">
+            <IconsDelete />
+          </button>
+          <button v-if="enabled_validasi" type="button" name="button" class="m-1 text-2xl "
+            @click="validasi()">
+            <IconsSignature />
+          </button>
 
-        <div v-if="salary_bonuses.length == 0" class="">
-          Maaf Tidak Ada Record
         </div>
-
-        <div v-else class="w-full h-full overflow-auto" role="sticky" ref="loadRef" @scroll="loadMore">
-          <table class="tacky">
-            <thead>
-              <tr class="sticky top-0 !z-[2]">
-                <th>App 1</th>
-                <th>App 2</th>
-                <th>App 3</th>
-                <th>ID</th>
-                <th>Tanggal</th>
-                <th>Tipe</th>
-                <th>Nama Karyawan</th>
-                <th>No KTP</th>
-                <th>No SIM</th>
-                <th>Nominal</th>
-                <th>Note</th>
-                <th>File</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(salary_bonus, index) in salary_bonuses" :key="index" @click="selected = index"
-                :class="selected == index ? 'active' : ''">
-                <td>
-                  <div class="flex items-center justify-center">
-                    <IconsLine v-if="!salary_bonus.val1"/>
-                    <IconsCheck v-else/>
-                  </div>
-                </td>
-                <td>
-                  <div class="flex items-center justify-center">
-                    <IconsLine v-if="!salary_bonus.val2"/>
-                    <IconsCheck v-else/>
-                  </div>
-                </td>
-                <td>
-                  <div class="flex items-center justify-center">
-                    <IconsLine v-if="!salary_bonus.val3"/>
-                    <IconsCheck v-else/>
-                  </div>
-                </td>
-                <td class="bold">{{ salary_bonus.id }}</td>
-                <td>{{ salary_bonus.tanggal ? $moment(salary_bonus.tanggal).format("DD-MM-Y") : "" }}</td>
-                <td>{{ salary_bonus.type }}</td>
-                <td>{{ salary_bonus.employee?.name }}</td>
-                <td>{{ salary_bonus.employee?.ktp_no }}</td>
-                <td>{{ salary_bonus.employee?.sim_no }}</td>
-                <td>{{ pointFormat(salary_bonus.nominal || 0) }}</td>
-                <td>{{ salary_bonus.note }}</td>
-                <td> 
-                  <TypeIcon :value="salary_bonus.attachment_1_type"/>
-                </td>
-                <td>{{ salary_bonus.created_at ? $moment(salary_bonus.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
-                <td>{{ salary_bonus.updated_at ? $moment(salary_bonus.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        
       </div>
+
+      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="salary_bonuses" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event"  @doFilter="searching()" :rowBgColor="rowBgColor">
+        <template #[`val1`]="{item}">
+          <IconsLine v-if="!item.val1"/>
+          <IconsCheck v-else/>
+        </template>
+        <template #[`val2`]="{item}">
+          <IconsLine v-if="!item.val2"/>
+          <IconsCheck v-else/>
+        </template>
+        <template #[`val3`]="{item}">
+          <IconsLine v-if="!item.val3"/>
+          <IconsCheck v-else/>
+        </template>
+        
+        <template #[`employee_name`]="{item}">
+          {{ item.employee?.name }}
+        </template>
+        <template #[`employee_ktp_no`]="{item}">
+          {{item.employee?.ktp_no}}
+        </template>
+        <template #[`employee_sim_no`]="{item}">
+          {{item.employee?.sim_no}}
+        </template>
+        <template #[`note`]="{item}">
+          <div style="min-width: 350px; text-wrap: wrap;">
+            {{ item.note }}
+          </div>
+        </template>
+        <template #[`attachment_1_type`]="{item}">
+          <TypeIcon :value="item.attachment_1_type"/>
+        </template>
+        <template #[`deleted_by_username`]="{item}">
+          {{ item.deleted_by?.username }}
+        </template>
+
+        <template #[`req_deleted_by_username`]="{item}">
+          {{ item.req_deleted_by?.username }}
+        </template>
+      </TableView>
     </div>
 
     <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk">
@@ -165,6 +119,32 @@ definePageMeta({
   ],
 });
 
+const rowBgColor=(data)=>{
+  if(data.deleted==1) return "!bg-red-400";
+  // if(data.val1 == 0 || data.val2 == 0 || data.val3 == 0 || !data.salary_paid_id ) return "!bg-yellow-300"; 
+  if(data.val1 > 0 && data.val2 > 0 && data.val3 > 0 && data.salary_paid_id > 0) return "!bg-blue-300"; 
+  return "";
+}
+
+const filter_status = ref("undone")
+watch(()=>filter_status.value,(newval)=>{
+  // fields_thead.value.map((x)=>{
+  //   let in_list=["deleted_by_username","deleted_at","deleted_reason"].indexOf(x.key) > -1;
+  //   if(["all","deleted"].indexOf(newval) > -1){
+  //     if( in_list )
+  //       x.tbl_show =  1; 
+  //   }else{
+  //     if( in_list )
+  //       x.tbl_show =  0; 
+  //   }
+  //   return x;
+  // });
+
+  searching();
+}, {
+  immediate: false
+})
+
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
 params.sort ="created_at:desc";
@@ -180,7 +160,7 @@ const { data: dt_async } = await useAsyncData(async () => {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
-    params: params,
+    params: {filter_status},
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -201,6 +181,9 @@ const sort = ref({
   by: "desc"
 });
 const selected = ref(-1);
+const dt_selected = computed(()=>{  
+  return salary_bonuses.value[selected.value];
+})
 const scrolling = ref({
   page: 1,
   is_last_record: false,
@@ -210,16 +193,17 @@ const scrolling = ref({
 
 const inject_params = () => {
   params.like = "";
-  if (search.value != "") {
-    params.like = `id:%${search.value}%,xto:%${search.value}%,tipe:%${search.value}%,jenis:%${search.value}%,harga:%${search.value}%`;
+  let words = JSON.parse(JSON.stringify(useCommonStore()._tv.global_keyword));
+  if (words != "") {
+    params.like = `id:%${words}%,employee_name:%${words}%`;
   }
   params.sort = "";
   if (sort.value.field) {
     params.sort = sort.value.field + ":" + sort.value.by;
   }
-};
+  params.filter_model = JSON.stringify(useCommonStore()._tv.filter_model);
 
-const loadRef = ref(null);
+};
 
 const callData = async () => {
   useCommonStore().loading_full = true;
@@ -230,6 +214,8 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(salary_bonuses.value[0]);
   }
+  params.filter_status = filter_status.value;
+
   const { data, error, status } = await useMyFetch("/salary_bonuses", {
     method: 'get',
     headers: {
@@ -249,52 +235,37 @@ const callData = async () => {
 
   if (scrolling.value.page == 1) {
     salary_bonuses.value = data.value.data;
-    if (loadRef.value) loadRef.value.scrollTop = 0;
+    // if (loadRef.value) loadRef.value.scrollTop = 0;
   } else if (scrolling.value.page > 1) {
     salary_bonuses.value = [...salary_bonuses.value, ...data.value.data];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
   }
-}
-
-const loadMore = async () => {
-
-  if (!scrolling.value.may_get_data) return;
-  let parent = loadRef.value;
-
-  if (parent.scrollLeft != scrolling.value.scrollLeft) {
-    scrolling.value.scrollLeft = parent.scrollLeft;
-    return;
-  }
-
-  if (scrolling.value.is_last_record) return;
-
-  let stuck = Math.round(parent.scrollTop) + parent.clientHeight >= parent.scrollHeight - 1 ? true : false;
-  if (!stuck) return;
-
-  scrolling.value.page++;
-  await callData();
+  useCommonStore()._tv.filter_box = false;
 
 }
 
 const searching = () => {
+  selected.value = -1;
+  selected.value = -1;
   scrolling.value.page = 1;
   scrolling.value.is_last_record = false;
   inject_params();
   callData();
 }
 
-const router = useRouter();
 
 const forms_salary_bonus_show =  ref(false);
 const forms_salary_bonus_id = ref(0);
 const forms_salary_bonus_copy = ref(0);
+const forms_salary_bonus_is_view = ref(false);
+
 const form_add = () => {
   forms_salary_bonus_id.value = 0;
-  forms_salary_bonus_show.value = true;
+  forms_salary_bonus_is_view.value = false;
   forms_salary_bonus_copy.value = false;
-  // router.push({ name: 'data_salary_bonus-form', query: { id: "" } });
+  forms_salary_bonus_show.value = true;
 }
 
 const { display } = useAlertStore();
@@ -305,37 +276,22 @@ const form_edit = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_salary_bonus_id.value = salary_bonuses.value[selected.value].id;
-    forms_salary_bonus_show.value = true;
+    forms_salary_bonus_is_view.value = false;
     forms_salary_bonus_copy.value = false;
-    // router.push({ name: 'data_salary_bonus-form', query: { id: salary_bonuses.value[selected.value].id } });
-  }
-};
-
-
-
-const form_copy = () => {
-  if (selected.value == -1) {
-    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
-  } else {
-    forms_salary_bonus_id.value = salary_bonuses.value[selected.value].id;
     forms_salary_bonus_show.value = true;
-    forms_salary_bonus_copy.value = true;
-    // router.push({ name: 'data_trx_trp-form', query: { id: trx_trps.value[selected.value].id } });
   }
 };
 
 const forms_salary_bonus_valid_show =  ref(false);
 const forms_salary_bonus_valid_id = ref(0);
-const forms_salary_bonus_is_view = ref(false);
 
 const validasi = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_salary_bonus_valid_id.value = salary_bonuses.value[selected.value].id;
-    forms_salary_bonus_valid_show.value = true;
     forms_salary_bonus_is_view.value = false;
-
+    forms_salary_bonus_valid_show.value = true;
   }
 };
 
@@ -344,8 +300,8 @@ const form_view = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_salary_bonus_valid_id.value = salary_bonuses.value[selected.value].id;
-    forms_salary_bonus_valid_show.value = true;
     forms_salary_bonus_is_view.value = true;
+    forms_salary_bonus_valid_show.value = true;
   }
 };
 
@@ -400,8 +356,79 @@ const confirmed_delete = async() => {
     useErrorStore().trigger(error);
     return;
   }
-  salary_bonuses.value.splice(selected.value,1);
+
+  let old = {...salary_bonuses.value[selected.value]};
+  old['deleted'] = data.value.deleted;
+  old['deleted_user'] = data.value.deleted_user;
+  old['deleted_at'] = data.value.deleted_at;
+  old['deleted_by'] = data.value.deleted_by;
+  old['deleted_reason'] = data.value.deleted_reason;
+
+  if(filter_status.value!='all'){
+    salary_bonuses.value.splice(selected.value,1);
+  }else{
+    salary_bonuses.value.splice(selected.value,1,{...old});
+  }
   selected.value = -1;
   delete_box.value = false;
 }
+
+const fields_thead=ref([
+  {key:"no",label:"No",isai:true},
+  {key:"val",label:"APP",childs:[
+    {key:"val1",label:"Staff",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+    {key:"val2",label:"SPV",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+    {key:"val3",label:"MGR",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  ]},
+  {key:"id",label:"ID",filter_on:1,type:"number"},
+  {key:"tanggal",label:"Tanggal",type:'date',dateformat:"DD-MM-Y",filter_on:1,sort:{priority:1,type:"desc"}},
+  {key:"type",label:"Tipe",filter_on:1,type:'string'},
+  {key:"employee_name",label:"Nama",freeze:1,filter_on:1,type:'string'},
+  {key:"employee_ktp_no",label:"No KTP",filter_on:1,type:'string'},
+  {key:"employee_sim_no",label:"No SIM",filter_on:1,type:'string'},
+  {key:"nominal",label:"Nominal",class:" justify-end",type:'number'},
+  {key:"note",label:"Note",filter_on:1,type:'string'},
+  {key:"attachment_1_type",label:"File",filter_on:1,type:'string'},
+  {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
+  {key:"updated_at",label:"Updated At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
+  {key:"deleted_by_username",label:"Deleted By",tbl_show:1},
+  {key:"deleted_at",label:"Deleted At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1, tbl_show:1},
+  {key:"deleted_reason",label:"Deleted Reason", tbl_show:1,type:'string',filter_on:1},
+]);
+
+
+const enabled_add = computed(()=>{  
+  let result = ['undone','all'].indexOf(filter_status.value) > -1  
+  && useUtils().checkPermission('salary_bonus.create');
+  return result;
+})
+
+const enabled_edit = computed(()=>{  
+  let result = selected.value > -1 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  &&  (
+        useUtils().checkPermission('salary_bonus.val') && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
+        useUtils().checkPermission('salary_bonus.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1
+      )
+  && useUtils().checkPermissions(['salary_bonus.modify']);
+  return result;
+})
+
+const enabled_validasi = computed(()=>{  
+  let result = selected.value > -1 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  && (
+    useUtils().checkPermission('salary_bonus.val') && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
+    useUtils().checkPermission('salary_bonus.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1
+  );
+  return result;
+})
+
+const enabled_remove = computed(()=>{  
+  let result = selected.value > -1
+  && useUtils().checkPermission('salary_bonus.remove') 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1;
+  return result;
+})
+
 </script>

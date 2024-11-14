@@ -30,8 +30,8 @@
           <div class="w-full text-blue-600 font-bold grid-">
             Set Show Column Field           
           </div>            
-          <div class="w-full flex flex-wrap overflow-auto">
-            <div v-for="(fd,index) in tbody_fields" class="p-2 m-1 font-bold cursor-pointer" :class="fd.tbl_show == 1 ? 'bg-green-600 text-white' : 'bg-gray-400 text-black'" @click="toggleVisible(fd,index)">
+          <div class="w-full flex flex-wrap overflow-auto text-xs">
+            <div v-for="(fd,index) in tbody_fields" class="p-2 m-1 font-bold cursor-pointer rounded-sm" :class="fd.tbl_show == 1 ? 'bg-green-600 text-white' : 'bg-gray-400 text-black'" @click="toggleVisible(fd,index)">
               {{ treeVisible(fd) }}
             </div>
           </div>
@@ -47,15 +47,15 @@
       </div>
     </div>
 
-    <div v-if="_tv.filter_box" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
+    <div v-if="_tv.filter_box" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-1 text-xs"
     style="background-color: rgba(255,255,255,0.9);">
-      <div class="relative" style="max-width:95%; height: 90%;">
-        <div class="absolute -top-7 right-0 bg-white"
+      <div class="relative w-full sm:max-w-[95%]" style="height: 90%;">
+        <div class="absolute -top-6 right-0 bg-white"
           style="position: absolute; padding:5px 10px; border: solid 1px #ccc; border-bottom: none; border-top-right-radius: 5px;  border-top-left-radius: 5px;">
           <IconsTimes  style="color:black; cursor:pointer;" @click="_tv.filter_box=false"/>
         </div>
         <div class="w-full h-full flex flex-col items-center justify-content-center bg-white  ring-1 ring-gray-300 p-2">         
-          <div class="w-full flex flex-wrap overflow-auto">
+          <div class="w-full flex flex-wrap overflow-auto sm:justify-center">
             <table id="tbl_filter" class=" border-separate ">
               <thead  class="sticky top-0 !z-[2] bg-slate-500">
                 <tr>
@@ -70,8 +70,8 @@
                   </th>
                 </tr>
                 <tr>
-                  <th class="border-black border-[1px]">Priority</th>
-                  <th class="border-black border-[1px]">Type</th>
+                  <th class="border-black border-[1px]" style="min-width: 55px;">Priority</th>
+                  <th class="border-black border-[1px]" style="min-width: 45px;">Type</th>
                 </tr>
               </thead>
               <tbody>
@@ -107,15 +107,15 @@
                         <option v-if="['date'].indexOf(fd.type)>-1" value="fullday">Fullday</option>
                       </select>
                     </td>
-                    <td>
+                    <td style="min-width: 180px;">
                       <select v-if="fd.type=='select'" v-model="filter_model[fd.key]['value_1']">
                         <option value=""></option>
                         <option v-for="si in fd.select_item" :value="si.k==undefined ? si : si.k">{{si.v==undefined ? si : si.v}}</option>
                       </select>
                       <input v-if="['string','number'].indexOf(fd.type) > -1" v-model="filter_model[fd.key]['value_1']" class="flex-grow" type="text" placeholder="Keyword">
-                      <div class="flex" v-if="['date','datetime'].indexOf(fd.type)>-1">
+                      <div class="flex flex-wrap" v-if="['date','datetime'].indexOf(fd.type)>-1">
 
-                        <div class="w-1/2">
+                        <div class="w-full sm:w-1/2">
                           <div class="w-full">From</div>
                           <div>
                             <ClientOnly>
@@ -130,7 +130,7 @@
                           </ClientOnly>
                           </div>
                         </div>
-                        <div class="w-1/2">
+                        <div class="w-full sm:w-1/2">
                           <div class="w-full">To</div>
                           <div>
                             <ClientOnly>

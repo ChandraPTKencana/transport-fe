@@ -57,10 +57,10 @@
             @click="generatePV()">
             Gen/Update PV
           </button>
-          <button v-if="useUtils().checkPermission('extra_money_trx.get_pv')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+          <!-- <button v-if="useUtils().checkPermission('extra_money_trx.get_pv')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="updatePV()">
             Update PV
-          </button>
+          </button> -->
           <div v-if="useUtils().checkPermissions(['extra_money_trx.generate_pvr','extra_money_trx.generate_pv','extra_money_trx.get_pv'])" class="m-1 card-border cursor-pointer" @click="online_status = !online_status">
             <span class="text-xs">Mode</span> : <span class="font-bold" :class="online_status?'text-green-600' : 'text-red-600'">{{ online_status ? "ONLINE" : "OFFLINE" }} </span>
           </div>

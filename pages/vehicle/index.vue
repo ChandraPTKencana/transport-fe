@@ -2,84 +2,70 @@
   <div class="w-full h-full flex flex-col">
     <Header :title="'List Vehicle'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
-      <div class="w-full flex">
-        <button type="button" name="button" class="m-1 text-2xl "
-          @click="form_add()">
-          <IconsPlus />
-        </button>
-        <button type="button" name="button" class="m-1 text-2xl "
-          @click="form_edit()">
-          <IconsEdit />
-        </button>
-        <button type="button" name="button" class="m-1 text-2xl "
-          @click="remove()">
-          <IconsDelete />
-        </button>
-        <!-- <button type="button" name="button" style="margin:4px; " @click="cetak()">
-          <fa :icon="['fas','print']"/>
-        </button> -->
-      </div>
-      <form action="#" class="w-full flex p-1">
-        <div class="grow">
-          <div class="font-bold"> Keyword </div>
-          <input class="" type="text" v-model="search" name="search"
-            placeholder="Keyword">
-        </div>
-        <div class="pl-1">
-          <div class="font-bold"> Sort By </div>
-          <select class="" v-model="sort.field">
-            <option value=""></option>
-            <option value="no_pol">No Pol</option>
-          </select>
-        </div>
-        <div class="pl-1">
-          <div class="font-bold"> Sort Order </div>
-          <select class="" v-model="sort.by">
-            <option value="asc">Asc</option>
-            <option value="desc">Desc</option>
-          </select>
-        </div>
-        <div class="flex items-end pl-1">
-          <button class="" type="submit" name="button" @click.prevent="searching()">
-            <IconsSearch class="text-2xl" />
+      <div class="w-full flex justify-between flex-wrap">
+        <div class="grow flex">
+          <div class="m-1">
+            <select class="" v-model="filter_status" >
+              <option value="available">Available</option>
+              <!-- <option value="unapprove">Unapprove</option> -->
+              <option value="deleted">Trash</option>
+              <option value="all">All</option>
+            </select>
+          </div>
+          <!-- <button v-if="enabled_copy" type="button" name="button" class="m-1 text-2xl "
+            @click="form_copy()">
+            <IconsCopy />
+          </button> -->
+          <button v-if="enabled_add" type="button" name="button" class="m-1 text-2xl "
+            @click="form_add()">
+            <IconsPlus />
           </button>
-        </div>
-      </form>
-      <div class="w-full flex justify-center items-center grow h-0 p-1">
-
-        <div v-if="vehicles.length == 0" class="">
-          Maaf Tidak Ada Record
-        </div>
-
-        <div v-else class="w-full h-full overflow-auto" role="sticky" ref="loadRef" @scroll="loadMore">
-          <table class="tacky">
-            <thead>
-              <tr class="sticky top-0 !z-[2]">
-                <th>No.</th>
-                <th>No Pol</th>
-                <!-- <th>Hak Akses</th>
-                <th>Status</th> -->
-                <th>Tanggal Dibuat</th>
-                <th>Tanggal Diubah</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(vehicle, index) in vehicles" :key="index" @click="selected = index"
-                :class="selected == index ? 'active' : ''">
-                <td>{{ index + 1 }}.</td>
-                <td class="bold">{{ vehicle.no_pol }}</td>
-                <!-- <td>{{ vehicle.hak_akses }}</td>
-                <td>{{ vehicle.is_active ? 'Aktif' : 'Nonaktif' }}</td> -->
-                <td>{{ $moment(vehicle.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ $moment(vehicle.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <button v-if="enabled_edit" type="button" name="button" class="m-1 text-2xl "
+            @click="form_edit()">
+            <IconsEdit/>
+          </button>
+          <button  v-if="enabled_remove" type="button" name="button" class="m-1 text-2xl "
+            @click="remove()">
+            <IconsDelete />
+          </button>
+          <!-- <button v-if="selected > -1" type="button" name="button" class="m-1 text-2xl "
+            @click="form_view()">
+            <IconsEyes/>
+          </button>
+          
+          <button v-if="enabled_validasi" type="button" name="button" class="m-1 text-2xl "
+            @click="validasi()">
+            <IconsSignature />
+          </button> -->
+          <!-- <button v-if="enabled_print_preview" type="button" name="button" class="m-1 text-2xl "
+            @click="printPreview()">
+            <IconsPrinterEye />
+          </button> -->
         </div>
       </div>
+      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="vehicles" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event"  @doFilter="searching()" :rowBgColor="rowBgColor">
+        <template #[`val`]="{item}">
+          <IconsLine v-if="!item.val"/>
+          <IconsCheck v-else/>
+        </template>
+        <template #[`val1`]="{item}">
+          <IconsLine v-if="!item.val1"/>
+          <IconsCheck v-else/>
+        </template>
 
-      <!-- {{ data.greetings }} -->
-      <!-- {{ vehicles }} -->
+        <template #[`bank_code`]="{item}">
+          {{ item.bank?.code }}
+        </template>
+        <template #[`attachment_1_type`]="{item}">
+          <TypeIcon :value="item.attachment_1_type"/>
+        </template>
+        <!-- <template #[`harga`]="{item}">
+          Rp. {{ pointFormat((parseFloat(item.total)) || 0) }}
+        </template> -->
+        <template #[`deleted_by_username`]="{item}">
+          {{ item.deleted_by?.username }}
+        </template>
+      </TableView>
     </div>
   </div>
   <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk">
@@ -115,6 +101,32 @@ definePageMeta({
   ],
 });
 
+const rowBgColor=(data)=>{
+  if(data.deleted==1) return "!bg-red-400";
+  // if(data.pvr_id > 0 && data.req_deleted == 1) return "!bg-yellow-300"; 
+  // if(data.pv_id > 0) return "!bg-blue-300"; 
+  if(data.val == 0) return "!bg-gray-300"; 
+  return "";
+}
+
+const filter_status = ref("available")
+watch(()=>filter_status.value,(newval)=>{
+  // fields_thead.value.map((x)=>{
+  //   let in_list=["deleted_by_username","deleted_at","deleted_reason"].indexOf(x.key) > -1;
+  //   if(["all","deleted"].indexOf(newval) > -1){
+  //     if( in_list )
+  //       x.tbl_show =  1; 
+  //   }else{
+  //     if( in_list )
+  //       x.tbl_show =  0; 
+  //   }
+  //   return x;
+  // });
+
+  searching();
+}, {
+  immediate: false
+})
 
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
@@ -129,7 +141,7 @@ const { data: vehicles } = await useAsyncData(async () => {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
-    params: params,
+    params: {filter_status},
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -155,25 +167,30 @@ const scrolling = ref({
   scrollLeft: 0,
   may_get_data: true
 });
+const dt_selected = computed(()=>{  
+  return vehicles.value[selected.value];
+})
 
 const inject_params = () => {
   params.like = "";
-  if (search.value != "") {
-    params.like = `id:%${search.value}%,no_pol:%${search.value}%`;
+  let words = JSON.parse(JSON.stringify(useCommonStore()._tv.global_keyword));
+  if (words != "") {
+    params.like = `id:%${words}%,no_pol:%${words}%`;
   }
   params.sort = "";
   if (sort.value.field) {
     params.sort = sort.value.field + ":" + sort.value.by;
   }
-};
+  params.filter_model = JSON.stringify(useCommonStore()._tv.filter_model);
 
-const loadRef = ref(null);
+};
 
 const callData = async () => {
   useCommonStore().loading_full = true;
   scrolling.value.may_get_data = false;
   params.page = scrolling.value.page;
   if (params.page == 1) vehicles.value = [];
+  params.filter_status = filter_status.value;
 
   const { data, error, status } = await useMyFetch("/vehicles", {
     method: 'get',
@@ -199,48 +216,31 @@ const callData = async () => {
 
   if (scrolling.value.page == 1) {
     vehicles.value = data.value.data;
-    if (loadRef.value) loadRef.value.scrollTop = 0;
+    // if (loadRef.value) loadRef.value.scrollTop = 0;
   } else if (scrolling.value.page > 1) {
     vehicles.value = [...vehicles.value, ...data.value.data];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
   }
-}
-
-const loadMore = async () => {
-
-  if (!scrolling.value.may_get_data) return;
-  let parent = loadRef.value;
-
-  if (parent.scrollLeft != scrolling.value.scrollLeft) {
-    scrolling.value.scrollLeft = parent.scrollLeft;
-    return;
-  }
-
-  if (scrolling.value.is_last_record) return;
-
-  let stuck = Math.round(parent.scrollTop) + parent.clientHeight >= parent.scrollHeight - 1 ? true : false;
-  if (!stuck) return;
-
-  scrolling.value.page++;
-  await callData();
-
+  useCommonStore()._tv.filter_box = false;
 }
 
 const searching = () => {
+  selected.value = -1;
   scrolling.value.page = 1;
   scrolling.value.is_last_record = false;
   inject_params();
   callData();
 }
 
-const router = useRouter();
-
 const forms_vehicle_show =  ref(false);
 const forms_vehicle_id = ref(0);
+const forms_vehicle_is_view = ref(false);
+
 const form_add = () => {
   forms_vehicle_id.value = 0;
+  forms_vehicle_is_view.value = false;
   forms_vehicle_show.value = true;
 }
 
@@ -252,6 +252,7 @@ const form_edit = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_vehicle_id.value = vehicles.value[selected.value].id;
+    forms_vehicle_is_view.value = false;
     forms_vehicle_show.value = true;
   }
 };
@@ -306,10 +307,71 @@ const confirmed_delete = async() => {
     useErrorStore().trigger(error);
     return;
   }
-  vehicles.value.splice(selected.value,1);
+
+  let old = {...vehicles.value[selected.value]};
+  old['deleted'] = data.value.deleted;
+  old['deleted_user'] = data.value.deleted_user;
+  old['deleted_at'] = data.value.deleted_at;
+  old['deleted_by'] = data.value.deleted_by;
+  old['deleted_reason'] = data.value.deleted_reason;
+  
+  if(filter_status.value!='all'){
+    vehicles.value.splice(selected.value,1);
+  }else{
+    vehicles.value.splice(selected.value,1,{...old});
+  }
   selected.value = -1;
   delete_box.value = false;
 }
+
+
+const fields_thead=ref([
+  {key:"no",label:"No",isai:true},
+  {key:"id",label:"ID",filter_on:1,type:"number"},
+  {key:"no_pol",label:"No Pol",filter_on:1,type:'string',sort:{priority:1,type:"asc"}},
+  {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
+  {key:"updated_at",label:"Updated At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
+  {key:"deleted_by_username",label:"Deleted By",tbl_show:1},
+  {key:"deleted_at",label:"Deleted At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1, tbl_show:1},
+  {key:"deleted_reason",label:"Deleted Reason", tbl_show:1,type:'string',filter_on:1},
+]);
+
+// const enabled_copy = computed(()=>{  
+//   let result = selected.value > -1 
+//   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+//   && useUtils().checkPermission('employee.create');
+//   return result;
+// })
+
+const enabled_add = computed(()=>{  
+  let result = ['available','all','unapprove'].indexOf(filter_status.value) > -1  
+  && useUtils().checkPermission('vehicle.create');
+  return result;
+})
+
+const enabled_edit = computed(()=>{  
+  let result = selected.value > -1 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  && useUtils().checkPermissions(['vehicle.modify']);
+  return result;
+})
+
+// const enabled_validasi = computed(()=>{  
+//   let result = selected.value > -1 
+//   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+//   && (
+//     useUtils().checkPermission('employee.val') && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
+//     useUtils().checkPermission('employee.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1
+//   );
+//   return result;
+// })
+
+const enabled_remove = computed(()=>{  
+  let result = selected.value > -1
+  && useUtils().checkPermission('vehicle.remove') 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1;
+  return result;
+})
 </script>
 
 <style scoped="">

@@ -233,6 +233,7 @@ const callData = async () => {
 }
 
 const searching = () => {
+  selected.value = -1;
   scrolling.value.page = 1;
   scrolling.value.is_last_record = false;
   inject_params();
@@ -248,7 +249,7 @@ const forms_employee_is_view = ref(false);
 
 const form_add = () => {
   forms_employee_id.value = 0;
-  forms_employee_show.value = true;
+  forms_employee_is_view.value = false;
   forms_employee_copy.value = false;
   forms_employee_show.value = true;
 }

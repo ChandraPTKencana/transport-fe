@@ -777,7 +777,7 @@ const fields_thead=ref([
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
   {key:"detail_dates",label:"Detail Dates",type:'string'},
   {key:"salary_paid",label:"Salary Paid",type:'string'},
-  {key:"standby_trx_dtl_tanggal",label:"Detail Date",type:'date',dateformat:"DD-MM-Y",filter_on:1, tbl_show:0},
+  {key:"standby_trx_dtl_tanggal",label:"Detail Date",type:'date',dateformat:"DD-MM-Y",filter_on:1, tbl_show:0,sort_off:1},
   {key:"supir",label:"Supir",filter_on:1,type:'string'},
   {key:"supir_rek_no",label:"No Rek Supir",filter_on:1,type:'string'},
   {key:"supir_rek_name",label:"Nama Rek Supir",filter_on:1,type:'string'},
