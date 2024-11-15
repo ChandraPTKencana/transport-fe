@@ -23,6 +23,11 @@
           @click="downloadExcel()">
           <IconsTable2Column />
         </button>
+
+        <button v-if="selected>-1 && rpt_salarys[selected].val1==1" type="button" name="button" class="m-1 text-2xl "
+          @click="downloadExcel2()">
+          <IconsTableUp />
+        </button>
       </div>
 
       <div class="w-full flex justify-center items-center grow h-0 p-1">
@@ -355,6 +360,26 @@ const printPreview = async()=>{
 const downloadExcel = async()=>{  
   useCommonStore().loading_full = true;
   const { data, error, status } = await useMyFetch("/rpt_salary/excel_download", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json'
+    },
+    params: {id:rpt_salarys.value[selected.value].id},
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  downloadFile(data.value);
+}
+
+const downloadExcel2 = async()=>{  
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/rpt_salary/excel_download2", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
