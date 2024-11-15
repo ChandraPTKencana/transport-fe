@@ -52,7 +52,7 @@
           {{ name_of_groups(item) }}
         </template>
         <template #[`is_active`]="{item}">
-          {{ item.is_active ? "Aktif" : "Tidak Aktif" }}
+          {{ item.is_active==1 ? "Aktif" : "Tidak Aktif" }}
         </template>
       </TableView>
     </div>

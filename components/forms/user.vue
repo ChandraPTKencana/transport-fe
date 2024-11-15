@@ -62,11 +62,16 @@
                             {{ (permission_list_checked.length != permission_list.length) ? 'Allow' : 'Deny' }}
                           </button>
                         </th> 
-                        <th>Name</th>
+                        <th >
+                          <div class="w-full flex items-center">
+                            <input type="text" v-model="search" name="search"
+                            placeholder="Name">
+                          </div>
+                        </th>
                       </tr>
                     </thead>
                     <tbody ref="to_move">
-                      <template v-for="(pl, index) in permission_list" :key="index">
+                      <template v-for="(pl, index) in source" :key="index">
                         <tr>
                           <td class="!w-[10px]">
                             <div class="w-full h-full flex items-center justify-center">
@@ -296,6 +301,19 @@ const unChPerList=(item)=>{
     });
   }
 };
+
+const search = ref("");
+
+const source = computed(()=>{
+  if(search.value!="")  
+  return permission_list.value.filter(
+    (x)=>
+    x.name.toLowerCase().includes(search.value.toLowerCase())
+  );
+  else
+  return permission_list.value;
+});
+
 
 watch(() => props.show, async(newVal, oldVal) => {
   if (newVal == true){

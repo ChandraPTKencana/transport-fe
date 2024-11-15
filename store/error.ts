@@ -42,7 +42,7 @@ export const useErrorStore = defineStore('error', {
         return;
       }
 
-      if (errorStatusCode == 400 || errorStatusCode == 403) {
+      if (errorStatusCode == 400) {
         display({
           show: true,
           status: "Failed",
@@ -51,7 +51,14 @@ export const useErrorStore = defineStore('error', {
         return;
       }
 
-      if (errorStatusCode == 401) {
+      if (errorStatusCode == 401 || errorStatusCode == 403 ) {
+        if(errorStatusCode == 403){
+          display({
+            show: true,
+            status: "Failed",
+            message: errorMessage
+          })
+        }
         useAuthStore().clearAuth();
       }
 
