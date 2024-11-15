@@ -133,6 +133,11 @@ const props = defineProps({
     required:true,
     default:[]
   },
+  is_copy: {
+    type: [Boolean,Number],
+    required: true,
+    default: false,
+  },
 })
 
 const user_temp = {
@@ -162,7 +167,7 @@ const doSave = async () => {
 
   let $method = "post";
 
-  let id = props.id;
+  let id = props.is_copy ? 0 : props.id;
   if (id == 0) {
   } else {
     // $method = "put";
@@ -190,7 +195,7 @@ const doSave = async () => {
   }
 
   
-  if(props.id<=0){
+  if(id<=0){
     user.value.id = data.value.id;
     user.value.created_at = data.value.created_at;
     user.value.updated_at = data.value.updated_at;
@@ -198,7 +203,7 @@ const doSave = async () => {
   }else{
     user.value.updated_at = data.value.updated_at;
 
-    let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
+    let idx= props.p_data.map((x)=>x.id).indexOf(id);
     if(idx>=-1){
       props.p_data.splice(idx,1,{...user.value});    
     }

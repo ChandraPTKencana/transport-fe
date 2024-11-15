@@ -275,17 +275,17 @@ const form_edit = () => {
   }
 };
 
-const form_copy = () => {
-  if (selected.value == -1) {
-    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
-  } else {
-    forms_potongan_mst_id.value = potongan_msts.value[selected.value].id;
-    forms_potongan_mst_is_view.value = false;
-    forms_potongan_mst_show.value = true;
-    forms_potongan_mst_copy.value = true;
-    // router.push({ name: 'data_trx_trp-form', query: { id: trx_trps.value[selected.value].id } });
-  }
-};
+// const form_copy = () => {
+//   if (selected.value == -1) {
+//     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+//   } else {
+//     forms_potongan_mst_id.value = potongan_msts.value[selected.value].id;
+//     forms_potongan_mst_is_view.value = false;
+//     forms_potongan_mst_show.value = true;
+//     forms_potongan_mst_copy.value = true;
+//     // router.push({ name: 'data_trx_trp-form', query: { id: trx_trps.value[selected.value].id } });
+//   }
+// };
 
 const forms_potongan_mst_valid_show =  ref(false);
 const forms_potongan_mst_valid_id = ref(0);
@@ -296,6 +296,7 @@ const validasi = () => {
   } else {
     forms_potongan_mst_valid_id.value = potongan_msts.value[selected.value].id;
     forms_potongan_mst_is_view.value = true;
+    forms_potongan_mst_copy.value = false;
     forms_potongan_mst_valid_show.value = true;
   }
 };
@@ -306,6 +307,7 @@ const form_view = () => {
   } else {
     forms_potongan_mst_id.value = potongan_msts.value[selected.value].id;
     forms_potongan_mst_is_view.value = true;
+    forms_potongan_mst_copy.value = false;
     forms_potongan_mst_show.value = true;
   }
 };

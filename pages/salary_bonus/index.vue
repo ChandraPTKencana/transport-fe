@@ -291,6 +291,7 @@ const validasi = () => {
   } else {
     forms_salary_bonus_valid_id.value = salary_bonuses.value[selected.value].id;
     forms_salary_bonus_is_view.value = false;
+    forms_salary_bonus_copy.value = false;
     forms_salary_bonus_valid_show.value = true;
   }
 };
@@ -301,6 +302,7 @@ const form_view = () => {
   } else {
     forms_salary_bonus_valid_id.value = salary_bonuses.value[selected.value].id;
     forms_salary_bonus_is_view.value = true;
+    forms_salary_bonus_copy.value = false;
     forms_salary_bonus_valid_show.value = true;
   }
 };

@@ -287,6 +287,7 @@ const validasi = () => {
   } else {
     forms_standby_mst_valid_id.value = standby_msts.value[selected.value].id;
     forms_standby_mst_is_view.value = false;
+    forms_standby_mst_copy.value = false;
     forms_standby_mst_valid_show.value = true;
   }
 };
@@ -297,6 +298,7 @@ const form_view = () => {
   } else {
     forms_standby_mst_valid_id.value = standby_msts.value[selected.value].id;
     forms_standby_mst_is_view.value = true;
+    forms_standby_mst_copy.value = false;
     forms_standby_mst_valid_show.value = true;
   }
 };

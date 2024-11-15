@@ -160,6 +160,11 @@ const props = defineProps({
     required:true,
     default:[]
   },
+  is_copy: {
+    type: [Boolean,Number],
+    required: true,
+    default: false,
+  },
 })
 
 const employee_temp = {
@@ -210,7 +215,7 @@ const doSave = async () => {
 
   let $method = "post";
 
-  let id = props.id;
+  let id = props.is_copy ? 0 : props.id;
   if (id == 0) {
   } else {
     data_in.append("id", id);
@@ -236,12 +241,12 @@ const doSave = async () => {
   employee.value.bank = {...banks.value[bidx]};
   employee.value.updated_at = data.value.updated_at;
   
-  if(props.id<=0){
+  if(id<=0){
     employee.value.id = data.value.id;
     employee.value.created_at = data.value.created_at;
     props.p_data.unshift(employee.value);
   }else{
-    let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
+    let idx= props.p_data.map((x)=>x.id).indexOf(id);
     if(idx>=-1){
       props.p_data.splice(idx,1,{...employee.value});    
     }
@@ -271,6 +276,10 @@ const callData = async () => {
   if (status.value === 'error') {
     useErrorStore().trigger(error);
     return;
+  }
+
+  if(props.is_copy){
+    employee.value.val = 0;
   }
 
   employee.value = data.value.data;

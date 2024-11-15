@@ -269,6 +269,7 @@ const validasi = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_rpt_salary_valid_id.value = rpt_salarys.value[selected.value].id;
+    forms_rpt_salary_copy.value = true;
     forms_rpt_salary_valid_show.value = true;
   }
 };

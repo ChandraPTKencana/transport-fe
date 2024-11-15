@@ -316,6 +316,7 @@ const validasi = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_salary_paid_valid_id.value = salary_paids.value[selected.value].id;
+    forms_salary_paid_copy.value = false;
     forms_salary_paid_valid_show.value = true;
   }
 };

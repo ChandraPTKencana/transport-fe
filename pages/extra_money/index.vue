@@ -270,12 +270,13 @@ const searching = () => {
 const forms_extra_money_show =  ref(false);
 const forms_extra_money_id = ref(0);
 const forms_extra_money_copy = ref(0);
+const forms_extra_money_is_view = ref(false);
 
 const form_add = () => {
   forms_extra_money_id.value = 0;
-  forms_extra_money_show.value = true;
+  forms_extra_money_is_view.value = false;
   forms_extra_money_copy.value = false;
-
+  forms_extra_money_show.value = true;
 }
 
 const { display } = useAlertStore();
@@ -286,8 +287,9 @@ const form_edit = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_extra_money_id.value = extra_moneys.value[selected.value].id;
-    forms_extra_money_show.value = true;
+    forms_extra_money_is_view.value = false;
     forms_extra_money_copy.value = false;
+    forms_extra_money_show.value = true;
   }
 };
 
@@ -296,22 +298,23 @@ const form_copy = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_extra_money_id.value = extra_moneys.value[selected.value].id;
-    forms_extra_money_show.value = true;
+    forms_extra_money_is_view.value = false;
     forms_extra_money_copy.value = true;
+    forms_extra_money_show.value = true;
     // router.push({ name: 'data_trx_trp-form', query: { id: trx_trps.value[selected.value].id } });
   }
 };
 
 const forms_extra_money_valid_show =  ref(false);
 const forms_extra_money_valid_id = ref(0);
-const forms_extra_money_is_view = ref(false);
 const validasi = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_extra_money_valid_id.value = extra_moneys.value[selected.value].id;
-    forms_extra_money_valid_show.value = true;
     forms_extra_money_is_view.value = false;
+    forms_extra_money_copy.value = false;
+    forms_extra_money_valid_show.value = true;
   }
 };
 
@@ -320,8 +323,9 @@ const form_view = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_extra_money_valid_id.value = extra_moneys.value[selected.value].id;
-    forms_extra_money_valid_show.value = true;
     forms_extra_money_is_view.value = true;
+    forms_extra_money_copy.value = false;
+    forms_extra_money_valid_show.value = true;
   }
 };
 

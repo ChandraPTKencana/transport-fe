@@ -16,10 +16,10 @@
             @click="form_copy()">
             <IconsCopy />
           </button>
-          <button v-if="enabled_add" type="button" name="button" class="m-1 text-2xl "
+          <!-- <button v-if="enabled_add" type="button" name="button" class="m-1 text-2xl "
             @click="form_add()">
             <IconsPlus />
-          </button>
+          </button> -->
           <button v-if="enabled_edit" type="button" name="button" class="m-1 text-2xl "
             @click="form_edit()">
             <IconsEdit/>
@@ -78,7 +78,7 @@
       </div>
     </template>
   </PopupMini>
-  <FormsEmployee :show="forms_employee_show" :fnClose="()=>{forms_employee_show=false}" :id="forms_employee_id" :p_data="employees"/>
+  <FormsEmployee :show="forms_employee_show" :fnClose="()=>{forms_employee_show=false}" :id="forms_employee_id" :p_data="employees" :is_copy="forms_employee_copy"/>
   <FormsEmployeeValidasi :show="forms_employee_valid_show" :fnClose="()=>{forms_employee_valid_show=false}" :id="forms_employee_valid_id" :p_data="employees"/>
 
 </template>
@@ -287,6 +287,7 @@ const validasi = () => {
   } else {
     forms_employee_valid_id.value = employees.value[selected.value].id;
     forms_employee_is_view.value = false;
+    forms_employee_copy.value = false;
     forms_employee_valid_show.value = true;
   }
 };
@@ -297,6 +298,7 @@ const form_view = () => {
   } else {
     forms_employee_valid_id.value = employees.value[selected.value].id;
     forms_employee_is_view.value = true;
+    forms_employee_copy.value = false;
     forms_employee_valid_show.value = true;
   }
 };

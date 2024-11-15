@@ -58,7 +58,7 @@
     </div>
   </div>
   <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
-  <FormsUser :show="forms_user_show" :fnClose="()=>{forms_user_show=false}" :id="forms_user_id" :p_data="users"/>
+  <FormsUser :show="forms_user_show" :fnClose="()=>{forms_user_show=false}" :id="forms_user_id" :p_data="users" :is_copy="forms_user_copy"/>
   <GAQR :show="qr_popup" :fnClose="()=>{qr_popup=false}" :qrCodeUrl="qr_img"/>
 
 </template>

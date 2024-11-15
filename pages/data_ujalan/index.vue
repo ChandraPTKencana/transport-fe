@@ -306,6 +306,7 @@ const validasi = () => {
   } else {
     forms_ujalan_valid_id.value = ujalans.value[selected.value].id;
     forms_ujalan_is_view.value = false;
+    forms_ujalan_copy.value = false;
     forms_ujalan_valid_show.value = true;
   }
 };
@@ -316,6 +317,7 @@ const form_view = () => {
   } else {
     forms_ujalan_valid_id.value = ujalans.value[selected.value].id;
     forms_ujalan_is_view.value = true;
+    forms_ujalan_copy.value = false;
     forms_ujalan_valid_show.value = true;
   }
 };
