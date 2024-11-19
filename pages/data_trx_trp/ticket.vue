@@ -705,6 +705,7 @@ const multiVal = async() => {
       trx_trps.value.splice(idx,1,{...sd});
     }
   });
+  deep_state.value.clearCheckBox = true;
 }
 
 const multiClearTicket = async() => {
@@ -742,7 +743,7 @@ const multiClearTicket = async() => {
     }
   });
 
-  // deep_state.value.clearCheckBox = true;
+  deep_state.value.clearCheckBox = true;
 }
 
 const forms_trx_check_show =  ref(false);
@@ -827,9 +828,9 @@ const checkbox_arr = ref([]);
 const fields_thead=ref([
   {key:"cb",label:"",checkbox:'id'},
   {key:"no",label:"No",isai:true},
-  {key:"val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"val_ticket",label:"App 3",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  // {key:"val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  // {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val_ticket",label:"Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1,sort:{priority:1,type:"desc"}},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},

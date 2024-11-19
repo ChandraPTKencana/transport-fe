@@ -2,7 +2,7 @@
   <div class="w-full h-full flex">
 
     <nav id="side_menu" ref="side_menu"
-      class="bg-slate-800 h-full min-w-[150px] max-w-[150px] fixed sm:relative sm:left-0  text-white z-10"
+      class="bg-slate-900 h-full min-w-[150px] max-w-[150px] fixed sm:relative sm:left-0  text-white z-10"
       style="width:320px;">
       <div class="relative h-full">
         <button class="absolute left-full h-8 text-2xl text-white bg-slate-500 sm:hidden bg-opacity-0 ring-0 focus:ring-0 flex justify-center items-center"
@@ -10,7 +10,7 @@
           <IconsTimes v-if="is_sidebar_open" />
           <IconsBurger v-else />
         </button>
-        <header class="h-full flex flex-col p-2 overflow-hidden">
+        <header class="h-full flex flex-col overflow-hidden">
           <ul class="grow overflow-auto">
             <li :class="activeMenu == '/'?'active':''" >
               <nuxt-link to="/" class="cursor-pointer" @click="goTo('/')">
@@ -200,7 +200,7 @@
             </li> -->
             
           </ul>
-          <div id="panel" class="h-7 text-xs relative">
+          <div id="panel" class="min-h-7 p-2 text-xs relative">
             <div v-show="is_panel_open"
               class="w-full absolute bottom-full mb-2 bg-slate-700 bg-opacity-80 cursor-pointer">
               <!-- <nuxt-link to="/profile" class="block w-full text-left p-2 hover:bg-slate-900">
@@ -384,11 +384,28 @@ watch(()=>is_sidebar_open.value,(newV,oldV)=>{
 </script>
 <style>
   ul li{
-    padding:5px;
+    padding:8px;
+    /* color:rgb(182, 182, 182); */
+    color:white;
+    position: relative;
   }
 
   ul li.active{
-    background-color: #2e5289;
+    /* background-color: #2e5289; */
+    background-color: #001F3F;
+    color:white;
+  }
+
+  ul li.active::after{
+    content: "";
+    position: absolute;
+    width: 3.5px;
+    height: 100%;
+    top:0px;
+    left:0px;
+    background-color: rgba(255, 255, 255, 1);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
   }
 
   ul li a{

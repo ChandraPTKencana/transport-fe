@@ -71,27 +71,27 @@
                         <tr v-if="detail.p_status!='Remove'"  :data-index="index">
                           <td>{{ index + 1 }}.</td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               {{ detail.xdesc }}
                             </div>
                           </td>
                           <td class="cell bold">
-                          <div class="w-full h-full flex items-center justify-center">
+                          <div class="w-full h-auto flex items-center justify-center">
                             {{ pointFormat(detail.harga||0) }}
                           </div>
                         </td>
                         <td class="cell">
-                          <div class="w-full h-full flex items-center justify-center">
+                          <div class="w-full h-auto flex items-center justify-center">
                             {{ pointFormat(detail.qty||0) }}
                           </div>
                         </td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center">                       
+                            <div class="w-full h-auto flex items-center justify-center">                       
                               {{ pointFormat(detail.qty * detail.harga || 0) }}   
                             </div>
                           </td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               <div class="text-white rounded text-xl w-5 h-5" :class="detail.for_remarks?'bg-green-600' : 'bg-red-600' ">
                                 <IconsTimes v-if="detail.for_remarks==0"/>
                                 <IconsCheck v-else/>             
@@ -132,27 +132,27 @@
                           <td>{{ index + 1 }}.</td>
                           
                           <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               {{ detail.ac_account_id }}
                             </div>
                           </td>
                           <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               {{ detail.ac_account_code }}
                             </div>
                           </td>
                           <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               {{ detail.ac_account_name }}
                             </div>
                           </td>
                           <td v-if="!disabled" class="cell">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               {{ detail.description }}
                             </div>
                           </td>
                           <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               {{ pointFormat(detail.amount||0) }}
                             </div>
                           </td>
@@ -163,7 +163,7 @@
                             {{ detail.xfor }}
                           </td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center">                       
+                            <div class="w-full h-auto flex items-center justify-center">                       
                               {{ pointFormat(detail.qty * detail.amount || 0) }}   
                             </div>
                           </td>

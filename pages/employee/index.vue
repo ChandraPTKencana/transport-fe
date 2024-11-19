@@ -12,14 +12,14 @@
               <option value="all">All</option>
             </select>
           </div>
-          <button v-if="enabled_copy" type="button" name="button" class="m-1 text-2xl "
+          <!-- <button v-if="enabled_copy" type="button" name="button" class="m-1 text-2xl "
             @click="form_copy()">
             <IconsCopy />
-          </button>
-          <!-- <button v-if="enabled_add" type="button" name="button" class="m-1 text-2xl "
+          </button> -->
+          <button v-if="enabled_add" type="button" name="button" class="m-1 text-2xl "
             @click="form_add()">
             <IconsPlus />
-          </button> -->
+          </button>
           <button v-if="enabled_edit" type="button" name="button" class="m-1 text-2xl "
             @click="form_edit()">
             <IconsEdit/>

@@ -73,27 +73,27 @@
                           <td>{{ index + 1 }}.</td>
                           
                           <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               {{ detail.ac_account_id }}
                             </div>
                           </td>
                           <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               {{ detail.ac_account_code }}
                             </div>
                           </td>
                           <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               {{ detail.ac_account_name }}
                             </div>
                           </td>
                           <td v-if="!disabled" class="cell">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               {{ detail.description }}
                             </div>
                           </td>
                           <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               {{ pointFormat(detail.amount||0) }}
                             </div>
                           </td>

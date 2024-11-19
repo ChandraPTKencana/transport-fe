@@ -188,27 +188,27 @@
                         <tr v-if="detail.p_status!='Remove'"  :data-index="index">
                           <td>{{ index + 1 }}.</td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center relative">
+                            <div class="w-full h-auto flex items-center justify-center relative">
                               {{ $moment(detail.tanggal).format("DD-MM-YYYY") }}
                             </div>
                           </td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center relative">
+                            <div class="w-full h-auto flex items-center justify-center relative">
                               {{ detail.waktu.substring(0,5)  }}
                             </div>
                           </td>
                           <td class="cell">
-                            <div style="width:60vw;" class="h-full flex items-center justify-center">
+                            <div style="width:60vw;" class="h-auto flex items-center justify-center">
                               <AttachmentSingle :value="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event"/>
                             </div>
                           </td>
                           <td class="cell">
-                            <div class="h-full flex items-center justify-center">
+                            <div class="h-auto flex items-center justify-center">
                               {{detail.note}}
                             </div>
                           </td>
                           <td class="cell" :class="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled || is_view ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               <div v-if="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled || is_view" class="text-3xl">
                                 <IconsTimes v-if="detail.be_paid==0" class="text-red-800"/>
                                 <IconsCheck v-else class="text-green-800"/>                                           

@@ -83,7 +83,7 @@
                         <!-- <tr v-if="detail.p_status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)"> -->
                         <tr v-if="detail.p_status!='Remove'"  :data-index="index">
                           <td v-if="useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) && !disabled" class="tools cell">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               <button  type="button" name="button"
                                 @click="showAction($event, index)">
                                 <IconsTools />
@@ -92,12 +92,12 @@
                           </td>
                           <td>{{ index + 1 }}.</td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               <textarea :disabled="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled" class="p-1 w-full" v-model="detail.xdesc" cols="7" rows="2"></textarea>
                             </div>
                           </td>
                           <td class="cell bold" :class="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               <InputPointFormat
                               :key="index" 
                               class="w-full h-full p-1" 
@@ -108,7 +108,7 @@
                             </div>
                           </td>
                           <td class="cell" :class="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               <InputPointFormat
                               :key="index" 
                               class="w-full h-full p-1" 
@@ -119,13 +119,13 @@
                             </div>
                           </td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center unselectable">                       
+                            <div class="w-full h-auto flex items-center justify-center unselectable">                       
                               {{ pointFormat(detail.qty * detail.harga || 0) }}   
                             </div>
                           </td>
 
                           <td class="cell" :class="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               <div v-if="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled" class="text-3xl">
                                 <IconsTimes v-if="detail.for_remarks==0" class="text-red-800"/>
                                 <IconsCheck v-else class="text-green-800"/>                                           
@@ -184,7 +184,7 @@
                         <!-- <tr v-if="detail.p_status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)"> -->
                         <tr v-if="detail.p_status!='Remove'"  :data-index="index">
                           <td v-if="!disabled" class="tools cell">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               <button  type="button" name="button"
                                 @click="showAction2($event, index)">
                                 <IconsTools />
@@ -193,7 +193,7 @@
                           </td>
                           <td>{{ index + 1 }}.</td>
                           <td v-if="!disabled" class="cell">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               <button v-if="!detail.ac_account_id" type="button" name="button" @click="showSNSItem($event, index)">
                                 ...
                               </button>
@@ -203,27 +203,27 @@
                             </div>
                           </td>
                           <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               {{ detail.ac_account_id }}
                             </div>
                           </td>
                           <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               {{ detail.ac_account_code }}
                             </div>
                           </td>
                           <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               {{ detail.ac_account_name }}
                             </div>
                           </td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               <textarea :disabled="disabled" class="p-1 w-full" v-model="detail.description" cols="7" rows="2"></textarea>
                             </div>
                           </td>
                           <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               <InputPointFormat
                               :key="index" 
                               class="w-full h-full p-1" 
@@ -234,7 +234,7 @@
                             </div>
                           </td>
                           <td class="cell" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               <InputPointFormat
                               :key="index" 
                               class="w-full h-full p-1" 
@@ -245,7 +245,7 @@
                             </div>
                           </td>
                           <td class="cell" :class="disabled ? 'unselectable' : ''">
-                            <div class="w-full h-full flex items-center justify-center">                       
+                            <div class="w-full h-auto flex items-center justify-center">                       
                               <select class="h-full" v-model="detail.xfor" :disabled="disabled">
                                 <option value="Supir">Supir</option>
                                 <option value="Kernet">Kernet</option>
@@ -253,7 +253,7 @@
                             </div>
                           </td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center unselectable">                       
+                            <div class="w-full h-auto flex items-center justify-center unselectable">                       
                               {{ pointFormat(detail.qty * detail.amount || 0) }}   
                             </div>
                           </td>

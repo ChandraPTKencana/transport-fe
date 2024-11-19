@@ -200,7 +200,7 @@
                   :class="tb.class_h ? tb.class_h : ''"
                   :style="{left:(tf.freeze && tf.freeze_left?tf.freeze_left:'none')}"
                 >
-                  <div v-if="!tf.checkbox" class="w-full h-full flex items-center" :class="tf.class ? tf.class : 'justify-center'">
+                  <div v-if="!tf.checkbox" class="w-full h-auto flex items-center" :class="tf.class ? tf.class : 'justify-center'">
                     <!-- {{ tf.id }} -->
                     <slot :name="tf.key" :item="tb" :index="index">
                       <template v-if="tf.isai">

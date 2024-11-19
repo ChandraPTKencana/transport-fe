@@ -81,7 +81,7 @@
                         </td>
                         <td>{{ index + 1 }}.</td>
                         <td v-if="!disabled" class="cell">
-                          <div class="w-full h-full flex items-center justify-center">
+                          <div class="w-full h-auto flex items-center justify-center">
                             <button v-if="!detail.ac_account_id" type="button" name="button" @click="showSNSItem($event, index)">
                               ...
                             </button>
@@ -91,27 +91,27 @@
                           </div>
                         </td>
                         <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                          <div class="w-full h-full flex items-center justify-center">
+                          <div class="w-full h-auto flex items-center justify-center">
                             {{ detail.ac_account_id }}
                           </div>
                         </td>
                         <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                          <div class="w-full h-full flex items-center justify-center">
+                          <div class="w-full h-auto flex items-center justify-center">
                             {{ detail.ac_account_code }}
                           </div>
                         </td>
                         <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                          <div class="w-full h-full flex items-center justify-center">
+                          <div class="w-full h-auto flex items-center justify-center">
                             {{ detail.ac_account_name }}
                           </div>
                         </td>
                         <td class="cell">
-                          <div class="w-full h-full flex items-center justify-center">
+                          <div class="w-full h-auto flex items-center justify-center">
                             <textarea :disabled="disabled" class="p-1 w-full" v-model="detail.description" cols="7" rows="2"></textarea>
                           </div>
                         </td>
                         <td class="cell bold" :class="disabled ? 'unselectable' : ''">
-                          <div class="w-full h-full flex items-center justify-center">
+                          <div class="w-full h-auto flex items-center justify-center">
                             <InputPointFormat
                             :key="index" 
                             class="w-full h-full p-1" 
@@ -122,7 +122,7 @@
                           </div>
                         </td>
                         <td class="cell" :class="disabled ? 'unselectable' : ''">
-                          <div class="w-full h-full flex items-center justify-center">                       
+                          <div class="w-full h-auto flex items-center justify-center">                       
                             <select v-model="detail.xfor" :disabled="disabled">
                               <option value="Supir">Supir</option>
                               <option value="Kernet">Kernet</option>

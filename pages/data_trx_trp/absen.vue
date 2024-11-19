@@ -35,7 +35,7 @@
       </div>
 
 
-      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event" @doFilter="searching()"  @setCheckbox="checkbox_arr=$event">
+      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event" @doFilter="searching()"  @setCheckbox="checkbox_arr=$event" :deep_state="deep_state">
         <template #[`ritase_val`]="{item}">
           <IconsLine v-if="!item.ritase_val"/>
           <IconsCheck v-else/>
@@ -137,6 +137,9 @@ const addClassToTbody=(data)=>{
   return data;
 }
 
+let deep_state = ref({
+  clearCheckBox:false
+});
 
 const filter_status = ref("Undone")
 watch(()=>filter_status.value,(newval)=>{
@@ -377,6 +380,7 @@ const multiUnVal = async() => {
       trx_trps.value.splice(idx,1,{...sd});
     }
   });
+  deep_state.value.clearCheckBox = true;
 }
 
 const fields_thead=ref([

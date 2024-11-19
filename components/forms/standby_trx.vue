@@ -205,7 +205,7 @@
                         <!-- <tr v-if="detail.p_status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)"> -->
                         <tr v-if="detail.p_status!='Remove'"  :data-index="index">
                           <td v-if="!disabled" class="tools cell">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               <button  type="button" name="button"
                                 @click="showAction($event, index)">
                                 <IconsTools />
@@ -214,7 +214,7 @@
                           </td>
                           <td>{{ index + 1 }}.</td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center relative">
+                            <div class="w-full h-auto flex items-center justify-center relative">
                               <ClientOnly>
                                   <vue-date-picker  v-model="detail.tanggal" 
                                   type="datetime" 
@@ -227,7 +227,7 @@
                             </div>
                           </td>
                           <td class="cell">
-                            <div class="w-full h-full flex items-center justify-center relative">
+                            <div class="w-full h-auto flex items-center justify-center relative">
                               <ClientOnly>
                                   <vue-date-picker  v-model="detail.waktu" 
                                   type="time" 
@@ -240,20 +240,20 @@
                             </div>
                           </td>
                           <td class="cell">
-                            <div style="width:60vw;" class="h-full flex items-center justify-center">
+                            <div style="width:60vw;" class="h-auto flex items-center justify-center">
                               <AttachmentSingle :value="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event" :can_remove="true"/>
                             </div>
-                            <!-- <div class="h-full flex items-center justify-center">
+                            <!-- <div class="h-auto flex items-center justify-center">
                               <AttachmentSingle :value="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event" :can_remove="true"/>
                             </div> -->
                           </td>
                           <td class="cell">
-                            <div class="h-full flex items-center justify-center">
+                            <div class="h-auto flex items-center justify-center">
                               <textarea class="h-full" v-model="detail.note"></textarea>
                             </div>
                           </td>
                           <td class="cell" :class="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled ? 'unselectable' : 'unselectable'">
-                            <div class="w-full h-full flex items-center justify-center">
+                            <div class="w-full h-auto flex items-center justify-center">
                               <!-- <div v-if="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled" class="text-3xl">
                               </div> -->
                               <IconsTimes v-if="detail.be_paid==0" class="text-red-800"/>
