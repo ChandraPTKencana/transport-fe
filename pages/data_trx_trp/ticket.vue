@@ -329,7 +329,8 @@ const checkStatus=(data)=>{
   if(data.val_ticket == 1 && (
     ( ["CPO","PK"].indexOf(data.jenis)>-1 && (data.ticket_a_id!="" && data.ticket_b_bruto!="" && data.ticket_b_tara!="" && data.ticket_b_netto !="" && data.ticket_b_in_at!="" && data.ticket_b_out_at!="")) ||
     ( data.jenis=="TBS" && (data.ticket_a_id!="" && data.ticket_b_id!="") ) ||
-    ( data.jenis=="TBSK" && data.ticket_b_id!="")
+    ( data.jenis=="TBSK" && data.ticket_b_id!="") ||
+      data.ticket_note != ""
     )
   ) return "!bg-blue-300"; 
   return "";

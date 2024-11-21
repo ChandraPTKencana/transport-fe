@@ -59,6 +59,13 @@
                   {{ trx_trp.tipe }}
                 </div>               
               </div>
+
+              <div>
+                <label for="">Info</label>
+                <div class="border-solid border-2 w-fit p-1 bg-slate-700 text-white">
+                  {{ trx_trp.uj?.asst_opt }}
+                </div>               
+              </div>
             </div>
           </div>
 

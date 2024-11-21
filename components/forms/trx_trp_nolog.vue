@@ -8,27 +8,27 @@
         <div class="w-full flex flex-col items-center grow overflow-auto">
           <div class="w-full flex flex-row flex-wrap">
 
-            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+            <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
               <label for="">U.Jalan Per</label>
               <div class="card-border">
                 {{ trx_trp.tanggal ? $moment(trx_trp.tanggal).format("DD-MM-YYYY") : "" }}
               </div>
             </div>
 
-            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+            <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
               <label for="">Jenis</label>
               <div class="card-border">
                 {{ trx_trp.jenis }}
               </div>
             </div>
-            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+            <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
               <label for="">Payment Method</label>
               <div class="card-border">
                 {{ trx_trp.payment_method.name }}
               </div>
             </div>
 
-            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+            <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
               <label for="">No Pol</label>
               <div class="card-border">
                 {{ trx_trp.no_pol }}

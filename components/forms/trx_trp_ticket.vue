@@ -45,21 +45,28 @@
           
 
               <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
+                <div class="w-6/12 sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">Tujuan</label>
                   <div class="card-border">
                     {{ trx_trp.xto }}
                   </div>
                 </div>
 
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
+                <div class="w-6/12 sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">Info</label>
+                  <div class="card-border">
+                    {{ trx_trp.uj?.asst_opt }}
+                  </div>
+                </div>
+
+                <div class="w-6/12 sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">Tipe</label>
                   <div class="card-border">
                     {{ trx_trp.tipe }}
                   </div>
                 </div>
 
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
+                <div class="w-6/12 sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">Total Dari U.Jalan</label>
                   <div class="card-border ">
                     {{pointFormat(trx_trp.amount || 0) }}
