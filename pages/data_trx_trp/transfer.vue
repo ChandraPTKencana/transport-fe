@@ -163,7 +163,14 @@
                   {{ trx_trp.xto }}
                 </div>
               </div>
-    
+              <div class="flex flex-col m-1 border-solid border-l-4 border-blue-400 px-2 py-1 bg-gray-200">
+                <span class="text-xs font-bold">
+                  Info
+                </span>
+                <div class="">
+                  {{ trx_trp.uj?.asst_opt }}
+                </div>
+              </div>
               <div class="flex flex-col m-1 border-solid border-l-4 border-blue-400 px-2 py-1 bg-gray-200">
                 <span class="text-xs font-bold">
                   Tipe

@@ -130,7 +130,14 @@
                 {{ trx_trp.xto }}
               </div>
             </div>
-  
+            <div class="flex flex-col m-2 ">
+              <span class="text-xs">
+                Info
+              </span>
+              <div class="">
+                {{ trx_trp.uj?.asst_opt }}
+              </div>
+            </div>
             <div class="flex flex-col m-2">
               <span class="text-xs">
                 Tipe

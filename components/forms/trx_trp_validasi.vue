@@ -36,24 +36,10 @@
             </div>
 
             <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
-              <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">Tujuan</label>
+              <div class="w-full flex flex-col flex-wrap p-1">
+                <label for="">Uang Jalan</label>
                 <div class="card-border">
-                  {{ trx_trp.xto }}
-                </div>
-              </div>
-
-              <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">Tipe</label>
-                <div class="card-border">
-                  {{ trx_trp.tipe }}
-                </div>
-              </div>
-
-              <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">Total Dari U.Jalan</label>
-                <div class="card-border ">
-                  {{pointFormat(trx_trp.amount || 0) }}
+                  <WidthMiniPart :selected="selected_uj"/>
                 </div>
               </div>
             </div>
@@ -278,8 +264,47 @@ const selected_mini_temp={
 
 };
 
+
 const selected_supir = ref(JSON.parse(JSON.stringify(selected_mini_temp)));
 const selected_kernet = ref(JSON.parse(JSON.stringify(selected_mini_temp)));
+
+
+const selected_mini_temp_uj={
+  _raw:{},
+  _:{
+    id:{
+      tcon:"IconsBaselineNumbers",
+      text:"ID",
+      val:"",
+    },
+    xto:{
+      tcon:"IconsLocationOn",
+      text:"Tujuan",
+      val:"",
+    },
+    asst_opt:{
+      tcon:"IconsPerson",
+      text:"Info",
+      val:"",
+    },
+    tipe:{
+      tcon:"",
+      text:"Tipe",
+      val:"",
+    },
+    harga:{
+      tcon:"IconsMoney",
+      text:"Amount",
+      val:"",
+    },
+    
+  },
+  id:"",
+  name:"",
+  title:"",
+  note:""
+};
+const selected_uj = ref(JSON.parse(JSON.stringify(selected_mini_temp_uj)));
 
 const doSave = async () => {
   useCommonStore().loading_full = true;
@@ -353,6 +378,22 @@ const doSave = async () => {
   props.fnClose();
 }
 
+const set_uj_dt = (dt)=>{
+  let temp = JSON.parse(JSON.stringify(selected_mini_temp_uj));
+  temp._.id.val = dt.id,
+  temp._.xto.val = dt.xto,
+  temp._.asst_opt.val = dt.asst_opt,
+  temp._.tipe.val = dt.tipe,
+  temp._.harga.val = pointFormat(dt.harga),
+
+  temp.id = dt.id,
+  temp.name = dt.xto,
+  temp.title = (dt.asst_opt || '')+" "+(dt.tipe || '')+" "+(pointFormat(dt.harga) || ''),
+  
+  temp._raw = dt;
+  return temp;
+}
+
 const callData = async () => {
   useCommonStore().loading_full = true;
   const { data, error, status } = await useMyFetch("/trx_trp", {
@@ -391,6 +432,8 @@ const callData = async () => {
   selected_kernet.value.id=dt.kernet_id;
   selected_kernet.value.name=dt.kernet;
   selected_kernet.value.rek_no=(dt.kernet_rek_no || '')+" "+(dt.kernet_rek_name || '');
+
+  selected_uj.value = set_uj_dt(dt.uj);
 
   let $ttl_cut_fs =0;
   let $ttl_cut_fk =0;

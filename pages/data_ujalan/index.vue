@@ -425,6 +425,7 @@ const fields_thead=ref([
   {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"xto",label:"Tujuan",freeze:1,filter_on:1,type:'string'},
+  {key:"asst_opt",label:"Info",filter_on:1,type:'string'},
   {key:"tipe",label:"Tipe",filter_on:1,type:'string'},
   {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK']},
   {key:"harga",label:"Harga",class:" justify-end",type:'number'},

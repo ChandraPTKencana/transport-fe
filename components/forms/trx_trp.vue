@@ -29,7 +29,7 @@
 
             <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">Jenis</label>
-              <select v-model="trx_trp.jenis" @change="changeJenis($event)" :disabled="trx_trp.val==1">
+              <select v-model="trx_trp.jenis" :disabled="trx_trp.val==1">
                 <option value="TBS">TBS</option>
                 <option value="TBSK">TBSK</option>
                 <option value="CPO">CPO</option>
@@ -56,93 +56,26 @@
             </div>
 
             <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
-              <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">Tujuan</label>
-                <select v-model="trx_trp.xto" :disabled="trx_trp.val==1">
-                  <option v-for="lt in list_to">{{lt}}</option>
-                </select>
-                <p class="text-red-500">{{ field_errors.xto }}</p>
-              </div>
-
-              <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">Tipe</label>
-                <select v-model="trx_trp.id_uj" :disabled="trx_trp.val==1">
-                  <option v-for="lt in list_tipe" :value="lt.id" :selected="lt.id == trx_trp.id_uj">{{lt.tipe}}</option>
-                </select>
+              <div class="w-full flex flex-col flex-wrap p-1">
+                <label for="">Uang Jalan</label>
+                <WidthMiniList :arr="list_uj_mst" :selected="selected_uj" :pure="selected_mini_temp_uj" @setSelected="selected_uj=$event" :disabled="trx_trp_loaded.supir_id > 1 || trx_trp.val1==1"/>
                 <p class="text-red-500">{{ field_errors.id_uj }}</p>
-              </div>
-
-              <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">Total Dari U.Jalan</label>
-                <div class="card-border disabled">
-                  {{pointFormat(trx_trp.amount) }}
-                </div>
               </div>
             </div>
 
-            <div v-if="trx_trp.uj.asst_opt" class="w-full flex flex-wrap">
+            <div v-if="selected_uj._raw?.asst_opt" class="w-full flex flex-wrap">
               <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Supir</label>
                 <WidthMiniList :arr="list_emp" :selected="selected_supir" :pure="selected_mini_temp" @setSelected="selected_supir=$event" :disabled="trx_trp_loaded.supir_id > 1 || trx_trp.val1==1"/>
                 <p class="text-red-500">{{ field_errors.supir_id }}</p>
               </div>
   
-              <div v-show="trx_trp.uj.asst_opt=='DENGAN KERNET'" class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+              <div v-show="selected_uj._raw?.asst_opt=='DENGAN KERNET'" class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Kernet</label>
                 <WidthMiniList :arr="list_emp" :selected="selected_kernet" :pure="selected_mini_temp" @setSelected="selected_kernet=$event" :disabled="trx_trp_loaded.kernet_id > 1 || trx_trp.val1==1"/>
                 <p class="text-red-500">{{ field_errors.kernet_id }}</p>
               </div>
             </div>
-
-            <!-- <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
-
-              <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">Cost Center Code</label>
-                <input list="cost_center"  v-model="trx_trp.cost_center_code" @blur="blurCostCenterCode($event)" :disabled="trx_trp.pvr_no!=''">
-                <datalist id="cost_center">
-                  <option v-for="lcc in list_cost_center" :value="lcc.CostCenter">{{lcc.CostCenter +'-'+ lcc.Description}}</option>
-                </datalist>
-                <p class="text-red-500">{{ field_errors.cost_center_code }}</p>
-              </div>
-
-              <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                <label for="">Cost Center Desc</label>
-                <div class="card-border disabled">
-                  {{  trx_trp.cost_center_desc }}
-                </div>
-              </div>
-
-              <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                <label for="">PVR No</label>
-                <div class="card-border disabled">
-                  {{  trx_trp.pvr_no }}
-                </div>
-              </div>
-
-              <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">PVR Total</label>
-                <div class="card-border disabled">
-                  {{ pointFormat(trx_trp.pvr_total || 0) }}
-                </div>
-              </div>
-
-
-              <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                <label for="">PV</label>
-                <div class="card-border disabled">
-                  {{  trx_trp.pv_no }}
-                </div>
-              </div>
-
-              <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">PV Amount</label>
-                <div class="card-border disabled">
-                  {{  pointFormat(trx_trp.pv_total) }}
-                </div>
-              </div>
-            </div> -->
-
-
           </div>
         </div>
         
@@ -229,6 +162,7 @@ const trx_trp_temp = {
   pvr_total:0,
   pvr_had_detail:"",
   transition_target:"",
+  transition_type:"",
   payment_method_id:2,
   payment_method:{
     id:0,
@@ -242,37 +176,7 @@ const trx_trp = ref({...trx_trp_temp});
 const token = useCookie('token');
 const field_errors = ref({})
 
-const blurCostCenterCode=($e)=>{
-  let val = $e.target.value;
-  if(!val) {
-    trx_trp.value.cost_center_code='';
-    trx_trp.value.cost_center_desc="";
-    return;
-  }
-  let match = props.list_cost_center.filter(
-    (x)=>x.CostCenter == val
-  );
-
-  if(match.length==0){
-    trx_trp.value.cost_center_code='112';
-    trx_trp.value.cost_center_desc="Transport";
-  }
-}
-
-const changeJenis=($e)=>{  
-  trx_trp.value.transition_target = ($e.target.value=="TBS") ? trx_trp.value.transition_target : "";
-}
-
-
-const { display } = useAlertStore();
-
 const doSave = async () => {
-
-  // if(trx_trp.value.pv_no && parseInt(trx_trp.value.pv_total) != parseInt(trx_trp.value.amount))
-  // {
-  //   display({ show: true, status: "Failed", message: "Total dari Ujalan dan PV tidak cocok" });
-  //   return;
-  // }
   
   useCommonStore().loading_full = true;
   field_errors.value = {};
@@ -280,11 +184,7 @@ const doSave = async () => {
   const data_in = new FormData();
   data_in.append("tanggal", $moment(trx_trp.value.tanggal).format("Y-MM-DD"));  
   data_in.append("jenis", trx_trp.value.jenis);
-  data_in.append("id_uj", trx_trp.value.id_uj);
-  data_in.append("xto", trx_trp.value.xto);
-  data_in.append("cost_center_code", trx_trp.value.cost_center_code);
-  data_in.append("online_status", props.online_status);
-  data_in.append("transition_target", trx_trp.value.transition_target);
+  data_in.append("id_uj", selected_uj.value.id);
   data_in.append("payment_method_id", trx_trp.value.payment_method_id);
 
   data_in.append("no_pol", trx_trp.value.no_pol);
@@ -318,9 +218,12 @@ const doSave = async () => {
   trx_trp.value.supir           = selected_supir.value.name;
   trx_trp.value.supir_rek_no    = selected_supir.value._.rek_no.val;
   trx_trp.value.supir_rek_name  = selected_supir.value._.rek_name.val;
+
   trx_trp.value.kernet          = selected_kernet.value.name;
   trx_trp.value.kernet_rek_no   = selected_kernet.value._.rek_no.val;
   trx_trp.value.kernet_rek_name = selected_kernet.value._.rek_name.val;
+  
+  trx_trp.value.uj              = selected_uj.value._raw;
   let pm_idx = list_payment_methods.value.map((x)=>x.id).indexOf(trx_trp.value.payment_method_id);
   trx_trp.value.payment_method  = {...list_payment_methods.value[pm_idx]};
 
@@ -338,14 +241,9 @@ const doSave = async () => {
   props.fnClose();
 }
 
-const list_to = computed(()=>{
+const list_uj = computed(()=>{
   let jenisF = trx_trp.value.jenis == 'TBSK' ? 'TBS' : trx_trp.value.jenis;
-  return [...new Set(list_ujalan.value.filter((x)=>x.jenis==jenisF).map((x)=>x.xto))];
-})
-
-const list_tipe = computed(()=>{
-  let jenisF = trx_trp.value.jenis == 'TBSK' ? 'TBS' : trx_trp.value.jenis;
-  return list_ujalan.value.filter((x)=>x.xto == trx_trp.value.xto && x.jenis==jenisF);
+  return list_ujalan.value.filter((x)=>x.jenis==jenisF);
 })
 
 const selected_mini_temp={
@@ -395,9 +293,71 @@ const list_emp = computed(()=>{
     temp.title = (x.rek_no || '')+" "+(x.rek_name || ''),
     temp.note = createPotonganNote(x),
 
-    
     temp._raw = x;
     results.push(JSON.parse(JSON.stringify(temp)));
+  });
+  return results;
+})
+
+
+const selected_mini_temp_uj={
+  _raw:{},
+  _:{
+    id:{
+      tcon:"IconsBaselineNumbers",
+      text:"ID",
+      val:"",
+    },
+    xto:{
+      tcon:"IconsLocationOn",
+      text:"Tujuan",
+      val:"",
+    },
+    asst_opt:{
+      tcon:"IconsPerson",
+      text:"Info",
+      val:"",
+    },
+    tipe:{
+      tcon:"",
+      text:"Tipe",
+      val:"",
+    },
+    harga:{
+      tcon:"IconsMoney",
+      text:"Amount",
+      val:"",
+    },
+    
+  },
+  id:"",
+  name:"",
+  title:"",
+  note:""
+};
+
+const selected_uj = ref(JSON.parse(JSON.stringify(selected_mini_temp_uj)));
+
+const set_uj_dt = (dt)=>{
+  let temp = JSON.parse(JSON.stringify(selected_mini_temp_uj));
+  temp._.id.val = dt.id,
+  temp._.xto.val = dt.xto,
+  temp._.asst_opt.val = dt.asst_opt,
+  temp._.tipe.val = dt.tipe,
+  temp._.harga.val = pointFormat(dt.harga),
+
+  temp.id = dt.id,
+  temp.name = dt.xto,
+  temp.title = (dt.asst_opt || '')+" "+(dt.tipe || '')+" "+(pointFormat(dt.harga) || ''),
+  
+  temp._raw = dt;
+  return temp;
+}
+
+const list_uj_mst = computed(()=>{
+  let results = [];
+  list_uj.value.forEach((x,y)=>{
+    results.push(JSON.parse(JSON.stringify(set_uj_dt(x))));
   });
   return results;
 })
@@ -451,6 +411,8 @@ const callData = async () => {
   selected_kernet.value.id=dt.kernet_id;
   selected_kernet.value.name=dt.kernet;
   selected_kernet.value.rek_no=(dt.kernet_rek_no || '')+" "+(dt.kernet_rek_name || '');
+
+  selected_uj.value = set_uj_dt(dt.uj)
 
   let $ttl_cut_fs =0;
   let $ttl_cut_fk =0;
@@ -512,6 +474,7 @@ watch(() => props.show, async(newVal, oldVal) => {
     trx_trp_loaded = {...trx_trp_temp};
     selected_supir.value = JSON.parse(JSON.stringify(selected_mini_temp));
     selected_kernet.value = JSON.parse(JSON.stringify(selected_mini_temp));
+    selected_uj.value = JSON.parse(JSON.stringify(selected_mini_temp_uj));
 
     field_errors.value = {};
     if(props.id!=0)
@@ -521,64 +484,21 @@ watch(() => props.show, async(newVal, oldVal) => {
   immediate: true
 });
 
-watch(()=>trx_trp.value.cost_center_code, (newVal, oldVal) => {
-  let $desc = "";
-  if (newVal=="" || newVal){
-    let dt = props.list_cost_center.filter(
-      (x)=>x.CostCenter == trx_trp.value.cost_center_code
-    );
-
-    if(dt.length  > 0) 
-    $desc = dt[0].Description;
-    else if(trx_trp.value.cost_center_code == trx_trp_loaded.cost_center_code) 
-    $desc = trx_trp_loaded.cost_center_desc;
-
-    trx_trp.value.cost_center_desc = $desc;
-  }
-}, {
-  deep:true,
-  immediate: true
-});
-
-
-const checkAmount = (newVal, oldVal)=>{
-  let $total=0;
-  let $tipe = "";
-  if (newVal=="" || newVal){
-    let hrg = list_ujalan.value.filter(
-      (x)=>x.id == trx_trp.value.id_uj
-    );
-
-    if(hrg.length  > 0)
-    {
-      trx_trp.value.uj = hrg[0];
-      $total = hrg[0].harga;
-      $tipe = hrg[0].tipe;
-    }
-    else if(trx_trp.value.id_uj == trx_trp_loaded.id_uj) 
-    {
-      trx_trp.value.uj = trx_trp_loaded.uj;
-      $total = trx_trp_loaded.amount;
-      $tipe = trx_trp_loaded.tipe;
-    }
-    trx_trp.value.tipe = $tipe
-    trx_trp.value.amount=$total;
-
-    if(trx_trp.value.uj.asst_opt && trx_trp.value.uj.asst_opt == 'TANPA KERNET' && !(trx_trp_loaded.kernet_id > 1 || trx_trp.val1==1)){
+watch(()=>selected_uj.value._raw, (newVal, oldVal) => {
+  if(newVal &&
+    Object.keys(newVal).length === 0 &&
+    newVal.constructor === Object){
+      selected_supir.value = JSON.parse(JSON.stringify(selected_mini_temp));
       selected_kernet.value = JSON.parse(JSON.stringify(selected_mini_temp));
-    }
+      trx_trp.value.transition_target = "";
+      trx_trp.value.transition_type = "";
+  } else if (newVal.asst_opt && newVal.asst_opt == 'TANPA KERNET') {
+      selected_kernet.value = JSON.parse(JSON.stringify(selected_mini_temp));
+      if(newVal.transition_from){
+        trx_trp.value.transition_target = newVal.transition_from;
+        trx_trp.value.transition_type = "From";
+      }
   }
-}
-
-watch(()=>trx_trp.value.xto, (newVal, oldVal) => {
-  if(props.show)checkAmount(newVal, oldVal);
-}, {
-  deep:true,
-  immediate: true
-});
-
-watch(()=>trx_trp.value.id_uj, (newVal, oldVal) => {
-  if(props.show)checkAmount(newVal, oldVal);
 }, {
   deep:true,
   immediate: true
