@@ -8,7 +8,7 @@
           <div class="w-full sm:w-full md:w-1/3 flex flex-row flex-wrap">
             <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
               <label for="">Nama</label>
-              <input type="text" v-model="employee.name">
+              <input type="text" v-model="employee.name" :disabled="employee.val_at!=''">
               <p class="text-red-500">{{ field_errors.name }}</p>
             </div>
 

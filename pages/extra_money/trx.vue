@@ -46,6 +46,10 @@
             @click="printPreview()">
             <IconsPrinterEye />
           </button>
+          <button v-if="enabled_print_preview_bt" type="button" name="button" class="m-1 text-2xl "
+            @click="printPreviewBT()">
+            <IconsPrinterEye />
+          </button>
         </div>
         <div  class="flex">
 
@@ -665,6 +669,31 @@ const printPreview = async()=>{
   printHtml(data.value.html,318);
 }
 
+const printPreviewBT = async()=>{
+  
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+    return;
+  } 
+  
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/extra_money_trx_preview_file_bt", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json'
+    },
+    params: {id : extra_money_trxs.value[selected.value].id},
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  printHtml(data.value.html,318);
+}
 
 const generatePVR = async() => {
   useCommonStore().loading_full = true;
@@ -915,4 +944,15 @@ const enabled_print_preview = computed(()=>{
   return result;
 })
 
+
+const enabled_print_preview_bt = computed(()=>{ 
+  let result = selected.value > -1 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
+  && dt_selected.value.payment_method_id == 2
+  && dt_selected.value.received_payment == 1
+  && dt_selected.value.duitku_employee_disburseId != ''
+  && useUtils().checkPermission('extra_money_trx.preview_file');
+  return result;
+})
 </script>
