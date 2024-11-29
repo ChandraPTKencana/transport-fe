@@ -184,6 +184,7 @@ const employee_temp = {
   tmk: new Date(),
   address:"",
   status:"TK/0",
+  val_at:""
 };
 
 const employee = ref({...employee_temp});
