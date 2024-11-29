@@ -427,7 +427,7 @@ const fields_thead=ref([
   {key:"xto",label:"Tujuan",freeze:1,filter_on:1,type:'string'},
   {key:"asst_opt",label:"Info",filter_on:1,type:'string'},
   {key:"tipe",label:"Tipe",filter_on:1,type:'string'},
-  {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK']},
+  {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK','LAIN']},
   {key:"harga",label:"Harga",class:" justify-end",type:'number'},
   {key:"note_for_remarks",label:"Ket.U.Remarks",filter_on:1,type:'string'},
   {key:"transition_from",label:"Pengalihan",filter_on:1,type:"select",select_item:useCommonStore().list_pabrik},

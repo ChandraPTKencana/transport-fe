@@ -326,13 +326,14 @@ definePageMeta({
 const checkStatus=(data)=>{
   if(data.deleted==1) return "!bg-red-400";
   if(data.req_deleted == 1) return "!bg-yellow-300"; 
-  if(data.val_ticket == 1 && (
-    ( ["CPO","PK"].indexOf(data.jenis)>-1 && (data.ticket_a_id!="" && data.ticket_b_bruto!="" && data.ticket_b_tara!="" && data.ticket_b_netto !="" && data.ticket_b_in_at!="" && data.ticket_b_out_at!="")) ||
-    ( data.jenis=="TBS" && (data.ticket_a_id!="" && data.ticket_b_id!="") ) ||
-    ( data.jenis=="TBSK" && data.ticket_b_id!="") ||
-      data.ticket_note != ""
-    )
-  ) return "!bg-blue-300"; 
+  // if(data.val_ticket == 1 && (
+  //   ( ["CPO","PK"].indexOf(data.jenis)>-1 && (data.ticket_a_id!="" && data.ticket_b_bruto!="" && data.ticket_b_tara!="" && data.ticket_b_netto !="" && data.ticket_b_in_at!="" && data.ticket_b_out_at!="")) ||
+  //   ( data.jenis=="TBS" && (data.ticket_a_id!="" && data.ticket_b_id!="") ) ||
+  //   ( data.jenis=="TBSK" && data.ticket_b_id!="") ||
+  //     data.ticket_note != ""
+  //   )
+  // ) return "!bg-blue-300"; 
+  if(data.val_ticket == 1) return "!bg-blue-300"; 
   return "";
 }
 const addClassToTbody=(data)=>{
@@ -840,7 +841,7 @@ const fields_thead=ref([
   {key:"xto",label:"Tujuan",filter_on:1,type:'string'},
   {key:"uj_asst_opt",label:"Info",filter_on:1,type:'select',select_item:['DENGAN KERNET','TANPA KERNET']},
   {key:"tipe",label:"Tipe",filter_on:1,type:'string'},
-  {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK']},
+  {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK','LAIN']},
   {key:"amount",label:"Amount",class:" justify-end",filter_on:1,type:"number"},
   {key:"transition",label:"Peralihan",childs:[
     {key:"transition_type",label:"Type",type:'select', filter_on:1,select_item:['To','From']},
