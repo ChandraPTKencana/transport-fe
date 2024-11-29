@@ -8,11 +8,11 @@
               placeholder="Keyword">
           </div>
           <div>
-            <button>CSV</button>
+            <button @click="generateCSV()">CSV</button>
           </div>
       </div>
 
-      <!-- <div class="grow overflow-auto h-0">
+      <div class="grow overflow-auto h-0">
         <div v-for="(tt,idx) in filtered_data" class="p-1 grow">
           <div class="bg-white flex py-2 justify-between">
   
@@ -82,10 +82,10 @@
             <button class="bg-blue-500 text-white rounded" @click="pop_verified(idx,tt)"> Detail </button>
           </div>
         </div>
-      </div> -->
+      </div>
     </section>
 
-    <!-- <div v-show="pop_show" class="w-full h-full fixed top-0 left-0 bg-gray-100 bg-opacity-80 flex items-center justify-center z-10">
+    <div v-show="pop_show" class="w-full h-full fixed top-0 left-0 bg-gray-100 bg-opacity-80 flex items-center justify-center z-10">
       <div class="w-full sm:w-10/12 md:w-10/12 lg:w-8/12 bg-white flex flex-col border-solid border-gray-200 max-w-full max-h-full overflow-auto" style="border-width: 1px;">
         <HeaderPopup :title="'Detail Information'" :fn="()=>{pop_show = false, show_confirm = false}" class="w-100 flex align-items-center"
           style="color:white;" />
@@ -339,7 +339,7 @@
         </div>
       </div>
 
-    </div> -->
+    </div>
 
     <GAPIN :show="timeout_pin" @setTimeout="timeout_pin=$event"/>
   </div>
@@ -379,7 +379,7 @@ const { data: dt_async } = await useAsyncData(async () => {
   let trx_trps = [];
 
   const [data1, data2] = await Promise.all([
-    useMyFetch("/trx_trp/transfers", {
+    useMyFetch("/trx_trp/transfers_mandiri", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -443,41 +443,6 @@ const callDetail = async (dt) => {
   trx_trp.value = data.value.data;  
 }
 
-
-
-
-// const callData = async () => {
-//   useCommonStore().loading_full = true;
-//   field_errors.value = {};
-
-//   if (params.page == 1) trx_trps.value = [];
-//   if(params.first_row) delete params.first_row;
-//   if(params.page > 1){
-//     params.first_row = JSON.stringify(trx_trps.value[0]);
-//   }
-//   params.filter_status = 'mandor_trx_unverified';
-
-//   const { data, error, status } = await useMyFetch("/trx_trps", {
-//     method: 'get',
-//     headers: {
-//       'Authorization': `Bearer ${token.value}`,
-//       'Accept': 'application/json'
-//     },
-//     params: params,
-//     retry: 0,
-//   });
-//   useCommonStore().loading_full = false;
-
-//   if (status.value === 'error') {
-//     useErrorStore().trigger(error, field_errors);
-//     return;
-//   }
-
-//   trx_trps.value = data.value.data;
-  
-// }
-
-
 const doTransfer = async () => {
   useCommonStore().loading_full = true;
   field_errors.value = {};
@@ -488,7 +453,7 @@ const doTransfer = async () => {
 
   let $method = "post";
 
-  const { data, error, status } = await useMyFetch("/trx_trp/transfer", {
+  const { data, error, status } = await useMyFetch("/trx_trp/transfer_mandiri", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -538,16 +503,31 @@ const potongan= (trx_trp)=>{
 };
 
 const potongan_supir= (trx_trp)=>{
-  if(trx_trp.potongan && trx_trp.potongan.length > 0)
-      return trx_trp.potongan.filter((x)=>x.potongan_mst.employee_id == trx_trp.supir_id).map((x)=>parseInt(x.nominal_cut)).reduce((prev,curr)=>{prev+=curr; return prev;})
+  if(trx_trp.potongan && trx_trp.potongan.length > 0){
+    let filter = trx_trp.potongan.filter((x)=>x.potongan_mst.employee_id == trx_trp.supir_id);
+    if(filter.length == 0) return 0;
+
+    let map = filter.map((x)=>parseInt(x.nominal_cut));
+    if(map.length == 0) return 0;
+
+    return map.reduce((prev,curr)=>{prev+=curr; return prev;})
+  }
   return 0;
 };
 
 const potongan_kernet= (trx_trp)=>{
-  if(trx_trp.potongan && trx_trp.potongan.length > 0)
-      return trx_trp.potongan.filter((x)=>x.potongan_mst.employee_id == trx_trp.kernet_id).map((x)=>parseInt(x.nominal_cut)).reduce((prev,curr)=>{prev+=curr; return prev;})
+  if(trx_trp.potongan && trx_trp.potongan.length > 0){
+    let filter = trx_trp.potongan.filter((x)=>x.potongan_mst.employee_id == trx_trp.kernet_id);
+    if(filter.length == 0) return 0;
+
+    let map = filter.map((x)=>parseInt(x.nominal_cut));
+    if(map.length == 0) return 0;
+
+    return map.reduce((prev,curr)=>{prev+=curr; return prev;})
+  }
   return 0;
 };
+
 
 const highlight=()=>{
   let text = search.value;
@@ -584,7 +564,7 @@ const generateCSV = async () => {
 
   let $method = "post";
 
-  const { data, error, status } = await useMyFetch("/trx_trp/transfer_mandiri", {
+  const { data, error, status } = await useMyFetch("/trx_trp/gen_csv_mandiri", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
