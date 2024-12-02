@@ -60,11 +60,12 @@
                       <th colspan="3">Trip <span class="text-sm">({{pointFormat((ttl_uj_gaji + ttl_uj_makan + ttl_uj_dinas) || 0) }})</span></th>
                       <th rowspan="2">Potongan Trip <span class="text-sm">({{pointFormat(ttl_potongan || 0) }})</span></th>
                       <th rowspan="2">Potongan Lainnya <span class="text-sm">({{pointFormat(ttl_bonus || 0) }})</span></th>
+                      <th rowspan="2">Potongan Lainnya 2 <span class="text-sm">({{pointFormat(ttl_bonus_2 || 0) }})</span></th>
                       <th rowspan="2">BPJS Kesehatan <span class="text-sm">({{pointFormat(ttl_bpjs_kesehatan || 0) }})</span></th>
                       <th rowspan="2">BPJS Jamsos <span class="text-sm">({{pointFormat(ttl_bpjs_jamsos || 0) }})</span></th>
                       <th rowspan="2">U.Kerajinan <span class="text-sm">({{pointFormat(ttl_kerajinan || 0) }})</span></th>
-                      <th rowspan="2">Grand Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_sb_dinas + ttl_sb_gaji_2 + ttl_sb_makan_2 + ttl_sb_dinas_2 + ttl_uj_gaji + ttl_uj_makan + ttl_uj_dinas - ttl_potongan + ttl_bonus + ttl_kerajinan ) || 0) }})</span></th>
-                      <th rowspan="2">Total Periode 2 <span class="text-sm">({{pointFormat((ttl_sb_gaji_2 + ttl_sb_makan_2 + ttl_sb_dinas_2 + ttl_bonus + ttl_kerajinan ) || 0) }})</span></th>
+                      <th rowspan="2">Grand Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_sb_dinas + ttl_sb_gaji_2 + ttl_sb_makan_2 + ttl_sb_dinas_2 + ttl_uj_gaji + ttl_uj_makan + ttl_uj_dinas - ttl_potongan + ttl_bonus + ttl_bonus_2  + ttl_kerajinan ) || 0) }})</span></th>
+                      <th rowspan="2">Total Periode 2 <span class="text-sm">({{pointFormat((ttl_sb_gaji_2 + ttl_sb_makan_2 + ttl_sb_dinas_2 + ttl_bonus_2 + ttl_kerajinan ) || 0) }})</span></th>
                     </tr>
                     <tr class="sticky top-[60px] !z-[2]">
                       <th >Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji || 0) }})</span></th>
@@ -104,6 +105,7 @@
                         <td>{{ pointFormat(detail.uj_dinas) }}</td>
                         <td>{{ pointFormat(detail.nominal_cut) }}</td>
                         <td>{{ pointFormat(detail.salary_bonus_nominal) }}</td>
+                        <td>{{ pointFormat(detail.salary_bonus_nominal_2) }}</td>
                         <td>{{ pointFormat(detail.employee_bpjs_kesehatan) }}</td>
                         <td>{{ pointFormat(detail.employee_bpjs_jamsos) }}</td>
                         <td>{{ pointFormat(detail.kerajinan) }}</td>
@@ -376,6 +378,15 @@ const ttl_bonus = computed(()=>{
 
   details.value.forEach(e => {
     temp += parseFloat(e.salary_bonus_nominal); 
+  });
+  return temp;
+})
+
+const ttl_bonus_2 = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.salary_bonus_nominal_2); 
   });
   return temp;
 })
