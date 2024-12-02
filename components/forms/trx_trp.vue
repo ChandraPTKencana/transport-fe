@@ -34,6 +34,7 @@
                 <option value="TBSK">TBSK</option>
                 <option value="CPO">CPO</option>
                 <option value="PK">PK</option>
+                <option value="LAIN">LAIN</option>
               </select>
               <p class="text-red-500">{{ field_errors.jenis }}</p>
             </div>
@@ -242,8 +243,9 @@ const doSave = async () => {
 }
 
 const list_uj = computed(()=>{
-  let jenisF = trx_trp.value.jenis == 'TBSK' ? 'TBS' : trx_trp.value.jenis;
-  return list_ujalan.value.filter((x)=>x.jenis==jenisF);
+  // let jenisF = trx_trp.value.jenis == 'TBSK' ? 'TBS' : trx_trp.value.jenis;
+  // return list_ujalan.value.filter((x)=>x.jenis==jenisF);
+  return list_ujalan.value.filter((x)=>x.jenis==trx_trp.value.jenis);
 })
 
 const selected_mini_temp={
