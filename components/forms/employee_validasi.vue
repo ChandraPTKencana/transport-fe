@@ -62,6 +62,55 @@
                   {{ employee.phone_number }}
                 </div>
               </div>
+
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+                <label for="">Tanggal Lahir</label>
+                <div class="card-border">
+                  {{ $moment(employee.birth_date).format("DD-MM-YYYY") }}
+                </div>
+              </div>
+
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+                <label for="">Tempat Lahir</label>
+                <div class="card-border">
+                  {{ employee.birth_place }}
+                </div>
+              </div>
+
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+                <label for="">TMK</label>
+                <div class="card-border">
+                  {{ $moment(employee.tmk).format("DD-MM-YYYY") }}
+                </div>
+              </div>
+
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+                <label for="">Alamat</label>
+                <div class="card-border">
+                  {{ employee.address }}
+                </div>
+              </div>
+
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+                <label for="">Status</label>
+                <div class="card-border">
+                  {{ employee.status }}
+                </div>
+              </div>
+
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+                <label for="">BPJS Kesehatan</label>
+                <div class="card-border">
+                  {{ pointFormat(employee.bpjs_kesehatan) }}
+                </div>
+              </div>
+
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+                <label for="">BPJS Jamsos</label>
+                <div class="card-border">
+                  {{ pointFormat(employee.bpjs_jamsos) }}
+                </div>
+              </div>
             </div>
             <div class="p-1 w-full sm:w-full md:w-2/3 md:overflow-auto max-h-full">
               <AttachmentSingle :label="'Attachment'" :value="employee.attachment_1_preview" @setFile="employee.attachment_1=$event"  @setPreview="employee.attachment_1_preview=$event"/>

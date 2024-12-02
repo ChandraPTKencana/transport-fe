@@ -116,6 +116,30 @@
               </select>
               <p class="text-red-500">{{ field_errors.status }}</p>
             </div>
+
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+                <label for="">BPJS Kesehatan</label>
+                <div class="w-full" >
+                  <InputPointFormat
+                  class="w-full h-full p-1" 
+                  type="text" 
+                  :value="employee.bpjs_kesehatan || 0" 
+                  @input="employee.bpjs_kesehatan = $event"/>
+                </div>
+                <p class="text-red-500">{{ field_errors.bpjs_kesehatan }}</p>
+            </div>
+
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+                <label for="">BPJS Jamsos</label>
+                <div class="w-full" >
+                  <InputPointFormat
+                  class="w-full h-full p-1" 
+                  type="text" 
+                  :value="employee.bpjs_jamsos || 0" 
+                  @input="employee.bpjs_jamsos = $event"/>
+                </div>
+                <p class="text-red-500">{{ field_errors.bpjs_jamsos }}</p>
+            </div>
           </div>
 
           <div class="p-1 w-full sm:w-full md:w-2/3 md:overflow-auto max-h-full">
@@ -181,6 +205,8 @@ const employee_temp = {
   attachment_1_preview:"",
   birth_date: new Date(),
   birth_place:"",
+  bpjs_kesehatan:0,
+  bpjs_jamsos:0,
   tmk: new Date(),
   address:"",
   status:"TK/0",
@@ -213,6 +239,8 @@ const doSave = async () => {
   data_in.append("tmk", employee.value.tmk ? $moment(employee.value.tmk).format("Y-MM-DD") : "");  
   data_in.append("address", employee.value.address);
   data_in.append("status", employee.value.status);
+  data_in.append("bpjs_kesehatan", employee.value.bpjs_kesehatan);
+  data_in.append("bpjs_jamsos", employee.value.bpjs_jamsos);
 
   let $method = "post";
 
