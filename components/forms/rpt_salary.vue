@@ -38,7 +38,7 @@
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
                   <thead >
                     <tr class="sticky -top-1 !z-[2]">
-                      <td colspan="28" class="!bg-slate-800 text-white font-bold">
+                      <td colspan="30" class="!bg-slate-800 text-white font-bold">
                         Detail
                       </td>
                     </tr>
@@ -54,6 +54,7 @@
                       <th rowspan="2">Alamat</th>
                       <th rowspan="2">Status</th>
                       <th rowspan="2">No Rek</th>
+                      <th rowspan="2">Nama Rek</th>
                       <th rowspan="2">Nama Bank</th>
                       <th colspan="3">Standby 1 <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_sb_dinas)  || 0) }})</span></th>
                       <th colspan="3">Standby 2 <span class="text-sm">({{pointFormat((ttl_sb_gaji_2 + ttl_sb_makan_2 + ttl_sb_dinas_2)  || 0) }})</span></th>
@@ -93,6 +94,7 @@
                         <td>{{ detail.employee_address }}</td>
                         <td>{{ detail.employee_status }}</td>
                         <td>{{ detail.employee_rek_no }}</td>
+                        <td>{{ detail.employee_rek_name }}</td>
                         <td>{{ detail.employee_bank_name }}</td>
                         <td>{{ pointFormat(detail.sb_gaji) }}</td>
                         <td>{{ pointFormat(detail.sb_makan) }}</td>
