@@ -407,7 +407,7 @@ const enabled_copy = computed(()=>{
 })
 
 const enabled_add = computed(()=>{  
-  let result = ['available','all','unapprove'].indexOf(filter_status.value) > -1  
+  let result = ['undone','done','deleted','all'].indexOf(filter_status.value) > -1  
   && useUtils().checkPermission('potongan_mst.create');
   return result;
 })

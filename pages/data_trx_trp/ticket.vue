@@ -192,6 +192,12 @@
       <template #words>
         Data akan diproses dan <b>tidak dapat dibatalkan lagi</b>, apakah Anda menyetujui permintaan penghapusan data berikut?
       </template>
+      <template #footer>
+          Alasan Tambahan:
+        <div class="grow mb-5" >
+          <textarea  v-model="reason_adder"></textarea>
+        </div>
+      </template>
     </PopupMini>
     <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
     <!-- <FormsTrxTrpTicket :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ticket="list_ticket" :online_status="online_status"/> -->
@@ -622,11 +628,13 @@ const toggleReqDeleteBox = async()=>{
   }
 };
 
+const reason_adder = ref("");
 const approveVoid = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     req_deleted_reason.value = '';
+    reason_adder.value = '';
     req_deleted_data.value = {
       id : trx_trps.value[selected.value].id, 
       "no pol":trx_trps.value[selected.value].no_pol, 
@@ -644,6 +652,7 @@ const confirmedReqDeleted = async() => {
   const data_in = new FormData();
   data_in.append("id", trx_trps.value[selected.value].id);  
   data_in.append("_method", "DELETE");
+  data_in.append("reason_adder", reason_adder.value);  
 
   const { data, error, status } = await useMyFetch("/trx_trp_approve_req_delete", {
     method: "post",
