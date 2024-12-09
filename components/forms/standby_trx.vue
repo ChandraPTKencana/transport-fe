@@ -85,7 +85,7 @@
               </div>
               
               <div class="w-full flex flex-wrap">
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <div v-if="standby_trx.standby_mst_.is_trip==1" class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">No Pol</label>
                   <input type="text" list="vehicle"  v-model="standby_trx.no_pol" :disabled="standby_trx.pvr_no!=''"/>
                   <datalist id="vehicle">
@@ -94,7 +94,7 @@
                   <p class="text-red-500">{{ field_errors.no_pol }}</p>
                 </div>
             
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <div v-if="standby_trx.standby_mst_.is_trip==1" class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">Tujuan</label>
                   <input type="text" list="xto"  v-model="standby_trx.xto" :disabled="standby_trx.pvr_no!=''"/>
                   <datalist id="xto">
@@ -108,7 +108,7 @@
                   <textarea v-model="standby_trx.note_for_remarks" :disabled="standby_trx.pvr_no!=''"> </textarea>
                   <p class="text-red-500">{{ field_errors.note_for_remarks }}</p>
                 </div>
-                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <div v-if="standby_trx.standby_mst_.is_trip==1" class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">Trx Trp ID#</label>
                   <input type="text" v-model="standby_trx.trx_trp_id" :disabled="standby_trx.pvr_no!=''"/>
                   <p class="text-red-500">{{ field_errors.trx_trp_id }}</p>
@@ -357,7 +357,8 @@ const standby_trx_temp = {
       name: "",
       tipe: "",
       amount:0,
-      is_transition:0
+      is_transition:0,
+      is_trip:0
     },
 
     supir: "",
@@ -752,7 +753,35 @@ watch(()=>standby_trx.value.standby_mst_id, (newVal, oldVal) => {
         standby_trx.value.transition_target = "";
         standby_trx.value.transition_type = "";
       }
+
+      let dao = standby_trx.value.standby_mst_?.driver_asst_opt;
+      switch (dao) {
+        case 'SUPIR':
+        selected_kernet.value = JSON.parse(JSON.stringify(selected_mini_temp));
+          
+        break;
+        case 'KERNET':
+        selected_supir.value = JSON.parse(JSON.stringify(selected_mini_temp));
+
+        break;
+    
+        case 'SUPIR KERNET':
+        
+        break;      
+
+        default:
+          selected_supir.value = JSON.parse(JSON.stringify(selected_mini_temp));
+          selected_kernet.value = JSON.parse(JSON.stringify(selected_mini_temp));
+          break;
+      }
+      if(standby_trx.value.standby_mst_.is_trip==0){
+        standby_trx.value.no_pol = "";
+        standby_trx.value.xto = "";
+        standby_trx.value.trx_trp_id = "";
+      }
     }
+
+
   }
 }, {
   // deep:true,

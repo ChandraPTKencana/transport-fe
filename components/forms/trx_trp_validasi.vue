@@ -36,10 +36,16 @@
             </div>
 
             <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
-              <div class="w-full flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Uang Jalan</label>
                 <div class="card-border">
                   <WidthMiniPart :selected="selected_uj"/>
+                </div>
+              </div>
+              <div class="w-full sm:w-6/12 flex flex-col flex-wrap p-1">
+                <label for="">Note For Remarks</label>
+                <div class="card-border">
+                  {{ trx_trp.note_for_remarks }}
                 </div>
               </div>
             </div>

@@ -57,10 +57,15 @@
             </div>
 
             <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
-              <div class="w-full flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Uang Jalan</label>
                 <WidthMiniList :arr="list_uj_mst" :selected="selected_uj" :pure="selected_mini_temp_uj" @setSelected="selected_uj=$event" :disabled="trx_trp_loaded.supir_id > 1 || trx_trp.val1==1"/>
                 <p class="text-red-500">{{ field_errors.id_uj }}</p>
+              </div>
+              <div class="w-full sm:w-6/12 flex flex-col flex-wrap p-1">
+                <label for="">Note For Remarks</label>
+                <textarea v-model="trx_trp.note_for_remarks"></textarea>
+                <p class="text-red-500">{{ field_errors.note_for_remarks }}</p>
               </div>
             </div>
 
@@ -156,6 +161,7 @@ const trx_trp_temp = {
   kernet_id: "",
   kernet: "",
   no_pol: '',
+  note_for_remarks:"",
   cost_center_code:"",
   cost_center_desc:"",
   pvr_id:"",
@@ -189,6 +195,7 @@ const doSave = async () => {
   data_in.append("payment_method_id", trx_trp.value.payment_method_id);
 
   data_in.append("no_pol", trx_trp.value.no_pol);
+  data_in.append("note_for_remarks", trx_trp.value.note_for_remarks);
   data_in.append("supir_id", selected_supir.value.id);
   data_in.append("kernet_id", selected_kernet.value.id);
   
