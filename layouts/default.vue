@@ -382,7 +382,7 @@ watch(()=>is_sidebar_open.value,(newV,oldV)=>{
 })
 
 </script>
-<style>
+<style scoped>
   ul li{
     padding:8px;
     /* color:rgb(182, 182, 182); */

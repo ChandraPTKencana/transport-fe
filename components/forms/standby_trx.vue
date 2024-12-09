@@ -434,7 +434,7 @@ const doSave = async () => {
   // data_in.append("cost_center_code", standby_trx.value.cost_center_code);
 
   // data_in.append("online_status", props.online_status);
-  let tDetails = [...details.value];
+  let tDetails = JSON.parse(JSON.stringify(details.value));
   tDetails = tDetails.map((x,k)=>{
     x.tanggal = (x.tanggal) ? $moment(x.tanggal).format("Y-MM-DD") : '';
     x.waktu = x.waktu ? x.waktu.hours+":"+x.waktu.minutes : '';
