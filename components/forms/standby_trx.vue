@@ -85,7 +85,7 @@
               </div>
               
               <div class="w-full flex flex-wrap">
-                <div v-if="standby_trx.standby_mst_.is_trip==1" class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">No Pol</label>
                   <input type="text" list="vehicle"  v-model="standby_trx.no_pol" :disabled="standby_trx.pvr_no!=''"/>
                   <datalist id="vehicle">
@@ -434,7 +434,7 @@ const doSave = async () => {
   // data_in.append("cost_center_code", standby_trx.value.cost_center_code);
 
   // data_in.append("online_status", props.online_status);
-  let tDetails = JSON.parse(JSON.stringify(details.value));
+  let tDetails = [...details.value];
   tDetails = tDetails.map((x,k)=>{
     x.tanggal = (x.tanggal) ? $moment(x.tanggal).format("Y-MM-DD") : '';
     x.waktu = x.waktu ? x.waktu.hours+":"+x.waktu.minutes : '';
@@ -775,7 +775,7 @@ watch(()=>standby_trx.value.standby_mst_id, (newVal, oldVal) => {
           break;
       }
       if(standby_trx.value.standby_mst_.is_trip==0){
-        standby_trx.value.no_pol = "";
+        // standby_trx.value.no_pol = "";
         standby_trx.value.xto = "";
         standby_trx.value.trx_trp_id = "";
       }

@@ -409,7 +409,7 @@ const enabled_edit = computed(()=>{
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   &&  (
-        useUtils().checkPermission('salary_bonus.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1 || 
+        useUtils().checkPermission('salary_bonus.val1') && [undefined,0,1].indexOf(dt_selected.value.val1) > -1 || 
         useUtils().checkPermission('salary_bonus.val2') && [undefined,0].indexOf(dt_selected.value.val2) > -1
       )
   && useUtils().checkPermissions(['salary_bonus.modify']);
