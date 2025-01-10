@@ -392,7 +392,7 @@ watch(()=>is_sidebar_open.value,(newV,oldV)=>{
 
   ul li.active{
     /* background-color: #2e5289; */
-    background-color: #001F3F;
+    background-color: #035bad;
     color:white;
   }
 

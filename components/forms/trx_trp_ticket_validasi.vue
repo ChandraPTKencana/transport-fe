@@ -303,8 +303,11 @@
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
-            <button ref="it_val" v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+            <button ref="it_val" v-if="it_state==1" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doValidate()">
               Validasi
+            </button>
+            <button ref="it_unval" v-if="it_state==0" type="submit" name="button" class="w-36 m-1 bg-yellow-600 text-white  rounded-sm" @click.prevent="doUnValidate()">
+              Unvalidasi
             </button>
           </div>
         </form>
@@ -344,10 +347,10 @@ const props = defineProps({
     required:true,
     default:[]
   },
-  is_view:{
-    type:Boolean,
+  it_state:{
+    type:Number,
     required:false,
-    default:false
+    default:-1
   },
 })
 
@@ -398,8 +401,9 @@ const trx_trp = ref({...trx_trp_temp});
 const token = useCookie('token');
 
 const it_val = ref(null);
+const it_unval = ref(null);
 
-const doSave = async () => {
+const doValidate = async () => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
@@ -416,6 +420,52 @@ const doSave = async () => {
   }
 
   const { data, error, status } = await useMyFetch("/trx_trp_val_ticket", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // "Content-Type": "multipart/form-data",
+    },
+    body: data_in,
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  trx_trp.value.val_ticket = data.value.val_ticket;
+  trx_trp.value.val_ticket_by = data.value.val_ticket_by;
+  trx_trp.value.val_ticket_at = data.value.val_ticket_at;
+
+  let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
+  if(idx>=-1){
+    props.p_data.splice(idx,1,{...trx_trp.value});    
+  }
+
+  props.fnClose();
+}
+
+const doUnValidate = async () => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  // data_in.append("tanggal", $moment(trx_trp.value.tanggal).format("Y-MM-DD"));
+  // data_in.append("tipe", trx_trp.value.tipe);
+  
+  let $method = "post";
+
+  let id = props.id;
+  if (id == 0) {
+  } else {
+    data_in.append("id", id);
+    data_in.append("_method", "PUT");
+  }
+
+  const { data, error, status } = await useMyFetch("/trx_trp_unval_ticket", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -473,9 +523,14 @@ const callData = async () => {
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
-    if(props.is_view==false){
+    if(props.it_state==1){
       setTimeout(()=>{
         it_val.value.focus();
+      },1);
+    }
+    if(props.it_state==0){
+      setTimeout(()=>{
+        it_unval.value.focus();
       },1);
     }
     callData();

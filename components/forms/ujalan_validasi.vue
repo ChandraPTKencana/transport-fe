@@ -196,8 +196,11 @@
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
-            <button ref="it_val" v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+            <button ref="it_val" v-if="it_state==1" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doValidate()">
               Validasi
+            </button>
+            <button ref="it_unval" v-if="it_state==0" type="submit" name="button" class="w-36 m-1 bg-yellow-600 text-white  rounded-sm" @click.prevent="doUnValidate()">
+              Unvalidasi
             </button>
           </div>
         </form>
@@ -241,12 +244,11 @@ const props = defineProps({
     required:true,
     default:[]
   },
-  is_view:{
-    type:Boolean,
+  it_state:{
+    type:Number,
     required:false,
-    default:false
+    default:-1
   },
-  
 })
 
 const ujalan_temp = {
@@ -271,11 +273,12 @@ const ujalan = ref({...ujalan_temp});
 const token = useCookie('token');
 const field_errors = ref({});
 const it_val = ref(null);
+const it_unval = ref(null);
 
 const details = ref([]);
 const details2 = ref([]);
 
-const doSave = async () => {
+const doValidate = async () => {
   useCommonStore().loading_full = true;
   field_errors.value = {};
 
@@ -331,6 +334,63 @@ const doSave = async () => {
   props.fnClose();
 }
 
+const doUnValidate = async () => {
+  useCommonStore().loading_full = true;
+  field_errors.value = {};
+
+  const data_in = new FormData();
+  
+  let $method = "post";
+
+  let id = props.id;
+  if (id == 0) {
+  } else {
+    // $method = "put";
+    // data_in['id'] = id;
+    data_in.append("id", id);
+    data_in.append("_method", "PUT");
+  }
+
+  const { data, error, status } = await useMyFetch("/ujalan_unvalidasi", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // "Content-Type": "multipart/form-data",
+    },
+    body: data_in,
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error, field_errors);
+    return;
+  }
+
+
+  ujalan.value.val = data.value.val;
+  ujalan.value.val_user = data.value.val_user;
+  ujalan.value.val_by = data.value.val_by;
+  ujalan.value.val_at = data.value.val_at;
+
+  ujalan.value.val1 = data.value.val1;
+  ujalan.value.val1_user = data.value.val1_user;
+  ujalan.value.val1_by = data.value.val1_by;
+  ujalan.value.val1_at = data.value.val1_at;
+
+
+  let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
+  if(idx>=-1){
+    props.p_data.splice(idx,1,{...ujalan.value});    
+  }
+
+
+  props.fnClose();
+}
+
+
 
 const callData = async () => {
   useCommonStore().loading_full = true;
@@ -377,9 +437,14 @@ const disabled = computed(()=>{
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
-    if(props.is_view==false){
+    if(props.it_state==1){
       setTimeout(()=>{
         it_val.value.focus();
+      },1);
+    }
+    if(props.it_state==0){
+      setTimeout(()=>{
+        it_unval.value.focus();
       },1);
     }
     callData();

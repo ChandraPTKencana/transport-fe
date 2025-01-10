@@ -36,6 +36,10 @@
             @click="validasi()">
             <IconsSignature />
           </button>
+          <button v-if="enabled_unvalidasi" type="button" name="button" class="m-1 text-2xl "
+            @click="unvalidasi()">
+            <IconsSignatureOff />
+          </button>
           <!-- <button v-if="enabled_print_preview" type="button" name="button" class="m-1 text-2xl "
             @click="printPreview()">
             <IconsPrinterEye />
@@ -72,8 +76,8 @@
       </template>
     </PopupMini>
     <FormsStandbyMst :show="forms_standby_mst_show" :fnClose="()=>{forms_standby_mst_show=false}" :id="forms_standby_mst_id" :p_data="standby_msts" :is_copy="forms_standby_mst_copy"/>
-    <FormsStandbyMstValidasi :show="forms_standby_mst_valid_show" :fnClose="()=>{forms_standby_mst_valid_show=false}" :id="forms_standby_mst_valid_id" :p_data="standby_msts" :is_view="forms_standby_mst_is_view"/>
-  
+    <FormsStandbyMstValidasi :show="forms_standby_mst_valid_show" :fnClose="()=>{forms_standby_mst_valid_show=false}" :id="forms_standby_mst_valid_id" :p_data="standby_msts" :it_state="forms_standby_mst_state"/>
+      <!-- :is_view="forms_standby_mst_is_view"   -->
   </div>
 </template>
 
@@ -242,11 +246,13 @@ const searching = () => {
 const forms_standby_mst_show =  ref(false);
 const forms_standby_mst_id = ref(0);
 const forms_standby_mst_copy = ref(0);
-const forms_standby_mst_is_view = ref(false);
+// const forms_standby_mst_is_view = ref(false);
+const forms_standby_mst_state = ref(-1);
 
 const form_add = () => {
   forms_standby_mst_id.value = 0;
-  forms_standby_mst_is_view.value = false;
+  // forms_standby_mst_is_view.value = false;
+  forms_standby_mst_state.value = -1;
   forms_standby_mst_copy.value = false;
   forms_standby_mst_show.value = true;
   // router.push({ name: 'data_standby_mst-form', query: { id: "" } });
@@ -260,7 +266,8 @@ const form_edit = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_standby_mst_id.value = standby_msts.value[selected.value].id;
-    forms_standby_mst_is_view.value = false;
+    // forms_standby_mst_is_view.value = false;
+    forms_standby_mst_state.value = -1;
     forms_standby_mst_copy.value = false;
     forms_standby_mst_show.value = true;
     // router.push({ name: 'data_standby_mst-form', query: { id: standby_msts.value[selected.value].id } });
@@ -272,7 +279,8 @@ const form_copy = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_standby_mst_id.value = standby_msts.value[selected.value].id;
-    forms_standby_mst_is_view.value = false;
+    // forms_standby_mst_is_view.value = false;
+    forms_standby_mst_state.value = -1;
     forms_standby_mst_copy.value = true;
     forms_standby_mst_show.value = true;
     // router.push({ name: 'data_trx_trp-form', query: { id: trx_trps.value[selected.value].id } });
@@ -286,7 +294,20 @@ const validasi = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_standby_mst_valid_id.value = standby_msts.value[selected.value].id;
-    forms_standby_mst_is_view.value = false;
+    // forms_standby_mst_is_view.value = false;
+    forms_standby_mst_state.value = 1;
+    forms_standby_mst_copy.value = false;
+    forms_standby_mst_valid_show.value = true;
+  }
+};
+
+const unvalidasi = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_standby_mst_valid_id.value = standby_msts.value[selected.value].id;
+    // forms_standby_mst_is_view.value = false;
+    forms_standby_mst_state.value = 0;
     forms_standby_mst_copy.value = false;
     forms_standby_mst_valid_show.value = true;
   }
@@ -297,7 +318,8 @@ const form_view = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_standby_mst_valid_id.value = standby_msts.value[selected.value].id;
-    forms_standby_mst_is_view.value = true;
+    // forms_standby_mst_is_view.value = true;
+    forms_standby_mst_state.value = -1;
     forms_standby_mst_copy.value = false;
     forms_standby_mst_valid_show.value = true;
   }
@@ -418,6 +440,16 @@ const enabled_validasi = computed(()=>{
   && (
     useUtils().checkPermission('standby_mst.val') && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
     useUtils().checkPermission('standby_mst.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1
+  );
+  return result;
+})
+
+const enabled_unvalidasi = computed(()=>{  
+  let result = selected.value > -1 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  && (
+    useUtils().checkPermission('standby_mst.unval') && [1].indexOf(dt_selected.value.val) > -1 || 
+    useUtils().checkPermission('standby_mst.unval1') && [1].indexOf(dt_selected.value.val1) > -1
   );
   return result;
 })

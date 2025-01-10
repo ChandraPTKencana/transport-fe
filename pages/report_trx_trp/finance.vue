@@ -22,6 +22,10 @@
             @click="downloadExcel()">
             <IconsTable2Column />  <span class="text-xs ml-1"> Excel </span>
           </button>
+          <button type="button" name="button" class="m-1 text-2xl flex items-center"
+            @click="downloadExcelFull()">
+            <IconsTable2Column />  <span class="text-xs ml-1"> Full </span>
+          </button>
           <button type="button" name="button" class="m-1 text-2xl "
             @click="lookUj()">
             <IconsEyes />
@@ -380,7 +384,7 @@ const fields_thead=ref([
     {key:"val4",label:"Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
     {key:"val5",label:"SPV Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   ]},
-  {key:"id",label:"ID",filter_on:1,type:"number"},
+  {key:"id",label:"ID",filter_on:1,type:"number",sort:{priority:2,type:"desc"}},
   {key:"absen",label:"Absen"},
   {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1,sort:{priority:1,type:"desc"}},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
@@ -459,6 +463,27 @@ const downloadExcel = async($link="")=>{
   inject_params();
   useCommonStore().loading_full = true;
   const { data, error, status } = await useMyFetch("/trx_trps/reportFinExcel", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json'
+    },
+    params: params,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  downloadFile(data.value);
+}
+
+const downloadExcelFull = async($link="")=>{  
+  inject_params();
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/trx_trps/reportFullExcel", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

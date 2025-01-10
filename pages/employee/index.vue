@@ -36,6 +36,10 @@
             @click="validasi()">
             <IconsSignature />
           </button>
+          <button v-if="enabled_unvalidasi" type="button" name="button" class="m-1 text-2xl "
+            @click="unvalidasi()">
+            <IconsSignatureOff />
+          </button>
           <!-- <button v-if="enabled_print_preview" type="button" name="button" class="m-1 text-2xl "
             @click="printPreview()">
             <IconsPrinterEye />
@@ -79,7 +83,7 @@
     </template>
   </PopupMini>
   <FormsEmployee :show="forms_employee_show" :fnClose="()=>{forms_employee_show=false}" :id="forms_employee_id" :p_data="employees" :is_copy="forms_employee_copy"/>
-  <FormsEmployeeValidasi :show="forms_employee_valid_show" :fnClose="()=>{forms_employee_valid_show=false}" :id="forms_employee_valid_id" :p_data="employees"/>
+  <FormsEmployeeValidasi :show="forms_employee_valid_show" :fnClose="()=>{forms_employee_valid_show=false}" :id="forms_employee_valid_id" :p_data="employees" :it_state="forms_employee_valid_state"/>
 
 </template>
 
@@ -245,11 +249,13 @@ const router = useRouter();
 const forms_employee_show =  ref(false);
 const forms_employee_id = ref(0);
 const forms_employee_copy = ref(0);
-const forms_employee_is_view = ref(false);
+// const forms_employee_is_view = ref(false);
+const forms_employee_valid_state = ref(1);
 
 const form_add = () => {
   forms_employee_id.value = 0;
-  forms_employee_is_view.value = false;
+  // forms_employee_is_view.value = false;
+  forms_employee_valid_state.value = -1;
   forms_employee_copy.value = false;
   forms_employee_show.value = true;
 }
@@ -262,7 +268,8 @@ const form_edit = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_employee_id.value = employees.value[selected.value].id;
-    forms_employee_is_view.value = false;
+    // forms_employee_is_view.value = false;
+    forms_employee_valid_state.value = -1;
     forms_employee_copy.value = false;
     forms_employee_show.value = true;
   }
@@ -273,7 +280,8 @@ const form_copy = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_employee_id.value = employees.value[selected.value].id;
-    forms_employee_is_view.value = false;
+    // forms_employee_is_view.value = false;
+    forms_employee_valid_state.value = -1;
     forms_employee_copy.value = true;
     forms_employee_show.value = true;
   }
@@ -286,7 +294,20 @@ const validasi = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_employee_valid_id.value = employees.value[selected.value].id;
-    forms_employee_is_view.value = false;
+    // forms_employee_is_view.value = false;
+    forms_employee_valid_state.value = 1;
+    forms_employee_copy.value = false;
+    forms_employee_valid_show.value = true;
+  }
+};
+
+const unvalidasi = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_employee_valid_id.value = employees.value[selected.value].id;
+    // forms_employee_is_view.value = false;
+    forms_employee_valid_state.value = 0;
     forms_employee_copy.value = false;
     forms_employee_valid_show.value = true;
   }
@@ -297,8 +318,9 @@ const form_view = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_employee_valid_id.value = employees.value[selected.value].id;
-    forms_employee_is_view.value = true;
+    // forms_employee_is_view.value = true;
     forms_employee_copy.value = false;
+    forms_employee_valid_state.value = -1;
     forms_employee_valid_show.value = true;
   }
 };
@@ -430,6 +452,14 @@ const enabled_validasi = computed(()=>{
     useUtils().checkPermission('employee.val') && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
     useUtils().checkPermission('employee.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1
   );
+  return result;
+})
+
+const enabled_unvalidasi = computed(()=>{  
+  let result = selected.value > -1 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  && useUtils().checkPermission('employee.unval')
+  &&  [1].indexOf(dt_selected.value.val) > -1;
   return result;
 })
 

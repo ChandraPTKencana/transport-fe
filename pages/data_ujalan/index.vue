@@ -36,6 +36,10 @@
             @click="validasi()">
             <IconsSignature />
           </button>
+          <button v-if="enabled_unvalidasi" type="button" name="button" class="m-1 text-2xl "
+            @click="unvalidasi()">
+            <IconsSignatureOff />
+          </button>
           <!-- <button v-if="enabled_print_preview" type="button" name="button" class="m-1 text-2xl "
             @click="printPreview()">
             <IconsPrinterEye />
@@ -71,7 +75,10 @@
     </PopupMini>
 
     <FormsUjalan :show="forms_ujalan_show" :fnClose="()=>{forms_ujalan_show=false}" :id="forms_ujalan_id" :p_data="ujalans" :is_copy="forms_ujalan_copy"/>
-    <FormsUjalanValidasi :show="forms_ujalan_valid_show" :fnClose="()=>{forms_ujalan_valid_show=false}" :id="forms_ujalan_valid_id" :p_data="ujalans" :is_view="forms_ujalan_is_view"/>
+    <FormsUjalanValidasi :show="forms_ujalan_valid_show" :fnClose="()=>{forms_ujalan_valid_show=false}" :id="forms_ujalan_valid_id" :p_data="ujalans" 
+      :it_state="forms_ujalan_valid_state"/>
+      <!-- :is_view="forms_ujalan_is_view"  -->
+
   </div>
 </template>
 
@@ -264,11 +271,13 @@ const searching = () => {
 const forms_ujalan_show =  ref(false);
 const forms_ujalan_id = ref(0);
 const forms_ujalan_copy = ref(0);
-const forms_ujalan_is_view = ref(false);
+// const forms_ujalan_is_view = ref(false);
+const forms_ujalan_valid_state = ref(-1);
 
 const form_add = () => {
   forms_ujalan_id.value = 0;
-  forms_ujalan_is_view.value = false;
+  // forms_ujalan_is_view.value = false;
+  forms_ujalan_valid_state.value = -1;
   forms_ujalan_copy.value = false;
   forms_ujalan_show.value = true;
 }
@@ -281,7 +290,8 @@ const form_edit = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_ujalan_id.value = ujalans.value[selected.value].id;
-    forms_ujalan_is_view.value = false;
+    // forms_ujalan_is_view.value = false;
+    forms_ujalan_valid_state.value = -1;
     forms_ujalan_copy.value = false;
     forms_ujalan_show.value = true;
   }
@@ -292,7 +302,8 @@ const form_copy = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_ujalan_id.value = ujalans.value[selected.value].id;
-    forms_ujalan_is_view.value = false;
+    // forms_ujalan_is_view.value = false;
+    forms_ujalan_valid_state.value = -1;
     forms_ujalan_copy.value = true;
     forms_ujalan_show.value = true;
   }
@@ -305,7 +316,20 @@ const validasi = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_ujalan_valid_id.value = ujalans.value[selected.value].id;
-    forms_ujalan_is_view.value = false;
+    // forms_ujalan_is_view.value = false;
+    forms_ujalan_valid_state.value = 1;
+    forms_ujalan_copy.value = false;
+    forms_ujalan_valid_show.value = true;
+  }
+};
+
+const unvalidasi = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_ujalan_valid_id.value = ujalans.value[selected.value].id;
+    // forms_ujalan_is_view.value = false;
+    forms_ujalan_valid_state.value = 0;
     forms_ujalan_copy.value = false;
     forms_ujalan_valid_show.value = true;
   }
@@ -316,8 +340,9 @@ const form_view = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_ujalan_valid_id.value = ujalans.value[selected.value].id;
-    forms_ujalan_is_view.value = true;
+    // forms_ujalan_is_view.value = true;
     forms_ujalan_copy.value = false;
+    forms_ujalan_valid_state.value = -1;
     forms_ujalan_valid_show.value = true;
   }
 };
@@ -468,6 +493,17 @@ const enabled_validasi = computed(()=>{
   && (
     useUtils().checkPermission('ujalan.val') && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
     useUtils().checkPermission('ujalan.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1
+  );
+  return result;
+})
+
+
+const enabled_unvalidasi = computed(()=>{  
+  let result = selected.value > -1 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  && (
+    useUtils().checkPermission('ujalan.unval') && [1].indexOf(dt_selected.value.val) > -1 || 
+    useUtils().checkPermission('ujalan.unval1') && [1].indexOf(dt_selected.value.val1) > -1
   );
   return result;
 })

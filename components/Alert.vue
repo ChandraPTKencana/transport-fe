@@ -16,6 +16,28 @@ const { show, status, message, permit_close } = storeToRefs(useAlertStore());
 //         }
 //     });
 // }
+let timeoutClickList: null | ReturnType<typeof setTimeout>  = null;
+
+watch(()=>show.value,(newVal, oldVal) => {
+    if(newVal){
+        if(timeoutClickList) {
+            clearTimeout(timeoutClickList)
+            timeoutClickList = null;
+        };
+        timeoutClickList = setTimeout(()=>{
+            show.value = false;
+        },5000);
+    }else{
+        if(timeoutClickList) {
+            clearTimeout(timeoutClickList);
+            timeoutClickList = null;
+        }
+    }
+}, {
+  deep:true,
+  immediate: true
+});
+
 </script>
 <template>
     <div id="alert" class="fixed w-full h-14 bottom-0 text-white p-1 border-t-2 border-slate-700 z-20" :class="status=='Failed'?'bg-red-800 ':'bg-slate-800 '"

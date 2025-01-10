@@ -254,14 +254,20 @@
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
-            <button v-if="is_view==0 && useUtils().checkPermissions(['standby_trx.detail.decide_paid']) && standby_trx.val2=='0'" type="submit" name="button" class="w-36 m-1 bg-green-600 text-white text-xs rounded-sm" @click.prevent="doSave('paid')">
+            <button v-if="it_state==1 && useUtils().checkPermissions(['standby_trx.detail.decide_paid']) && standby_trx.val2=='0'" type="submit" name="button" class="w-36 m-1 bg-green-600 text-white text-xs rounded-sm" @click.prevent="doValidate('paid')">
               Paid
             </button>
-            <button v-if="is_view==0 && useUtils().checkPermissions(['standby_trx.detail.decide_paid']) && standby_trx.val2=='0'" type="submit" name="button" class="w-36 m-1 bg-red-600 text-white text-xs rounded-sm" @click.prevent="doSave('nopaid')">
+            <button v-if="it_state==1 && useUtils().checkPermissions(['standby_trx.detail.decide_paid']) && standby_trx.val2=='0'" type="submit" name="button" class="w-36 m-1 bg-red-600 text-white text-xs rounded-sm" @click.prevent="doValidate('nopaid')">
               NoPaid
             </button>
-            <button ref="it_val" v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+            <button ref="it_val" v-if="it_state==1" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doValidate()">
               Validasi
+              <div class="text-xs font-bold" v-if="save_state!=''">
+                {{ save_state }}
+              </div>
+            </button>
+            <button ref="it_unval" v-if="it_state==0" type="submit" name="button" class="w-36 m-1 bg-yellow-600 text-white  rounded-sm" @click.prevent="doUnValidate()">
+              Unvalidasi
               <div class="text-xs font-bold" v-if="save_state!=''">
                 {{ save_state }}
               </div>
@@ -311,10 +317,10 @@ const props = defineProps({
     required:true,
     default:[]
   },
-  is_view:{
-    type:Boolean,
+  it_state:{
+    type:Number,
     required:false,
-    default:false
+    default:-1
   },
 })
 
@@ -372,6 +378,7 @@ const standby_trx = ref({...standby_trx_temp});
 const token = useCookie('token');
 const field_errors = ref({});
 const it_val = ref(null);
+const it_unval = ref(null);
 const details = ref([]);
 
 
@@ -426,7 +433,7 @@ const selected_kernet = ref(JSON.parse(JSON.stringify(selected_mini_temp)));
 
 const save_state = ref("");
 
-const doSave = async (paid_state) => {
+const doValidate = async (paid_state) => {
   save_state.value = "PROSES...";
   useCommonStore().loading_full = true;
   field_errors.value = {};
@@ -506,6 +513,85 @@ const doSave = async (paid_state) => {
   // props.fnClose();
 }
 
+
+const doUnValidate = async () => {
+  save_state.value = "PROSES...";
+  useCommonStore().loading_full = true;
+  field_errors.value = {};
+
+  const data_in = new FormData(); 
+  // let tDetails = [...details.value];
+  // if(paid_state=='paid'){    
+  //   tDetails = tDetails.map((x,k)=>{
+  //     x.be_paid=1;
+  //     return x;
+  //   });
+  // }else if(paid_state=='nopaid'){
+  //   tDetails = tDetails.map((x,k)=>{
+  //     x.be_paid=0;
+  //     return x;
+  //   });
+  // }
+
+  // data_in.append("details", JSON.stringify(tDetails));
+
+  let $method = "post";
+
+  let id = props.id;
+  if (id == 0) {
+  } else {
+    // $method = "put";
+    // data_in['id'] = id;
+    data_in.append("id", id);
+    data_in.append("_method", "PUT");
+  }
+
+  const { data, error, status } = await useMyFetch("/standby_trx_unvalidasi", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // "Content-Type": "multipart/form-data",
+    },
+    body: data_in,
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    save_state.value = "GAGAL";
+    useErrorStore().trigger(error, field_errors);
+    return;
+  }
+
+
+  standby_trx.value.val = data.value.val;
+  standby_trx.value.val_user = data.value.val_user;
+  standby_trx.value.val_by = data.value.val_by;
+  standby_trx.value.val_at = data.value.val_at;
+
+  standby_trx.value.val1 = data.value.val1;
+  standby_trx.value.val1_user = data.value.val1_user;
+  standby_trx.value.val1_by = data.value.val1_by;
+  standby_trx.value.val1_at = data.value.val1_at;
+
+  standby_trx.value.val2 = data.value.val2;
+  standby_trx.value.val2_user = data.value.val2_user;
+  standby_trx.value.val2_by = data.value.val2_by;
+  standby_trx.value.val2_at = data.value.val2_at;
+
+
+
+  let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
+  if(idx>=-1){
+    props.p_data.splice(idx,1,{...standby_trx.value});    
+  }
+
+  save_state.value = "BERHASIL";
+
+  // props.fnClose();
+}
 
 const callData = async () => {
   save_state.value = '';

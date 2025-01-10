@@ -30,18 +30,33 @@
             @click="validasi()">
             <IconsSignature />
           </button>
+          <button v-if="enabled_unvalidasi" type="button" name="button" class="m-1 text-2xl "
+            @click="unvalidasi()">
+            <IconsSignatureOff />
+          </button>
           
         </div>
         <div class="flex">
 
-          <button v-if="checkbox_arr.length > 0" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
-            @click="multiClearTicket()">
-            Multi Clear Ticket
+          <button v-if="checkbox_arr.length > 0 && useUtils().checkPermission('trp_trx.ticket.unval_ticket')" type="button" name="button" class="m-1 text-xs whitespace-nowrap grid grid-cols-2"
+            @click="multi_unval_ticket_box=true">
+            <IconsSignatureOff />
+            <IconsSignatureOff />
+            <IconsSignatureOff />
+            <IconsSignatureOff />
           </button>
 
           <button v-if="checkbox_arr.length > 0" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
-            @click="multiVal()">
-            Multi Val
+            @click="multi_clear_ticket_box=true">
+            Multi Clear Ticket
+          </button>
+
+          <button v-if="checkbox_arr.length > 0" type="button" name="button" class="m-1 text-xs whitespace-nowrap grid grid-cols-2"
+            @click="multi_val_ticket_box=true">
+            <IconsSignature />
+            <IconsSignature />
+            <IconsSignature />
+            <IconsSignature />
           </button>
 
           <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
@@ -199,10 +214,29 @@
         </div>
       </template>
     </PopupMini>
+
+    <PopupMini :type="'custome'" :show="multi_clear_ticket_box" :fnClose="()=>multi_clear_ticket_box=false" :fnConfirm="multiClearTicket" >
+      <template #words>
+        Ticket akan <b class="text-red-500">dibersihkan</b> sesuai dengan data-data yang telah di pilih, yakin untuk melanjutkan ?
+      </template>
+    </PopupMini>
+
+    <PopupMini :type="'custome'" :show="multi_val_ticket_box" :fnClose="()=>multi_val_ticket_box=false" :fnConfirm="multiVal" > 
+      <template #words>
+        Ticket akan <b class="text-red-500">divalidasi</b> sesuai dengan data-data yang telah di pilih, yakin untuk melanjutkan ?
+      </template>
+    </PopupMini>
+
+    <PopupMini :type="'custome'" :show="multi_unval_ticket_box" :fnClose="()=>multi_unval_ticket_box=false" :fnConfirm="multiUnval" > 
+      <template #words>
+        Ticket akan <b class="text-red-500">di unvalidasi</b> sesuai dengan data-data yang telah di pilih, yakin untuk melanjutkan ?
+      </template>
+    </PopupMini>
     <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
     <!-- <FormsTrxTrpTicket :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ticket="list_ticket" :online_status="online_status"/> -->
     <FormsTrxTrpTicket :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ticket="list_ticket"/>
-    <FormsTrxTrpTicketValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" :is_view="forms_trx_trp_is_view"/>
+    <FormsTrxTrpTicketValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" :it_state="forms_trx_trp_valid_state" />
+      <!-- :is_view="forms_trx_trp_is_view" -->
     <FormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
     <FormsTrxTrpTicketOver :show="forms_trx_check_show" :fnClose="()=>{forms_trx_check_show=false}"/>
 
@@ -579,11 +613,14 @@ const forms_trx_trp_id = ref(0);
 const { display } = useAlertStore();
 const { show, status, message } = storeToRefs(useAlertStore());
 
+const forms_trx_trp_valid_state = ref(1);
+
 const form_edit = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_trx_trp_id.value = trx_trps.value[selected.value].id;
+    forms_trx_trp_valid_state.value = -1;
     forms_trx_trp_show.value = true;
     // router.push({ name: 'data_trx_trp-form', query: { id: trx_trps.value[selected.value].id } });
   }
@@ -591,14 +628,26 @@ const form_edit = () => {
 
 const forms_trx_trp_valid_show =  ref(false);
 const forms_trx_trp_valid_id = ref(0);
-const forms_trx_trp_is_view = ref(false);
+// const forms_trx_trp_is_view = ref(false);
 const validasi = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_trx_trp_valid_id.value = trx_trps.value[selected.value].id;
+    forms_trx_trp_valid_state.value = 1;
     forms_trx_trp_valid_show.value = true;
-    forms_trx_trp_is_view.value = false;
+    // forms_trx_trp_is_view.value = false;
+  }
+};
+
+const unvalidasi = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_trx_trp_valid_id.value = trx_trps.value[selected.value].id;
+    forms_trx_trp_valid_state.value = 0;
+    forms_trx_trp_valid_show.value = true;
+    // forms_trx_trp_is_view.value = false;
   }
 };
 
@@ -607,8 +656,9 @@ const form_view = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_trx_trp_valid_id.value = trx_trps.value[selected.value].id;
+    forms_trx_trp_valid_state.value = -1;
     forms_trx_trp_valid_show.value = true;
-    forms_trx_trp_is_view.value = true;
+    // forms_trx_trp_is_view.value = true;
   }
 };
 
@@ -627,6 +677,10 @@ const toggleReqDeleteBox = async()=>{
     req_deleted_box.value = false;
   }
 };
+
+const multi_clear_ticket_box = ref(false);
+const multi_val_ticket_box = ref(false);
+const multi_unval_ticket_box = ref(false);
 
 const reason_adder = ref("");
 const approveVoid = () => {
@@ -706,7 +760,43 @@ const multiVal = async() => {
     useErrorStore().trigger(error);
     return;
   }
+  multi_val_ticket_box.value = false;
+  data.value.val_lists.forEach(e => {
+    let idx = trx_trps.value.map((x)=>x.id).indexOf(e.id);
+    if(idx>-1){
+      let sd = trx_trps.value[idx];
+      sd.val_ticket = e.val_ticket;
+      sd.val_ticket_by = e.val_ticket_by;
+      sd.val_ticket_at = e.val_ticket_at;
+      sd.updated_at = e.updated_at;
+      trx_trps.value.splice(idx,1,{...sd});
+    }
+  });
+  deep_state.value.clearCheckBox = true;
+}
 
+const multiUnval = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("ids", JSON.stringify(checkbox_arr.value));  
+  data_in.append("_method", "PUT");
+
+  const { data, error, status } = await useMyFetch("/trx_trp_unval_tickets", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  multi_unval_ticket_box.value = false;
   data.value.val_lists.forEach(e => {
     let idx = trx_trps.value.map((x)=>x.id).indexOf(e.id);
     if(idx>-1){
@@ -742,6 +832,8 @@ const multiClearTicket = async() => {
     useErrorStore().trigger(error);
     return;
   }
+
+  multi_clear_ticket_box.value = false;
 
   data.value.clear_lists.forEach(e => {
     let idx = trx_trps.value.map((x)=>x.id).indexOf(e.id);
@@ -930,6 +1022,15 @@ const enabled_validasi = computed(()=>{
   && dt_selected.value.req_deleted == 0
   && dt_selected.value.val_ticket == 0
   && useUtils().checkPermission('trp_trx.ticket.val_ticket');
+  return result;
+})
+
+const enabled_unvalidasi = computed(()=>{  
+  let result = selected.value > -1 
+  && dt_selected.value.deleted == 0
+  && dt_selected.value.req_deleted == 0
+  && dt_selected.value.val_ticket == 1
+  && useUtils().checkPermission('trp_trx.ticket.unval_ticket');
   return result;
 })
 

@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <div class="w-full text-left mt-3" >
+      <div v-if="data.length > 0 || info_type=='custome'" class="w-full text-left mt-3" >
         <b class="text-gray-600" >Data Information :</b>
         <div v-if="info_type=='custome'" class="w-full border-solid border-2 border-black p-1 capitalize bg-slate-800 text-white text-center">
           <slot name="info"></slot> 
@@ -58,7 +58,7 @@ const props = defineProps({
   data: {
     type: Object,
     required: false,
-    default: '',
+    default: {},
   },
   fnClose: {
     type: Function,

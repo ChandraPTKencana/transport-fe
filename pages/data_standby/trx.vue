@@ -42,6 +42,10 @@
             @click="validasi()">
             <IconsSignature />
           </button>
+          <button v-if="enabled_unvalidasi" type="button" name="button" class="m-1 text-2xl "
+            @click="unvalidasi()">
+            <IconsSignatureOff />
+          </button>
           <button v-if="enabled_print_preview" type="button" name="button" class="m-1 text-2xl "
             @click="printPreview()">
             <IconsPrinterEye />
@@ -197,8 +201,8 @@
 
     <!-- <FormsStandbyTrx :show="forms_standby_trx_show" :fnClose="()=>{forms_standby_trx_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_standby_trx_id" :p_data="standby_trxs" :list_cost_center="list_cost_center" :online_status="online_status"/> -->
     <FormsStandbyTrx :show="forms_standby_trx_show" :fnClose="()=>{forms_standby_trx_show=false}" :id="forms_standby_trx_id" :p_data="standby_trxs"/>
-    <FormsStandbyTrxValidasi :show="forms_standby_trx_valid_show" :fnClose="()=>{forms_standby_trx_valid_show=false}" :id="forms_standby_trx_valid_id" :p_data="standby_trxs" :is_view="forms_standby_trx_is_view" @setID="forms_standby_trx_valid_id=$event" @setIndex="selected=$event"/>
-  
+    <FormsStandbyTrxValidasi :show="forms_standby_trx_valid_show" :fnClose="()=>{forms_standby_trx_valid_show=false}" :id="forms_standby_trx_valid_id" :p_data="standby_trxs" :it_state="forms_standby_trx_valid_state" @setID="forms_standby_trx_valid_id=$event" @setIndex="selected=$event"/>
+      <!-- :is_view="forms_standby_trx_is_view" -->
   </div>
 </template>
 
@@ -421,8 +425,10 @@ const searching = () => {
 
 const forms_standby_trx_show =  ref(false);
 const forms_standby_trx_id = ref(0);
+const forms_standby_trx_valid_state = ref(-1);
 const form_add = () => {
   forms_standby_trx_id.value = 0;
+  forms_standby_trx_valid_state.value = -1;
   forms_standby_trx_show.value = true;
 }
 
@@ -434,20 +440,33 @@ const form_edit = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_standby_trx_id.value = standby_trxs.value[selected.value].id;
+    forms_standby_trx_valid_state.value = -1;
     forms_standby_trx_show.value = true;
   }
 };
 
 const forms_standby_trx_valid_show =  ref(false);
 const forms_standby_trx_valid_id = ref(0);
-const forms_standby_trx_is_view = ref(false);
+// const forms_standby_trx_is_view = ref(false);
 const validasi = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_standby_trx_valid_id.value = standby_trxs.value[selected.value].id;
+    forms_standby_trx_valid_state.value = 1;
     forms_standby_trx_valid_show.value = true;
-    forms_standby_trx_is_view.value = false;
+    // forms_standby_trx_is_view.value = false;
+  }
+};
+
+const unvalidasi = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_standby_trx_valid_id.value = standby_trxs.value[selected.value].id;
+    forms_standby_trx_valid_state.value = 0;
+    forms_standby_trx_valid_show.value = true;
+    // forms_standby_trx_is_view.value = false;
   }
 };
 
@@ -456,8 +475,9 @@ const form_view = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_standby_trx_valid_id.value = standby_trxs.value[selected.value].id;
+    forms_standby_trx_valid_state.value = -1;
     forms_standby_trx_valid_show.value = true;
-    forms_standby_trx_is_view.value = true;
+    // forms_standby_trx_is_view.value = true;
   }
 };
 
@@ -849,6 +869,23 @@ const enabled_validasi = computed(()=>{
     )|| 
     (
       dt_selected.value.pvr_id > -1 &&  useUtils().checkPermission('standby_trx.val2') && [undefined,0].indexOf(dt_selected.value.val2) > -1
+    )
+  );
+  return result;
+})
+
+const enabled_unvalidasi = computed(()=>{  
+  let result = selected.value > -1 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
+  && (
+    (
+      [undefined,"",null].indexOf(dt_selected.value.salary_paid_id) > -1 && 
+      (
+        useUtils().checkPermission('standby_trx.unval') && [1].indexOf(dt_selected.value.val) > -1 || 
+        useUtils().checkPermission('standby_trx.unval1') && [1].indexOf(dt_selected.value.val1) > -1 || 
+        useUtils().checkPermission('standby_trx.unval2') && [1].indexOf(dt_selected.value.val2) > -1
+      )
     )
   );
   return result;

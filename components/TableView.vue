@@ -4,9 +4,9 @@
     <div class="w-full flex justify-end">
       <div class="w-6/12 p-1 sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col">
         <input class="flex-grow" type="text" v-model="global_keyword" name="search"
-          placeholder="Keyword" @keyup.enter="$emit('doFilter')">
+          placeholder="Keyword" @keyup.enter="doFilter()">
       </div>
-      <button type="button" name="button" class="m-1 text-2xl " @click="$emit('doFilter')">
+      <button type="button" name="button" class="m-1 text-2xl " @click="doFilter()">
         <IconsSearch />
       </button>
       <button type="button" name="button" class="m-1 text-2xl "
@@ -166,7 +166,7 @@
             <button type="button" class="bg-white font-bold mt-3 mr-2"  @click="_tv.filter_box=false">
               Cancel
             </button>
-            <button type="button" class="bg-white font-bold mt-3" @click="$emit('doFilter')">
+            <button type="button" class="bg-white font-bold mt-3" @click="doFilter()">
               Filter
             </button>
           </div>
@@ -714,6 +714,12 @@ const updatePagination = ()=>{
     }
 
   }
+}
+
+const doFilter =()=>{
+  checkbox_arr.value = [];
+  emit('setCheckbox',checkbox_arr.value);
+  emit('doFilter');
 }
 
 watch(()=>props.scrolling.page,(newVal, oldVal) => {

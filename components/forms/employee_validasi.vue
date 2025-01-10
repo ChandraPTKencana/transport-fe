@@ -132,8 +132,11 @@
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
-            <button ref="it_val" v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+            <button ref="it_val" v-if="it_state==1" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doValidate()">
               Validasi
+            </button>
+            <button ref="it_unval" v-if="it_state==0" type="submit" name="button" class="w-36 m-1 bg-yellow-600 text-white  rounded-sm" @click.prevent="doUnValidate()">
+              Unvalidasi
             </button>
           </div>
         </form>
@@ -177,10 +180,10 @@ const props = defineProps({
     required:true,
     default:[]
   },
-  is_view:{
-    type:Boolean,
+  it_state:{
+    type:Number,
     required:false,
-    default:false
+    default:-1
   },
 })
 
@@ -206,9 +209,10 @@ const employee = ref({...employee_temp});
 const token = useCookie('token');
 const field_errors = ref({});
 const it_val = ref(null);
+const it_unval = ref(null);
 const details = ref([]);
 
-const doSave = async () => {
+const doValidate = async () => {
   useCommonStore().loading_full = true;
   field_errors.value = {};
 
@@ -226,6 +230,59 @@ const doSave = async () => {
   }
 
   const { data, error, status } = await useMyFetch("/employee_validasi", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error, field_errors);
+    return;
+  }
+
+
+  employee.value.val = data.value.val;
+  employee.value.val_user = data.value.val_user;
+  employee.value.val_by = data.value.val_by;
+  employee.value.val_at = data.value.val_at;
+
+  // employee.value.val1 = data.value.val1;
+  // employee.value.val1_user = data.value.val1_user;
+  // employee.value.val1_by = data.value.val1_by;
+  // employee.value.val1_at = data.value.val1_at;
+
+
+  let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
+  if(idx>=-1){
+    props.p_data.splice(idx,1,{...employee.value});    
+  }
+
+
+  props.fnClose();
+}
+
+const doUnValidate = async () => {
+  useCommonStore().loading_full = true;
+  field_errors.value = {};
+
+  const data_in = new FormData();
+  
+  let $method = "post";
+
+  let id = props.id;
+  if (id == 0) {
+  } else {
+    // $method = "put";
+    // data_in['id'] = id;
+    data_in.append("id", id);
+    data_in.append("_method", "PUT");
+  }
+
+  const { data, error, status } = await useMyFetch("/employee_unvalidasi", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -306,10 +363,15 @@ const disabled = computed(()=>{
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
-    employee.value = {...employee_temp};
-    if(props.is_view==false){
+    employee.value = {...employee_temp}; // mgkn karna file gambar
+    if(props.it_state==1){
       setTimeout(()=>{
         it_val.value.focus();
+      },1);
+    }
+    if(props.it_state==0){
+      setTimeout(()=>{
+        it_unval.value.focus();
       },1);
     }
     callData();
