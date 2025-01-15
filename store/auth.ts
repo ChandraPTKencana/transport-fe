@@ -122,6 +122,7 @@ export const useAuthStore = defineStore('auth', {
 
             let info = data?.value?.user?.company_info;
             let info1 = info.map((x:any)=>x.dkey);
+            let cc = info1.indexOf('company_code');
             let cn = info1.indexOf('company_name');
             let ce = info1.indexOf('company_email');
 
@@ -130,6 +131,9 @@ export const useAuthStore = defineStore('auth', {
 
             const company_email = useCookie('company_email'); // useCookie new hook in nuxt 3
             company_email.value = (ce > -1 ? info[ce].dval : ''); // set token to cookie
+
+            const company_code = useCookie('company_code'); // useCookie new hook in nuxt 3
+            company_code.value = (cc > -1 ? info[cc].dval : ''); // set token to cookie
 
             this.done_get_user_info = true;
           }
@@ -208,6 +212,8 @@ export const useAuthStore = defineStore('auth', {
       const company_email = useCookie('company_email'); // useCookie new hook in nuxt 3
       company_email.value = null; // set token to cookie
 
+      const company_code = useCookie('company_code'); // useCookie new hook in nuxt 3
+      company_code.value = null; // set token to cookie
 
       const router = useRouter();
       router.push('/login');

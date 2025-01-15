@@ -313,6 +313,16 @@
               <div class="w-full text-gray-600 font-bold text-center">
                 Set Mobil Yang Tidak Di Izinkan Untuk Di Update Tiketnya
               </div>
+              <div class="w-full flex my-2">
+                <div class="text-gray-600">
+                  Data Luar:
+                </div>
+                <div class="flex mx-2" v-for="lp in useCommonStore().list_pabrik.filter((ex)=>ex!=company_code)">
+                  <label class="flex cursor-pointer">
+                    <input type="checkbox" :value="lp" v-model="pabriks" class="mr-1"> {{ lp }}
+                  </label>
+                </div>
+              </div>
               <div class="w-full">
                 <SelectMulti :arr="list_vehicle"/>
                 <div class="w-full grid grid-cols-2 gap-1 p-1 mt-5">
@@ -383,6 +393,8 @@ const addClassToTbody=(data)=>{
   return data;
 }
 
+const company_code = useCookie('company_code');
+const pabriks = ref([]);
 let deep_state = ref({
   clearCheckBox:false
 });
@@ -880,6 +892,7 @@ const updateTicket = async() => {
   useCommonStore().loading_full = true;
   const data_in = new FormData();
   data_in.append("vehicles",JSON.stringify(list_vehicle.value.filter((x)=>x.checked).map((x)=>x.id)));
+  data_in.append("pabriks",JSON.stringify(pabriks.value));
   const { data, error, status } = await useMyFetch("/trx_trp_do_update_ticket", {
     method: "post",
     headers: {

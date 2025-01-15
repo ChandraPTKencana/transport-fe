@@ -421,10 +421,10 @@ const enabled_view = computed(()=>{
 const enabled_edit = computed(()=>{  
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
-  &&  (
-        useUtils().checkPermission('potongan_mst.val') && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
-        useUtils().checkPermission('potongan_mst.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1
-      )
+  // &&  (
+  //       useUtils().checkPermission('potongan_mst.val') && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
+  //       useUtils().checkPermission('potongan_mst.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1
+  //     )
   && useUtils().checkPermissions(['potongan_mst.modify','potongan_trx.create','potongan_trx.modify','potongan_trx.remove']);
   return result;
 })
