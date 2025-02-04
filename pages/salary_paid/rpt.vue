@@ -28,6 +28,11 @@
           @click="downloadExcel2()">
           <IconsTableUp />
         </button>
+
+        <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
+            @click="checkNilai()">
+            Check Nilai
+          </button>
       </div>
 
       <div class="w-full flex justify-center items-center grow h-0 p-1">
@@ -77,7 +82,7 @@
     </PopupMini>
     <FormsRptSalary :show="forms_rpt_salary_show" :fnClose="()=>{forms_rpt_salary_show=false}" :id="forms_rpt_salary_id" :p_data="rpt_salarys" :is_copy="forms_rpt_salary_copy"/>
     <FormsRptSalaryValidasi :show="forms_rpt_salary_valid_show" :fnClose="()=>{forms_rpt_salary_valid_show=false}" :id="forms_rpt_salary_valid_id" :p_data="rpt_salarys"/>
-  
+    <FormsRptSalaryCheck :show="forms_rpt_salary_check_show" :fnClose="()=>{forms_rpt_salary_check_show=false}" :id="forms_rpt_salary_check_id"/>
   </div>
 </template>
 
@@ -397,4 +402,17 @@ const downloadExcel2 = async()=>{
   }
   downloadFile(data.value);
 }
+
+
+const forms_rpt_salary_check_id = ref(0);
+const forms_rpt_salary_check_show =  ref(false);
+
+const checkNilai = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_rpt_salary_check_id.value = rpt_salarys.value[selected.value].id;
+    forms_rpt_salary_check_show.value = true;
+  }
+};
 </script>

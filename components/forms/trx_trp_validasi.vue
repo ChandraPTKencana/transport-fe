@@ -50,6 +50,7 @@
               </div>
             </div>
 
+
             <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
               <label for="">Supir</label>
               <div class="card-border">
@@ -61,6 +62,63 @@
               <label for="">Kernet</label>
               <div class="card-border">
                 <WidthMiniPart :selected="selected_kernet"/>
+              </div>
+            </div>
+
+            <div class="w-full flex flex-col flex-wrap p-1 bg-yellow-300 font-bold mt-5 text-red-900">
+              Informasi Pembayaran ( Harap di baca sebelum melakukan unvalidasi )
+            </div>
+
+            <div class="w-full flex flex-wrap">
+              <div class="w-full flex flex-col flex-wrap p-1">
+                <label for="">Sudah dibayarkan ?</label>
+                <div class="card-border">
+                  {{ trx_trp.received_payment ? "Ya" : "Tidak" }}
+                </div>
+              </div>
+            </div>
+            <div class="w-full flex flex-wrap">
+              <div class="w-6/12 sm:w-6/12 md:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">ID Duitku Supir</label>
+                <div class="card-border">
+                  {{ trx_trp.duitku_supir_disburseId }}
+                </div>
+              </div>
+
+              <div class="w-6/12 sm:w-6/12 md:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">Ket Inquery Duitku Supir</label>
+                <div class="card-border">
+                  {{ trx_trp.duitku_supir_inv_res_desc }}
+                </div>
+              </div>
+
+              <div class="w-6/12 sm:w-6/12 md:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">Ket Pengiriman Duitku Supir</label>
+                <div class="card-border">
+                  {{ trx_trp.duitku_supir_trf_res_desc }}
+                </div>
+              </div>
+            </div>
+            <div class="w-full flex flex-wrap">
+              <div class="w-6/12 sm:w-6/12 md:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">ID Duitku Kernet</label>
+                <div class="card-border">
+                  {{ trx_trp.duitku_kernet_disburseId }}
+                </div>
+              </div>
+
+              <div class="w-6/12 sm:w-6/12 md:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">Ket Inquery Duitku Kernet</label>
+                <div class="card-border">
+                  {{ trx_trp.duitku_kernet_inv_res_desc }}
+                </div>
+              </div>
+
+              <div class="w-6/12 sm:w-6/12 md:w-4/12 flex flex-col flex-wrap p-1">
+                <label for="">Ket Pengiriman Duitku Kernet</label>
+                <div class="card-border">
+                  {{ trx_trp.duitku_kernet_trf_res_desc }}
+                </div>
               </div>
             </div>
 
@@ -146,8 +204,11 @@
           <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
             Cancel
           </button>
-          <button v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+          <button ref="it_val" v-if="it_state==1" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doValidate()">
             Validasi
+          </button>
+          <button ref="it_unval" v-if="it_state==0" type="submit" name="button" class="w-36 m-1 bg-yellow-600 text-white  rounded-sm" @click.prevent="doUnValidate()">
+            Unvalidasi
           </button>
         </div>
       </form>
@@ -183,10 +244,10 @@ const props = defineProps({
     required:true,
     default:[]
   },
-  is_view:{
-    type:Boolean,
+  it_state:{
+    type:Number,
     required:false,
-    default:false
+    default:-1
   },
 })
 
@@ -238,7 +299,8 @@ const trx_trp_temp = {
 const trx_trp = ref({...trx_trp_temp});
 
 const token = useCookie('token');
-
+const it_val = ref(null);
+const it_unval = ref(null);
 
 const selected_mini_temp={
   _:{
@@ -312,7 +374,7 @@ const selected_mini_temp_uj={
 };
 const selected_uj = ref(JSON.parse(JSON.stringify(selected_mini_temp_uj)));
 
-const doSave = async () => {
+const doValidate = async () => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
@@ -327,6 +389,78 @@ const doSave = async () => {
   }
 
   const { data, error, status } = await useMyFetch("/trx_trp_validasi", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  
+  trx_trp.value.val = data.value.val;
+  trx_trp.value.val_user = data.value.val_user;
+  trx_trp.value.val_by = data.value.val_by;
+  trx_trp.value.val_at = data.value.val_at;
+
+  trx_trp.value.val1 = data.value.val1;
+  trx_trp.value.val1_user = data.value.val1_user;
+  trx_trp.value.val1_by = data.value.val1_by;
+  trx_trp.value.val1_at = data.value.val1_at;
+
+  trx_trp.value.val2 = data.value.val2;
+  trx_trp.value.val2_user = data.value.val2_user;
+  trx_trp.value.val2_by = data.value.val2_by;
+  trx_trp.value.val2_at = data.value.val2_at;
+
+  trx_trp.value.val3 = data.value.val3;
+  trx_trp.value.val3_user = data.value.val3_user;
+  trx_trp.value.val3_by = data.value.val3_by;
+  trx_trp.value.val3_at = data.value.val3_at;
+
+  trx_trp.value.val4 = data.value.val4;
+  trx_trp.value.val4_user = data.value.val4_user;
+  trx_trp.value.val4_by = data.value.val4_by;
+  trx_trp.value.val4_at = data.value.val4_at;
+
+  trx_trp.value.val5 = data.value.val5;
+  trx_trp.value.val5_user = data.value.val5_user;
+  trx_trp.value.val5_by = data.value.val5_by;
+  trx_trp.value.val5_at = data.value.val5_at;
+
+  trx_trp.value.val6 = data.value.val6;
+  trx_trp.value.val6_user = data.value.val6_user;
+  trx_trp.value.val6_by = data.value.val6_by;
+  trx_trp.value.val6_at = data.value.val6_at;
+
+  let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
+  if(idx>=-1){
+    props.p_data.splice(idx,1,{...trx_trp.value});    
+  }
+
+  props.fnClose();
+}
+
+const doUnValidate = async () => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  
+  let $method = "post";
+
+  let id = props.id;
+  if (id == 0) {
+  } else {
+    data_in.append("id", id);
+    data_in.append("_method", "PUT");
+  }
+
+  const { data, error, status } = await useMyFetch("/trx_trp_unvalidasi", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -466,6 +600,16 @@ const callData = async () => {
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
+    if(props.it_state==1){
+      setTimeout(()=>{
+        it_val.value.focus();
+      },1);
+    }
+    if(props.it_state==0){
+      setTimeout(()=>{
+        it_unval.value.focus();
+      },1);
+    }
     callData();
   }
 }, {

@@ -12,7 +12,7 @@
           </div>
         </div>
       </div>
-      <SubTrxTrpRitaseHistory :show="submenu=='history'" ></SubTrxTrpRitaseHistory>
+      <!-- <SubTrxTrpRitaseHistory :show="submenu=='history'" ></SubTrxTrpRitaseHistory> -->
       <SubTrxTrpRitaseUnverified :show="submenu=='unverified'" ></SubTrxTrpRitaseUnverified>
     </div>
 

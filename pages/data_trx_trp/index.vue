@@ -38,6 +38,12 @@
             @click="validasi()">
             <IconsSignature />
           </button>
+
+          <button v-if="enabled_unvalidasi" type="button" name="button" class="m-1 text-2xl "
+            @click="unvalidasi()">
+            <IconsSignatureOff />
+          </button>
+
           <button v-if="enabled_print_preview" type="button" name="button" class="m-1 text-2xl "
             @click="printPreview()">
             <IconsPrinterEye />
@@ -179,6 +185,9 @@
         <template #[`payment_method_name`]="{item}">
           {{ item.payment_method?.name }}
         </template>
+        <template #[`received_payment`]="{item}">
+          {{ item.received_payment?"Ya":"Tidak" }}
+        </template>
         <template #[`pvr_had_detail`]="{item}">
           <IconsLine v-if="!item.pvr_had_detail"/><IconsCheck v-else/>
         </template>
@@ -231,7 +240,9 @@
       </template>
     </PopupMini>
     <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_cost_center="list_cost_center" :online_status="online_status"/>
-    <FormsTrxTrpValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" :is_view="forms_trx_trp_is_view"/>
+    <FormsTrxTrpValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" 
+      :it_state="forms_trx_trp_valid_state"/>
+      <!-- :is_view="forms_trx_trp_is_view" -->
     <FormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
   </div>
 </template>
@@ -456,10 +467,13 @@ const searching = () => {
   callData();
 }
 
+const forms_trx_trp_valid_state = ref(1);
+
 const forms_trx_trp_show =  ref(false);
 const forms_trx_trp_id = ref(0);
 const form_add = () => {
   forms_trx_trp_id.value = 0;
+  forms_trx_trp_valid_state.value = -1;
   forms_trx_trp_show.value = true;
 }
 
@@ -470,20 +484,31 @@ const form_edit = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_trx_trp_id.value = trx_trps.value[selected.value].id;
+    forms_trx_trp_valid_state.value = -1;
     forms_trx_trp_show.value = true;
   }
 };
 
 const forms_trx_trp_valid_show =  ref(false);
 const forms_trx_trp_valid_id = ref(0);
-const forms_trx_trp_is_view = ref(false);
+// const forms_trx_trp_is_view = ref(false);
 const validasi = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_trx_trp_valid_id.value = trx_trps.value[selected.value].id;
+    forms_trx_trp_valid_state.value = 1;
     forms_trx_trp_valid_show.value = true;
-    forms_trx_trp_is_view.value = false;
+  }
+};
+
+const unvalidasi = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_trx_trp_valid_id.value = trx_trps.value[selected.value].id;
+    forms_trx_trp_valid_state.value = 0;
+    forms_trx_trp_valid_show.value = true;
   }
 };
 
@@ -492,8 +517,8 @@ const form_view = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_trx_trp_valid_id.value = trx_trps.value[selected.value].id;
+    forms_trx_trp_valid_state.value = -1;
     forms_trx_trp_valid_show.value = true;
-    forms_trx_trp_is_view.value = true;
   }
 };
 
@@ -820,9 +845,9 @@ const fields_thead=ref([
     {key:"val1",label:"Mandor",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
     {key:"val2",label:"KTU/W",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
     {key:"val3",label:"Marketing",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+    {key:"val4",label:"Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
     {key:"val5",label:"SPV Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
     {key:"val6",label:"MGR Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-    {key:"val4",label:"Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   ]},
   {key:"id",label:"ID",filter_on:1,type:"number",sort:{priority:2,type:"desc"}},
   {key:"absen",label:"Absen"},
@@ -859,6 +884,13 @@ const fields_thead=ref([
   {key:"kernet_rek_no",label:"No Rek Kernet",filter_on:1,type:'string'},
   {key:"kernet_rek_name",label:"Nama Rek Kernet",filter_on:1,type:'string'},
   {key:"payment_method_name",label:"Payment Method Name",type:'string'},
+  {key:"received_payment",label:"Sudah Dibayarkan?",type:'string'},
+  {key:"duitku_supir_disburseId",label:"ID Duitku Supir",type:'string'},
+  {key:"duitku_supir_inv_res_desc",label:"Ket Inquery Duitku Supir",type:'string'},
+  {key:"duitku_supir_trf_res_desc",label:"Ket Pengiriman Duitku Supir",type:'string'},
+  {key:"duitku_kernet_disburseId",label:"ID Duitku Kernet",type:'string'},
+  {key:"duitku_kernet_inv_res_desc",label:"Ket Inquery Duitku Kernet",type:'string'},
+  {key:"duitku_kernet_trf_res_desc",label:"Ket Pengiriman Duitku Kernet",type:'string'},
   {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   {key:"updated_at",label:"Updated At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   {key:"deleted_by_username",label:"Deleted By",tbl_show:0},
@@ -907,6 +939,22 @@ const enabled_validasi = computed(()=>{
     ( dt_selected.value.val4 == 0 && useUtils().checkPermissions(['trp_trx.val4']) ) ||
     ( dt_selected.value.val5 == 0 && useUtils().checkPermissions(['trp_trx.val5']) ) ||
     ( dt_selected.value.val6 == 0 && useUtils().checkPermissions(['trp_trx.val6']) )
+  );
+  return result;
+})
+
+const enabled_unvalidasi = computed(()=>{  
+  let result = selected.value > -1 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
+  // && [undefined,0].indexOf(dt_selected.value.val) > -1
+  && (
+    ( dt_selected.value.val1 == 1 && useUtils().checkPermissions(['trp_trx.unval1']) ) ||
+    ( dt_selected.value.val2 == 1 && useUtils().checkPermissions(['trp_trx.unval2']) ) ||
+    ( dt_selected.value.val3 == 1 && useUtils().checkPermissions(['trp_trx.unval3']) ) ||
+    ( dt_selected.value.val4 == 1 && useUtils().checkPermissions(['trp_trx.unval4']) ) ||
+    ( dt_selected.value.val5 == 1 && useUtils().checkPermissions(['trp_trx.unval5']) ) ||
+    ( dt_selected.value.val6 == 1 && useUtils().checkPermissions(['trp_trx.unval6']) )
   );
   return result;
 })
