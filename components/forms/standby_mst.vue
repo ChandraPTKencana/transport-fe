@@ -35,8 +35,8 @@
               <div class="w-1/2 sm:w-4/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Trip?</label>
                 <div class="card-border !flex flex-row items-center">
-                  <input id="checkbox" :checked="standby_mst.is_trip" v-model="standby_mst.is_trip" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded">
-                  <label for="checkbox" class="w-full ml-1"> {{standby_mst.is_trip ? 'Ya' : 'Tidak'}} </label>
+                  <input id="checkbox1" :checked="standby_mst.is_trip" v-model="standby_mst.is_trip" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded">
+                  <label for="checkbox1" class="w-full ml-1"> {{standby_mst.is_trip ? 'Ya' : 'Tidak'}} </label>
                 </div>
                 <p class="text-red-500">{{ field_errors.is_trip }}</p>
               </div>

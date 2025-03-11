@@ -6,7 +6,7 @@
 
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
           <div class="w-full flex flex-wrap flex-row grow overflow-auto items-start">
-            <div class="w-full sm:w-full md:w-1/3 flex flex-row flex-wrap">
+            <div class="w-full sm:w-full md:w-1/3 md:overflow-auto md:max-h-full flex flex-row flex-wrap">
 
               <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
                 <label for="">Name</label>
@@ -92,6 +92,13 @@
               </div>
 
               <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+                <label for="">Agama</label>
+                <div class="card-border">
+                  {{ employee.religion }}
+                </div>
+              </div>
+
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
                 <label for="">Status</label>
                 <div class="card-border">
                   {{ employee.status }}
@@ -111,7 +118,32 @@
                   {{ pointFormat(employee.bpjs_jamsos) }}
                 </div>
               </div>
+
+              <div class="w-full p-2 bg-blue-400 text-white mt-4">
+                Data For Mobile APP
+              </div>
+  
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+                <label for="">Username</label>
+                <div class="card-border">
+                  {{ employee.username }}
+                </div>
+              </div>
+
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+                <AttachmentSingle :label="'Photo'" :value="employee.face_loc_preview" @setFile="employee.face_loc=$event"  @setPreview="employee.face_loc_preview=$event"/>
+              </div>
+
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+                <label for="">Face Login?</label>
+                <div class="card-border">
+                  {{employee.m_face_login ? 'Ya' : 'Tidak'}}
+                </div>
+              </div>
+
             </div>
+
+
             <div class="p-1 w-full sm:w-full md:w-2/3 md:overflow-auto max-h-full">
               <AttachmentSingle :label="'Attachment'" :value="employee.attachment_1_preview" @setFile="employee.attachment_1=$event"  @setPreview="employee.attachment_1_preview=$event"/>
             </div>

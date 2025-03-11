@@ -5,7 +5,10 @@
 
       <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
         <div class="w-full flex flex-wrap flex-row grow overflow-auto items-start">
-          <div class="w-full sm:w-full md:w-1/3 flex flex-row flex-wrap">
+          <div class="w-full sm:w-full md:w-1/3 md:overflow-auto md:max-h-full flex flex-row flex-wrap">
+
+            
+
             <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
               <label for="">Nama</label>
               <input type="text" v-model="employee.name" :disabled="employee.val_at!=''">
@@ -101,6 +104,18 @@
               <textarea  v-model="employee.address"></textarea>
               <p class="text-red-500">{{ field_errors.address }}</p>
             </div>
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+              <label for="">Agama</label>
+              <select v-model="employee.religion">
+                <option value="ISLAM">ISLAM</option>
+                <option value="KRISTEN PROTESTAN">KRISTEN PROTESTAN</option>
+                <option value="KRISTEN KATOLIK">KRISTEN KATOLIK</option>
+                <option value="HINDU">HINDU</option>
+                <option value="BUDDHA">BUDDHA</option>
+                <option value="KONGHUCU">KONGHUCU</option>
+              </select>
+              <p class="text-red-500">{{ field_errors.religion }}</p>
+            </div>
 
             <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
               <label for="">Status</label>
@@ -139,6 +154,56 @@
                   @input="employee.bpjs_jamsos = $event"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.bpjs_jamsos }}</p>
+            </div>
+
+            <div class="w-full p-2 bg-blue-400 text-white mt-4">
+              Data For Mobile APP
+            </div>
+
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+              <label for="">Username</label>
+              <input type="text" v-model="employee.username">
+              <p class="text-red-500">{{ field_errors.username }}</p>
+            </div>
+
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+              <label for="">Password</label>
+              <div class="w-full flex items-center">
+                <input :type="look_pass ?'text' :'password'" class="grow rounded-tr-none rounded-br-none" v-model="employee.password">
+                <div class="flex items-center justify-center bg-blue-400 cursor-pointer h-full aspect-square text-white rounded-tr-sm rounded-br-sm" @click="look_pass=!look_pass">
+                  <IconsEyes v-if="look_pass"/>
+                  <IconsEyesOff v-else/>
+                </div>
+              </div>
+              <p class="text-red-500">{{ field_errors.password }}</p>
+            </div>
+
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+              <label for="">Confirm Password</label>
+              <div class="w-full flex items-center">
+                <input :type="look_pass ?'text' :'password'" class="grow rounded-tr-none rounded-br-none" v-model="employee.confirm_password">
+                <div class="flex items-center justify-center bg-blue-400 cursor-pointer h-full aspect-square text-white rounded-tr-sm rounded-br-sm" @click="look_pass=!look_pass">
+                  <IconsEyes v-if="look_pass"/>
+                  <IconsEyesOff v-else/>
+                </div>
+
+              </div>
+              <p class="text-red-500">{{ field_errors.confirm_password }}</p>
+            </div>
+
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+              <AttachmentSingle :label="'Photo'" :value="employee.face_loc_preview" @setFile="employee.face_loc=$event"  @setPreview="employee.face_loc_preview=$event" :can_remove="true" />
+            </div>
+
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+              <label for="">Face Login?</label>
+              <div class="card-border !flex flex-row items-center">
+                <label for="checkbox" class="w-full ml-1 flex items-center"> 
+                  <input id="checkbox" :checked="employee.m_face_login" v-model="employee.m_face_login" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded mr-1">
+                  {{employee.m_face_login ? 'Ya' : 'Tidak'}} 
+                </label>
+              </div>
+              <p class="text-red-500">{{ field_errors.m_face_login }}</p>
             </div>
           </div>
 
@@ -191,6 +256,8 @@ const props = defineProps({
   },
 })
 
+const look_pass = ref(0);
+
 const employee_temp = {
   id: -1,
   name: "",
@@ -210,7 +277,14 @@ const employee_temp = {
   tmk: new Date(),
   address:"",
   status:"TK/0",
-  val_at:""
+  val_at:"",
+  religion:"ISLAM",
+  username:"",
+  password:"",
+  confirm_password:"",
+  face_loc:"",
+  face_loc_preview:"",
+  m_face_login:0
 };
 
 const employee = ref({...employee_temp});
@@ -223,7 +297,7 @@ const doSave = async () => {
   field_errors.value = {};
 
   const data_in = new FormData();
-  
+
   data_in.append("name", employee.value.name);
   data_in.append("role", employee.value.role);
   data_in.append("ktp_no", employee.value.ktp_no);
@@ -241,6 +315,13 @@ const doSave = async () => {
   data_in.append("status", employee.value.status);
   data_in.append("bpjs_kesehatan", employee.value.bpjs_kesehatan);
   data_in.append("bpjs_jamsos", employee.value.bpjs_jamsos);
+  data_in.append("religion", employee.value.religion);
+  data_in.append("username", employee.value.username);
+  if(employee.value.password) data_in.append("password", employee.value.password);
+  if(employee.value.confirm_password) data_in.append("confirm_password", employee.value.confirm_password);
+  data_in.append("m_face_login", employee.value.m_face_login);
+  data_in.append("face_loc", employee.value.face_loc);
+  data_in.append("face_loc_preview", employee.value.face_loc_preview);
 
   let $method = "post";
 

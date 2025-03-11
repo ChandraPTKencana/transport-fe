@@ -33,9 +33,9 @@
                 <tbody>
                   <tr v-for="(rtts, index) in rpt_total_tidak_sesuai" :key="index">
                       <td>{{ rtts.no }}</td>
-                      <td>{{ rtts.header }}</td>
-                      <td>{{ rtts.detail }}</td>
-                      <td>{{ rtts.selisih }}</td>
+                      <td>{{ pointFormat( rtts.header || 0) }}</td>
+                      <td>{{ pointFormat( rtts.detail || 0) }}</td>
+                      <td>{{ pointFormat( rtts.selisih || 0) }}</td>
                   </tr>
                 </tbody>
             </table>
@@ -57,7 +57,7 @@
                   <tbody>
                     <tr v-for="(cr, idxcr) in cmpr" :key="idxcr">
                         <td>{{ cr.voucherno }}</td>
-                        <td>{{ cr.amount }}</td>
+                        <td>{{ pointFormat( cr.amount || 0) }}</td>
                     </tr>
                   </tbody>
               </table>
@@ -95,7 +95,8 @@ const props = defineProps({
     default: 0,
   },
 })
-  
+const { pointFormat } = useUtils();
+
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
 params.sort ="tanggal:desc";

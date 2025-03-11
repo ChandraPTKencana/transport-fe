@@ -48,6 +48,11 @@
             @click="printPreview()">
             <IconsPrinterEye />
           </button> -->
+
+          <button v-if="enabled_qen_code" type="button" name="button" class="m-1 text-sm "
+            @click="genCode()">
+            GEN CODE
+          </button>
         </div>
       </div>
       <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="employees" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event"  @doFilter="searching()" :rowBgColor="rowBgColor">
@@ -451,9 +456,50 @@ const confirmed_undelete = async() => {
   undelete_box.value = false;
 }
 
+const genCode = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    generateCode();
+  }
+};
+
+const generateCode = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("id", employees.value[selected.value].id);  
+  data_in.append("_method", "PUT");
+
+  const { data, error, status } = await useMyFetch("/employee_generate_code", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  let old = {...employees.value[selected.value]};
+  old['m_enkey'] = data.value.m_enkey;
+  employees.value.splice(selected.value,1,{...old});
+
+  // selected.value = -1;
+};
+
+
+
 const fields_thead=ref([
   {key:"no",label:"No",isai:true},
   {key:"val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"m_enkey",label:"Kode Kunci",filter_on:1},
+  {key:"username",label:"Username",filter_on:1},
   {key:"id",label:"ID",freeze:1,filter_on:1,type:"number"},
   {key:"name",label:"Nama",freeze:1, freeze_left:"44px",filter_on:1,type:'string',sort:{priority:1,type:"asc"}},
   {key:"role",label:"Jabatan",filter_on:1,type:'string'},
@@ -533,6 +579,13 @@ const enabled_unremove = computed(()=>{
   let result = selected.value > -1
   && useUtils().checkPermission('employee.unremove') 
   && [1].indexOf(dt_selected.value.deleted) > -1;
+  return result;
+})
+
+const enabled_qen_code = computed(()=>{  
+  let result = selected.value > -1 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  &&  [1].indexOf(dt_selected.value.val) > -1;
   return result;
 })
 

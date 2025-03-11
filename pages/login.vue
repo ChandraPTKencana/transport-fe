@@ -96,6 +96,12 @@ const login = async () => {
                         </button>
                     </div>
                 </div>
+
+                <div class="w-full flex justify-center items-center mt-5">
+                    <a href="driver_w_ast.apk" class="h-10 block">
+                        <img src="android.png" class="max-w-full max-h-full">
+                    </a>
+                </div>
     
                 <!-- <p class="mt-10 text-center text-sm text-gray-500">
                 Not a member?
