@@ -21,6 +21,12 @@
                 </div>
               </div>
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">KM Range</label>
+                <div class="card-border">
+                  {{ ujalan.km_range }}
+                </div>
+              </div>
+              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Harga</label>
                 <div class="card-border">
                   {{ pointFormat(ujalan.harga||0) }}
@@ -47,9 +53,9 @@
             </div>
 
             <div class="w-full flex flex-col sm:flex-row grow p-1 justify-between flex-wrap 2xl:overflow-hidden">
-              <div class="w-full p-0 2xl:pr-1 2xl:w-1/2 2xl:h-full  2xl:overflow-auto">
+              <div class="w-full max-w-full 2xl:w-1/2 2xl:overflow-auto 2xl:pr-1 2xl:max-h-full">
                 <div class="w-full" role="sticky">
-                  <table class="tacky w-full" style="white-space:normal;">
+                  <table class="tacky w-full !table-auto whitespace-normal">
                     <thead >
                       <tr class="sticky top-0 !z-[2]">
                         <td colspan="6" class="!bg-slate-800 text-white font-bold">
@@ -58,11 +64,11 @@
                       </tr>
                       <tr class="sticky top-8 !z-[2]">
                         <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
-                        <th>Desc</th>
+                        <th class="min-w-[150px] !w-[150px] max-w-[150px] ">Desc</th>
                         <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Harga @</th>
                         <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Qty</th>
                         <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Total <br> <span class="text-sm">({{pointFormat(ujalan.harga || 0) }})</span>  </th>
-                        <th class="min-w-[50px] !w-[50px] max-w-[50px] ">For Remarks</th>
+                        <th class="min-w-[70px] !w-[70px] max-w-[70px] whitespace-break-spaces">For Remarks</th>
                       </tr>
                     </thead>
                     <tbody ref="to_move">
@@ -104,9 +110,9 @@
                   </table>
                 </div>
               </div>
-              <div class="w-full px-0 py-2 2xl:pl-1 2xl:py-0 2xl:w-1/2 2xl:h-full  2xl:overflow-auto">
+              <div class="w-full max-w-full 2xl:w-1/2 2xl:overflow-auto 2xl:pl-1 2xl:max-h-full">
                 <div class="w-full" role="sticky">
-                  <table class="tacky w-full !table-auto" style="white-space:normal;">
+                  <table class="tacky w-full !table-auto whitespace-normal">
                     <thead >
                       <tr class="sticky top-0 !z-[2]">
                         <td colspan="9" class="!bg-slate-800 text-white font-bold">
@@ -115,7 +121,7 @@
                       </tr>
                       <tr class="sticky top-8 !z-[2]">
                         <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
-                        <th class="min-w-[40px] !w-[40px] max-w-[40px] ">Acc ID</th>
+                        <th class="min-w-[60px] !w-[60px] max-w-[60px] ">Acc ID</th>
                         <th class="!min-w-[100px] !w-[100px] !max-w-[100px] ">Acc Code</th>
                         <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Acc Name</th>
                         <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Desc</th>
@@ -254,6 +260,7 @@ const props = defineProps({
 const ujalan_temp = {
     id: -1,
     xto: "",
+    km_range:0,
     tipe: "",
     // status: "Y",
     jenis: "",

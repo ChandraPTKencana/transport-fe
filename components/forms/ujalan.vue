@@ -8,13 +8,13 @@
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-8/12 md:w-8/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">To</label>
                 <input v-model="ujalan.xto" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
                 <p class="text-red-500">{{ field_errors.xto }}</p>
               </div>
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-2/12 md:w-2/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Jenis</label>
                 <select v-model="ujalan.jenis" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
                   <option value="PK">PK</option>
@@ -25,7 +25,14 @@
                 </select>
                 <p class="text-red-500">{{ field_errors.jenis }}</p>
               </div>
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+
+              <div class="w-1/2 sm:w-2/12 md:w-2/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                <label for="">KM Range</label>
+                <input v-model="ujalan.km_range" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
+                <p class="text-red-500">{{ field_errors.km_range }}</p>
+              </div>
+
+              <div class="w-1/2 sm:w-2/12 md:w-2/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Harga</label>
                 <div class="card-border disabled">
                   {{pointFormat(total_harga) }}
@@ -33,7 +40,9 @@
                 <p class="text-red-500">{{ field_errors.harga }}</p>
               </div>
 
-              <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              
+
+              <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Asal Peralihan</label>
                 <select v-model="ujalan.transition_from" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
                   <option value=""></option>
@@ -42,13 +51,13 @@
                 <p class="text-red-500">{{ field_errors.transition_from }}</p>
               </div>
               
-              <div class="w-full sm:w-4/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-7/12 md:w-8/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Tipe</label>
                 <textarea v-model="ujalan.tipe" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"></textarea>
                 <p class="text-red-500">{{ field_errors.tipe }}</p>
               </div>
 
-              <div class="w-full sm:w-4/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-full md:w-full lg:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Ket. Untuk Remarks</label>
                 <textarea v-model="ujalan.note_for_remarks" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"></textarea>
                 <p class="text-red-500">{{ field_errors.note_for_remarks }}</p>
@@ -57,9 +66,9 @@
             </div>
 
             <div class="w-full flex flex-col sm:flex-row grow p-1 justify-between flex-wrap 2xl:overflow-hidden">
-              <div class="w-full max-w-full p-0 2xl:pr-1 2xl:w-1/2 2xl:max-h-full 2xl:overflow-auto">
+              <div class="w-full max-w-full 2xl:w-1/2 2xl:overflow-auto 2xl:pr-1 2xl:max-h-full     ">
                 <div class="w-full" role="sticky">
-                  <table class="tacky w-full" style="white-space:normal;">
+                  <table class="tacky w-full !table-auto whitespace-normal">
                     <thead >
                       <tr class="sticky -top-1 !z-[2]">
                         <td :colspan="useUtils().checkPermissions(['ujalan.create','ujalan.modify']) && !disabled ? 7 : 6" class="!bg-slate-800 text-white font-bold">
@@ -73,11 +82,11 @@
                           </button>
                         </th>
                         <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
-                        <th>Desc</th>
+                        <th class="min-w-[150px] !w-[150px] max-w-[150px] ">Desc</th>
                         <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Harga @</th>
                         <th class="min-w-[50px] !w-[50px] max-w-[50px] ">Qty</th>
                         <th class="min-w-[100px] !w-[100px] max-w-[100px] ">Total <br> <span class="text-sm">({{pointFormat(total_harga) }})</span>  </th>
-                        <th class="min-w-[50px] !w-[50px] max-w-[50px] ">For Remarks</th>
+                        <th class="min-w-[70px] !w-[70px] max-w-[70px] whitespace-break-spaces">For Remarks</th>
                       </tr>
                     </thead>
                     <tbody ref="to_move">
@@ -154,9 +163,9 @@
                   </table>
                 </div>
               </div>
-              <div class="w-full max-w-full max-h-full px-0 py-2 2xl:pl-1 2xl:py-0 2xl:w-1/2 2xl:overflow-auto">
+              <div class="w-full max-w-full 2xl:w-1/2 2xl:overflow-auto 2xl:pl-1 2xl:max-h-full   ">
                 <div class="w-full" role="sticky">
-                  <table class="tacky w-full !table-auto" style="white-space:normal;">
+                  <table class="tacky w-full !table-auto whitespace-normal">
                     <thead >
                       <tr class="sticky -top-1 !z-[2]">
                         <td :colspan="!disabled  ? 11 : 9" class="!bg-slate-800 text-white font-bold">
@@ -171,7 +180,7 @@
                         </th> 
                         <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
                         <th v-if="!disabled" class="min-w-[30px] !w-[30px] max-w-[30px] "></th>
-                        <th class="min-w-[40px] !w-[40px] max-w-[40px] ">Acc ID</th>
+                        <th class="min-w-[60px] !w-[60px] max-w-[60px] ">Acc ID</th>
                         <th class="!min-w-[100px] !w-[100px] !max-w-[100px] ">Acc Code</th>
                         <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Acc Name</th>
                         <th class="!min-w-[150px] !w-[150px] !max-w-[150px] ">Desc</th>
@@ -249,6 +258,7 @@
                           <td class="cell" :class="disabled ? 'unselectable' : ''">
                             <div class="w-full h-auto flex items-center justify-center">                       
                               <select class="h-full" v-model="detail.xfor" :disabled="disabled">
+                                <option value=""></option>
                                 <option value="Supir">Supir</option>
                                 <option value="Kernet">Kernet</option>
                               </select>
@@ -352,6 +362,7 @@ const props = defineProps({
 const ujalan_temp = {
     id: -1,
     xto: "",
+    km_range:0,
     tipe: "",
     // status: "Y",
     jenis: "",
@@ -542,6 +553,7 @@ const doSave = async () => {
 
   const data_in = new FormData();
   data_in.append("xto", ujalan.value.xto);
+  data_in.append("km_range", ujalan.value.km_range);
   data_in.append("tipe", ujalan.value.tipe);
   // data_in.append("status", ujalan.value.status);
   data_in.append("jenis", ujalan.value.jenis);

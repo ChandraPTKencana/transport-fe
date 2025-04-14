@@ -112,6 +112,12 @@
                 Rpt Gaji Supir &amp; Kernet
               </nuxt-link>
             </li>
+            <li v-if="useUtils().checkPermission('report.distance.views')" :class="activeMenu == '/report/distance'?'active':''" >
+              <nuxt-link to="/report/distance"  class="cursor-pointer" @click="goTo('/report/distance')">
+                <IconsFileCopy class="mr-1"/>
+                Rpt Jarak
+              </nuxt-link>
+            </li>
             <!-- <li v-if="useUtils().checkPermission('development')" :class="activeMenu == '/fin_payment_req'?'active':''" >
               <nuxt-link to="/fin_payment_req"  class="cursor-pointer" @click="goTo('/fin_payment_req')">
                 <IconsFileCopy class="mr-1"/>

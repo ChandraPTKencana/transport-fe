@@ -98,8 +98,8 @@ const login = async () => {
                 </div>
 
                 <div class="w-full flex justify-center items-center mt-5">
-                    <a href="driver_w_ast.apk" class="h-10 block">
-                        <img src="android.png" class="max-w-full max-h-full">
+                    <a href="/logistik/driver_w_ast.apk" class="h-10 block">
+                        <img src="/android.png" class="max-w-full max-h-full">
                     </a>
                 </div>
     
