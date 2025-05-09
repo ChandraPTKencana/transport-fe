@@ -35,6 +35,7 @@
                 <option value="CPO">CPO</option>
                 <option value="PK">PK</option>
                 <option value="LAIN">LAIN</option>
+                <option value="TUNGGU">TUNGGU</option>
               </select>
               <p class="text-red-500">{{ field_errors.jenis }}</p>
             </div>

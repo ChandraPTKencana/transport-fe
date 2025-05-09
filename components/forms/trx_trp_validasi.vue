@@ -15,13 +15,13 @@
               </div>
             </div>
 
-            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+            <div class="w-6/12 sm:w-2/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">Jenis</label>
               <div class="card-border">
                 {{ trx_trp.jenis }}
               </div>
             </div>
-            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+            <div class="w-6/12 sm:w-4/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
               <label for="">Payment Method</label>
               <div class="card-border">
                 {{ trx_trp.payment_method.name }}
@@ -69,7 +69,7 @@
               Informasi Pembayaran ( Harap di baca sebelum melakukan unvalidasi )
             </div>
 
-            <div class="w-full flex flex-wrap">
+            <div class="w-full md:w-4/12 flex  flex-wrap">
               <div class="w-full flex flex-col flex-wrap p-1">
                 <label for="">Sudah dibayarkan ?</label>
                 <div class="card-border">
@@ -77,92 +77,80 @@
                 </div>
               </div>
             </div>
-            <div class="w-full flex flex-wrap">
-              <div class="w-6/12 sm:w-6/12 md:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">ID Duitku Supir</label>
-                <div class="card-border">
-                  {{ trx_trp.duitku_supir_disburseId }}
+            <div class="w-full sm:w-6/12 md:w-4/12 flex flex-wrap flex-col p-1">
+              <label for="">Duitku Supir</label>
+              <div class="card-border !flex flex-row flex-wrap">
+                <div class="w-4/12 flex-col">
+                  <div class="font-bold">ID</div>
+                  <div>{{ trx_trp.duitku_supir_disburseId }}</div>
                 </div>
-              </div>
-
-              <div class="w-6/12 sm:w-6/12 md:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">Ket Inquery Duitku Supir</label>
-                <div class="card-border">
-                  {{ trx_trp.duitku_supir_inv_res_desc }}
+                <div class="w-4/12 flex-col pl-1">
+                  <div class="font-bold">Inquery</div>
+                  <div>{{ trx_trp.duitku_supir_inv_res_desc }}</div>
                 </div>
-              </div>
-
-              <div class="w-6/12 sm:w-6/12 md:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">Ket Pengiriman Duitku Supir</label>
-                <div class="card-border">
-                  {{ trx_trp.duitku_supir_trf_res_desc }}
+                <div class="w-4/12 flex-col pl-1">
+                  <div class="font-bold">Transfer</div>
+                  <div>{{ trx_trp.duitku_supir_trf_res_desc }}</div>
                 </div>
               </div>
             </div>
-            <div class="w-full flex flex-wrap">
-              <div class="w-6/12 sm:w-6/12 md:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">ID Duitku Kernet</label>
-                <div class="card-border">
-                  {{ trx_trp.duitku_kernet_disburseId }}
+            <div class="w-full sm:w-6/12 md:w-4/12 flex flex-wrap flex-col p-1">
+              <label for="">Duitku Kernet</label>
+              <div class="card-border !flex flex-row flex-wrap">
+                <div class="w-4/12 flex-col">
+                  <div class="font-bold">ID</div>
+                  <div>{{ trx_trp.duitku_kernet_disburseId }}</div>
                 </div>
-              </div>
-
-              <div class="w-6/12 sm:w-6/12 md:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">Ket Inquery Duitku Kernet</label>
-                <div class="card-border">
-                  {{ trx_trp.duitku_kernet_inv_res_desc }}
+                <div class="w-4/12 flex-col pl-1">
+                  <div class="font-bold">Inquery</div>
+                  <div>{{ trx_trp.duitku_kernet_inv_res_desc }}</div>
                 </div>
-              </div>
-
-              <div class="w-6/12 sm:w-6/12 md:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">Ket Pengiriman Duitku Kernet</label>
-                <div class="card-border">
-                  {{ trx_trp.duitku_kernet_trf_res_desc }}
+                <div class="w-4/12 flex-col pl-1">
+                  <div class="font-bold">Transfer</div>
+                  <div>{{ trx_trp.duitku_kernet_trf_res_desc }}</div>
                 </div>
               </div>
             </div>
 
-            <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
-              <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">Cost Center Code</label>
-                <div class="card-border">
-                  {{ trx_trp.cost_center_code }}
+            <div class="w-full sm:w-6/12 md:w-6/12 flex flex-wrap flex-col p-1">
+              <label for="">Cost Center</label>
+              <div class="card-border !flex flex-row flex-wrap">
+                <div class="w-6/12 flex-col">
+                  <div class="font-bold">Code</div>
+                  <div>{{ trx_trp.cost_center_code }}</div>
+                </div>
+                <div class="w-6/12 flex-col pl-1">
+                  <div class="font-bold">Desc</div>
+                  <div>{{ trx_trp.cost_center_desc }}</div>
                 </div>
               </div>
+            </div>
 
-              <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                <label for="">Cost Center Desc</label>
-                <div class="card-border">
-                  {{ trx_trp.cost_center_desc }}
+
+            <div class="w-full sm:w-6/12 md:w-3/12 flex flex-wrap flex-col p-1">
+              <label for="">PVR</label>
+              <div class="card-border !flex flex-row flex-wrap">
+                <div class="w-6/12 flex-col">
+                  <div class="font-bold">No</div>
+                  <div>{{ trx_trp.pvr_no }}</div>
+                </div>
+                <div class="w-6/12 flex-col pl-1">
+                  <div class="font-bold">Total</div>
+                  <div>{{ pointFormat(trx_trp.pvr_total || 0) }}</div>
                 </div>
               </div>
+            </div>
 
-              <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                <label for="">PVR No</label>
-                <div class="card-border">
-                  {{ trx_trp.pvr_no }}
+            <div class="w-full sm:w-6/12 md:w-3/12 flex flex-wrap flex-col p-1">
+              <label for="">PV</label>
+              <div class="card-border !flex flex-row flex-wrap">
+                <div class="w-6/12 flex-col">
+                  <div class="font-bold">No</div>
+                  <div>{{ trx_trp.pv_no }}</div>
                 </div>
-              </div>
-
-              <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">PVR Total</label>
-                <div class="card-border">
-                  {{ pointFormat(trx_trp.pvr_total || 0) }}
-                </div>
-              </div>
-
-
-              <div class="w-6/12 sm:w-8/12 flex flex-col flex-wrap p-1">
-                <label for="">PV</label>
-                <div class="card-border">
-                  {{ trx_trp.pv_no }}
-                </div>
-              </div>
-
-              <div class="w-6/12 sm:w-4/12 flex flex-col flex-wrap p-1">
-                <label for="">PV Amount</label>
-                <div class="card-border ">
-                  {{  pointFormat(trx_trp.pv_total || 0) }}
+                <div class="w-6/12 flex-col pl-1">
+                  <div class="font-bold">Amount</div>
+                  <div>{{ pointFormat(trx_trp.pv_total || 0) }}</div>
                 </div>
               </div>
             </div>

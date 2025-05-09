@@ -29,6 +29,11 @@
           <IconsTableUp />
         </button>
 
+        <button v-if="selected>-1 && rpt_salarys[selected].val1==1" type="button" name="button" class="m-1 text-2xl "
+            @click="updateTrip()">
+            <IconsCalculator />
+          </button>
+
         <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="checkNilai()">
             Check Nilai
@@ -415,4 +420,29 @@ const checkNilai = () => {
     forms_rpt_salary_check_show.value = true;
   }
 };
+
+
+const updateTrip = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("id", rpt_salarys.value[selected.value].id);  
+
+  const { data, error, status } = await useMyFetch("/rpt_salary/recal_trip", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  display({ show: true, status: "Success", message: "Recal Trip Done" });
+}
 </script>

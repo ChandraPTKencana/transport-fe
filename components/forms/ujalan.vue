@@ -8,13 +8,13 @@
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
 
-              <div class="w-full sm:w-8/12 md:w-8/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-8/12 md:w-5/12 lg:w-5/12 flex flex-col flex-wrap p-1">
                 <label for="">To</label>
                 <input v-model="ujalan.xto" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
                 <p class="text-red-500">{{ field_errors.xto }}</p>
               </div>
 
-              <div class="w-1/2 sm:w-2/12 md:w-2/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
                 <label for="">Jenis</label>
                 <select v-model="ujalan.jenis" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
                   <option value="PK">PK</option>
@@ -26,13 +26,13 @@
                 <p class="text-red-500">{{ field_errors.jenis }}</p>
               </div>
 
-              <div class="w-1/2 sm:w-2/12 md:w-2/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-2/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">KM Range</label>
                 <input v-model="ujalan.km_range" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
                 <p class="text-red-500">{{ field_errors.km_range }}</p>
               </div>
 
-              <div class="w-1/2 sm:w-2/12 md:w-2/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-2/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Harga</label>
                 <div class="card-border disabled">
                   {{pointFormat(total_harga) }}
@@ -40,9 +40,7 @@
                 <p class="text-red-500">{{ field_errors.harga }}</p>
               </div>
 
-              
-
-              <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Asal Peralihan</label>
                 <select v-model="ujalan.transition_from" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
                   <option value=""></option>
@@ -51,13 +49,13 @@
                 <p class="text-red-500">{{ field_errors.transition_from }}</p>
               </div>
               
-              <div class="w-full sm:w-7/12 md:w-8/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-7/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Tipe</label>
                 <textarea v-model="ujalan.tipe" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"></textarea>
                 <p class="text-red-500">{{ field_errors.tipe }}</p>
               </div>
 
-              <div class="w-full sm:w-full md:w-full lg:w-6/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-full md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Ket. Untuk Remarks</label>
                 <textarea v-model="ujalan.note_for_remarks" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"></textarea>
                 <p class="text-red-500">{{ field_errors.note_for_remarks }}</p>
@@ -66,7 +64,7 @@
             </div>
 
             <div class="w-full flex flex-col sm:flex-row grow p-1 justify-between flex-wrap 2xl:overflow-hidden">
-              <div class="w-full max-w-full 2xl:w-1/2 2xl:overflow-auto 2xl:pr-1 2xl:max-h-full     ">
+              <div class="w-full max-w-full 2xl:w-1/2 2xl:overflow-auto 2xl:pr-1 2xl:max-h-full">
                 <div class="w-full" role="sticky">
                   <table class="tacky w-full !table-auto whitespace-normal">
                     <thead >
@@ -163,7 +161,7 @@
                   </table>
                 </div>
               </div>
-              <div class="w-full max-w-full 2xl:w-1/2 2xl:overflow-auto 2xl:pl-1 2xl:max-h-full   ">
+              <div class="w-full max-w-full 2xl:w-1/2 2xl:overflow-auto 2xl:pl-1 2xl:max-h-full pt-1 2xl:pt-0">
                 <div class="w-full" role="sticky">
                   <table class="tacky w-full !table-auto whitespace-normal">
                     <thead >
