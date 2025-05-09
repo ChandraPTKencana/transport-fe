@@ -22,13 +22,20 @@
                   <option value="TBS">TBS</option>
                   <option value="TBSK">TBSK</option>
                   <option value="LAIN">LAIN</option>
+                  <option value="TUNGGU">TUNGGU</option>
                 </select>
                 <p class="text-red-500">{{ field_errors.jenis }}</p>
               </div>
 
               <div class="w-1/2 sm:w-2/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">KM Range</label>
-                <input v-model="ujalan.km_range" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
+                <div class="w-full" >
+                  <InputPointFormat
+                    class="w-full h-full p-1" 
+                    type="text" 
+                    :value="ujalan.km_range || 0" 
+                    @input="ujalan.km_range = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"/>
+                </div>
                 <p class="text-red-500">{{ field_errors.km_range }}</p>
               </div>
 

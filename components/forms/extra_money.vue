@@ -25,6 +25,7 @@
                   <option value="TBS">TBS</option>
                   <option value="TBSK">TBSK</option>
                   <option value="LAIN">LAIN</option>
+                  <option value="TUNGGU">TUNGGU</option>
                 </select>
                 <p class="text-red-500">{{ field_errors.jenis }}</p>
               </div>

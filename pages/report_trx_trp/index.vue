@@ -575,7 +575,7 @@ const fields_thead=ref([
   {key:"xto",label:"Tujuan",filter_on:1,type:'string'},
   {key:"uj_asst_opt",label:"Info",filter_on:1,type:'select',select_item:['DENGAN KERNET','TANPA KERNET']},
   {key:"tipe",label:"Tipe",filter_on:1,type:'string'},
-  {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK','LAIN']},
+  {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK','LAIN','TUNGGU']},
   {key:"amount",label:"Amount",class:" justify-end",filter_on:1,type:"number"},
   {key:"cost_center",label:"Cost Center",childs:[
     {key:"cost_center_code",label:"Code", class:" justify-start",filter_on:1,type:'string'},
