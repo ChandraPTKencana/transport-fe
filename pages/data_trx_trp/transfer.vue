@@ -7,6 +7,11 @@
             <input class="flex-grow" type="text" v-model="search" name="search"
               placeholder="Keyword">
           </div>
+
+          <button type="button" name="button" class="m-1 text-2xl "
+            @click="downloadExcel()">
+            <IconsTable2Column />
+          </button>
       </div>
 
       <div class="grow overflow-auto h-0">
@@ -646,6 +651,29 @@ watch(() => filtered_data, (newVal, oldVal) => {
   deep:true,
   immediate: true
 });
+
+const { downloadFile, viewFile } = useDownload();
+
+
+const downloadExcel = async()=>{  
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/trx_trp/manual_tf", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json'
+    },
+    params: {},
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  downloadFile(data.value);
+}
 
 
 const timeout_pin = ref(0);
