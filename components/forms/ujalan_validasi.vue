@@ -23,9 +23,23 @@
               </div>
 
               <div class="w-1/2 sm:w-2/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <label for="">Trip Bonus Supir</label>
+                <div class="card-border">
+                  {{ pointFormat(ujalan.bonus_trip_supir||0) }}
+                </div>
+              </div>
+
+              <div class="w-1/2 sm:w-2/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <label for="">Trip Bonus Kernet</label>
+                <div class="card-border">
+                  {{ pointFormat(ujalan.bonus_trip_kernet||0) }}
+                </div>
+              </div>
+
+              <div class="w-1/2 sm:w-2/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">KM Range</label>
                 <div class="card-border">
-                  {{ ujalan.km_range }}
+                  {{ pointFormat(ujalan.km_range||0) }}
                 </div>
               </div>
 
@@ -267,6 +281,8 @@ const ujalan_temp = {
     id: -1,
     xto: "",
     km_range:0,
+    bonus_trip_supir:0,
+    bonus_trip_kernet:0,
     tipe: "",
     // status: "Y",
     jenis: "",

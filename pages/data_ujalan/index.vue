@@ -461,6 +461,8 @@ const fields_thead=ref([
   {key:"km_range",label:"Jarak KM",filter_on:1,type:'number'},
   {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK','LAIN','TUNGGU']},
   {key:"harga",label:"Harga",class:" justify-end",type:'number'},
+  {key:"bonus_trip_supir",label:"Bonus Trip Supir",class:" justify-end",type:'number'},
+  {key:"bonus_trip_kernet",label:"Bonus Trip Kernet",class:" justify-end",type:'number'},
   {key:"note_for_remarks",label:"Ket.U.Remarks",filter_on:1,type:'string'},
   {key:"transition_from",label:"Pengalihan",filter_on:1,type:"select",select_item:useCommonStore().list_pabrik},
   {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},

@@ -8,13 +8,13 @@
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
 
-              <div class="w-full sm:w-8/12 md:w-5/12 lg:w-5/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-8/12 md:w-6/12 lg:w-5/12 flex flex-col flex-wrap p-1">
                 <label for="">To</label>
                 <input v-model="ujalan.xto" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
                 <p class="text-red-500">{{ field_errors.xto }}</p>
               </div>
 
-              <div class="w-1/2 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-4/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Jenis</label>
                 <select v-model="ujalan.jenis" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
                   <option value="PK">PK</option>
@@ -27,7 +27,31 @@
                 <p class="text-red-500">{{ field_errors.jenis }}</p>
               </div>
 
-              <div class="w-1/2 sm:w-2/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <label for="">Trip Bonus Supir</label>
+                <div class="w-full" >
+                  <InputPointFormat
+                    class="w-full h-full p-1" 
+                    type="text" 
+                    :value="ujalan.bonus_trip_supir || 0" 
+                    @input="ujalan.bonus_trip_supir = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"/>
+                </div>
+                <p class="text-red-500">{{ field_errors.bonus_trip_supir }}</p>
+              </div>
+
+              <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <label for="">Trip Bonus Kernet</label>
+                <div class="w-full" >
+                  <InputPointFormat
+                    class="w-full h-full p-1" 
+                    type="text" 
+                    :value="ujalan.bonus_trip_kernet || 0" 
+                    @input="ujalan.bonus_trip_kernet = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"/>
+                </div>
+                <p class="text-red-500">{{ field_errors.bonus_trip_kernet }}</p>
+              </div>
+
+              <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">KM Range</label>
                 <div class="w-full" >
                   <InputPointFormat
@@ -39,7 +63,7 @@
                 <p class="text-red-500">{{ field_errors.km_range }}</p>
               </div>
 
-              <div class="w-1/2 sm:w-2/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Harga</label>
                 <div class="card-border disabled">
                   {{pointFormat(total_harga) }}
@@ -47,7 +71,7 @@
                 <p class="text-red-500">{{ field_errors.harga }}</p>
               </div>
 
-              <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <div class="w-1/2 sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Asal Peralihan</label>
                 <select v-model="ujalan.transition_from" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
                   <option value=""></option>
@@ -56,13 +80,13 @@
                 <p class="text-red-500">{{ field_errors.transition_from }}</p>
               </div>
               
-              <div class="w-full sm:w-7/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Tipe</label>
                 <textarea v-model="ujalan.tipe" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"></textarea>
                 <p class="text-red-500">{{ field_errors.tipe }}</p>
               </div>
 
-              <div class="w-full sm:w-full md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Ket. Untuk Remarks</label>
                 <textarea v-model="ujalan.note_for_remarks" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"></textarea>
                 <p class="text-red-500">{{ field_errors.note_for_remarks }}</p>
@@ -368,6 +392,8 @@ const ujalan_temp = {
     id: -1,
     xto: "",
     km_range:0,
+    bonus_trip_supir:0,
+    bonus_trip_kernet:0,
     tipe: "",
     // status: "Y",
     jenis: "",
@@ -559,6 +585,8 @@ const doSave = async () => {
   const data_in = new FormData();
   data_in.append("xto", ujalan.value.xto);
   data_in.append("km_range", ujalan.value.km_range);
+  data_in.append("bonus_trip_supir", ujalan.value.bonus_trip_supir);
+  data_in.append("bonus_trip_kernet", ujalan.value.bonus_trip_kernet);
   data_in.append("tipe", ujalan.value.tipe);
   // data_in.append("status", ujalan.value.status);
   data_in.append("jenis", ujalan.value.jenis);
