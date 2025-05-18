@@ -162,7 +162,7 @@ const fin_payment_req_temp = {
 
 const fin_payment_req = ref({...fin_payment_req_temp});
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 
 const details = ref([]);
 

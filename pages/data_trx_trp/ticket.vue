@@ -393,7 +393,7 @@ const addClassToTbody=(data)=>{
   return data;
 }
 
-const company_code = useCookie('company_code');
+const company_code = useDynamicPathCookie('company_code');
 const pabriks = ref([]);
 let deep_state = ref({
   clearCheckBox:false
@@ -430,7 +430,7 @@ const date = ref({
   to: "",
 });
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
   let trx_trps = [];

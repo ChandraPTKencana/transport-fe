@@ -233,7 +233,7 @@ const standby_mst = ref({...standby_mst_temp});
 
 // const { countClickListFn } = useUtils();
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 
 // const field_errors = ref<Record<string, any>>({})
   const field_errors = ref({})
@@ -453,7 +453,7 @@ const replyAction=(act = "")=>{
   tools_popup.value = false;
 };
 
-const role = useCookie('role');
+const role = useDynamicPathCookie('role');
 const disabled = computed(()=>{
   return (standby_mst.value.val && standby_mst.value.val1) || (useUtils().checkPermission('standby_mst.val') && standby_mst.value.val) || (useUtils().checkPermission('standby_mst.val1') && standby_mst.value.val1);
 });

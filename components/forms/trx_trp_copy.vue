@@ -239,7 +239,7 @@ const trx_trp_temp = {
 let trx_trp_loaded = {...trx_trp_temp};
 const trx_trp = ref({...trx_trp_temp});
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const field_errors = ref({})
 
 const blurCostCenterCode=($e)=>{

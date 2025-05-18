@@ -37,6 +37,49 @@ const login = async () => {
     }
 };
 
+const clearCookie = async()=>{
+    useCommonStore().loading_full = true;
+    const { data, error, status } = await useMyFetch("/clear_cookies", {
+        method: 'get',
+        credentials: 'include',
+        headers: {
+        //   'Authorization': `Bearer ${token.value}`,
+        // 'Content-Type': 'application/json',
+        //   'Accept': 'application/json'
+        },
+        // params: params,
+        // body: {
+        //   sort: "updated_at:desc"
+        // },
+        retry: 0,
+        // server: true
+    });
+  useCommonStore().loading_full = false;
+
+    //  // Get all cookies for the current site
+    //  const cookies = document.cookie.split(';');
+    // console.log("cookies",cookies);
+    // // Loop through all cookies and expire them
+    // for (let i = 0; i < cookies.length; i++) {
+    //     const cookie = cookies[i];
+    //     const eqPos = cookie.indexOf('=');
+    //     const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+    //     console.log("name",name);
+        
+    //     // Set the cookie expiration to the past to delete it
+    //     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+        
+    //     // Also try to delete with domain if we're on a subdomain
+    //     const domainParts = window.location.hostname.split('.');
+    //     console.log("domainParts",domainParts);
+
+    //     if (domainParts.length > 1) {
+    //         const domain = '.' + domainParts.slice(-2).join('.');
+    //         document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=' + domain;
+    //     }
+    // }
+}
+
 
 // if (process.client) {
 //   window.addEventListener('keypress', (e) => {
@@ -101,6 +144,12 @@ const login = async () => {
                     <a href="/logistik/driver_w_ast.apk" class="h-10 block">
                         <img src="/android.png" class="max-w-full max-h-full">
                     </a>
+                </div>
+
+                <div class="w-full flex justify-center items-center mt-5">
+                    <button @click.prevent="clearCookie()">
+                        CLEAR COOKIE
+                    </button>
                 </div>
     
                 <!-- <p class="mt-10 text-center text-sm text-gray-500">

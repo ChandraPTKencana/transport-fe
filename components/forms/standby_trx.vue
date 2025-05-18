@@ -410,7 +410,7 @@ const detail = ref({
 let standby_trx_loaded = {...standby_trx_temp};
 const standby_trx = ref({...standby_trx_temp});
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const field_errors = ref({})
 
 const { display } = useAlertStore();

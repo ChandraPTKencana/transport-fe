@@ -134,7 +134,7 @@ const salary_bonus_temp = {
 
 const salary_bonus = ref({...salary_bonus_temp});
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const field_errors = ref({});
 const it_val = ref(null);
 const details = ref([]);

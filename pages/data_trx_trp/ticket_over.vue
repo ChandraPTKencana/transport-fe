@@ -81,7 +81,7 @@
     to: "",
   });
   
-  const token = useCookie('token');
+  const token = useDynamicPathCookie('token');
   const { data: dt_async } = await useAsyncData(async () => {
     useCommonStore().loading_full = true;
     let trx_trps = [];

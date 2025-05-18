@@ -271,7 +271,7 @@ const { logUserOut } = useAuthStore();
 const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive
 const { triggerSidebar } = useCommonStore(); // make authenticated state reactive
 const { is_sidebar_open } = storeToRefs(useCommonStore()); // make authenticated state reactive
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 
 const logout = async() => {
   useCommonStore().loading_full = true;
@@ -293,11 +293,11 @@ const logout = async() => {
 
 };
 
-const company_name  = useCookie('company_name'); // useCookie new hook in nuxt 3
-const company_email = useCookie('company_email'); // useCookie new hook in nuxt 3
+const company_name  = useDynamicPathCookie('company_name'); // useCookie new hook in nuxt 3
+const company_email = useDynamicPathCookie('company_email'); // useCookie new hook in nuxt 3
 
-const username = useCookie('username');
-const fullname = useCookie('fullname');
+const username = useDynamicPathCookie('username');
+const fullname = useDynamicPathCookie('fullname');
 const is_panel_open = ref(false);
 
 if (process.client) {

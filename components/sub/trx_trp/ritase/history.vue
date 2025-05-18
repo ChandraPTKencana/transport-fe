@@ -157,7 +157,7 @@ const field_errors = ref({})
 
 const date = ref({ from: "", to: "" });
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 
 // const { data: dt_async } = await useAsyncData(async () => {
 //   useCommonStore().loading_full = true;

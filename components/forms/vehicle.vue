@@ -70,7 +70,7 @@ const vehicle_temp = {
 
 const vehicle = ref({...vehicle_temp});
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const field_errors = ref({})
 
 

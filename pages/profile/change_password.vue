@@ -45,7 +45,7 @@
     });
   const photo = ref(false);
 
-  const token = useCookie('token');
+  const token = useDynamicPathCookie('token');
   const field_errors = ref<Record<string, any>>({})
   
   const router = useRouter();

@@ -103,7 +103,7 @@ params.sort ="tanggal:desc";
 
 const field_errors = ref({})
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const rpt_total_tidak_sesuai = ref([]);
 const rpt_pembanding = ref([]);
 

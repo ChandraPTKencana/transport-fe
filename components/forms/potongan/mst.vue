@@ -180,7 +180,7 @@ const detail = ref({
 let potongan_mst_loaded = JSON.parse(JSON.stringify(potongan_mst_temp));
 const potongan_mst = ref(JSON.parse(JSON.stringify(potongan_mst_temp)));
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const field_errors = ref({})
 
 

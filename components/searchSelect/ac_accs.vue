@@ -98,7 +98,7 @@ const props = defineProps({
 
 const { countClickListFn } = useUtils();
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 
 const items = ref([]);
 

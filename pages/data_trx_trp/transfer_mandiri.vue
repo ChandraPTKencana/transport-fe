@@ -368,7 +368,7 @@ definePageMeta({
     // 'auth',
   ],
 });
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();

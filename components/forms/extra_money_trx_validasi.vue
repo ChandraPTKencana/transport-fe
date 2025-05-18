@@ -234,7 +234,7 @@ const extra_money_trx_temp = {
 
 const extra_money_trx = ref({...extra_money_trx_temp});
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const field_errors = ref({});
 const it_val = ref(null);
 const details = ref([]);

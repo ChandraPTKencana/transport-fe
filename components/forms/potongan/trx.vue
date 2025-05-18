@@ -79,7 +79,7 @@ const potongan_trx_temp = {
 
 const potongan_trx = ref({...potongan_trx_temp});
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const field_errors = ref({})
 
 const emit = defineEmits(['updateRemainingCut']);

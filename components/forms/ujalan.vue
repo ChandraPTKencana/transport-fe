@@ -410,7 +410,7 @@ const ujalan = ref({...ujalan_temp});
 
 // const { countClickListFn } = useUtils();
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 
 // const field_errors = ref<Record<string, any>>({})
   const field_errors = ref({})
@@ -806,7 +806,7 @@ const replyAction2=(act = "")=>{
   tools_popup2.value = false;
 };
 
-const role = useCookie('role');
+const role = useDynamicPathCookie('role');
 const disabled = computed(()=>{
   return (ujalan.value.val && ujalan.value.val1) || (useUtils().checkPermission('ujalan.val') && ujalan.value.val) || (useUtils().checkPermissions('ujalan.val1') && ujalan.value.val1);
 });

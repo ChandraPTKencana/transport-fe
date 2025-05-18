@@ -39,7 +39,7 @@ onMounted(()=>{
 })
 
 const field_errors = ref({})
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 
 const pin = ref("");
 const timeout_limit = ref(0); //15 menit = 900 detik x 1000 millis

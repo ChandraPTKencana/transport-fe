@@ -347,7 +347,7 @@ params.sort ="tanggal:desc";
 
 const field_errors = ref({})
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const date = ref({
   from: "",
   to: "",

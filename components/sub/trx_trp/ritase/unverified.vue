@@ -219,7 +219,7 @@ params.sort ="tanggal:desc";
 
 const field_errors = ref({})
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 // const trx_trps = ref(dt_async.value.trx_trps || []);
 const trx_trps = ref([]);
 const trx_trp = ref({

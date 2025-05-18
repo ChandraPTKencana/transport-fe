@@ -150,7 +150,7 @@ const trx_trp_temp = {
 };
 const trx_trp = ref({...trx_trp_temp});
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 
 const callData = async () => {
   useCommonStore().loading_full = true;

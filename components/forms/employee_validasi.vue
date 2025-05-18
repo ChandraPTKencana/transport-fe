@@ -238,7 +238,7 @@ const employee_temp = {
 
 const employee = ref({...employee_temp});
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const field_errors = ref({});
 const it_val = ref(null);
 const it_unval = ref(null);

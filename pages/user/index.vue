@@ -115,7 +115,7 @@ const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
 
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const { data: users } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
   const { data, error, status } = await useMyFetch("/users", {

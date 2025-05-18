@@ -210,7 +210,7 @@ const rpt_salary_temp = {
 
 const rpt_salary = ref({...rpt_salary_temp});
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const field_errors = ref({});
 const it_val = ref(null);
 const details = ref([]);

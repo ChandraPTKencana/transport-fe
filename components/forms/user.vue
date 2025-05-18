@@ -155,7 +155,7 @@ const user_temp = {
 
 const user = ref({...user_temp});
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const field_errors = ref({})
 
 const doSave = async () => { 

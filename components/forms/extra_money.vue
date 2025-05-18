@@ -194,7 +194,7 @@ const detail = ref({
 let extra_money_loaded = {...extra_money_temp};
 const extra_money = ref({...extra_money_temp});
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const field_errors = ref({})
 
 const doSave = async () => {

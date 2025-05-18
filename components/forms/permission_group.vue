@@ -176,7 +176,7 @@ const permission_group_temp = {
 };
 
 const permission_group = ref({...permission_group_temp});
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const field_errors = ref({})
 
 const doSave = async () => {

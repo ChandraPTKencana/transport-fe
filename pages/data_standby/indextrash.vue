@@ -149,7 +149,7 @@ const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
 params.sort ="created_at:desc";
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const { data: dt_async } = await useAsyncData(async () => {
   let standby_msts = [];
 

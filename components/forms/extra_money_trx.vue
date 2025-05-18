@@ -155,7 +155,7 @@ const extra_money_trx_temp = {
 let extra_money_trx_loaded = {...extra_money_trx_temp};
 const extra_money_trx = ref({...extra_money_trx_temp});
 const list_payment_methods = ref([]);
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const field_errors = ref({})
 
 const doSave = async () => {

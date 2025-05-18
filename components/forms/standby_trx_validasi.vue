@@ -375,7 +375,7 @@ const standby_trx_temp = {
 
 const standby_trx = ref({...standby_trx_temp});
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const field_errors = ref({});
 const it_val = ref(null);
 const it_unval = ref(null);

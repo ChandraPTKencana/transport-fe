@@ -174,7 +174,7 @@ const potongan_mst_temp = {
 
 const potongan_mst = ref({...potongan_mst_temp});
 
-const token = useCookie('token');
+const token = useDynamicPathCookie('token');
 const field_errors = ref({});
 const it_val = ref(null);
 const details = ref([]);

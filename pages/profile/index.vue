@@ -61,7 +61,7 @@
     });
   const photo = ref(false);
 
-  const token = useCookie('token');
+  const token = useDynamicPathCookie('token');
   const field_errors = ref<Record<string, any>>({})
   
   const router = useRouter();
@@ -127,8 +127,8 @@ const resetPhoto = () => {
 };
   
 
-const username = useCookie('username');
-const fullname = useCookie('fullname');
+const username = useDynamicPathCookie('username');
+const fullname = useDynamicPathCookie('fullname');
 
 
   const doSave = async () => {
