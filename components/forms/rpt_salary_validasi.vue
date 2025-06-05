@@ -26,7 +26,7 @@
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
                   <thead >
                     <tr class="sticky -top-1 !z-[2]">
-                      <td colspan="33" class="!bg-slate-800 text-white font-bold">
+                      <td colspan="43" class="!bg-slate-800 text-white font-bold">
                         Detail
                       </td>
                     </tr>
@@ -53,6 +53,9 @@
                       <th rowspan="2">Periode 2 <span class="text-sm">({{pointFormat(ttl_periode_2) }})</span></th>
                       <th rowspan="2">Periode 1+2 <span class="text-sm">({{pointFormat(ttl_periode) }})</span></th>
                       <th colspan="3">Trip <span class="text-sm">({{pointFormat(trip) }})</span></th>
+                      <th colspan="4">Trip Lain <span class="text-sm">({{pointFormat(_lain_) }})</span></th>
+                      <th colspan="3" class="whitespace-nowrap">Trip Tunggu <span class="text-sm">({{pointFormat(_tunggu_) }})</span></th>
+                      <th colspan="3">Bonus Trip <span class="text-sm">({{pointFormat(bonus_trip) }})</span></th>        
                       <th rowspan="2">Potongan Trip <span class="text-sm">({{pointFormat(ttl_potongan || 0) }})</span></th>
                       <th rowspan="2">Total <span class="text-sm">({{pointFormat(total) }})</span></th>
                       <th rowspan="2">BPJS Kesehatan <span class="text-sm">({{pointFormat(ttl_bpjs_kesehatan || 0) }})</span></th>
@@ -69,6 +72,16 @@
                       <th >Gaji <span class="text-sm">({{pointFormat(ttl_uj_gaji || 0) }})</span></th>
                       <th >Makan <span class="text-sm">({{pointFormat(ttl_uj_makan || 0) }})</span></th>
                       <th >Dinas <span class="text-sm">({{pointFormat(ttl_uj_dinas || 0) }})</span></th>
+                      <th >Jmlh <span class="text-sm">({{pointFormat(ttl_lain || 0) }})</span></th>
+                      <th >Gaji <span class="text-sm">({{pointFormat(ttl_lain_gaji || 0) }})</span></th>
+                      <th >Makan <span class="text-sm">({{pointFormat(ttl_lain_makan || 0) }})</span></th>
+                      <th >Dinas <span class="text-sm">({{pointFormat(ttl_lain_dinas || 0) }})</span></th>
+                      <th >Jmlh <span class="text-sm">({{pointFormat(ttl_tunggu || 0) }})</span></th>
+                      <th >Gaji <span class="text-sm">({{pointFormat(ttl_tunggu_gaji || 0) }})</span></th>
+                      <th >Dinas <span class="text-sm">({{pointFormat(ttl_tunggu_dinas || 0) }})</span></th>
+                      <th >Jmlh <span class="text-sm">({{pointFormat(ttl_bonus_jmlh || 0) }})</span></th>
+                      <th >Gaji <span class="text-sm">({{pointFormat(ttl_bonus_gaji || 0) }})</span></th>
+                      <th >Dinas <span class="text-sm">({{pointFormat(ttl_bonus_dinas || 0) }})</span></th>                    
                     </tr>
                   </thead>
                   <tbody ref="to_move">
@@ -102,6 +115,16 @@
                         <td>{{ pointFormat(detail.uj_gaji) }}</td>
                         <td>{{ pointFormat(detail.uj_makan) }}</td>
                         <td>{{ pointFormat(detail.uj_dinas) }}</td>
+                        <td>{{ pointFormat(detail.trip_lain) }}</td>
+                        <td>{{ pointFormat(detail.trip_lain_gaji) }}</td>
+                        <td>{{ pointFormat(detail.trip_lain_makan) }}</td>
+                        <td>{{ pointFormat(detail.trip_lain_dinas) }}</td>
+                        <td>{{ pointFormat(detail.trip_tunggu) }}</td>
+                        <td>{{ pointFormat(detail.trip_tunggu_gaji) }}</td>
+                        <td>{{ pointFormat(detail.trip_tunggu_dinas) }}</td>
+                        <td>{{ pointFormat(detail.trip_cpo+detail.trip_pk+detail.trip_tbs+detail.trip_tbsk) }}</td>
+                        <td>{{ pointFormat(parseFloat(detail.trip_cpo_bonus_gaji)+parseFloat(detail.trip_pk_bonus_gaji)+parseFloat(detail.trip_tbs_bonus_gaji)+parseFloat(detail.trip_tbsk_bonus_gaji)) }}</td>
+                        <td>{{ pointFormat(parseFloat(detail.trip_cpo_bonus_dinas)+parseFloat(detail.trip_pk_bonus_dinas)+parseFloat(detail.trip_tbs_bonus_dinas)+parseFloat(detail.trip_tbsk_bonus_dinas)) }}</td>
                         <td>{{ pointFormat(detail.nominal_cut) }}</td>
                         <td>{{ pointFormat(cal_total(detail)) }}</td>
                         <td>{{ pointFormat(detail.employee_bpjs_kesehatan) }}</td>
@@ -362,6 +385,104 @@ const ttl_uj_dinas = computed(()=>{
   return temp;
 })
 
+const ttl_bonus_trip = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.trip_lain); 
+  });
+  return temp;
+})
+
+const ttl_lain = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.trip_lain); 
+  });
+  return temp;
+})
+const ttl_lain_gaji = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.trip_lain_gaji); 
+  });
+  return temp;
+})
+const ttl_lain_makan = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.trip_lain_makan); 
+  });
+  return temp;
+})
+
+const ttl_lain_dinas = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.trip_lain_dinas); 
+  });
+  return temp;
+})
+
+const ttl_tunggu = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.trip_tunggu); 
+  });
+  return temp;
+})
+
+const ttl_tunggu_gaji = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.trip_tunggu_gaji); 
+  });
+  return temp;
+})
+
+const ttl_tunggu_dinas = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.trip_tunggu_dinas); 
+  });
+  return temp;
+})
+
+const ttl_bonus_jmlh = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.trip_cpo)+ parseFloat(e.trip_pk)+parseFloat(e.trip_tbs) +parseFloat(e.trip_tbsk);
+  });
+  return temp;
+})
+
+const ttl_bonus_gaji = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.trip_cpo_bonus_gaji)+ parseFloat(e.trip_pk_bonus_gaji)+parseFloat(e.trip_tbs_bonus_gaji) +parseFloat(e.trip_tbsk_bonus_gaji);
+  });
+  return temp;
+})
+
+const ttl_bonus_dinas = computed(()=>{
+  let temp = 0;
+
+  details.value.forEach(e => {
+    temp += parseFloat(e.trip_cpo_bonus_dinas)+ parseFloat(e.trip_pk_bonus_dinas)+parseFloat(e.trip_tbs_bonus_dinas) +parseFloat(e.trip_tbsk_bonus_dinas);
+  });
+  return temp;
+})
+
+
 const ttl_bpjs_kesehatan = computed(()=>{
   let temp = 0;
 
@@ -442,9 +563,22 @@ const trip = computed(()=>{
   return (ttl_uj_gaji.value + ttl_uj_makan.value + ttl_uj_dinas.value) || 0;
 })
 
-const total = computed(()=>{
-  return (ttl_periode.value + trip.value - ttl_potongan.value) || 0;
+const _lain_ = computed(()=>{
+  return (ttl_lain_gaji.value + ttl_lain_makan.value + ttl_lain_dinas.value) || 0;
 })
+
+const _tunggu_ = computed(()=>{
+  return (ttl_tunggu_gaji.value + ttl_tunggu_dinas.value) || 0;
+})
+
+const bonus_trip = computed(()=>{
+  return (ttl_bonus_gaji.value + ttl_bonus_dinas.value) || 0;
+})
+
+const total = computed(()=>{
+  return (ttl_periode.value + trip.value + _lain_.value + _tunggu_.value + bonus_trip.value - ttl_potongan.value) || 0;
+})
+
 
 const total_grand = computed(()=>{
   return (total.value + ttl_bpjs_kesehatan.value + ttl_bpjs_jamsos.value) || 0;
@@ -463,7 +597,14 @@ const cal_periode = (dtl)=>{
 }
 
 const cal_total = (dtl)=>{
-  return cal_periode(dtl) + parseFloat(dtl.uj_gaji) + parseFloat(dtl.uj_gaji) + parseFloat(dtl.uj_dinas) - parseFloat(dtl.nominal_cut);
+  return cal_periode(dtl) + parseFloat(dtl.uj_gaji) + parseFloat(dtl.uj_makan) + parseFloat(dtl.uj_dinas) + 
+  parseFloat(dtl.trip_lain_gaji) + parseFloat(dtl.trip_lain_makan) + parseFloat(dtl.trip_lain_dinas) +
+  parseFloat(dtl.trip_tunggu_gaji) + parseFloat(dtl.trip_tunggu_dinas) +
+  parseFloat(dtl.trip_cpo_bonus_gaji) + parseFloat(dtl.trip_cpo_bonus_dinas) +
+  parseFloat(dtl.trip_pk_bonus_gaji) + parseFloat(dtl.trip_pk_bonus_dinas) +
+  parseFloat(dtl.trip_tbs_bonus_gaji) + parseFloat(dtl.trip_tbs_bonus_dinas) +
+  parseFloat(dtl.trip_tbsk_bonus_gaji) + parseFloat(dtl.trip_tbsk_bonus_dinas) -
+  parseFloat(dtl.nominal_cut);
 }
 
 const cal_total_grand = (dtl)=>{

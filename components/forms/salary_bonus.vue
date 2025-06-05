@@ -12,6 +12,7 @@
                 <select v-model="salary_bonus.type" :disabled="disabled">
                   <option value="Lainnya">Lainnya</option>
                   <option value="Kerajinan">Kerajinan</option>
+                  <option value="BonusTrip">BonusTrip</option>
                 </select>
                 <p class="text-red-500">{{ field_errors.type }}</p>
               </div>

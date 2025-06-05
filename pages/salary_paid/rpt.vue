@@ -29,10 +29,10 @@
           <IconsTableUp />
         </button>
 
-        <button v-if="selected>-1 && rpt_salarys[selected].val1==1" type="button" name="button" class="m-1 text-2xl "
+        <!-- <button v-if="selected>-1 && rpt_salarys[selected].val1==1" type="button" name="button" class="m-1 text-2xl "
             @click="updateTrip()">
             <IconsCalculator />
-          </button>
+          </button> -->
 
         <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="checkNilai()">

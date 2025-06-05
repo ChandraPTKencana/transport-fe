@@ -53,6 +53,14 @@
             @click="printPreviewBT()">
             <IconsPrinterEye />
           </button>
+
+          <button v-if="checkbox_arr.length > 0 && useUtils().checkPermissions(['trp_trx.val','trp_trx.val1','trp_trx.val2','trp_trx.val3','trp_trx.val4','trp_trx.val5','trp_trx.val6'])" type="button" name="button" class="m-1 text-xs whitespace-nowrap grid grid-cols-2"
+            @click="multi_val_ticket_box=true">
+            <IconsSignature />
+            <IconsSignature />
+            <IconsSignature />
+            <IconsSignature />
+          </button>
         </div>
         <div class="flex">
           <button v-if="useUtils().checkPermission('trp_trx.generate_pvr')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
@@ -130,7 +138,7 @@
       </form> -->
       
 
-      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event" @doFilter="searching()">
+      <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="trx_trps" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event" @doFilter="searching()" @setCheckbox="checkbox_arr=$event" :deep_state="deep_state">
         <template #[`id`]="{item}">
           {{item.id}}<span v-if="item.potongan && item.potongan.length > 0">*</span>
         </template>
@@ -227,6 +235,12 @@
       </template>
     </PopupMini>
 
+    <PopupMini :type="'custome'" :show="multi_val_ticket_box" :fnClose="()=>multi_val_ticket_box=false" :fnConfirm="multiVal" > 
+      <template #words>
+        Ticket akan <b class="text-red-500">divalidasi</b> sesuai dengan data-data yang telah di pilih, yakin untuk melanjutkan ?
+      </template>
+    </PopupMini>
+
     <PopupMini :type="'custome'" :show="req_deleted_box" :data="req_deleted_data" :fnClose="toggleReqDeleteBox" :fnConfirm="confirmedReqDeleted" :enabledOk="enabledOk1" >
       
       <template #words>
@@ -268,6 +282,10 @@ definePageMeta({
     },
     // 'auth',
   ],
+});
+
+let deep_state = ref({
+  clearCheckBox:false
 });
 
 const checkStatus=(data)=>{
@@ -663,6 +681,71 @@ const confirmedReqDeleted = async() => {
   req_deleted_box.value = false;
 }
 
+const checkbox_arr = ref([]);
+const multi_val_ticket_box = ref(false);
+
+const multiVal = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("ids", JSON.stringify(checkbox_arr.value));  
+  data_in.append("_method", "PUT");
+
+  const { data, error, status } = await useMyFetch("/trx_trp_validasis", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  multi_val_ticket_box.value = false;
+  data.value.val_lists.forEach(e => {
+    let idx = trx_trps.value.map((x)=>x.id).indexOf(e.id);
+    if(idx>-1){
+      let sd = trx_trps.value[idx];
+
+      sd.val = e.val;
+      sd.val_by = e.val_by;
+      sd.val_at = e.val_at;
+
+      sd.val1 = e.val1;
+      sd.val1_by = e.val1_by;
+      sd.val1_at = e.val1_at;
+
+      sd.val2 = e.val2;
+      sd.val2_by = e.val2_by;
+      sd.val2_at = e.val2_at;
+
+      sd.val3 = e.val3;
+      sd.val3_by = e.val3_by;
+      sd.val3_at = e.val3_at;
+
+      sd.val4 = e.val4;
+      sd.val4_by = e.val4_by;
+      sd.val4_at = e.val4_at;
+
+      sd.val5 = e.val5;
+      sd.val5_by = e.val5_by;
+      sd.val5_at = e.val5_at;
+
+      sd.val6 = e.val6;
+      sd.val6_by = e.val6_by;
+      sd.val6_at = e.val6_at;
+
+      sd.updated_at = e.updated_at;
+      trx_trps.value.splice(idx,1,{...sd});
+    }
+  });
+  deep_state.value.clearCheckBox = true;
+}
+
 const { printHtml } = useDownload();
 
 const printPreview = async()=>{
@@ -839,6 +922,7 @@ const updatePV = async() => {
 }
 
 const fields_thead=ref([
+  {key:"cb",label:"",checkbox:'id'},
   {key:"no",label:"No",isai:true},
   {key:"val",label:"APP",childs:[
     {key:"val",label:"Kasir",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
