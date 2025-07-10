@@ -50,6 +50,11 @@
             @click="printPreviewBT()">
             <IconsPrinterEye />
           </button>
+
+          <button type="button" name="button" class="m-1 text-2xl flex items-center "
+            @click="downloadExcel()">
+            <IconsTable2Column />  <span class="text-xs ml-1"> Excel </span>
+          </button>
         </div>
         <div  class="flex">
 
@@ -816,6 +821,29 @@ const updatePV = async() => {
   display({ show: true, status: "Success", message: "Update PV Done" });
 }
 
+const { downloadFile, viewFile } = useDownload();
+
+const downloadExcel = async($link="")=>{  
+  inject_params();
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/extra_money_trxs/reportExcel", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json'
+    },
+    params: params,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  downloadFile(data.value);
+}
+
 const fields_thead=ref([
   {key:"no",label:"No",isai:true},
   {key:"val",label:"APP",childs:[
@@ -827,7 +855,7 @@ const fields_thead=ref([
     {key:"val6",label:"MGR Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   ]},
   {key:"id",label:"ID",filter_on:1,type:"number"},
-  {key:"tanggal",label:"Tanggal",type:'datetime',dateformat:"DD-MM-Y",filter_on:1},
+  {key:"tanggal",label:"Tanggal",type:'date',dateformat:"DD-MM-Y",filter_on:1},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
   {key:"employee_name",label:"Nama Pekerja",filter_on:1,type:'string'},
   {key:"employee_rek_no",label:"No rek Pekerja",type:'string'},

@@ -255,7 +255,7 @@
     </PopupMini>
     <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_cost_center="list_cost_center" :online_status="online_status"/>
     <FormsTrxTrpValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" 
-      :it_state="forms_trx_trp_valid_state"/>
+      :it_state="forms_trx_trp_valid_state" @setID="forms_trx_trp_valid_id=$event" @setIndex="selected=$event"/>
       <!-- :is_view="forms_trx_trp_is_view" -->
     <FormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
   </div>
