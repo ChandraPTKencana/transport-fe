@@ -42,6 +42,7 @@
   const { checkScopes,checkRole } = useAuthStore();
     definePageMeta({
         layout: "clear",
+        ssr: false
     });
   const photo = ref(false);
 

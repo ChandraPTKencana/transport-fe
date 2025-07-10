@@ -28,7 +28,8 @@ const callNotif = (timeout)=>{
 
                 txtNot.value += "=====================================================<br/>";
                 txtNot.value += "called<br/>";
-                if ('Notification' in window) {
+
+                if (process.client && 'Notification' in window) {
                     txtNot.value += "called in<br/>";
                     
                     if (Notification.permission === 'granted') {

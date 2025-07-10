@@ -68,6 +68,7 @@ import { useCommonStore } from '~/store/common';
 
 definePageMeta({
   // layout: "clear",
+  ssr: false,
   middleware: [
     function (to, from) {
       if (!useAuthStore().checkPermission('report.distance.views')){

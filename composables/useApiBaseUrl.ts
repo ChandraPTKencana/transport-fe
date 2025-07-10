@@ -1,0 +1,33 @@
+export default function useApiBaseUrl() {
+    const url = useRequestURL()
+    const  apiBaseUrls:Record<string, string>= {
+        '192.168.1.163/logistik': 'http://192.168.1.163/transport-be/a9p/',
+        'localhost:3000/logistik': 'http://192.168.1.163/transport-be/a9p/',
+
+        '10.10.30.196/logistik': 'http://10.10.30.196/transport-be/a9p/',
+        '10.10.7.197/logistik': 'http://10.10.7.197/transport-be/a9p/',
+        '10.10.88.197/logistik': 'http://10.10.88.197/transport-be/a9p/',
+        '10.10.26.197/logistik': 'http://10.10.26.197/transport-be/a9p/',
+        '10.10.29.196/logistik': 'http://10.10.29.196/transport-be/a9p/',
+        '10.10.77.196/logistik': 'http://10.10.77.196/transport-be/a9p/',
+
+        '192.168.99.246/arp': 'http://192.168.99.246:8001',
+        '192.168.99.246/kap': 'http://192.168.99.246:8002',
+        '192.168.99.246/kas': 'http://192.168.99.246:8003',
+        '192.168.99.246/kpn': 'http://192.168.99.246:8004',
+        '192.168.99.246/kus': 'http://192.168.99.246:8005',
+        '192.168.99.246/smp': 'http://192.168.99.246:8006',
+
+        '110.232.82.16:8880/arp': 'http://110.232.82.16:9001',
+        '110.232.82.16:8880/kap': 'http://110.232.82.16:9002',
+        '110.232.82.16:8880/kas': 'http://110.232.82.16:9003',
+        '110.232.82.16:8880/kpn': 'http://110.232.82.16:9004',
+        '110.232.82.16:8880/kus': 'http://110.232.82.16:9005',
+        '110.232.82.16:8880/smp': 'http://110.232.82.16:9006',
+    };
+
+    let apiBase = apiBaseUrls[url.host+"/"+(url.pathname.split("/")[1])];
+    return {
+        apiBase
+    }
+  }

@@ -14,13 +14,17 @@ export const useDynamicPathCookie = <T = string | null>(
       return `/${firstPathSegment}`
     }
     
-    if (process.client) {
-      // const route = useRoute()
-      const firstPathSegment = window.location.pathname.split('/')[1] || '/'
-      console.log("in client",firstPathSegment)
-      return `/${firstPathSegment}`
-    }
-    return '/' // Fallback untuk server-side
+    // if (process.client) {
+    //   // const route = useRoute()
+    //   const firstPathSegment = window.location.pathname.split('/')[1] || '/'
+    //   console.log("in client",firstPathSegment)
+    //   return `/${firstPathSegment}`
+    // }
+    // return '/' // Fallback untuk server-side
+
+    const url = useRequestURL();
+    const firstPathSegment = url.pathname.split('/')[1] || '/';
+    return `/${firstPathSegment}`;
   })
 
   console.log("call cookie",value !== undefined,name,cookiePath.value);

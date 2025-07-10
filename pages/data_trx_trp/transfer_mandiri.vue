@@ -358,6 +358,7 @@ const { pointFormat } = useUtils();
 
 definePageMeta({
   // layout: "clear",
+  ssr: false,
   middleware: [
     function (to, from) {
       if (!useAuthStore().checkPermission('trp_trx.transfer.views')){

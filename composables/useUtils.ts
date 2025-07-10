@@ -1,7 +1,7 @@
 // const route = useRoute();
 // const router = useRouter();
-const role = useCookie('role');
 export const useUtils = () => {
+
     const sayHello = () => {
         // console.log(route)
         // console.log(router)
@@ -48,17 +48,19 @@ export const useUtils = () => {
     };
 
     const checkRole = (list:any)=>{
+        const role = useCookie('role');
         return (list).includes(role.value);
     };
 
 
     const checkPermission=(name:string)=>{
-        
-        let permissions = localStorage.getItem('permissions');
-        if(permissions) {
-            permissions=JSON.parse(permissions)
-            return permissions ? permissions.includes(name) : false;
-        }; // useCookie new hook in nuxt 3
+        if(process.client){
+            let permissions = localStorage.getItem('permissions');
+            if(permissions) {
+                permissions=JSON.parse(permissions)
+                return permissions ? permissions.includes(name) : false;
+            }; // useCookie new hook in nuxt 3
+        }
 
         return  false;
     };
@@ -83,6 +85,6 @@ export const useUtils = () => {
         checkRole,
         checkPermission,
         checkPermissions,
-        round
+        round,
     }
 }

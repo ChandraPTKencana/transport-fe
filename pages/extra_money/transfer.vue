@@ -278,6 +278,7 @@ const { pointFormat } = useUtils();
 
 definePageMeta({
   // layout: "clear",
+  ssr: false,
   middleware: [
     function (to, from) {
       if (!useAuthStore().checkPermission('extra_money_trx.transfer.views')){

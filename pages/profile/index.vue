@@ -1,35 +1,35 @@
 <template>
     <div class="w-full h-full flex flex-col">
-      <HeaderCustom :title="'Profile'" :back="true" />
+      <HeaderCustom :title="'Profile'" :back="true" @submit.prevent="doSave()"/>
       <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
         <div class="w-full align-items-center justify-content-center grow overflow-auto">
           <div class="w-full flex flex-col flex-wrap p-1">
-            <label for="">Username</label>
-            <input class="" type="text" v-model="user.username">
+            <label for="username">Username</label>
+            <input id="username" type="text" v-model="user.username">
             <p class="text-red-500">{{ field_errors.username }}</p>
           </div>
           <div class="w-full flex flex-col flex-wrap p-1">
-            <label for="">Nama Identitas</label>
-            <input class="" type="text" v-model="user.fullname">
+            <label for="fullname">Nama Identitas</label>
+            <input id="fullname" type="text" v-model="user.fullname">
             <p class="text-red-500">{{ field_errors.fullname }}</p>
           </div>
           <div class="w-full flex flex-col flex-wrap p-1">
-            <label for="">Email</label>
-            <input class="" type="text" v-model="user.email">
+            <label for="email">Email</label>
+            <input id="email" type="text" v-model="user.email">
             <p class="text-red-500">{{ field_errors.email }}</p>
           </div>
           <div class="w-full flex flex-col flex-wrap p-1">
-            <label for="">Telepon</label>
-            <input class="" type="text" v-model="user.phone_number">
+            <label for="phone_number">Telepon</label>
+            <input id="phone_number" type="text" v-model="user.phone_number">
             <p class="text-red-500">{{ field_errors.phone_number }}</p>
           </div>
           <div class="w-full flex flex-col flex-wrap p-1">
-            <label for="">Foto</label>
-            <div  class="flex justify-center items-center w-24 h-24">
+            <label for="photo">Foto</label>
+            <div class="flex justify-center items-center w-24 h-24">
                 <img :src="user.photo || '/logistik/user-default.png'" alt="" class=" max-w-full max-h-full">
             </div>
             <button type="button" v-show="photo" class="bg-gray-600 w-24 text-white" @click="resetPhoto()">Remove</button>
-            <input v-show="!photo" @change="changePhoto($event)" ref="photo_input" type="file" name="photo" value="">
+            <input id="photo" v-show="!photo" @change="changePhoto($event)" ref="photo_input" type="file" name="photo" value="">
 
             <small>Upload file image : jpg, jpeg</small>
             <p class="help-err">{{ field_errors.photo }}</p>
@@ -39,7 +39,7 @@
           <button type="button" name="button" class="w-36 m-1" @click="$router.go(-1)">
             Cancel
           </button>
-          <button type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white rounded-sm" @click.prevent="doSave()">
+          <button type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white rounded-sm">
             Save
           </button>
         </div>
@@ -58,6 +58,7 @@
   const { checkScopes,checkRole } = useAuthStore();
     definePageMeta({
         layout: "clear",
+        ssr: false
     });
   const photo = ref(false);
 
@@ -130,65 +131,75 @@ const resetPhoto = () => {
 const username = useDynamicPathCookie('username');
 const fullname = useDynamicPathCookie('fullname');
 
+const isSaving = ref(false);
 
-  const doSave = async () => {
-    useCommonStore().loading_full = true;
-    field_errors.value = {};
-  
-    const data_in = new FormData();
-    data_in.append("username", user.value.username);
-    data_in.append("email", user.value.email);
-    data_in.append("phone_number", user.value.phone_number);
-    data_in.append("fullname", user.value.fullname);
+const doSave = async () => {
+  if (isSaving.value) return;
+  isSaving.value = true;
+
+  useCommonStore().loading_full = true;
+  field_errors.value = {};
+
+  const data_in = new FormData();
+  data_in.append("username", user.value.username);
+  data_in.append("email", user.value.email);
+  data_in.append("phone_number", user.value.phone_number);
+  data_in.append("fullname", user.value.fullname);
+  if (user.value.password) {      
     data_in.append("password", user.value.password);
-    data_in.append("can_login", user.value.can_login);
-    if (photo_input.value?.files)
-        data_in.append("photo", photo_input.value.files[0] || '');
-    if (photo_input.value)
-        data_in.append("photo_preview", user.value.photo);
-
-
-    let req_method: any = "post";
-  
-    let id = route.query.id;
-    if (id === "") {
-    } else {
-        req_method = "post";
-        // data_in['id'] = id;
-        data_in.append("id", id as string);
-        data_in.append("_method", "PUT");
-    }
-  
-    const { data, error, status }: any = await useMyFetch("/update_profile", {
-      method: req_method,
-      headers: {
-        'Authorization': `Bearer ${token.value}`,
-        // 'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        // "Content-Type": "multipart/form-data",
-      },
-      body: data_in,
-      retry: 0,
-      // server: true
-    });
-    useCommonStore().loading_full = false;
-    if (status.value === 'error') {
-      useErrorStore().trigger(error, field_errors);
-      return;
-    }else{
-        username.value = user.value.username;
-        fullname.value = user.value.fullname;
-
-        useAlertStore().display({
-            show: true,
-            status: "Success",
-            message: data.value.message
-        })
-    }
-
-
-    // router.go(-1);
   }
+
+  if (typeof user.value.can_login !== 'undefined') {
+    // data_in.append("can_login", user.value.can_login.toString());
+    data_in.append("can_login", user.value.can_login);
+  }
+
+  if (photo_input.value?.files?.[0])
+      data_in.append("photo", photo_input.value.files[0] || '');
+  if (photo_input.value)
+      data_in.append("photo_preview", user.value.photo);
+
+
+  let req_method: any = "post";
+
+  let id = route.query.id;
+  if (id === "") {
+  } else {
+      req_method = "post";
+      // data_in['id'] = id;
+      data_in.append("id", id as string);
+      data_in.append("_method", "PUT");
+  }
+
+  const { data, error, status }: any = await useMyFetch("/update_profile", {
+    method: req_method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // "Content-Type": "multipart/form-data",
+    },
+    body: data_in,
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+  isSaving.value = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error, field_errors);
+    return;
+  }else{
+    username.value = user.value.username;
+    fullname.value = user.value.fullname;
+
+    useAlertStore().display({
+        show: true,
+        status: "Success",
+        message: data.value.message
+    })
+  }
+  // router.go(-1);
+}
   
   
-  </script>
+</script>

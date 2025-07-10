@@ -10,7 +10,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const { authenticated, done_get_user_info } = storeToRefs(useAuthStore()); // make authenticated state reactive
   // const token = useCookie('token'); // get token from cookies
   // console.log(token.value, "token when route");
-  const pathSegment = window.location.pathname.split('/')[1] || '/';
+  const url = useRequestURL();
+  const pathSegment = url.pathname.split('/')[1] || '/';
+  // const pathSegment = window.location.pathname.split('/')[1] || '/';
   const token = useDynamicPathCookie('token', undefined, undefined, pathSegment);
   if (token.value) {
     // check if value exists

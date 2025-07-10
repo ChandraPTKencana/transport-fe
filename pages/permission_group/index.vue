@@ -87,6 +87,7 @@ const { pointFormat } = useUtils();
 
 definePageMeta({
   // layout: "clear",
+  ssr: false,
   middleware: [
     function (to, from) {
       if (!useAuthStore().checkPermission('permission_group.views')){

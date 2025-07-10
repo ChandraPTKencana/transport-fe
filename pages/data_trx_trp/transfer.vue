@@ -427,6 +427,7 @@ const { pointFormat } = useUtils();
 
 definePageMeta({
   // layout: "clear",
+  ssr: false,
   middleware: [
     function (to, from) {
       if (!useAuthStore().checkPermission('trp_trx.transfer.views')){
@@ -544,8 +545,10 @@ const callDetail = async (dt) => {
   
 // }
 
-
+const transfering = ref(false);
 const doTransfer = async () => {
+  if(transfering.value)return;
+  transfering.value = true;
   useCommonStore().loading_full = true;
   field_errors.value = {};
 
@@ -568,6 +571,7 @@ const doTransfer = async () => {
     // server: true
   });
   useCommonStore().loading_full = false;
+  transfering.value = false;
   if (status.value === 'error') {
     useErrorStore().trigger(error, field_errors);
     return;
@@ -577,7 +581,6 @@ const doTransfer = async () => {
   selected.value = -1;
   show_confirm.value = false;
   pop_show.value = false;
-
 }
 
 const pop_show =  ref(false);

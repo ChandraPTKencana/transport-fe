@@ -113,9 +113,10 @@ import { useAlertStore } from '~/store/alert';
 
 definePageMeta({
   // layout: "clear",
+  ssr: false,
   middleware: [
     function (to, from) {
-      if (!useAuthStore().checkPermission('trp_trx.views')){
+      if (!useAuthStore().checkPermission('trp_trx.absen.views')){
         useCommonStore().loading_full = false;
         return navigateTo('/');
       }
