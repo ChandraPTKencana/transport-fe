@@ -30,7 +30,7 @@
                         Detail
                       </td>
                     </tr>
-                    <tr class="sticky top-7 !z-[2]">
+                    <tr class="sticky top-14 !z-[2]">
                       <th rowspan="2">No</th>
                       <th rowspan="2">ID</th>
                       <th rowspan="2">Nama Pekerja</th>
@@ -44,45 +44,47 @@
                       <th rowspan="2">No Rek</th>
                       <th rowspan="2">Nama Rek</th>
                       <th rowspan="2">Nama Bank</th>
-                      <th colspan="3">Standby 1 <span class="text-sm">({{pointFormat(table_datas.standby_1_ttl) }})</span></th>
-                      <th rowspan="2">Potongan 1 <span class="text-sm">({{pointFormat(table_datas.perubahaan_lainnya_1_ttl) }})</span></th>
-                      <th rowspan="2">Periode 1 <span class="text-sm">({{pointFormat(table_datas.periode_1_ttl) }})</span></th>
-                      <th colspan="3">Standby 2 <span class="text-sm">({{pointFormat(table_datas.standby_2_ttl) }})</span></th>
-                      <th rowspan="2">Potongan 2 <span class="text-sm">({{pointFormat(table_datas.perubahaan_lainnya_2_ttl) }})</span></th>
-                      <th rowspan="2">U.Kerajinan <span class="text-sm">({{pointFormat(table_datas.perubahaan_kerajinan_ttl) }})</span></th>
-                      <th colspan="4">Bonus Trip <span class="text-sm">({{pointFormat(table_datas.bonus_trip_ttl) }})</span></th>
-                      <th rowspan="2">Periode 2 <span class="text-sm">({{pointFormat(table_datas.periode_2_ttl) }})</span></th>
-                      <th rowspan="2">Periode 1+2 <span class="text-sm">({{pointFormat(table_datas.periode_ttl) }})</span></th>
-                      <th colspan="3">Trip <span class="text-sm">({{pointFormat(table_datas.trip_umum_ttl) }})</span></th>
-                      <th colspan="4">Trip Lain <span class="text-sm">({{pointFormat(table_datas.trip_lain_ttl) }})</span></th>
-                      <th colspan="3" class="whitespace-nowrap">Trip Tunggu <span class="text-sm">({{pointFormat(table_datas.trip_tunggu_ttl) }})</span></th>
-                      <th rowspan="2">Potongan Trip <span class="text-sm">({{pointFormat(table_datas.potongan_trip) }})</span></th>
-                      <th rowspan="2">Total <span class="text-sm">({{pointFormat(table_datas.total) }})</span></th>
-                      <th rowspan="2">BPJS Kesehatan <span class="text-sm">({{pointFormat(table_datas.bpjs_kesehatan_ttl) }})</span></th>
-                      <th rowspan="2">BPJS Jamsos <span class="text-sm">({{pointFormat(table_datas.bpjs_jamsos_ttl) }})</span></th>
-                      <th rowspan="2">Grand Total <span class="text-sm">({{pointFormat(table_datas.total_grand) }})</span></th>
+                      <th colspan="3">Standby 1 <span class="text-sm">(
+                        {{pointFormat(standby_1) }} -> 
+                        {{pointFormat(table_datas.standby_1_ttl) }})</span></th>
+                      <th rowspan="2">Potongan 1 <span class="text-sm">({{pointFormat(ttl_bonus || 0) }} -> {{pointFormat(table_datas.perubahaan_lainnya_1_ttl) }})</span></th>
+                      <th rowspan="2">Periode 1 <span class="text-sm">({{pointFormat(ttl_periode_1) }}-> {{pointFormat(table_datas.periode_1_ttl) }})</span></th>
+                      <th colspan="3">Standby 2 <span class="text-sm">({{pointFormat(standby_2) }}-> {{pointFormat(table_datas.standby_2_ttl) }})</span></th>
+                      <th rowspan="2">Potongan 2 <span class="text-sm">({{pointFormat(ttl_bonus_2 || 0) }}-> {{pointFormat(table_datas.perubahaan_lainnya_2_ttl) }})</span></th>
+                      <th rowspan="2">U.Kerajinan <span class="text-sm">({{pointFormat(ttl_kerajinan || 0) }}-> {{pointFormat(table_datas.perubahaan_kerajinan_ttl) }})</span></th>
+                      <th colspan="4">Bonus Trip <span class="text-sm">({{pointFormat(bonus_trip) }}-> {{pointFormat(table_datas.bonus_trip_ttl) }})</span></th>
+                      <th rowspan="2">Periode 2 <span class="text-sm">({{pointFormat(ttl_periode_2) }}-> {{pointFormat(table_datas.periode_2_ttl) }})</span></th>
+                      <th rowspan="2">Periode 1+2 <span class="text-sm">({{pointFormat(ttl_periode) }}-> {{pointFormat(table_datas.periode_ttl) }})</span></th>
+                      <th colspan="3">Trip <span class="text-sm">({{pointFormat(trip) }}-> {{pointFormat(table_datas.trip_umum_ttl) }})</span></th>
+                      <th colspan="4">Trip Lain <span class="text-sm">({{pointFormat(_lain_) }}-> {{pointFormat(table_datas.trip_lain_ttl) }})</span></th>
+                      <th colspan="3" class="whitespace-nowrap">Trip Tunggu <span class="text-sm">({{pointFormat(_tunggu_) }}-> {{pointFormat(table_datas.trip_tunggu_ttl) }})</span></th>
+                      <th rowspan="2">Potongan Trip <span class="text-sm">({{pointFormat(ttl_potongan || 0) }}-> {{pointFormat(table_datas.potongan_trip) }})</span></th>
+                      <th rowspan="2">Total <span class="text-sm">({{pointFormat(total) }}-> {{pointFormat(table_datas.total) }})</span></th>
+                      <th rowspan="2">BPJS Kesehatan <span class="text-sm">({{pointFormat(ttl_bpjs_kesehatan || 0) }}-> {{pointFormat(table_datas.bpjs_kesehatan_ttl) }})</span></th>
+                      <th rowspan="2">BPJS Jamsos <span class="text-sm">({{pointFormat(ttl_bpjs_jamsos || 0) }}-> {{pointFormat(table_datas.bpjs_jamsos_ttl) }})</span></th>
+                      <th rowspan="2">Grand Total <span class="text-sm">({{pointFormat(total_grand) }}-> {{pointFormat(table_datas.total_grand) }})</span></th>
                     </tr>
                     <tr class="sticky top-[60px] !z-[2]">
-                      <th >Gaji <span class="text-sm">({{pointFormat(table_datas.standby_1_gaji) }})</span></th>
-                      <th >Makan <span class="text-sm">({{pointFormat(table_datas.standby_1_makan) }})</span></th>
-                      <th >Dinas <span class="text-sm">({{pointFormat(table_datas.standby_1_dinas) }})</span></th>
-                      <th >Gaji <span class="text-sm">({{pointFormat(table_datas.standby_2_gaji) }})</span></th>
-                      <th >Makan <span class="text-sm">({{pointFormat(table_datas.standby_2_makan) }})</span></th>
-                      <th >Dinas <span class="text-sm">({{pointFormat(table_datas.standby_2_dinas) }})</span></th>
-                      <th >Jmlh <span class="text-sm">({{pointFormat(table_datas.bonus_trip_jlh) }})</span></th>
-                      <th >Gaji <span class="text-sm">({{pointFormat(table_datas.bonus_trip_gaji) }})</span></th>
-                      <th >Dinas <span class="text-sm">({{pointFormat(table_datas.bonus_trip_dinas) }})</span></th>
+                      <th >Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji || 0) }} -> {{pointFormat(table_datas.standby_1_gaji) }})</span></th>
+                      <th >Makan <span class="text-sm">({{pointFormat(ttl_sb_makan || 0) }} -> {{pointFormat(table_datas.standby_1_makan) }})</span></th>
+                      <th >Dinas <span class="text-sm">({{pointFormat(ttl_sb_dinas || 0) }} -> {{pointFormat(table_datas.standby_1_dinas) }})</span></th>
+                      <th >Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji_2 || 0) }} -> {{pointFormat(table_datas.standby_2_gaji) }})</span></th>
+                      <th >Makan <span class="text-sm">({{pointFormat(ttl_sb_makan_2 || 0) }} -> {{pointFormat(table_datas.standby_2_makan) }})</span></th>
+                      <th >Dinas <span class="text-sm">({{pointFormat(ttl_sb_dinas_2 || 0) }} -> {{pointFormat(table_datas.standby_2_dinas) }})</span></th>
+                      <th >Jmlh <span class="text-sm">({{pointFormat(ttl_bonus_jmlh || 0) }} -> {{pointFormat(table_datas.bonus_trip_jlh) }})</span></th>
+                      <th >Gaji <span class="text-sm">({{pointFormat(ttl_bonus_gaji || 0) }} -> {{pointFormat(table_datas.bonus_trip_gaji) }})</span></th>
+                      <th >Dinas <span class="text-sm">({{pointFormat(ttl_bonus_dinas || 0) }} -> {{pointFormat(table_datas.bonus_trip_dinas) }})</span></th>
                       <th >Potongan <span class="text-sm">({{pointFormat(bonus_trip_perubahaan || 0) }} )</span></th>
-                      <th >Gaji <span class="text-sm">({{pointFormat(table_datas.trip_umum_gaji) }})</span></th>
-                      <th >Makan <span class="text-sm">({{pointFormat(table_datas.trip_umum_makan) }})</span></th>
-                      <th >Dinas <span class="text-sm">({{pointFormat(table_datas.trip_umum_dinas) }})</span></th>
-                      <th >Jmlh <span class="text-sm">({{pointFormat(table_datas.trip_lain_jlh) }})</span></th>
-                      <th >Gaji <span class="text-sm">({{pointFormat(table_datas.trip_lain_gaji) }})</span></th>
-                      <th >Makan <span class="text-sm">({{pointFormat(table_datas.trip_lain_makan) }})</span></th>
-                      <th >Dinas <span class="text-sm">({{pointFormat(table_datas.trip_lain_dinas) }})</span></th>
-                      <th >Jmlh <span class="text-sm">({{pointFormat(table_datas.trip_tunggu_jlh) }})</span></th>
-                      <th >Gaji <span class="text-sm">({{pointFormat(table_datas.trip_tunggu_gaji) }})</span></th>
-                      <th >Dinas <span class="text-sm">({{pointFormat(table_datas.trip_tunggu_dinas) }})</span></th>                  
+                      <th >Gaji <span class="text-sm">({{pointFormat(ttl_uj_gaji || 0) }} -> {{pointFormat(table_datas.trip_umum_gaji) }})</span></th>
+                      <th >Makan <span class="text-sm">({{pointFormat(ttl_uj_makan || 0) }} -> {{pointFormat(table_datas.trip_umum_makan) }})</span></th>
+                      <th >Dinas <span class="text-sm">({{pointFormat(ttl_uj_dinas || 0) }} -> {{pointFormat(table_datas.trip_umum_dinas) }})</span></th>
+                      <th >Jmlh <span class="text-sm">({{pointFormat(ttl_lain || 0) }} -> {{pointFormat(table_datas.trip_lain_jlh) }})</span></th>
+                      <th >Gaji <span class="text-sm">({{pointFormat(ttl_lain_gaji || 0) }} -> {{pointFormat(table_datas.trip_lain_gaji) }})</span></th>
+                      <th >Makan <span class="text-sm">({{pointFormat(ttl_lain_makan || 0) }} -> {{pointFormat(table_datas.trip_lain_makan) }})</span></th>
+                      <th >Dinas <span class="text-sm">({{pointFormat(ttl_lain_dinas || 0) }} -> {{pointFormat(table_datas.trip_lain_dinas) }})</span></th>
+                      <th >Jmlh <span class="text-sm">({{pointFormat(ttl_tunggu || 0) }} -> {{pointFormat(table_datas.trip_tunggu_jlh) }})</span></th>
+                      <th >Gaji <span class="text-sm">({{pointFormat(ttl_tunggu_gaji || 0) }} -> {{pointFormat(table_datas.trip_tunggu_gaji) }})</span></th>
+                      <th >Dinas <span class="text-sm">({{pointFormat(ttl_tunggu_dinas || 0) }} -> {{pointFormat(table_datas.trip_tunggu_dinas) }})</span></th>                  
                     </tr>
                   </thead>
                   <tbody ref="to_move">
@@ -105,18 +107,18 @@
                         <td>{{ pointFormat(detail.sb_makan) }}</td>
                         <td>{{ pointFormat(detail.sb_dinas) }}</td>
                         <td>{{ pointFormat(detail.salary_bonus_nominal) }}</td>
-                        <td>{{ pointFormat(detail.periode_1_ttl) }}</td>
+                        <td>{{ pointFormat(cal_periode_1(detail)) }} -> {{pointFormat(detail.periode_1_ttl) }}</td>
                         <td>{{ pointFormat(detail.sb_gaji_2) }}</td>
                         <td>{{ pointFormat(detail.sb_makan_2) }}</td>
                         <td>{{ pointFormat(detail.sb_dinas_2) }}</td>
                         <td>{{ pointFormat(detail.salary_bonus_nominal_2) }}</td>
                         <td>{{ pointFormat(detail.kerajinan) }}</td>
-                        <td>{{ pointFormat(detail.bonus_trip_jlh) }}</td>
-                        <td>{{ pointFormat(detail.bonus_trip_gaji) }}</td>
-                        <td>{{ pointFormat(detail.bonus_trip_dinas) }}</td>
+                        <td>{{ pointFormat(detail.trip_cpo+detail.trip_pk+detail.trip_tbs+detail.trip_tbsk) }} -> {{pointFormat(detail.bonus_trip_jlh) }}</td>
+                        <td>{{ pointFormat(parseFloat(detail.trip_cpo_bonus_gaji)+parseFloat(detail.trip_pk_bonus_gaji)+parseFloat(detail.trip_tbs_bonus_gaji)+parseFloat(detail.trip_tbsk_bonus_gaji)) }} -> {{pointFormat(detail.bonus_trip_gaji) }}</td>
+                        <td>{{ pointFormat(parseFloat(detail.trip_cpo_bonus_dinas)+parseFloat(detail.trip_pk_bonus_dinas)+parseFloat(detail.trip_tbs_bonus_dinas)+parseFloat(detail.trip_tbsk_bonus_dinas)) }} -> {{pointFormat(detail.bonus_trip_dinas) }}</td>
                         <td>{{ pointFormat(detail.salary_bonus_bonus_trip) }}</td>
-                        <td>{{ pointFormat(detail.periode_2_ttl) }}</td>
-                        <td>{{ pointFormat(detail.periode_ttl) }}</td>
+                        <td>{{ pointFormat(cal_periode_2(detail)) }} -> {{pointFormat(detail.periode_2_ttl) }}</td>
+                        <td>{{ pointFormat(cal_periode(detail)) }} -> {{pointFormat(detail.periode_ttl) }}</td>
                         <td>{{ pointFormat(detail.uj_gaji) }}</td>
                         <td>{{ pointFormat(detail.uj_makan) }}</td>
                         <td>{{ pointFormat(detail.uj_dinas) }}</td>
@@ -128,11 +130,10 @@
                         <td>{{ pointFormat(detail.trip_tunggu_gaji) }}</td>
                         <td>{{ pointFormat(detail.trip_tunggu_dinas) }}</td>
                         <td>{{ pointFormat(detail.nominal_cut) }}</td>
-                        <td>{{ pointFormat(detail.total) }}</td>
+                        <td>{{ pointFormat(cal_total(detail)) }} -> {{pointFormat(detail.total) }}</td>
                         <td>{{ pointFormat(detail.employee_bpjs_kesehatan) }}</td>
                         <td>{{ pointFormat(detail.employee_bpjs_jamsos) }}</td>
-                        <td>{{ pointFormat(detail.total_grand) }}</td>                      
-                      </tr>
+                        <td>{{ pointFormat(cal_total_grand(detail)) }} -> {{pointFormat(detail.total_grand) }}</td>                      </tr>
                     </template>
                   </tbody>
                 </table>
