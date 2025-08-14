@@ -18,6 +18,7 @@
             @click="form_add()">
             <IconsPlus />
           </button>
+
           <!-- <button v-if="enabled_edit" type="button" name="button" class="m-1 text-2xl "
             @click="form_edit()">
             <IconsEdit/> dihapus karna ada fitur kunci supir atau kernet
@@ -52,6 +53,11 @@
           <button v-if="enabled_print_preview_bt" type="button" name="button" class="m-1 text-2xl "
             @click="printPreviewBT()">
             <IconsPrinterEye />
+          </button>
+          
+          <button type="button" name="button" class="m-1 text-2xl flex items-center "
+            @click="downloadExcel()">
+            <IconsTable2Column />  <span class="text-xs ml-1"> Download </span>
           </button>
 
           <button v-if="checkbox_arr.length > 0 && useUtils().checkPermissions(['trp_trx.val','trp_trx.val1','trp_trx.val2','trp_trx.val3','trp_trx.val4','trp_trx.val5','trp_trx.val6'])" type="button" name="button" class="m-1 text-xs whitespace-nowrap grid grid-cols-2"
@@ -1076,4 +1082,27 @@ const enabled_print_preview_bt = computed(()=>{
   && useUtils().checkPermission('trp_trx.preview_file');
   return result;
 })
+
+const { downloadFile, viewFile } = useDownload();
+
+const downloadExcel = async()=>{  
+  inject_params();
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/trx_trp/report_raw_excel", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json'
+    },
+    params: params,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  downloadFile(data.value);
+}
 </script>

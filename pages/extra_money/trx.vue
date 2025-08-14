@@ -860,6 +860,8 @@ const fields_thead=ref([
   {key:"employee_name",label:"Nama Pekerja",filter_on:1,type:'string'},
   {key:"employee_rek_no",label:"No rek Pekerja",type:'string'},
   {key:"employee_rek_name",label:"Nama Rek Pekerja",type:'string'},
+  {key:"prev_trx_trp_id",label:"ID Trip Sumber",type:'string',filter_on:1},
+  {key:"trx_trp_id",label:"ID Trip Dibayar",type:'string',filter_on:1},
   {key:"note",label:"Note",filter_on:1,type:'string'},
   {key:"payment_method_name",label:"Payment Method Name",type:'string'},
   {key:"extra_money_xto",label:"Tujuan",filter_on:1,type:'string'},
