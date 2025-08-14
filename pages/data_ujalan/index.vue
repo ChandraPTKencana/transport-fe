@@ -40,7 +40,7 @@
             @click="unvalidasi()">
             <IconsSignatureOff />
           </button>
-          <button v-if="selected > -1" type="button" name="button" class="m-1 text-2xl flex items-center "
+          <button type="button" name="button" class="m-1 text-2xl flex items-center "
             @click="downloadExcel()">
             <IconsTable2Column />  <span class="text-xs ml-1"> Download </span>
           </button>
@@ -540,10 +540,7 @@ const enabled_remove = computed(()=>{
 const { downloadFile, viewFile } = useDownload();
 
 const downloadExcel = async()=>{  
-  if (selected.value == -1) {
-    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
-    return;
-  }
+  inject_params();
   useCommonStore().loading_full = true;
   const { data, error, status } = await useMyFetch("/ujalan/download_excel", {
     method: 'get',
@@ -551,7 +548,7 @@ const downloadExcel = async()=>{
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
-    params: {id : ujalans.value[selected.value].id},
+    params: params,
     retry: 0,
   });
   useCommonStore().loading_full = false;
