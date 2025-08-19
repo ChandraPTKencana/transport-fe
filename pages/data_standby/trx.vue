@@ -50,6 +50,10 @@
             @click="printPreview()">
             <IconsPrinterEye />
           </button>
+          <button type="button" name="button" class="m-1 text-2xl flex items-center "
+            @click="downloadExcel()">
+            <IconsTable2Column />  <span class="text-xs ml-1"> Download </span>
+          </button>
         </div>
         <!-- <div  class="flex">
 
@@ -928,6 +932,30 @@ const enabled_print_preview = computed(()=>{
   return result;
 })
 
+
+
+const { downloadFile, viewFile } = useDownload();
+
+const downloadExcel = async()=>{  
+  inject_params();
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/standby_trx/download_excel", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json'
+    },
+    params: params,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  downloadFile(data.value);
+}
 </script>
 
 <style scoped>

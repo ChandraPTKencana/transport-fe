@@ -104,7 +104,7 @@
                         <option v-if="['number','string'].indexOf(fd.type)>-1" value="less_then">&lt;</option>
                         <option v-if="['number','string'].indexOf(fd.type)>-1" value="less_and">&lt;=</option>
                         <option v-if="['datetime'].indexOf(fd.type)>-1" value="specific">Specific</option>
-                        <option v-if="['date'].indexOf(fd.type)>-1" value="fullday">Fullday</option>
+                        <option v-if="['date','datetime'].indexOf(fd.type)>-1" value="fullday">Fullday</option>
                       </select>
                     </td>
                     <td style="min-width: 180px;">
@@ -122,8 +122,8 @@
                             <vue-date-picker 
                             v-model="filter_model[fd.key]['value_1']" 
                             type="datetime" 
-                            :format="fd.type=='date'?'dd-MM-yyyy':'dd-MM-yyyy HH:mm:ss'"
-                            :enable-time-picker = "fd.type == 'datetime'" 
+                            :format="fd.type=='date' || filter_model[fd.key]['operator']=='fullday'?'dd-MM-yyyy':'dd-MM-yyyy HH:mm:ss'"
+                            :enable-time-picker = "fd.type=='datetime' && filter_model[fd.key]['operator']=='specific'" 
                             text-input
                             teleport-center
                             class="flex-grow"></vue-date-picker>
@@ -137,8 +137,8 @@
                               <vue-date-picker  
                               type="datetime" 
                               v-model="filter_model[fd.key]['value_2']"
-                              :format="fd.type=='date'?'dd-MM-yyyy':'dd-MM-yyyy HH:mm:ss'"
-                              :enable-time-picker = "fd.type == 'datetime'" 
+                              :format="fd.type=='date' || filter_model[fd.key]['operator']=='fullday'?'dd-MM-yyyy':'dd-MM-yyyy HH:mm:ss'"
+                              :enable-time-picker = "fd.type=='datetime' && filter_model[fd.key]['operator']=='specific'" 
                               text-input
                               teleport-center
                               class="flex-grow"></vue-date-picker>
