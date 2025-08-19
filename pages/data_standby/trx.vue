@@ -159,8 +159,11 @@
         <template #[`standby_mst_amount`]="{item}">
           Rp. {{ pointFormat(item.standby_mst_?.amount || 0) }}
         </template>
+        <template #[`details_count`]="{item}">
+          {{ pointFormat(item.details.filter((x)=>x.be_paid==1).length || 0) }}
+        </template>
         <template #[`sb_total`]="{item}">
-          Rp. {{ pointFormat(item.standby_mst_?.amount * item.details_count || 0) }}
+          Rp. {{ pointFormat(item.standby_mst_?.amount * item.details.filter((x)=>x.be_paid==1).length || 0) }}
         </template>
         <template #[`pvr_had_detail`]="{item}">
           <IconsLine v-if="!item.pvr_had_detail"/><IconsCheck v-else/>
@@ -931,7 +934,6 @@ const enabled_print_preview = computed(()=>{
   && dt_selected.value.val == 1;
   return result;
 })
-
 
 
 const { downloadFile, viewFile } = useDownload();

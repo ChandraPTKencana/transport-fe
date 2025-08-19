@@ -475,7 +475,7 @@ const doSave = async () => {
     return x;
   });
 
-  standby_trx.value.details_count = details.value.length; 
+  standby_trx.value.details_count = details.value.filter(x=>x.be_paid==1).length; 
 
   standby_trx.value.supir           = selected_supir.value.name;
   standby_trx.value.supir_rek_no    = selected_supir.value._.rek_no.val;
