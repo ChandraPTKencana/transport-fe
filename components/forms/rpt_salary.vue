@@ -62,10 +62,10 @@
                       <th colspan="3">Standby 2 <span class="text-sm">({{pointFormat(table_datas.standby_2_ttl) }})</span></th>
                       <th rowspan="2">Potongan 2 <span class="text-sm">({{pointFormat(table_datas.perubahaan_lainnya_2_ttl) }})</span></th>
                       <th rowspan="2">U.Kerajinan <span class="text-sm">({{pointFormat(table_datas.perubahaan_kerajinan_ttl) }})</span></th>
-                      <th colspan="4">Bonus Trip <span class="text-sm">({{pointFormat(table_datas.bonus_trip_ttl) }})</span></th>
+                      <th colspan="3">Bonus Trip <span class="text-sm">({{pointFormat(table_datas.bonus_trip_ttl) }})</span></th>
                       <th rowspan="2">Periode 2 <span class="text-sm">({{pointFormat(table_datas.periode_2_ttl) }})</span></th>
                       <th rowspan="2">Periode 1+2 <span class="text-sm">({{pointFormat(table_datas.periode_ttl) }})</span></th>
-                      <th colspan="3">Trip <span class="text-sm">({{pointFormat(table_datas.trip_umum_ttl) }})</span></th>
+                      <th colspan="4">Trip <span class="text-sm">({{pointFormat(table_datas.trip_umum_ttl) }})</span></th>
                       <th colspan="4">Trip Lain <span class="text-sm">({{pointFormat(table_datas.trip_lain_ttl) }})</span></th>
                       <th colspan="3" class="whitespace-nowrap">Trip Tunggu <span class="text-sm">({{pointFormat(table_datas.trip_tunggu_ttl) }})</span></th>
                       <th rowspan="2">Potongan Trip <span class="text-sm">({{pointFormat(table_datas.potongan_trip) }})</span></th>
@@ -81,10 +81,10 @@
                       <th >Gaji <span class="text-sm">({{pointFormat(table_datas.standby_2_gaji) }})</span></th>
                       <th >Makan <span class="text-sm">({{pointFormat(table_datas.standby_2_makan) }})</span></th>
                       <th >Dinas <span class="text-sm">({{pointFormat(table_datas.standby_2_dinas) }})</span></th>
-                      <th >Jmlh <span class="text-sm">({{pointFormat(table_datas.bonus_trip_jlh) }})</span></th>
                       <th >Gaji <span class="text-sm">({{pointFormat(table_datas.bonus_trip_gaji) }})</span></th>
                       <th >Dinas <span class="text-sm">({{pointFormat(table_datas.bonus_trip_dinas) }})</span></th>
-                      <th >Potongan <span class="text-sm">({{pointFormat(bonus_trip_perubahaan || 0) }} )</span></th>
+                      <th >Potongan <span class="text-sm">({{pointFormat(table_datas.bonus_trip_perubahaan || 0) }} )</span></th>
+                      <th >Jmlh <span class="text-sm">({{pointFormat(table_datas.trip_jumlah) }})</span></th>
                       <th >Gaji <span class="text-sm">({{pointFormat(table_datas.trip_umum_gaji) }})</span></th>
                       <th >Makan <span class="text-sm">({{pointFormat(table_datas.trip_umum_makan) }})</span></th>
                       <th >Dinas <span class="text-sm">({{pointFormat(table_datas.trip_umum_dinas) }})</span></th>
@@ -123,12 +123,12 @@
                         <td>{{ pointFormat(detail.sb_dinas_2) }}</td>
                         <td>{{ pointFormat(detail.salary_bonus_nominal_2) }}</td>
                         <td>{{ pointFormat(detail.kerajinan) }}</td>
-                        <td>{{ pointFormat(detail.bonus_trip_jlh) }}</td>
                         <td>{{ pointFormat(detail.bonus_trip_gaji) }}</td>
                         <td>{{ pointFormat(detail.bonus_trip_dinas) }}</td>
                         <td>{{ pointFormat(detail.salary_bonus_bonus_trip) }}</td>
                         <td>{{ pointFormat(detail.periode_2_ttl) }}</td>
                         <td>{{ pointFormat(detail.periode_ttl) }}</td>
+                        <td>{{ pointFormat(detail.trip_jumlah) }}</td>
                         <td>{{ pointFormat(detail.uj_gaji) }}</td>
                         <td>{{ pointFormat(detail.uj_makan) }}</td>
                         <td>{{ pointFormat(detail.uj_dinas) }}</td>
@@ -282,6 +282,8 @@ const doSave = async () => {
       props.p_data.splice(idx,1,{...rpt_salary.value});    
     }
   }
+
+  rerenderView(details.value);
   // props.fnClose();
   // router.go(-1);
 }
@@ -324,9 +326,14 @@ const callData = async () => {
   }
 
   details.value = data.value.data.details;
+
+  rerenderView(data.value.data.details);
+}
+
+const rerenderView = (xdetails)=>{
   // remake details
   let all_data = {
-    details : data.value.data.details,
+    details : xdetails,
     standby_1_ttl : 0,
     standby_1_gaji : 0,
     standby_1_makan : 0,
@@ -355,7 +362,7 @@ const callData = async () => {
     trip_tunggu_gaji : 0,
     trip_tunggu_dinas : 0,
     bonus_trip_ttl : 0,
-    bonus_trip_jlh : 0,
+    trip_jumlah : 0,
     bonus_trip_gaji : 0,
     bonus_trip_dinas : 0,
     bonus_trip_perubahaan : 0,
@@ -370,7 +377,7 @@ const callData = async () => {
   all_data.details.forEach(x=>{
     x.periode_1_ttl=parseFloat(x.sb_gaji)+parseFloat(x.sb_makan)+parseFloat(x.sb_dinas)+parseFloat(x.salary_bonus_nominal);
 
-    x.bonus_trip_jlh = x.trip_cpo + x.trip_pk + x.trip_tbs + x.trip_tbsk;
+    x.trip_jumlah = x.trip_cpo + x.trip_pk + x.trip_tbs + x.trip_tbsk;
     x.bonus_trip_gaji = parseFloat(x.trip_cpo_bonus_gaji) + parseFloat(x.trip_pk_bonus_gaji) + parseFloat(x.trip_tbs_bonus_gaji) + parseFloat(x.trip_tbsk_bonus_gaji);
     x.bonus_trip_dinas = parseFloat(x.trip_cpo_bonus_dinas) + parseFloat(x.trip_pk_bonus_dinas) + parseFloat(x.trip_tbs_bonus_dinas) + parseFloat(x.trip_tbsk_bonus_dinas);
 
@@ -410,7 +417,7 @@ const callData = async () => {
     all_data.trip_tunggu_gaji += parseFloat(x.trip_tunggu_gaji);
     all_data.trip_tunggu_dinas += parseFloat(x.trip_tunggu_dinas);
 
-    all_data.bonus_trip_jlh += x.bonus_trip_jlh;
+    all_data.trip_jumlah += x.trip_jumlah;
     all_data.bonus_trip_gaji += x.bonus_trip_gaji;
     all_data.bonus_trip_dinas += x.bonus_trip_dinas;
     all_data.bonus_trip_perubahaan += parseFloat(x.salary_bonus_bonus_trip);
@@ -438,8 +445,8 @@ const callData = async () => {
   all_data.total_grand = all_data.periode_ttl  + all_data.total - all_data.bpjs_kesehatan_ttl - all_data.bpjs_jamsos_ttl;
 
   table_datas.value = all_data;
-
 }
+
 const search = ref("");
 const source = computed(()=>{
   if(search.value!="")  

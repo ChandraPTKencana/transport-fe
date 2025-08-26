@@ -44,6 +44,10 @@
             @click="downloadExcel()">
             <IconsTable2Column />  <span class="text-xs ml-1"> Download </span>
           </button>
+          <button v-if="selected>-1 && useUtils().checkPermission('ujalan.batas_persen_susut.full_act')" type="button" name="button" class="m-1 text-2xl "
+            @click="form_edit_batas_persen_susut()">
+            <IconsEdit/>
+          </button>
           <!-- <button v-if="enabled_print_preview" type="button" name="button" class="m-1 text-2xl "
             @click="printPreview()">
             <IconsPrinterEye />
@@ -85,6 +89,7 @@
     </PopupMini>
 
     <FormsUjalan :show="forms_ujalan_show" :fnClose="()=>{forms_ujalan_show=false}" :id="forms_ujalan_id" :p_data="ujalans" :is_copy="forms_ujalan_copy"/>
+    <FormsUjalanBatasPersenSusut :show="forms_ujalan_batas_persen_susut_show" :fnClose="()=>{forms_ujalan_batas_persen_susut_show=false}" :id="forms_ujalan_id" :p_data="ujalans" :is_copy="forms_ujalan_copy"/>
     <FormsUjalanValidasi :show="forms_ujalan_valid_show" :fnClose="()=>{forms_ujalan_valid_show=false}" :id="forms_ujalan_valid_id" :p_data="ujalans" 
       :it_state="forms_ujalan_valid_state"/>
       <!-- :is_view="forms_ujalan_is_view"  -->
@@ -280,6 +285,7 @@ const searching = () => {
 }
 
 const forms_ujalan_show =  ref(false);
+const forms_ujalan_batas_persen_susut_show =  ref(false);
 const forms_ujalan_id = ref(0);
 const forms_ujalan_copy = ref(0);
 // const forms_ujalan_is_view = ref(false);
@@ -305,6 +311,18 @@ const form_edit = () => {
     forms_ujalan_valid_state.value = -1;
     forms_ujalan_copy.value = false;
     forms_ujalan_show.value = true;
+  }
+};
+
+const form_edit_batas_persen_susut = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_ujalan_id.value = ujalans.value[selected.value].id;
+    // forms_ujalan_is_view.value = false;
+    forms_ujalan_valid_state.value = -1;
+    forms_ujalan_copy.value = false;
+    forms_ujalan_batas_persen_susut_show.value = true;
   }
 };
 
@@ -466,6 +484,7 @@ const fields_thead=ref([
   {key:"km_range",label:"Jarak KM",filter_on:1,type:'number'},
   {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK','LAIN','TUNGGU']},
   {key:"harga",label:"Harga",class:" justify-end",type:'number'},
+  {key:"batas_persen_susut",label:"Batas Persen Susut",class:" justify-end",type:'number',tbl_show:useUtils().checkPermission('ujalan.batas_persen_susut.full_act')},
   {key:"bonus_trip_supir",label:"Bonus Trip Supir",class:" justify-end",type:'number'},
   {key:"bonus_trip_kernet",label:"Bonus Trip Kernet",class:" justify-end",type:'number'},
   {key:"note_for_remarks",label:"Ket.U.Remarks",filter_on:1,type:'string'},

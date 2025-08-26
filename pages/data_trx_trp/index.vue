@@ -184,6 +184,9 @@
           <IconsLine v-if="!item.val6"/>
           <IconsCheck v-else/>
         </template>
+        <template #[`salary_paid`]="{item}">
+          {{ (item.salary_paid) ? $moment(item.salary_paid?.period_end).format("MM-Y") + '['+item.salary_paid?.period_part+']' : "" }}
+        </template>
         <template #[`uj_xto`]="{item}">
           {{ item.uj?.xto }}
         </template>
@@ -984,6 +987,7 @@ const fields_thead=ref([
   {key:"duitku_kernet_trf_res_desc",label:"Ket Pengiriman Duitku Kernet",type:'string'},
   {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   {key:"updated_at",label:"Updated At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
+  {key:"salary_paid",label:"Salary Paid",type:'string'},
   {key:"deleted_by_username",label:"Deleted By",tbl_show:0},
   {key:"deleted_at",label:"Deleted At",dateformat:"DD-MM-Y HH:mm:ss", tbl_show:0,type:'datetime',filter_on:1},
   {key:"deleted_reason",label:"Deleted Reason", tbl_show:0,type:'string',filter_on:1},

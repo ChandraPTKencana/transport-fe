@@ -12,10 +12,10 @@
           @click="form_edit()">
           <IconsEdit/>
         </button>
-        <!-- <button v-if="useUtils().checkPermission('potongan_trx.remove')" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermission('potongan_trx.remove')" type="button" name="button" class="m-1 text-2xl "
           @click="remove()">
           <IconsDelete />
-        </button> -->
+        </button>
         <button v-if="!is_view && useUtils().checkPermissions(['potongan_trx.val','potongan_trx.val1'])" type="button" name="button" class="m-1 text-2xl "
           @click="validasi()">
           <IconsSignature />
