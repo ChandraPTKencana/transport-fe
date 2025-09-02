@@ -198,9 +198,9 @@
 
 
         <template #[`status_batas_susut`]="{item}">
-          <div class="btn p-1 rounded-sm text-white text-xs mr-1 relative" :class="[item.ujalan.status_batas_susut == 'Terisi'? 'bg-green-600' : 'bg-red-500']">
+          <div class="btn p-1 rounded-sm text-white text-xs mr-1 relative" :class="[item.uj.status_batas_susut == 'Terisi'? 'bg-green-600' : 'bg-red-500']">
             <div class="relative z-[1]">
-              {{ item.ujalan.status_batas_susut }}
+              {{ item.uj.status_batas_susut }}
             </div>
           </div>
         </template>
