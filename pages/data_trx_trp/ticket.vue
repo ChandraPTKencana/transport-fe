@@ -196,6 +196,15 @@
           {{calculateSusut(item.ticket_a_netto,item.ticket_b_netto)}}
         </template>
 
+
+        <template #[`batas_persen_susut`]="{item}">
+          <div class="btn p-1 rounded-sm text-white text-xs mr-1 relative" :class="[item.batas_persen_susut == 'Terisi'? 'bg-green-600' : 'bg-red-500']">
+            <div class="relative z-[1]">
+              {{ item.batas_persen_susut }}
+            </div>
+          </div>
+        </template>
+
         <template #[`deleted_by_username`]="{item}">
           {{ item.deleted_by?.username }}
         </template>
@@ -954,6 +963,7 @@ const fields_thead=ref([
   // {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"val_ticket",label:"Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"id",label:"ID",filter_on:1,type:"number",sort:{priority:1,type:"desc"}},
+  {key:"batas_persen_susut",label:"Batas Susut",type:'string'},
   {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
   {key:"xto",label:"Tujuan",filter_on:1,type:'string'},
