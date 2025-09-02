@@ -667,7 +667,7 @@ const calculateSusut=(a,b)=>{
   let bigger = diff > 0 ? b : a;
 
   if(bigger==0) return 0;
-  let result = useUtils().round(diff / bigger * 100,2);
+  let result = useUtils().round(diff / a * 100,2);
   if(result<0) return "("+Math.abs(result*100)/100+")";
   return result;
 }

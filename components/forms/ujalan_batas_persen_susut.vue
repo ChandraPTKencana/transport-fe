@@ -67,11 +67,12 @@
               <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Batas Persen Susut</label>
                 <div class="w-full" >
-                  <InputPointFormat
+                  <!-- <InputPointFormat
                     class="w-full h-full p-1" 
                     type="text" 
                     :value="ujalan.batas_persen_susut || 0" 
-                    @input="ujalan.batas_persen_susut = $event"/>
+                    @input="ujalan.batas_persen_susut = $event"/> -->
+                  <input v-model="ujalan.batas_persen_susut">
                 </div>
                 <p class="text-red-500">{{ field_errors.batas_persen_susut }}</p>
               </div>
@@ -151,7 +152,7 @@ const ujalan_temp = {
     km_range:0,
     bonus_trip_supir:0,
     bonus_trip_kernet:0,
-    batas_persen_susut:0,
+    batas_persen_susut:'',
     tipe: "",
     // status: "Y",
     jenis: "",
