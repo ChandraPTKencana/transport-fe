@@ -27,7 +27,7 @@ export const useDynamicPathCookie = <T = string | null>(
     return `/${firstPathSegment}`;
   })
 
-  console.log("call cookie",value !== undefined,name,cookiePath.value);
+  // console.log("call cookie",value !== undefined,name,cookiePath.value);
   const cookie = useCookie<T>(name, {
     ...options,
     path: cookiePath.value,

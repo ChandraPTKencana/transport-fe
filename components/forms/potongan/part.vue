@@ -50,6 +50,7 @@
           <table class="tacky">
             <thead>
               <tr class="sticky top-0 !z-[2]">
+                <th>No</th>
                 <th>App 1</th>
                 <th>App 2</th>
                 <th>ID</th>
@@ -66,6 +67,11 @@
             <tbody>
               <tr v-for="(potongan_trx, index) in potongan_trxs" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
+                <td>
+                  <div class="flex items-center justify-center">
+                    {{index+1}}
+                  </div>
+                </td>
                 <td :class="potongan_trx.deleted ? '!bg-red-500' :''">
                   <div class="flex items-center justify-center">
                     <IconsLine v-if="!potongan_trx.val"/>

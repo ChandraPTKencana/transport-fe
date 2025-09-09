@@ -19,14 +19,9 @@
           @click="printPreview()">
           <IconsPrinterEye />
         </button> -->
-        <button v-if="selected>-1 && rpt_salarys[selected].val1==1" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="selected>-1" type="button" name="button" class="m-1 text-2xl "
           @click="downloadExcel()">
           <IconsTable2Column />
-        </button>
-
-        <button v-if="selected>-1 && rpt_salarys[selected].val1==1" type="button" name="button" class="m-1 text-2xl "
-          @click="downloadExcel2()">
-          <IconsTableUp />
         </button>
 
         <!-- <button v-if="selected>-1 && rpt_salarys[selected].val1==1" type="button" name="button" class="m-1 text-2xl "
@@ -37,7 +32,13 @@
         <button type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="checkNilai()">
             Check Nilai
-          </button>
+        </button>
+
+        <button v-if="selected>-1 && rpt_salarys[selected].val1==1" type="button" name="button" class="m-1 text-2xl "
+          @click="downloadExcel2()">
+          <IconsTableUp />
+        </button>
+
       </div>
 
       <div class="w-full flex justify-center items-center grow h-0 p-1">

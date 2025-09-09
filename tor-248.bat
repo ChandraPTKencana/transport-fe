@@ -71,6 +71,7 @@ IF "%1"=="" (
     call npm run generate
     @REM xcopy /s /y .\dist\* ..\%pabrik%\logistik\
     xcopy /s /y .\dist\* \\192.168.99.246\htdocs\%pabrik%\logistik\
+    @REM xcopy /s /y .\dist\* \\192.168.120.247\htdocs\%pabrik%\logistik\
 
 )
 

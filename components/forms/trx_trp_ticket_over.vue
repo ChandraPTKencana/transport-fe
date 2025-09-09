@@ -7,7 +7,10 @@
         <div class="w-full flex grow flex-col overflow-auto h-0">
         <div class="w-full flex justify-between flex-wrap">
           <div class="grow flex">  
-            
+            <select v-model="pabrik">
+              <option :value="company_code">{{ company_code }}</option>
+              <option v-for="lp in useCommonStore().list_pabrik.filter((ex)=>ex!=company_code)" :value="lp">{{ lp }}</option>
+            </select>
             <button type="button" name="button" class="m-1 text-2xl "
               @click="searching()">
               <IconsRefresh />
@@ -75,6 +78,8 @@ const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
 params.sort ="tanggal:desc";
 
+const company_code = useDynamicPathCookie('company_code');
+const pabrik = ref(company_code.value);
 const field_errors = ref({})
 
 const token = useDynamicPathCookie('token');
@@ -100,6 +105,8 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(trx_trps.value[0]);
   }
+
+  params.pabrik = pabrik.value;
 
   const { data, error, status } = await useMyFetch("/trx_trps/ticket_over", {
     method: 'get',
