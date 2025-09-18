@@ -541,6 +541,7 @@ const pdfPreview = async()=>{
 const downloadExcel = async()=>{  
   inject_params();
   useCommonStore().loading_full = true;
+  params.filter_status = filter_status.value;
   const { data, error, status } = await useMyFetch("/trx_trp_susuts/report_Excel", {
     method: 'get',
     headers: {

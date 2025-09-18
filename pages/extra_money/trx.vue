@@ -826,6 +826,7 @@ const { downloadFile, viewFile } = useDownload();
 const downloadExcel = async($link="")=>{  
   inject_params();
   useCommonStore().loading_full = true;
+  params.filter_status = filter_status.value;
   const { data, error, status } = await useMyFetch("/extra_money_trxs/reportExcel", {
     method: 'get',
     headers: {

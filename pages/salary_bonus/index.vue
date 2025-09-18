@@ -445,6 +445,7 @@ const { downloadFile, viewFile } = useDownload();
 const downloadExcel = async()=>{  
   inject_params();
   useCommonStore().loading_full = true;
+  params.filter_status = filter_status.value;
   const { data, error, status } = await useMyFetch("/salary_bonus/download_excel", {
     method: 'get',
     headers: {

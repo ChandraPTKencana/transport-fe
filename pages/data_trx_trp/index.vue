@@ -60,6 +60,11 @@
             <IconsTable2Column />  <span class="text-xs ml-1"> Download </span>
           </button>
 
+          <button type="button" name="button" class="m-1 text-2xl flex items-center "
+            @click="downloadExcelWUj()">
+            <IconsTable2Column />  <span class="text-xs ml-1"> With UJ </span>
+          </button>
+
           <button v-if="checkbox_arr.length > 0 && useUtils().checkPermissions(['trp_trx.val','trp_trx.val1','trp_trx.val2','trp_trx.val3','trp_trx.val4','trp_trx.val5','trp_trx.val6'])" type="button" name="button" class="m-1 text-xs whitespace-nowrap grid grid-cols-2"
             @click="multi_val_ticket_box=true">
             <IconsSignature />
@@ -1092,7 +1097,30 @@ const { downloadFile, viewFile } = useDownload();
 const downloadExcel = async()=>{  
   inject_params();
   useCommonStore().loading_full = true;
+  params.filter_status = filter_status.value;
   const { data, error, status } = await useMyFetch("/trx_trp/report_raw_excel", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json'
+    },
+    params: params,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  downloadFile(data.value);
+}
+
+const downloadExcelWUj = async()=>{  
+  inject_params();
+  useCommonStore().loading_full = true;
+  params.filter_status = filter_status.value;
+  const { data, error, status } = await useMyFetch("/trx_trp/report_excel_w_uj", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

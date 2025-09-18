@@ -463,6 +463,7 @@ const pdfPreview = async()=>{
 const downloadExcel = async($link="")=>{  
   inject_params();
   useCommonStore().loading_full = true;
+  params.filter_status = filter_status.value;
   const { data, error, status } = await useMyFetch("/trx_trps/reportFinExcel", {
     method: 'get',
     headers: {
@@ -484,6 +485,7 @@ const downloadExcel = async($link="")=>{
 const downloadExcelFull = async($link="")=>{  
   inject_params();
   useCommonStore().loading_full = true;
+  params.filter_status = filter_status.value;
   const { data, error, status } = await useMyFetch("/trx_trps/reportFullExcel", {
     method: 'get',
     headers: {
