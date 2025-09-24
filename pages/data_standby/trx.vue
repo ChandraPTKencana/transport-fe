@@ -139,6 +139,18 @@
           <IconsLine v-if="!item.val2"/>
           <IconsCheck v-else/>
         </template>
+        <template #[`val3`]="{item}">
+          <IconsLine v-if="!item.val3"/>
+          <IconsCheck v-else/>
+        </template>
+        <template #[`val4`]="{item}">
+          <IconsLine v-if="!item.val4"/>
+          <IconsCheck v-else/>
+        </template>
+        <template #[`val5`]="{item}">
+          <IconsLine v-if="!item.val5"/>
+          <IconsCheck v-else/>
+        </template>
         <template #[`detail_dates`]="{item}">
           <div v-for="itdtl in item.details" class="btn p-1 rounded-sm text-white text-xs mr-1 relative" :class="[itdtl.attachment_1_type ? 'bg-green-600' : 'bg-red-500',itdtl.be_paid ? '' : 'unpaid']" >
             <div class="relative z-[1]">
@@ -798,9 +810,14 @@ const printPreview = async()=>{
 
 const fields_thead=ref([
   {key:"no",label:"No",isai:true},
-  {key:"val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"val2",label:"App 3",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val",label:"Kasir",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val1",label:"Mandor",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val_logistik",label:"Logistik",childs:[
+    {key:"val2",label:"Staff",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+    {key:"val3",label:"Admin",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+    {key:"val4",label:"SPV",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+    {key:"val5",label:"Manager",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  ]},
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
   {key:"detail_dates",label:"Detail Dates",type:'string'},
@@ -877,6 +894,15 @@ const enabled_validasi = computed(()=>{
     )|| 
     (
       dt_selected.value.pvr_id > -1 &&  useUtils().checkPermission('standby_trx.val2') && [undefined,0].indexOf(dt_selected.value.val2) > -1
+    )|| 
+    (
+      dt_selected.value.pvr_id > -1 &&  useUtils().checkPermission('standby_trx.val3') && [undefined,0].indexOf(dt_selected.value.val3) > -1
+    )|| 
+    (
+      dt_selected.value.pvr_id > -1 &&  useUtils().checkPermission('standby_trx.val4') && [undefined,0].indexOf(dt_selected.value.val4) > -1
+    )|| 
+    (
+      dt_selected.value.pvr_id > -1 &&  useUtils().checkPermission('standby_trx.val5') && [undefined,0].indexOf(dt_selected.value.val5) > -1
     )
   );
   return result;
@@ -892,7 +918,10 @@ const enabled_unvalidasi = computed(()=>{
       (
         useUtils().checkPermission('standby_trx.unval') && [1].indexOf(dt_selected.value.val) > -1 || 
         useUtils().checkPermission('standby_trx.unval1') && [1].indexOf(dt_selected.value.val1) > -1 || 
-        useUtils().checkPermission('standby_trx.unval2') && [1].indexOf(dt_selected.value.val2) > -1
+        useUtils().checkPermission('standby_trx.unval2') && [1].indexOf(dt_selected.value.val2) > -1 || 
+        useUtils().checkPermission('standby_trx.unval3') && [1].indexOf(dt_selected.value.val3) > -1 || 
+        useUtils().checkPermission('standby_trx.unval4') && [1].indexOf(dt_selected.value.val4) > -1 || 
+        useUtils().checkPermission('standby_trx.unval5') && [1].indexOf(dt_selected.value.val5) > -1
       )
     )
   );
@@ -922,7 +951,10 @@ const enabled_approve_void = computed(()=>{
   && selected.value > -1 
   && dt_selected.value.deleted == 0
   && dt_selected.value.req_deleted == 1
-  && dt_selected.value.val2 == 0;
+  && dt_selected.value.val2 == 0 
+  && dt_selected.value.val3 == 0
+  && dt_selected.value.val4 == 0
+  && dt_selected.value.val5 == 0;
   return result;
 })
 

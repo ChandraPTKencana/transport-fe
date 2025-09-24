@@ -11,6 +11,13 @@ export default function useApiBaseUrl() {
         '10.10.29.196/logistik': 'http://10.10.29.196/transport-be/a9p/',
         '10.10.77.196/logistik': 'http://10.10.77.196/transport-be/a9p/',
 
+        '110.232.82.16:8882/logistik': 'http://110.232.82.16:8882/transport-be/a9p/',
+        '110.232.82.16:8885/logistik': 'http://110.232.82.16:8885/transport-be/a9p/',
+        '110.232.82.16:8883/logistik': 'http://110.232.82.16:8883/transport-be/a9p/',
+        '110.232.82.16:8881/logistik': 'http://110.232.82.16:8881/transport-be/a9p/',
+        '110.232.82.16:8884/logistik': 'http://110.232.82.16:8884/transport-be/a9p/',
+        '110.232.82.16:8886/logistik': 'http://110.232.82.16:8886/transport-be/a9p/',
+
         '192.168.99.246/arp': 'http://192.168.99.246:8001',
         '192.168.99.246/kap': 'http://192.168.99.246:8002',
         '192.168.99.246/kas': 'http://192.168.99.246:8003',
@@ -25,7 +32,7 @@ export default function useApiBaseUrl() {
         '110.232.82.16:8880/kus': 'http://110.232.82.16:9005',
         '110.232.82.16:8880/smp': 'http://110.232.82.16:9006',
 
-        '110.232.82.16:8885/logistik': 'http://110.232.82.16:8885/transport-be/a9p/',
+        // '110.232.82.16:8885/logistik': 'http://110.232.82.16:8885/transport-be/a9p/',
         
         '27.131.248.29:8880/arp': 'http://27.131.248.29:9001',
         '27.131.248.29:8880/kap': 'http://27.131.248.29:9002',

@@ -235,15 +235,24 @@
               <div>
                 Di Validasi oleh : 
               </div>
-              <div v-if="standby_trx.val || standby_trx.val1 || standby_trx.val2" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
+              <div v-if="standby_trx.val || standby_trx.val1 || standby_trx.val2 || standby_trx.val3 || standby_trx.val4 || standby_trx.val5" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
                 <div v-if="standby_trx.val">
-                  App 1 : {{ standby_trx.val_by.username}} ( {{ standby_trx.val_at ? $moment(standby_trx.val_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                  Kasir : {{ standby_trx.val_by.username}} ( {{ standby_trx.val_at ? $moment(standby_trx.val_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
                 <div v-if="standby_trx.val1">
-                  App 2 : {{ standby_trx.val1_by.username}} ( {{ standby_trx.val1_at ? $moment(standby_trx.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                  Mandor : {{ standby_trx.val1_by.username}} ( {{ standby_trx.val1_at ? $moment(standby_trx.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
                 <div v-if="standby_trx.val2">
-                  App 3 : {{ standby_trx.val2_by.username}} ( {{ standby_trx.val2_at ? $moment(standby_trx.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                  Staff Logistik : {{ standby_trx.val2_by.username}} ( {{ standby_trx.val2_at ? $moment(standby_trx.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
+                <div v-if="standby_trx.val3">
+                  Staff Logistik : {{ standby_trx.val3_by.username}} ( {{ standby_trx.val3_at ? $moment(standby_trx.val3_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
+                <div v-if="standby_trx.val4">
+                  Staff Logistik : {{ standby_trx.val4_by.username}} ( {{ standby_trx.val4_at ? $moment(standby_trx.val4_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
+                <div v-if="standby_trx.val5">
+                  Staff Logistik : {{ standby_trx.val5_by.username}} ( {{ standby_trx.val5_at ? $moment(standby_trx.val5_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
               </div>
             </div>
@@ -254,10 +263,10 @@
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
-            <button v-if="it_state==1 && useUtils().checkPermissions(['standby_trx.detail.decide_paid']) && standby_trx.val2=='0'" type="submit" name="button" class="w-36 m-1 bg-green-600 text-white text-xs rounded-sm" @click.prevent="doValidate('paid')">
+            <button v-if="it_state==1 && useUtils().checkPermissions(['standby_trx.detail.decide_paid']) && standby_trx.val5=='0'" type="submit" name="button" class="w-36 m-1 bg-green-600 text-white text-xs rounded-sm" @click.prevent="doValidate('paid')">
               Paid
             </button>
-            <button v-if="it_state==1 && useUtils().checkPermissions(['standby_trx.detail.decide_paid']) && standby_trx.val2=='0'" type="submit" name="button" class="w-36 m-1 bg-red-600 text-white text-xs rounded-sm" @click.prevent="doValidate('nopaid')">
+            <button v-if="it_state==1 && useUtils().checkPermissions(['standby_trx.detail.decide_paid']) && standby_trx.val5=='0'" type="submit" name="button" class="w-36 m-1 bg-red-600 text-white text-xs rounded-sm" @click.prevent="doValidate('nopaid')">
               NoPaid
             </button>
             <button ref="it_val" v-if="it_state==1" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doValidate()">
@@ -371,6 +380,16 @@ const standby_trx_temp = {
     val2:0,
     val2_by:{ username:"" },
     val2_at:"",
+    val3:0,
+    val3_by:{ username:"" },
+    val3_at:"",
+    val4:0,
+    val4_by:{ username:"" },
+    val4_at:"",
+    val5:0,
+    val5_by:{ username:"" },
+    val5_at:"",
+
 };
 
 const standby_trx = ref({...standby_trx_temp});
@@ -501,6 +520,21 @@ const doValidate = async (paid_state) => {
   standby_trx.value.val2_by = data.value.val2_by;
   standby_trx.value.val2_at = data.value.val2_at;
 
+  standby_trx.value.val3 = data.value.val3;
+  standby_trx.value.val3_user = data.value.val3_user;
+  standby_trx.value.val3_by = data.value.val3_by;
+  standby_trx.value.val3_at = data.value.val3_at;
+
+  standby_trx.value.val4 = data.value.val4;
+  standby_trx.value.val4_user = data.value.val4_user;
+  standby_trx.value.val4_by = data.value.val4_by;
+  standby_trx.value.val4_at = data.value.val4_at;
+
+  standby_trx.value.val5 = data.value.val5;
+  standby_trx.value.val5_user = data.value.val5_user;
+  standby_trx.value.val5_by = data.value.val5_by;
+  standby_trx.value.val5_at = data.value.val5_at;
+
 
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
@@ -581,6 +615,21 @@ const doUnValidate = async () => {
   standby_trx.value.val2_by = data.value.val2_by;
   standby_trx.value.val2_at = data.value.val2_at;
 
+  standby_trx.value.val3 = data.value.val3;
+  standby_trx.value.val3_user = data.value.val3_user;
+  standby_trx.value.val3_by = data.value.val3_by;
+  standby_trx.value.val3_at = data.value.val3_at;
+
+  standby_trx.value.val4 = data.value.val4;
+  standby_trx.value.val4_user = data.value.val4_user;
+  standby_trx.value.val4_by = data.value.val4_by;
+  standby_trx.value.val4_at = data.value.val4_at;
+
+  standby_trx.value.val5 = data.value.val5;
+  standby_trx.value.val5_user = data.value.val5_user;
+  standby_trx.value.val5_by = data.value.val5_by;
+  standby_trx.value.val5_at = data.value.val5_at;
+
 
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
@@ -655,7 +704,7 @@ const total_amount = computed(()=>{
 
 const disabled = computed(()=>{
 
-  return standby_trx.value.val2==1;
+  return standby_trx.value.val5==1;
   // return standby_trx.value.confirmed_by || standby_trx.value.ref_id != null;
 });
 
