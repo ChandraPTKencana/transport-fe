@@ -30,17 +30,27 @@
               </div>
 
               <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
-                <label for="">Trip Bonus Kernet</label>
-                <div class="card-border disabled">
-                  {{ pointFormat(ujalan.bonus_trip_kernet||0) }}
+                <label for="">Trip Bonus Supir</label>
+                <div class="w-full" >
+                  <InputPointFormat
+                    class="w-full h-full p-1" 
+                    type="text" 
+                    :value="ujalan.bonus_trip_supir || 0" 
+                    @input="ujalan.bonus_trip_supir = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"/>
                 </div>
+                <p class="text-red-500">{{ field_errors.bonus_trip_supir }}</p>
               </div>
 
               <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
-                <label for="">KM Range</label>
-                <div class="card-border disabled">
-                  {{ pointFormat(ujalan.km_range||0) }}
+                <label for="">Trip Bonus Kernet</label>
+                <div class="w-full" >
+                  <InputPointFormat
+                    class="w-full h-full p-1" 
+                    type="text" 
+                    :value="ujalan.bonus_trip_kernet || 0" 
+                    @input="ujalan.bonus_trip_kernet = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"/>
                 </div>
+                <p class="text-red-500">{{ field_errors.bonus_trip_kernet }}</p>
               </div>
 
               <div class="w-1/2 sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
@@ -174,6 +184,8 @@ const doSave = async () => {
 
   const data_in = new FormData();
   data_in.append("batas_persen_susut", ujalan.value.batas_persen_susut);
+  data_in.append("bonus_trip_supir", ujalan.value.bonus_trip_supir);
+  data_in.append("bonus_trip_kernet", ujalan.value.bonus_trip_kernet);
   
   let $method = "post";
 
