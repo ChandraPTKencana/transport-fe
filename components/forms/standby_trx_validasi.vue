@@ -207,9 +207,9 @@
                               {{detail.note}}
                             </div>
                           </td>
-                          <td class="cell" :class="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled || is_view ? 'unselectable' : ''">
+                          <td class="cell" :class="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled ? 'unselectable' : ''">
                             <div class="w-full h-auto flex items-center justify-center">
-                              <div v-if="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled || is_view" class="text-3xl">
+                              <div v-if="!useUtils().checkPermissions(['standby_trx.detail.decide_paid']) || disabled" class="text-3xl">
                                 <IconsTimes v-if="detail.be_paid==0" class="text-red-800"/>
                                 <IconsCheck v-else class="text-green-800"/>                                           
                               </div>
@@ -712,11 +712,11 @@ watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
     document.addEventListener('keydown', keydownListener);
     standby_trx.value = {...standby_trx_temp};
-    if(props.is_view==false){
-      setTimeout(()=>{
-        it_val.value.focus();
-      },1);
-    }
+    // if(props.is_view==false){
+    //   setTimeout(()=>{
+    //     it_val.value.focus();
+    //   },1);
+    // }
     callData();
   }else{
     document.removeEventListener('keydown', keydownListener);

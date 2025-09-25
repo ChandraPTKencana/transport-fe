@@ -216,7 +216,7 @@
                           <td class="cell">
                             <div class="w-full h-auto flex items-center justify-center relative">
                               <ClientOnly>
-                                  <vue-date-picker  v-model="detail.tanggal" 
+                                  <vue-date-picker :key="index" v-model="detail.tanggal" 
                                   type="datetime" 
                                   format="dd-MM-yyyy"
                                   :enable-time-picker = "false" 
@@ -229,7 +229,7 @@
                           <td class="cell">
                             <div class="w-full h-auto flex items-center justify-center relative">
                               <ClientOnly>
-                                  <vue-date-picker  v-model="detail.waktu" 
+                                  <vue-date-picker :key="index" v-model="detail.waktu" 
                                   type="time" 
                                   format="HH:mm"
                                   text-input
@@ -396,10 +396,7 @@ const detail = ref({
   id:"",
   tanggal: new Date(),
   // tanggal: new Date(new Date().setDate(new Date().getDate()-1)),
-  waktu:{
-    hours: new Date().getHours(),
-    minutes: new Date().getMinutes()
-  },
+  waktu:null,
   note:"",
   be_paid:0,
   p_status:"",
@@ -434,10 +431,10 @@ const doSave = async () => {
   // data_in.append("cost_center_code", standby_trx.value.cost_center_code);
 
   // data_in.append("online_status", props.online_status);
-  let tDetails = [...details.value];
+  let tDetails = JSON.parse(JSON.stringify(details.value));
   tDetails = tDetails.map((x,k)=>{
     x.tanggal = (x.tanggal) ? $moment(x.tanggal).format("Y-MM-DD") : '';
-    x.waktu = x.waktu ? x.waktu.hours+":"+x.waktu.minutes : '';
+    x.waktu = x.waktu ? x.waktu.hours.toString().padStart(2, "0")+":"+x.waktu.minutes.toString().padStart(2, "0") : '';
     x.attachment_1_preview = x.attachment_1_preview ? "Exists" : null;
     data_in.append(`attachments[${k}]`, x.attachment_1);
     return x;
