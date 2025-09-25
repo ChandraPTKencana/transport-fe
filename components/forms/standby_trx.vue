@@ -229,7 +229,7 @@
                           <td class="cell">
                             <div class="w-full h-auto flex items-center justify-center relative">
                               <ClientOnly>
-                                  <vue-date-picker :key="index" v-model="detail.waktu" 
+                                  <vue-date-picker :key="index" v-model="detail.f_waktu" 
                                   type="time" 
                                   format="HH:mm"
                                   text-input
@@ -396,6 +396,7 @@ const detail = ref({
   id:"",
   tanggal: new Date(),
   // tanggal: new Date(new Date().setDate(new Date().getDate()-1)),
+  f_waktu:null,
   waktu:null,
   note:"",
   be_paid:0,
@@ -431,10 +432,11 @@ const doSave = async () => {
   // data_in.append("cost_center_code", standby_trx.value.cost_center_code);
 
   // data_in.append("online_status", props.online_status);
-  let tDetails = JSON.parse(JSON.stringify(details.value));
+  let tDetails = [...details.value];
+  // let tDetails = JSON.parse(JSON.stringify(details.value));
   tDetails = tDetails.map((x,k)=>{
     x.tanggal = (x.tanggal) ? $moment(x.tanggal).format("Y-MM-DD") : '';
-    x.waktu = x.waktu ? x.waktu.hours.toString().padStart(2, "0")+":"+x.waktu.minutes.toString().padStart(2, "0") : '';
+    x.waktu = x.f_waktu ? x.f_waktu.hours.toString().padStart(2, "0")+":"+x.f_waktu.minutes.toString().padStart(2, "0") : '';
     x.attachment_1_preview = x.attachment_1_preview ? "Exists" : null;
     data_in.append(`attachments[${k}]`, x.attachment_1);
     return x;
@@ -600,12 +602,12 @@ const callData = async () => {
     if(x['waktu']!=""){
       let forWaktu = x['waktu'].split(":");
   
-      x['waktu'] = {
+      x['f_waktu'] = {
         hours: forWaktu[0],
         minutes: forWaktu[1]
       };
     }else{
-      x['waktu'] = null;
+      x['f_waktu'] = null;
     }
 
     x["p_status"]= p_status;
