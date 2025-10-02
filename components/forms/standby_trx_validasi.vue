@@ -246,13 +246,13 @@
                   Staff Logistik : {{ standby_trx.val2_by.username}} ( {{ standby_trx.val2_at ? $moment(standby_trx.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
                 <div v-if="standby_trx.val3">
-                  Staff Logistik : {{ standby_trx.val3_by.username}} ( {{ standby_trx.val3_at ? $moment(standby_trx.val3_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                  Admin Logistik : {{ standby_trx.val3_by.username}} ( {{ standby_trx.val3_at ? $moment(standby_trx.val3_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
                 <div v-if="standby_trx.val4">
-                  Staff Logistik : {{ standby_trx.val4_by.username}} ( {{ standby_trx.val4_at ? $moment(standby_trx.val4_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                  SPV Logistik : {{ standby_trx.val4_by.username}} ( {{ standby_trx.val4_at ? $moment(standby_trx.val4_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
                 <div v-if="standby_trx.val5">
-                  Staff Logistik : {{ standby_trx.val5_by.username}} ( {{ standby_trx.val5_at ? $moment(standby_trx.val5_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                  MGR Logistik : {{ standby_trx.val5_by.username}} ( {{ standby_trx.val5_at ? $moment(standby_trx.val5_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
               </div>
             </div>

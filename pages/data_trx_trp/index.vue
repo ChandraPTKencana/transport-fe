@@ -45,6 +45,11 @@
             <IconsSignatureOff />
           </button>
 
+          <button v-if="enabled_view_full" type="button" name="button" class="m-1 text-4xl p-0"
+            @click="fullView()">
+            <IconsEyes />
+          </button>
+
           <button v-if="enabled_print_preview" type="button" name="button" class="m-1 text-2xl "
             @click="printPreview()">
             <IconsPrinterEye />
@@ -272,6 +277,10 @@
       :it_state="forms_trx_trp_valid_state" @setID="forms_trx_trp_valid_id=$event" @setIndex="selected=$event"/>
       <!-- :is_view="forms_trx_trp_is_view" -->
     <FormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
+    <FormsTrxTrpFull :show="forms_trx_trp_full_valid_show" :fnClose="()=>{forms_trx_trp_full_valid_show=false}" :id="forms_trx_trp_full_valid_id" :p_data="trx_trps" 
+      :it_state="forms_trx_trp_full_valid_state" @setID="forms_trx_trp_full_valid_id=$event" @setIndex="selected=$event"/>
+
+
   </div>
 </template>
 
@@ -501,8 +510,10 @@ const searching = () => {
 }
 
 const forms_trx_trp_valid_state = ref(1);
+const forms_trx_trp_full_valid_state = ref(1);
 
 const forms_trx_trp_show =  ref(false);
+
 const forms_trx_trp_id = ref(0);
 const form_add = () => {
   forms_trx_trp_id.value = 0;
@@ -532,6 +543,19 @@ const validasi = () => {
     forms_trx_trp_valid_id.value = trx_trps.value[selected.value].id;
     forms_trx_trp_valid_state.value = 1;
     forms_trx_trp_valid_show.value = true;
+  }
+};
+
+const forms_trx_trp_full_valid_show =  ref(false);
+const forms_trx_trp_full_valid_id = ref(0);
+// const forms_trx_trp_full_is_view = ref(false);
+const fullView = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_trx_trp_full_valid_id.value = trx_trps.value[selected.value].id;
+    forms_trx_trp_full_valid_state.value = 1;
+    forms_trx_trp_full_valid_show.value = true;
   }
 };
 
@@ -1010,6 +1034,12 @@ const enabled_add = computed(()=>{
 const enabled_view = computed(()=>{ 
   let result = selected.value > -1
   && useUtils().checkPermission('trp_trx.view');
+  return result;
+})
+
+const enabled_view_full = computed(()=>{ 
+  let result = selected.value > -1
+  && useUtils().checkPermission('trp_trx.ticket.views');
   return result;
 })
 

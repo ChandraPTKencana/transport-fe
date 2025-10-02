@@ -14,8 +14,8 @@
               </div>
             </div>
 
-            <div class="w-full flex flex-col sm:flex-row grow p-1 justify-between flex-wrap 2xl:overflow-hidden">
-              <div class="w-full max-w-full p-0 2xl:pr-1 2xl:w-1/2 2xl:max-h-full 2xl:overflow-auto">
+            <div class="w-full flex flex-col sm:flex-row grow p-1 justify-between flex-wrap md:overflow-hidden">
+              <div class="w-full max-w-full p-0 md:pr-1 md:w-1/2 md:max-h-full md:overflow-auto">
                 <div class="w-full" role="sticky">
                   <table class="tacky w-full !table-auto" style="white-space:normal;">
                     <thead >
@@ -57,7 +57,7 @@
                   </table>
                 </div>
               </div>
-              <div class="w-full max-w-full max-h-full px-0 py-2 2xl:pl-1 2xl:py-0 2xl:w-1/2 2xl:overflow-auto">
+              <div class="w-full max-w-full max-h-full px-0 py-2 md:pl-1 md:py-0 md:w-1/2 md:overflow-auto">
                 <div class="w-full" role="sticky">
                   <table class="tacky w-full !table-auto" style="white-space:normal;">
                     <thead >
