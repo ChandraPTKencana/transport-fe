@@ -3,7 +3,7 @@
     <Header :title="'List Transaction'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex justify-between flex-wrap">
-        <div class="grow flex">
+        <div class="grow flex flex-wrap">
           <div class="m-1">
             <select class="" v-model="filter_status" >
               <option value="pv_not_done">Undone</option>
@@ -79,6 +79,11 @@
           </button>
         </div>
         <div class="flex">
+          <button type="button" name="button" class="m-1 text-2xl"
+            @click="linkToExtraMoneyTrx()">
+            <IconsChain />
+          </button>
+
           <button v-if="useUtils().checkPermission('trp_trx.generate_pvr')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="generatePVR()">
             Gen/Update PVR
@@ -919,6 +924,30 @@ const generatePV = async() => {
   });
 
   display({ show: true, status: "Success", message: "Generate Or Update PV Done" });
+}
+
+
+const linkToExtraMoneyTrx = async() => {
+  useCommonStore().loading_full = true;
+
+  // const data_in = new FormData();
+
+  const { data, error, status } = await useMyFetch("/trx_trp/link_to_extramoney_trx", {
+    method: "get",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    // body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  display({ show: true, status: "Success", message: data.value.message });
 }
 
 const updatePV = async() => {

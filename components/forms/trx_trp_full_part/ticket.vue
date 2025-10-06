@@ -1,5 +1,5 @@
 <template>
-<div class="border-2">
+<div class="border-2 w-full">
     <div class="w-full font-bold text-center bg-blue-300">TICKET TRIP INFO </div>
     
     <div class="border-t-2 p-2 flex flex-col items-center justify-center">

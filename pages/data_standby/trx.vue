@@ -3,7 +3,7 @@
     <Header :title="'List Transaction'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex justify-between flex-wrap">
-        <div class="grow flex">
+        <div class="grow flex flex-wrap">
           <div class="m-1">
             <select class="" v-model="filter_status" >
               <option value="trx_not_done">Undone</option>
@@ -45,6 +45,10 @@
           <button v-if="enabled_unvalidasi" type="button" name="button" class="m-1 text-2xl "
             @click="unvalidasi()">
             <IconsSignatureOff />
+          </button>
+          <button v-if="enabled_view_full" type="button" name="button" class="m-1 text-4xl p-0"
+            @click="fullView()">
+            <IconsEyes />
           </button>
           <button v-if="enabled_print_preview" type="button" name="button" class="m-1 text-2xl "
             @click="printPreview()">
@@ -221,7 +225,9 @@
     <!-- <FormsStandbyTrx :show="forms_standby_trx_show" :fnClose="()=>{forms_standby_trx_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_standby_trx_id" :p_data="standby_trxs" :list_cost_center="list_cost_center" :online_status="online_status"/> -->
     <FormsStandbyTrx :show="forms_standby_trx_show" :fnClose="()=>{forms_standby_trx_show=false}" :id="forms_standby_trx_id" :p_data="standby_trxs"/>
     <FormsStandbyTrxValidasi :show="forms_standby_trx_valid_show" :fnClose="()=>{forms_standby_trx_valid_show=false}" :id="forms_standby_trx_valid_id" :p_data="standby_trxs" :it_state="forms_standby_trx_valid_state" @setID="forms_standby_trx_valid_id=$event" @setIndex="selected=$event"/>
-      <!-- :is_view="forms_standby_trx_is_view" -->
+    <FormsStandbyTrxFull :show="forms_standby_trx_full_valid_show" :fnClose="()=>{forms_standby_trx_full_valid_show=false}" :id="forms_standby_trx_full_valid_id" :standby_trx="selected > -1 ? standby_trxs[selected] : {}"  :p_data="standby_trxs" 
+    :it_state="forms_standby_trx_full_valid_state" @setID="forms_standby_trx_full_valid_id=$event" @setIndex="selected=$event"/>
+  <!-- :is_view="forms_standby_trx_is_view" -->
   </div>
 </template>
 
@@ -476,6 +482,20 @@ const validasi = () => {
     forms_standby_trx_valid_state.value = 1;
     forms_standby_trx_valid_show.value = true;
     // forms_standby_trx_is_view.value = false;
+  }
+};
+
+const forms_standby_trx_full_valid_state = ref(1);
+const forms_standby_trx_full_valid_show =  ref(false);
+const forms_standby_trx_full_valid_id = ref(0);
+// const forms_standby_trx_full_is_view = ref(false);
+const fullView = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_standby_trx_full_valid_id.value = standby_trxs.value[selected.value].id;
+    forms_standby_trx_full_valid_state.value = 1;
+    forms_standby_trx_full_valid_show.value = true;
   }
 };
 
@@ -867,6 +887,14 @@ const fields_thead=ref([
 const enabled_add = computed(()=>{  
   let result = ['trx_not_done','all'].indexOf(filter_status.value) > -1  
   && useUtils().checkPermission('standby_trx.create');
+  return result;
+})
+
+
+const enabled_view_full = computed(()=>{ 
+  let result = selected.value > -1
+  && standby_trxs.value[selected.value].trx_trp_id
+  && useUtils().checkPermission('standby_trx.view');
   return result;
 })
 

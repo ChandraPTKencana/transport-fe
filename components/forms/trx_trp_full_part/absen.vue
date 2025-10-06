@@ -1,5 +1,5 @@
 <template>
-<div class="border-2">
+<div class="border-2 w-full">
     <div class="w-full font-bold text-center bg-blue-300">ABSEN TRIP</div>
     <div class="border-t-2 flex w-full items-center justify-between">
         <div class="w-full flex flex-wrap items-center">

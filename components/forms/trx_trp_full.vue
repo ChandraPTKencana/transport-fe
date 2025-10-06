@@ -6,11 +6,10 @@
 
       <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white p-1">
         <!-- kelompok : Extra Money , Trip , Potongan, Absen, Standby -->
-        <FormsTrxTrpFullPartUj :trx_trp="trx_trp"/>
-        <FormsTrxTrpFullPartEmt :extra_money_trxs="trx_trp.extra_money_trxs"/>
-        <FormsTrxTrpFullPartAbsen :trx_trp="trx_trp"/>
-        <FormsTrxTrpFullPartTicket :trx_trp="trx_trp"/>
-        <FormsTrxTrpFullPartStt :standby_trxs="trx_trp.standby_trxs"/>
+        <div ref="main_part" class="w-full flex flex-col items-center grow overflow-auto">
+          <FormsTrxTrpFullPartUj :trx_trp="trx_trp" :p_data="p_data" :save_do="uj_save_do" :save_state="uj_save_state"/>
+          <FormsTrxTrpFullPartEmt :extra_money_trxs="trx_trp.extra_money_trxs" />
+        </div>
         <div class="w-full flex items-center justify-end">
           <button type="button" name="button" class="w-36 h-9 m-1 grid place-items-center" @click="loadTop()">
             <IconsCaretTop class="black"/>
@@ -46,7 +45,7 @@ const { $moment } = useNuxtApp()
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 const { pointFormat } = useUtils();
-
+const main_part = ref(null);
 
 const props = defineProps({
   show: {
@@ -74,6 +73,8 @@ const props = defineProps({
   },
 })
 
+const uj_save_state = ref([""]);
+const uj_save_do = ref([""]);
 
 let keydownListener = (event)=>{
 
@@ -397,7 +398,11 @@ const set_uj_dt = (dt)=>{
 }
 
 const callData = async () => {
-  save_state.value = '';
+  uj_save_state.value = [""];
+  uj_save_do.value = [""];
+  setTimeout(()=>{
+    main_part.value.scrollTop = 0
+  },1);
   useCommonStore().loading_full = true;
   const { data, error, status } = await useMyFetch("/trx_trp/full_view", {
     method: 'get',
@@ -478,7 +483,6 @@ const callData = async () => {
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
     document.addEventListener('keydown', keydownListener);
-
     // if(props.it_state==1){
     //   setTimeout(()=>{
     //     it_val.value.focus();
