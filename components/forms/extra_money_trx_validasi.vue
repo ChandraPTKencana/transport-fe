@@ -148,8 +148,14 @@
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
-            <button ref="it_val" v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+            <button ref="it_val" v-if="it_state==1" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doValidate()">
               Validasi
+              <div class="text-xs font-bold" v-if="save_state!=''">
+                {{ save_state }}
+              </div>
+            </button>
+            <button ref="it_unval" v-if="it_state==0" type="submit" name="button" class="w-36 m-1 bg-yellow-600 text-white  rounded-sm" @click.prevent="doUnValidate()">
+              Unvalidasi
               <div class="text-xs font-bold" v-if="save_state!=''">
                 {{ save_state }}
               </div>
@@ -199,10 +205,15 @@ const props = defineProps({
     required:true,
     default:[]
   },
-  is_view:{
-    type:Boolean,
+  // is_view:{
+  //   type:Boolean,
+  //   required:false,
+  //   default:false
+  // },
+  it_state:{
+    type:Number,
     required:false,
-    default:false
+    default:-1
   },
 })
 
@@ -237,6 +248,7 @@ const extra_money_trx = ref({...extra_money_trx_temp});
 const token = useDynamicPathCookie('token');
 const field_errors = ref({});
 const it_val = ref(null);
+const it_unval = ref(null);
 const details = ref([]);
 
 const selected_temp_extra_money={
@@ -324,7 +336,7 @@ const selected_extra_money = ref(JSON.parse(JSON.stringify(selected_temp_extra_m
 
 const save_state = ref("");
 
-const doSave = async () => {
+const doValidate = async () => {
   save_state.value = "PROSES...";
   useCommonStore().loading_full = true;
   field_errors.value = {};
@@ -401,6 +413,81 @@ const doSave = async () => {
   // props.fnClose();
 }
 
+const doUnValidate = async () => {
+  save_state.value = "PROSES...";
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  // data_in.append("tanggal", $moment(trx_trp.value.tanggal).format("Y-MM-DD"));
+  // data_in.append("tipe", trx_trp.value.tipe);
+  
+  let $method = "post";
+
+  let id = props.id;
+  if (id == 0) {
+  } else {
+    data_in.append("id", id);
+    data_in.append("_method", "PUT");
+  }
+
+  const { data, error, status } = await useMyFetch("/extra_money_trx_unvalidasi", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // "Content-Type": "multipart/form-data",
+    },
+    body: data_in,
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    save_state.value = "GAGAL";
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  extra_money_trx.value.val1 = data.value.val1;
+  extra_money_trx.value.val1_user = data.value.val1_user;
+  extra_money_trx.value.val1_by = data.value.val1_by;
+  extra_money_trx.value.val1_at = data.value.val1_at;
+
+  extra_money_trx.value.val2 = data.value.val2;
+  extra_money_trx.value.val2_user = data.value.val2_user;
+  extra_money_trx.value.val2_by = data.value.val2_by;
+  extra_money_trx.value.val2_at = data.value.val2_at;
+
+  extra_money_trx.value.val3 = data.value.val3;
+  extra_money_trx.value.val3_user = data.value.val3_user;
+  extra_money_trx.value.val3_by = data.value.val3_by;
+  extra_money_trx.value.val3_at = data.value.val3_at;
+
+  extra_money_trx.value.val4 = data.value.val4;
+  extra_money_trx.value.val4_user = data.value.val4_user;
+  extra_money_trx.value.val4_by = data.value.val4_by;
+  extra_money_trx.value.val4_at = data.value.val4_at;
+
+  extra_money_trx.value.val5 = data.value.val5;
+  extra_money_trx.value.val5_user = data.value.val5_user;
+  extra_money_trx.value.val5_by = data.value.val5_by;
+  extra_money_trx.value.val5_at = data.value.val5_at;
+
+  extra_money_trx.value.val6 = data.value.val6;
+  extra_money_trx.value.val6_user = data.value.val6_user;
+  extra_money_trx.value.val6_by = data.value.val6_by;
+  extra_money_trx.value.val6_at = data.value.val6_at;
+
+
+  let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
+  if(idx>=-1){
+    props.p_data.splice(idx,1,{...extra_money_trx.value});    
+  }
+
+  save_state.value = "BERHASIL";
+}
+
 
 const callData = async () => {
   save_state.value = '';
@@ -458,9 +545,14 @@ watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
     document.addEventListener('keydown', keydownListener);
     extra_money_trx.value = {...extra_money_trx_temp};
-    if(props.is_view==false){
+    if(props.it_state==1){
       setTimeout(()=>{
         it_val.value.focus();
+      },1);
+    }
+    if(props.it_state==0){
+      setTimeout(()=>{
+        it_unval.value.focus();
       },1);
     }
     callData();

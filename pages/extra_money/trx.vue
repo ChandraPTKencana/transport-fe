@@ -42,6 +42,10 @@
             @click="validasi()">
             <IconsSignature />
           </button>
+          <button v-if="enabled_unvalidasi" type="button" name="button" class="m-1 text-2xl "
+            @click="unvalidasi()">
+            <IconsSignatureOff />
+          </button>
           <button v-if="enabled_print_preview" type="button" name="button" class="m-1 text-2xl "
             @click="printPreview()">
             <IconsPrinterEye />
@@ -180,11 +184,17 @@
       <template #words>
         Data akan diproses dan <b>tidak dapat dibatalkan lagi</b>, apakah Anda menyetujui permintaan penghapusan data berikut?
       </template>
+      <template #footer>
+          Alasan Tambahan:
+        <div class="grow mb-5" >
+          <textarea  v-model="reason_adder"></textarea>
+        </div>
+      </template>
     </PopupMini>
 
     <FormsExtraMoneyTrx :show="forms_extra_money_trx_show" :fnClose="()=>{forms_extra_money_trx_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_extra_money_trx_id" :p_data="extra_money_trxs" :list_cost_center="list_cost_center" :online_status="online_status"/>
-    <FormsExtraMoneyTrxValidasi :show="forms_extra_money_trx_valid_show" :fnClose="()=>{forms_extra_money_trx_valid_show=false}" :id="forms_extra_money_trx_valid_id" :p_data="extra_money_trxs" :is_view="forms_extra_money_trx_is_view" @setID="forms_extra_money_trx_valid_id=$event" @setIndex="selected=$event"/>
-  
+    <FormsExtraMoneyTrxValidasi :show="forms_extra_money_trx_valid_show" :fnClose="()=>{forms_extra_money_trx_valid_show=false}" :id="forms_extra_money_trx_valid_id" :p_data="extra_money_trxs" :it_state="forms_extra_money_trx_valid_state" @setID="forms_extra_money_trx_valid_id=$event" @setIndex="selected=$event"/>
+      <!-- :is_view="forms_extra_money_trx_is_view"    -->
   </div>
 </template>
 
@@ -416,25 +426,41 @@ const form_add = () => {
 const { display } = useAlertStore();
 const { show, status, message } = storeToRefs(useAlertStore());
 
+
+const forms_extra_money_trx_valid_state = ref(1);
+
 const form_edit = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_extra_money_trx_id.value = extra_money_trxs.value[selected.value].id;
+    forms_extra_money_trx_valid_state.value = -1;
     forms_extra_money_trx_show.value = true;
   }
 };
 
 const forms_extra_money_trx_valid_show =  ref(false);
 const forms_extra_money_trx_valid_id = ref(0);
-const forms_extra_money_trx_is_view = ref(false);
+// const forms_extra_money_trx_is_view = ref(false);
 const validasi = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_extra_money_trx_valid_id.value = extra_money_trxs.value[selected.value].id;
+    forms_extra_money_trx_valid_state.value = 1;
     forms_extra_money_trx_valid_show.value = true;
-    forms_extra_money_trx_is_view.value = false;
+    // forms_extra_money_trx_is_view.value = false;
+  }
+};
+
+const unvalidasi = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_extra_money_trx_valid_id.value = extra_money_trxs.value[selected.value].id;
+    forms_extra_money_trx_valid_state.value = 0;
+    forms_extra_money_trx_valid_show.value = true;
+    // forms_extra_money_trx_is_view.value = false;
   }
 };
 
@@ -443,8 +469,9 @@ const form_view = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     forms_extra_money_trx_valid_id.value = extra_money_trxs.value[selected.value].id;
+    forms_extra_money_trx_valid_state.value = -1;
     forms_extra_money_trx_valid_show.value = true;
-    forms_extra_money_trx_is_view.value = true;
+    // forms_extra_money_trx_is_view.value = true;
   }
 };
 
@@ -546,18 +573,19 @@ const toggleApproveVoidBox = async()=>{
     approve_void_box.value = false;
   }
 };
-
+const reason_adder = ref("");
 const approveVoid = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     approve_void_reason.value = '';
+    reason_adder.value = '';
     approve_void_data.value = {
       id : extra_money_trxs.value[selected.value].id, 
       "no pol":extra_money_trxs.value[selected.value].no_pol, 
       "tujuan":extra_money_trxs.value[selected.value].extra_money.xto,
-      "permintaan":extra_money_trxs.value[selected.value].approve_void_by?.username,
-      "alasan":extra_money_trxs.value[selected.value].approve_void_reason,
+      "permintaan":extra_money_trxs.value[selected.value].req_deleted_by?.username,
+      "alasan":extra_money_trxs.value[selected.value].req_deleted_reason,
     };
     approve_void_box.value = true;
   }
@@ -569,8 +597,9 @@ const confirmedApproveVoid = async() => {
   const data_in = new FormData();
   data_in.append("id", extra_money_trxs.value[selected.value].id);  
   data_in.append("_method", "DELETE");
+  data_in.append("reason_adder", reason_adder.value);  
 
-  const { data, error, status } = await useMyFetch("/extra_money_trx_approve_void", {
+  const { data, error, status } = await useMyFetch("/extra_money_trx_approve_req_delete", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -940,6 +969,26 @@ const enabled_validasi = computed(()=>{
   return result;
 })
 
+const enabled_unvalidasi = computed(()=>{  
+  let result = selected.value > -1 
+  && dt_selected.value.deleted == 0
+  && dt_selected.value.req_deleted == 0
+  && (
+    (dt_selected.value.val1 == 1 && useUtils().checkPermission('extra_money_trx.unval1')) 
+    ||
+    (dt_selected.value.val2 == 1 && useUtils().checkPermission('extra_money_trx.unval2')) 
+    ||
+    (dt_selected.value.val3 == 1 && useUtils().checkPermission('extra_money_trx.unval3')) 
+    ||
+    (dt_selected.value.val4 == 1 && useUtils().checkPermission('extra_money_trx.unval4')) 
+    ||
+    (dt_selected.value.val5 == 1 && useUtils().checkPermission('extra_money_trx.unval5')) 
+    ||
+    (dt_selected.value.val6 == 1 && useUtils().checkPermission('extra_money_trx.unval6')) 
+  );
+  return result;
+})
+
 const enabled_remove = computed(()=>{  
   let result = useUtils().checkPermission('extra_money_trx.remove') 
   && selected.value > -1 
@@ -963,7 +1012,6 @@ const enabled_approve_void = computed(()=>{
   && selected.value > -1 
   && dt_selected.value.deleted == 0
   && dt_selected.value.req_deleted == 1
-  && dt_selected.value.val2 == 0;
   return result;
 })
 
