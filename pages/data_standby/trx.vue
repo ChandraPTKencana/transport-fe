@@ -166,7 +166,7 @@
         <template #[`standby_mst_name`]="{item}">
           {{item.standby_mst_?.name}}
         </template>
-        <template #[`standby_mst_type`]="{item}">
+        <template #[`standby_mst_tipe`]="{item}">
           {{item.standby_mst_?.tipe}}
         </template>
         <template #[`salary_paid`]="{item}">
@@ -386,7 +386,7 @@ const inject_params = () => {
   params.like = "";
   let words = JSON.parse(JSON.stringify(useCommonStore()._tv.global_keyword));
   if (words != "") {
-    params.like = `id:%${words}%,transition_target:%${words}%,transition_type:%${words}%,standby_mst_name:%${words}%,standby_mst_type:%${words}%,supir:%${words}%,kernet:%${words}%,no_pol:%${words}%,xto:%${words}%,pvr_no:%${words}%,pv_no:%${words}%,pvr_no:%${words}%,tanggal:%${words}%,transition_target:%${words}%,cost_center_code:%${words}%`;
+    params.like = `id:%${words}%,transition_target:%${words}%,transition_type:%${words}%,standby_mst_name:%${words}%,standby_mst_tipe:%${words}%,supir:%${words}%,kernet:%${words}%,no_pol:%${words}%,xto:%${words}%,pvr_no:%${words}%,pv_no:%${words}%,pvr_no:%${words}%,tanggal:%${words}%,transition_target:%${words}%,cost_center_code:%${words}%`;
   }
   params.sort = "";
   if (sort.value.field) {
@@ -851,7 +851,7 @@ const fields_thead=ref([
   {key:"kernet_rek_name",label:"Nama Rek Kernet",filter_on:1,type:'string'},
   {key:"xto",label:"Tujuan",filter_on:1,type:'string'},
   {key:"standby_mst_name",label:"Nama Standby",filter_on:1,type:'string'},
-  {key:"standby_mst_type",label:"Tipe Standby",filter_on:1,type:'string'},
+  {key:"standby_mst_tipe",label:"Tipe Standby",filter_on:1,type:'string'},
   {key:"standby_mst_amount",label:"Nilai SB",class:" justify-end",type:'number'},
   {key:"details_count",label:"Jlh SB",class:" justify-end",type:'number'},
   {key:"sb_total",label:"Total SB",class:" justify-end",type:'number'},
