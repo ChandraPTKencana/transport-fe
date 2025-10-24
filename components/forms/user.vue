@@ -209,7 +209,7 @@ const doSave = async () => {
     user.value.updated_at = data.value.updated_at;
 
     let idx= props.p_data.map((x)=>x.id).indexOf(id);
-    if(idx>=-1){
+    if(idx>-1){
       props.p_data.splice(idx,1,{...user.value});    
     }
   }

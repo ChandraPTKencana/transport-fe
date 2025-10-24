@@ -300,7 +300,7 @@ const doSave = async () => {
 
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
-  if(idx>=-1){
+  if(idx>-1){
     props.p_data.splice(idx,1,{...trx_trp.value});    
   }
   save_state.value = "BERHASIL";

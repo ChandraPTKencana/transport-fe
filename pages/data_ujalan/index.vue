@@ -73,6 +73,26 @@
         <!-- <template #[`harga`]="{item}">
           Rp. {{ pointFormat((parseFloat(item.total)) || 0) }}
         </template> -->
+
+        <template #[`destination_location_xto`]="{item}">
+          {{ item.destination_location?.xto }}
+        </template>
+        <template #[`destination_location_minimal_trip`]="{item}">
+          {{ pointFormat(item.destination_location?.minimal_trip) }}
+        </template>
+        <template #[`destination_location_bonus_trip_supir`]="{item}">
+          {{ pointFormat(item.destination_location?.bonus_trip_supir) }}
+        </template>
+        <template #[`destination_location_bonus_next_trip_supir`]="{item}">
+          {{ pointFormat(item.destination_location?.bonus_next_trip_supir) }}
+        </template>
+        <template #[`destination_location_bonus_trip_kernet`]="{item}">
+          {{ pointFormat(item.destination_location?.bonus_trip_kernet) }}
+        </template>
+        <template #[`destination_location_bonus_next_trip_kernet`]="{item}">
+          {{ pointFormat(item.destination_location?.bonus_next_trip_kernet) }}
+        </template>
+        
         <template #[`deleted_by_username`]="{item}">
           {{ item.deleted_by?.username }}
         </template>
@@ -480,7 +500,15 @@ const fields_thead=ref([
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"xto",label:"Tujuan",freeze:1,filter_on:1,type:'string'},
   {key:"asst_opt",label:"Info",filter_on:1,type:'string'},
-  {key:"tipe",label:"Tipe",filter_on:1,type:'string'},
+  {key:"tipe",label:"Tipe",filter_on:1,type:'string'},  
+  {key:"destination_location",label:"Dest. Location",childs:[
+    {key:"destination_location_xto",label:"Xto",type:'string',filter_on:1},
+    {key:"destination_location_minimal_trip",label:"Min Trip",filter_on:1,type:'string'},
+    {key:"destination_location_bonus_trip_supir",label:"Bonus Trip Supir",filter_on:1,type:'number'},
+    {key:"destination_location_bonus_next_trip_supir",label:"Bonus Trip Supir",filter_on:1,type:"number"},
+    {key:"destination_location_bonus_trip_kernet",label:"Bonus Trip Kernet",filter_on:1,type:'number'},
+    {key:"destination_location_bonus_next_trip_kernet",label:"Bonus Trip Kernet",filter_on:1,type:"number"},
+  ]},
   {key:"km_range",label:"Jarak KM",filter_on:1,type:'number'},
   {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK','LAIN','TUNGGU']},
   {key:"harga",label:"Harga",class:" justify-end",type:'number'},

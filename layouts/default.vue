@@ -18,6 +18,12 @@
                 Dashboard
               </nuxt-link>
             </li>
+            <li v-if="useUtils().checkPermission('destination_location.views')" :class="activeMenu == '/destination_location'?'active':''" >
+              <nuxt-link to="/destination_location"  class="cursor-pointer" @click="goTo('/destination_location')">
+                <IconsLocationOn class="mr-1"/>
+                Dest.Location
+              </nuxt-link>
+            </li>
             <li v-if="useUtils().checkPermission('ujalan.views')"  :class="activeMenu == '/data_ujalan'?'active':''" >
               <nuxt-link to="/data_ujalan"  class="cursor-pointer" @click="goTo('/data_ujalan')">
                 <IconsMoney class="mr-1"/>
@@ -147,7 +153,7 @@
                 <IconsMoneyMulti class="mr-1"/>
                 Extra Money
               </nuxt-link>
-            </li>
+            </li>      
 
             <li v-if="useUtils().checkPermission('extra_money_trx.views')" :class="activeMenu == '/extra_money/trx'?'active':''" >
               <nuxt-link to="/extra_money/trx"  class="cursor-pointer" @click="goTo('/extra_money/trx')">

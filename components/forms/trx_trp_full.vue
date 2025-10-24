@@ -296,7 +296,7 @@ const doValidate = async () => {
   trx_trp.value.val6_at = data.value.val6_at;
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
-  if(idx>=-1){
+  if(idx>-1){
     props.p_data.splice(idx,1,{...trx_trp.value});    
   }
 
@@ -372,7 +372,7 @@ const doUnValidate = async () => {
   trx_trp.value.val6_at = data.value.val6_at;
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
-  if(idx>=-1){
+  if(idx>-1){
     props.p_data.splice(idx,1,{...trx_trp.value});    
   }
 

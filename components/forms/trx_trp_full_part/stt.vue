@@ -379,7 +379,7 @@ const doValidate = async (st_idx,paid_state) => {
   props.save_state[st_idx] = "BERHASIL";
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.standby_trxs[st_idx].id);
-  if(idx>=-1){
+  if(idx>-1){
     props.p_data.splice(idx,1,{...props.standby_trxs[st_idx]});    
   }
 }
@@ -449,7 +449,7 @@ const doUnValidate = async (st_idx) => {
   props.save_state[st_idx] = "BERHASIL";
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.standby_trxs[st_idx].id);
-  if(idx>=-1){
+  if(idx>-1){
     props.p_data.splice(idx,1,{...props.standby_trxs[st_idx]});    
   }
 }
