@@ -1,12 +1,11 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Form Transaction'" :fn="fnClose" class="w-full flex align-items-center" style="color:white;" />
+      <HeaderPopup :title="'Form Transaction'+(id?' #'+id:'')" :fn="fnClose" class="w-full flex align-items-center" style="color:white;" />
 
       <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
         <div class="w-full flex flex-col items-center grow overflow-auto">
           <div class="w-full flex flex-row flex-wrap">
-
             <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
               <label for="">U.Jalan Per</label>
               <div class="grow" v-if="trx_trp.val!==1">

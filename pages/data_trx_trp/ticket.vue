@@ -177,6 +177,10 @@
         <template #[`susut_netto_b`]="{item}">
           {{pointFormat(item.ticket_b_netto)}}
         </template> -->
+        <template #[`salary_paid`]="{item}">
+          {{ (item.salary_paid) ? $moment(item.salary_paid?.period_end).format("MM-Y") + '['+item.salary_paid?.period_part+']' : "" }}
+        </template>
+
         <template #[`susut_bruto_b_a`]="{item}">
           {{calculateSelisih(item.ticket_a_bruto,item.ticket_b_bruto)}}
         </template>
@@ -1015,6 +1019,7 @@ const fields_thead=ref([
       {key:"susut_netto_b_a_persen",label:"%"},
     ]},
   ]},
+  {key:"salary_paid",label:"Salary Paid",type:'string'},
   {key:"supir",label:"Supir",filter_on:1,type:'string'},
   {key:"kernet",label:"Kernet",filter_on:1,type:'string'},
   {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},

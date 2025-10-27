@@ -1,7 +1,7 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Form Transaction Validation'" :fn="fnClose" class="w-100 flex align-items-center"
+      <HeaderPopup :title="'Form Ticket Validation'+(id?' #'+id:'')" :fn="fnClose" class="w-100 flex align-items-center"
         style="color:white;" />
 
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
@@ -45,7 +45,7 @@
             
               <div v-if="trx_trp.jenis!=''" class="w-full flex flex-wrap">
                 <div class="w-6/12 sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
-                  <label for="">Tujuan</label>
+                  <label for="">Tujuan {{ trx_trp.id_uj ? ' #'+trx_trp.id_uj:'' }}</label>
                   <div class="card-border">
                     {{ trx_trp.xto }}
                   </div>
