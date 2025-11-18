@@ -5,38 +5,38 @@
       <div class="w-full flex justify-between flex-wrap">
         <div class="grow flex">
           <div class="m-1">
-            <select class="" v-model="filter_status" >
+            <select aria-label="Filter Status" v-model="filter_status" >
               <option value="available">Available</option>
               <option value="unapprove">Unapprove</option>
               <option value="deleted">Trash</option>
               <option value="all">All</option>
             </select>
           </div>
-          <button v-if="enabled_copy" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_copy" type="button" name="button" aria-label="Copy Data" class="m-1 text-2xl "
             @click="form_copy()">
             <IconsCopy />
           </button>
-          <button v-if="enabled_add" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_add" type="button" name="button" aria-label="New Form" class="m-1 text-2xl "
             @click="form_add()">
             <IconsPlus />
           </button>
-          <button v-if="enabled_edit" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_edit" type="button" name="button" aria-label="Edit Form" class="m-1 text-2xl "
             @click="form_edit()">
             <IconsEdit/>
           </button>
-          <button v-if="selected > -1" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="selected > -1" type="button" name="button" aria-label="View Form" class="m-1 text-2xl "
             @click="form_view()">
             <IconsEyes/>
           </button>
-          <button  v-if="enabled_remove" type="button" name="button" class="m-1 text-2xl "
+          <button  v-if="enabled_remove" type="button" name="button" aria-label="Delete Data" class="m-1 text-2xl "
             @click="remove()">
             <IconsDelete />
           </button>
-          <button v-if="enabled_validasi" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_validasi" type="button" name="button" aria-label="Validate Data" class="m-1 text-2xl "
             @click="validasi()">
             <IconsSignature />
           </button>
-          <button v-if="enabled_unvalidasi" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_unvalidasi" type="button" name="button" aria-label="Unvalidate Data" class="m-1 text-2xl "
             @click="unvalidasi()">
             <IconsSignatureOff />
           </button>
@@ -67,16 +67,16 @@
       </TableView>
     </div>
 
-    <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk">
+    <LazyPopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk">
       <template #footer>
         Masukkan Alasan Penghapusan:
         <div class="grow mb-5" >
           <textarea  v-model="deleted_reason"></textarea>
         </div>
       </template>
-    </PopupMini>
-    <FormsStandbyMst :show="forms_standby_mst_show" :fnClose="()=>{forms_standby_mst_show=false}" :id="forms_standby_mst_id" :p_data="standby_msts" :is_copy="forms_standby_mst_copy"/>
-    <FormsStandbyMstValidasi :show="forms_standby_mst_valid_show" :fnClose="()=>{forms_standby_mst_valid_show=false}" :id="forms_standby_mst_valid_id" :p_data="standby_msts" :it_state="forms_standby_mst_state"/>
+    </LazyPopupMini>
+    <LazyFormsStandbyMst :show="forms_standby_mst_show" :fnClose="()=>{forms_standby_mst_show=false}" :id="forms_standby_mst_id" :p_data="standby_msts" :is_copy="forms_standby_mst_copy"/>
+    <LazyFormsStandbyMstValidasi :show="forms_standby_mst_valid_show" :fnClose="()=>{forms_standby_mst_valid_show=false}" :id="forms_standby_mst_valid_id" :p_data="standby_msts" :it_state="forms_standby_mst_state"/>
       <!-- :is_view="forms_standby_mst_is_view"   -->
   </div>
 </template>

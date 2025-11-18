@@ -56,7 +56,7 @@
               </datalist>
           </div> -->
 
-  <PDFView :show="prtView" :pdfContent="pdfContent" @close="prtView=!prtView"/>
+  <LazyPDFView :show="prtView" :pdfContent="pdfContent" @close="prtView=!prtView"/>
 </template>
 
 <script setup>

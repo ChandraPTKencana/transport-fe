@@ -70,7 +70,7 @@
         </div>
       </div>
     </div>
-    <FormsPermissionGroup :show="forms_permission_group_show" :fnClose="()=>{forms_permission_group_show=false}" :id="forms_permission_group_id" :p_data="permission_groups" :is_copy="forms_permission_group_copy"/>  
+    <LazyFormsPermissionGroup :show="forms_permission_group_show" :fnClose="()=>{forms_permission_group_show=false}" :id="forms_permission_group_id" :p_data="permission_groups" :is_copy="forms_permission_group_copy"/>  
   </div>
 </template>
 

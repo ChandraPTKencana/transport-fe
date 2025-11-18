@@ -6,14 +6,14 @@
         <input class="flex-grow" type="text" v-model="global_keyword" name="search"
           placeholder="Keyword" @keyup.enter="doFilter()">
       </div>
-      <button type="button" name="button" class="m-1 text-2xl " @click="doFilter()">
+      <button type="button" name="button" aria-label="Search" class="m-1 text-2xl " @click="doFilter()">
         <IconsSearch />
       </button>
-      <button type="button" name="button" class="m-1 text-2xl "
+      <button type="button" aria-label="Filter Form"  name="button" class="m-1 text-2xl "
         @click="_tv.filter_box=!_tv.filter_box">
         <IconsAdjust />
       </button>
-      <button type="button" name="button" class="m-1 text-2xl "
+      <button type="button" name="button" aria-label="Filter Field"  class="m-1 text-2xl "
         @click="cogs_show=!cogs_show">
         <IconsTableHeaderEye />
       </button>
@@ -180,7 +180,7 @@
         Maaf Tidak Ada Record
       </div>
 
-      <div v-else class="w-full h-full overflow-auto" role="sticky" ref="loadRef" @scroll="loadMore">
+      <div v-else class="w-full h-full overflow-auto" ref="loadRef" @scroll="loadMore">
         <table class="tacky">
           <thead  class="sticky top-0 !z-[5]">
             <tr v-for="(ts,idx) in thead_split">

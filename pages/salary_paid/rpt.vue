@@ -78,17 +78,17 @@
       </div>
     </div>
 
-    <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk">
+    <LazyPopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk">
       <template #footer>
         Masukkan Alasan Penghapusan:
         <div class="grow mb-5" >
           <textarea  v-model="deleted_reason"></textarea>
         </div>
       </template>
-    </PopupMini>
-    <FormsRptSalary :show="forms_rpt_salary_show" :fnClose="()=>{forms_rpt_salary_show=false}" :id="forms_rpt_salary_id" :p_data="rpt_salarys" :is_copy="forms_rpt_salary_copy"/>
-    <FormsRptSalaryValidasi :show="forms_rpt_salary_valid_show" :fnClose="()=>{forms_rpt_salary_valid_show=false}" :id="forms_rpt_salary_valid_id" :p_data="rpt_salarys"/>
-    <FormsRptSalaryCheck :show="forms_rpt_salary_check_show" :fnClose="()=>{forms_rpt_salary_check_show=false}" :id="forms_rpt_salary_check_id"/>
+    </LazyPopupMini>
+    <LazyFormsRptSalary :show="forms_rpt_salary_show" :fnClose="()=>{forms_rpt_salary_show=false}" :id="forms_rpt_salary_id" :p_data="rpt_salarys" :is_copy="forms_rpt_salary_copy"/>
+    <LazyFormsRptSalaryValidasi :show="forms_rpt_salary_valid_show" :fnClose="()=>{forms_rpt_salary_valid_show=false}" :id="forms_rpt_salary_valid_id" :p_data="rpt_salarys"/>
+    <LazyFormsRptSalaryCheck :show="forms_rpt_salary_check_show" :fnClose="()=>{forms_rpt_salary_check_show=false}" :id="forms_rpt_salary_check_id"/>
   </div>
 </template>
 

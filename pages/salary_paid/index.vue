@@ -112,18 +112,18 @@
       </div>
     </div>
 
-    <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk">
+    <LazyPopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk">
       <template #footer>
         Masukkan Alasan Penghapusan:
         <div class="grow mb-5" >
           <textarea  v-model="deleted_reason"></textarea>
         </div>
       </template>
-    </PopupMini>
+    </LazyPopupMini>
     <!-- <salary_paidsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
-    <FormsSalaryPaid :show="forms_salary_paid_show" :fnClose="()=>{forms_salary_paid_show=false}" :id="forms_salary_paid_id" :p_data="salary_paids" :is_copy="forms_salary_paid_copy"/>
-    <FormsSalaryPaidValidasi :show="forms_salary_paid_valid_show" :fnClose="()=>{forms_salary_paid_valid_show=false}" :id="forms_salary_paid_valid_id" :p_data="salary_paids"/>
-    <PDFView :show="prtView" :pdfContent="pdfContent" @close="prtView=!prtView"/>
+    <LazyFormsSalaryPaid :show="forms_salary_paid_show" :fnClose="()=>{forms_salary_paid_show=false}" :id="forms_salary_paid_id" :p_data="salary_paids" :is_copy="forms_salary_paid_copy"/>
+    <LazyFormsSalaryPaidValidasi :show="forms_salary_paid_valid_show" :fnClose="()=>{forms_salary_paid_valid_show=false}" :id="forms_salary_paid_valid_id" :p_data="salary_paids"/>
+    <LazyPDFView :show="prtView" :pdfContent="pdfContent" @close="prtView=!prtView"/>
   
   </div>
 </template>

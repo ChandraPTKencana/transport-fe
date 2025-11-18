@@ -114,9 +114,9 @@
       </TableView>
     </div>
 
-    <FormsTrxTrpAbsen :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :id="forms_trx_trp_id" :p_data="trx_trps" />
-    <FormsTrxTrpAbsenValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" :is_view="forms_trx_trp_is_view" @setID="forms_trx_trp_valid_id=$event" @setIndex="selected=$event"/>
-    <FormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
+    <LazyFormsTrxTrpAbsen :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :id="forms_trx_trp_id" :p_data="trx_trps" />
+    <LazyFormsTrxTrpAbsenValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" :is_view="forms_trx_trp_is_view" @setID="forms_trx_trp_valid_id=$event" @setIndex="selected=$event"/>
+    <LazyFormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
   </div>
 </template>
 
@@ -406,9 +406,9 @@ const multiUnVal = async() => {
 const fields_thead=ref([
   {key:"cb",label:"",checkbox:'id'},
   {key:"no",label:"No",isai:true},
-  {key:"ritase_val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"ritase_val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"ritase_val2",label:"App 3",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"ritase_val",label:"Kasir",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"ritase_val1",label:"Mandor",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"ritase_val2",label:"Staff Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1,sort:{priority:1,type:"desc"}},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},

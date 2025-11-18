@@ -105,9 +105,9 @@
         </div>
       </template>
     </PopupMini> -->
-    <FormsFinPaymentReqTrxTrps :show="forms_fin_payment_req_show" :fnClose="()=>{forms_fin_payment_req_show=false}" :id="forms_fin_payment_req_id" :p_data="fin_payment_reqs"/>
-    <FormsFinPaymentReqView :show="forms_fin_payment_req_view_show" :fnClose="()=>{forms_fin_payment_req_view_show=false}" :id="forms_fin_payment_req_view_id"/>
-    <FormsFinPaymentReqValidasi :show="forms_fin_payment_req_valid_show" :fnClose="()=>{forms_fin_payment_req_valid_show=false}" :id="forms_fin_payment_req_valid_id" :p_data="fin_payment_reqs"/>
+    <LazyFormsFinPaymentReqTrxTrps :show="forms_fin_payment_req_show" :fnClose="()=>{forms_fin_payment_req_show=false}" :id="forms_fin_payment_req_id" :p_data="fin_payment_reqs"/>
+    <LazyFormsFinPaymentReqView :show="forms_fin_payment_req_view_show" :fnClose="()=>{forms_fin_payment_req_view_show=false}" :id="forms_fin_payment_req_view_id"/>
+    <LazyFormsFinPaymentReqValidasi :show="forms_fin_payment_req_valid_show" :fnClose="()=>{forms_fin_payment_req_valid_show=false}" :id="forms_fin_payment_req_valid_id" :p_data="fin_payment_reqs"/>
   
   </div>
 </template>

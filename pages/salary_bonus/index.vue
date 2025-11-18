@@ -84,17 +84,17 @@
       </TableView>
     </div>
 
-    <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk">
+    <LazyPopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk">
       <template #footer>
         Masukkan Alasan Penghapusan:
         <div class="grow mb-5" >
           <textarea  v-model="deleted_reason"></textarea>
         </div>
       </template>
-    </PopupMini>
+    </LazyPopupMini>
     <!-- <salary_bonusesRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
-    <FormsSalaryBonus :show="forms_salary_bonus_show" :fnClose="()=>{forms_salary_bonus_show=false}" :id="forms_salary_bonus_id" :p_data="salary_bonuses" :is_copy="forms_salary_bonus_copy"/>
-    <FormsSalaryBonusValidasi :show="forms_salary_bonus_valid_show" :fnClose="()=>{forms_salary_bonus_valid_show=false}" :id="forms_salary_bonus_valid_id" :p_data="salary_bonuses" :is_view="forms_salary_bonus_is_view"/>
+    <LazyFormsSalaryBonus :show="forms_salary_bonus_show" :fnClose="()=>{forms_salary_bonus_show=false}" :id="forms_salary_bonus_id" :p_data="salary_bonuses" :is_copy="forms_salary_bonus_copy"/>
+    <LazyFormsSalaryBonusValidasi :show="forms_salary_bonus_valid_show" :fnClose="()=>{forms_salary_bonus_valid_show=false}" :id="forms_salary_bonus_valid_id" :p_data="salary_bonuses" :is_view="forms_salary_bonus_is_view"/>
   
   </div>
 </template>

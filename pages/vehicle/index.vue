@@ -68,15 +68,15 @@
       </TableView>
     </div>
   </div>
-  <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk">
+  <LazyPopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk">
     <template #footer>
       Masukkan Alasan Penghapusan:
       <div class="grow mb-5" >
         <textarea  v-model="deleted_reason"></textarea>
       </div>
     </template>
-  </PopupMini>
-  <FormsVehicle :show="forms_vehicle_show" :fnClose="()=>{forms_vehicle_show=false}" :id="forms_vehicle_id" :p_data="vehicles"/>
+  </LazyPopupMini>
+  <LazyFormsVehicle :show="forms_vehicle_show" :fnClose="()=>{forms_vehicle_show=false}" :id="forms_vehicle_id" :p_data="vehicles"/>
 
 </template>
 

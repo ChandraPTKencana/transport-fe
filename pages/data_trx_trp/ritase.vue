@@ -13,7 +13,7 @@
         </div>
       </div>
       <!-- <SubTrxTrpRitaseHistory :show="submenu=='history'" ></SubTrxTrpRitaseHistory> -->
-      <SubTrxTrpRitaseUnverified :show="submenu=='unverified'" ></SubTrxTrpRitaseUnverified>
+      <LazySubTrxTrpRitaseUnverified :show="submenu=='unverified'" />
     </div>
 
     <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->

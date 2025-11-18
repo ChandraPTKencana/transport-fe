@@ -250,22 +250,22 @@
       </TableView>
     </div>
 
-    <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk" >
+    <LazyPopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk" >
       <template #footer>
         Masukkan Alasan Penghapusan:
         <div class="grow mb-5" >
           <textarea  v-model="deleted_reason"></textarea>
         </div>
       </template>
-    </PopupMini>
+    </LazyPopupMini>
 
-    <PopupMini :type="'custome'" :show="multi_val_ticket_box" :fnClose="()=>multi_val_ticket_box=false" :fnConfirm="multiVal" > 
+    <LazyPopupMini :type="'custome'" :show="multi_val_ticket_box" :fnClose="()=>multi_val_ticket_box=false" :fnConfirm="multiVal" > 
       <template #words>
         Ticket akan <b class="text-red-500">divalidasi</b> sesuai dengan data-data yang telah di pilih, yakin untuk melanjutkan ?
       </template>
-    </PopupMini>
+    </LazyPopupMini>
 
-    <PopupMini :type="'custome'" :show="req_deleted_box" :data="req_deleted_data" :fnClose="toggleReqDeleteBox" :fnConfirm="confirmedReqDeleted" :enabledOk="enabledOk1" >
+    <LazyPopupMini :type="'custome'" :show="req_deleted_box" :data="req_deleted_data" :fnClose="toggleReqDeleteBox" :fnConfirm="confirmedReqDeleted" :enabledOk="enabledOk1" >
       
       <template #words>
         Data akan diproses dan <b>tidak dapat dibatalkan lagi</b>, yakin untuk melanjutkan ?
@@ -276,13 +276,13 @@
           <textarea  v-model="req_deleted_reason"></textarea>
         </div>
       </template>
-    </PopupMini>
-    <FormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_cost_center="list_cost_center" :online_status="online_status"/>
-    <FormsTrxTrpValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" 
+    </LazyPopupMini>
+    <LazyFormsTrxTrp :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_cost_center="list_cost_center" :online_status="online_status"/>
+    <LazyFormsTrxTrpValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" 
       :it_state="forms_trx_trp_valid_state" @setID="forms_trx_trp_valid_id=$event" @setIndex="selected=$event"/>
       <!-- :is_view="forms_trx_trp_is_view" -->
-    <FormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
-    <FormsTrxTrpFull :show="forms_trx_trp_full_valid_show" :fnClose="()=>{forms_trx_trp_full_valid_show=false}" :id="forms_trx_trp_full_valid_id" :p_data="trx_trps" 
+    <LazyFormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
+    <LazyFormsTrxTrpFull :show="forms_trx_trp_full_valid_show" :fnClose="()=>{forms_trx_trp_full_valid_show=false}" :id="forms_trx_trp_full_valid_id" :p_data="trx_trps" 
       :it_state="forms_trx_trp_full_valid_state" @setID="forms_trx_trp_full_valid_id=$event" @setIndex="selected=$event"/>
 
 

@@ -83,23 +83,23 @@
       <!-- {{ employees }} -->
     </div>
   </div>
-  <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk">
+  <LazyPopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk">
     <template #footer>
       Masukkan Alasan Penghapusan:
       <div class="grow mb-5" >
         <textarea  v-model="deleted_reason"></textarea>
       </div>
     </template>
-  </PopupMini>
-  <FormsEmployee :show="forms_employee_show" :fnClose="()=>{forms_employee_show=false}" :id="forms_employee_id" :p_data="employees" :is_copy="forms_employee_copy"/>
-  <FormsEmployeeValidasi :show="forms_employee_valid_show" :fnClose="()=>{forms_employee_valid_show=false}" :id="forms_employee_valid_id" :p_data="employees" :it_state="forms_employee_valid_state"/>
-  <PopupMini :type="'custome'" :show="undelete_box" :fnClose="()=>undelete_box=false" :fnConfirm="confirmed_undelete" > 
+  </LazyPopupMini>
+  <LazyFormsEmployee :show="forms_employee_show" :fnClose="()=>{forms_employee_show=false}" :id="forms_employee_id" :p_data="employees" :is_copy="forms_employee_copy"/>
+  <LazyFormsEmployeeValidasi :show="forms_employee_valid_show" :fnClose="()=>{forms_employee_valid_show=false}" :id="forms_employee_valid_id" :p_data="employees" :it_state="forms_employee_valid_state"/>
+  <LazyPopupMini :type="'custome'" :show="undelete_box" :fnClose="()=>undelete_box=false" :fnConfirm="confirmed_undelete" > 
     <template #words>
       Alasan Keluar Sebelumnya : <b class="text-red-500"> {{ employees[selected].deleted_reason }}</b>. 
       <br>
       Pekerja telah <b class="text-green-500">Kembali Bekerja </b> , yakin untuk melanjutkan ?
     </template>
-  </PopupMini>
+  </LazyPopupMini>
 </template>
 
 <script setup>

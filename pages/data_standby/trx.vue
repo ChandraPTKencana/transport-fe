@@ -194,16 +194,16 @@
       </TableView>
     </div>
 
-    <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk" >
+    <LazyPopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk" >
       <template #footer>
         Masukkan Alasan Penghapusan:
         <div class="grow mb-5" >
           <textarea  v-model="deleted_reason"></textarea>
         </div>
       </template>
-    </PopupMini>
+    </LazyPopupMini>
 
-    <PopupMini :type="'custome'" :show="req_deleted_box" :data="req_deleted_data" :fnClose="toggleReqDeleteBox" :fnConfirm="confirmedReqDeleted" :enabledOk="enabledOk1" >
+    <LazyPopupMini :type="'custome'" :show="req_deleted_box" :data="req_deleted_data" :fnClose="toggleReqDeleteBox" :fnConfirm="confirmedReqDeleted" :enabledOk="enabledOk1" >
       
       <template #words>
         Data akan diproses dan <b>tidak dapat dibatalkan lagi</b>, yakin untuk melanjutkan ?
@@ -214,18 +214,18 @@
           <textarea  v-model="req_deleted_reason"></textarea>
         </div>
       </template>
-    </PopupMini>
+    </LazyPopupMini>
 
-    <PopupMini :type="'custome'" :show="approve_void_box" :data="approve_void_data" :fnClose="toggleApproveVoidBox" :fnConfirm="confirmedApproveVoid">      
+    <LazyPopupMini :type="'custome'" :show="approve_void_box" :data="approve_void_data" :fnClose="toggleApproveVoidBox" :fnConfirm="confirmedApproveVoid">      
       <template #words>
         Data akan diproses dan <b>tidak dapat dibatalkan lagi</b>, apakah Anda menyetujui permintaan penghapusan data berikut?
       </template>
-    </PopupMini>
+    </LazyPopupMini>
 
     <!-- <FormsStandbyTrx :show="forms_standby_trx_show" :fnClose="()=>{forms_standby_trx_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_standby_trx_id" :p_data="standby_trxs" :list_cost_center="list_cost_center" :online_status="online_status"/> -->
-    <FormsStandbyTrx :show="forms_standby_trx_show" :fnClose="()=>{forms_standby_trx_show=false}" :id="forms_standby_trx_id" :p_data="standby_trxs"/>
-    <FormsStandbyTrxValidasi :show="forms_standby_trx_valid_show" :fnClose="()=>{forms_standby_trx_valid_show=false}" :id="forms_standby_trx_valid_id" :p_data="standby_trxs" :it_state="forms_standby_trx_valid_state" @setID="forms_standby_trx_valid_id=$event" @setIndex="selected=$event"/>
-    <FormsStandbyTrxFull :show="forms_standby_trx_full_valid_show" :fnClose="()=>{forms_standby_trx_full_valid_show=false}" :id="forms_standby_trx_full_valid_id" :standby_trx="selected > -1 ? standby_trxs[selected] : {}"  :p_data="standby_trxs" 
+    <LazyFormsStandbyTrx :show="forms_standby_trx_show" :fnClose="()=>{forms_standby_trx_show=false}" :id="forms_standby_trx_id" :p_data="standby_trxs"/>
+    <LazyFormsStandbyTrxValidasi :show="forms_standby_trx_valid_show" :fnClose="()=>{forms_standby_trx_valid_show=false}" :id="forms_standby_trx_valid_id" :p_data="standby_trxs" :it_state="forms_standby_trx_valid_state" @setID="forms_standby_trx_valid_id=$event" @setIndex="selected=$event"/>
+    <LazyFormsStandbyTrxFull :show="forms_standby_trx_full_valid_show" :fnClose="()=>{forms_standby_trx_full_valid_show=false}" :id="forms_standby_trx_full_valid_id" :standby_trx="selected > -1 ? standby_trxs[selected] : {}"  :p_data="standby_trxs" 
     :it_state="forms_standby_trx_full_valid_state" @setID="forms_standby_trx_full_valid_id=$event" @setIndex="selected=$event"/>
   <!-- :is_view="forms_standby_trx_is_view" -->
   </div>

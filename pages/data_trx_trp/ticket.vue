@@ -219,7 +219,7 @@
       </TableView>
     </div>
 
-    <PopupMini :type="'custome'" :show="req_deleted_box" :data="req_deleted_data" :fnClose="toggleReqDeleteBox" :fnConfirm="confirmedReqDeleted">      
+    <LazyPopupMini :type="'custome'" :show="req_deleted_box" :data="req_deleted_data" :fnClose="toggleReqDeleteBox" :fnConfirm="confirmedReqDeleted">      
       <template #words>
         Data akan diproses dan <b>tidak dapat dibatalkan lagi</b>, apakah Anda menyetujui permintaan penghapusan data berikut?
       </template>
@@ -229,32 +229,32 @@
           <textarea  v-model="reason_adder"></textarea>
         </div>
       </template>
-    </PopupMini>
+    </LazyPopupMini>
 
-    <PopupMini :type="'custome'" :show="multi_clear_ticket_box" :fnClose="()=>multi_clear_ticket_box=false" :fnConfirm="multiClearTicket" >
+    <LazyPopupMini :type="'custome'" :show="multi_clear_ticket_box" :fnClose="()=>multi_clear_ticket_box=false" :fnConfirm="multiClearTicket" >
       <template #words>
         Ticket akan <b class="text-red-500">dibersihkan</b> sesuai dengan data-data yang telah di pilih, yakin untuk melanjutkan ?
       </template>
-    </PopupMini>
+    </LazyPopupMini>
 
-    <PopupMini :type="'custome'" :show="multi_val_ticket_box" :fnClose="()=>multi_val_ticket_box=false" :fnConfirm="multiVal" > 
+    <LazyPopupMini :type="'custome'" :show="multi_val_ticket_box" :fnClose="()=>multi_val_ticket_box=false" :fnConfirm="multiVal" > 
       <template #words>
         Ticket akan <b class="text-red-500">divalidasi</b> sesuai dengan data-data yang telah di pilih, yakin untuk melanjutkan ?
       </template>
-    </PopupMini>
+    </LazyPopupMini>
 
-    <PopupMini :type="'custome'" :show="multi_unval_ticket_box" :fnClose="()=>multi_unval_ticket_box=false" :fnConfirm="multiUnval" > 
+    <LazyPopupMini :type="'custome'" :show="multi_unval_ticket_box" :fnClose="()=>multi_unval_ticket_box=false" :fnConfirm="multiUnval" > 
       <template #words>
         Ticket akan <b class="text-red-500">di unvalidasi</b> sesuai dengan data-data yang telah di pilih, yakin untuk melanjutkan ?
       </template>
-    </PopupMini>
+    </LazyPopupMini>
     <!-- <trx_trpsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
     <!-- <FormsTrxTrpTicket :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ticket="list_ticket" :online_status="online_status"/> -->
-    <FormsTrxTrpTicket :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ticket="list_ticket"/>
-    <FormsTrxTrpTicketValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" :it_state="forms_trx_trp_valid_state" />
+    <LazyFormsTrxTrpTicket :show="forms_trx_trp_show" :fnClose="()=>{forms_trx_trp_show=false}" :fnLoadDBData="fnLoadDBData" :id="forms_trx_trp_id" :p_data="trx_trps" :list_ticket="list_ticket"/>
+    <LazyFormsTrxTrpTicketValidasi :show="forms_trx_trp_valid_show" :fnClose="()=>{forms_trx_trp_valid_show=false}" :id="forms_trx_trp_valid_id" :p_data="trx_trps" :it_state="forms_trx_trp_valid_state" />
       <!-- :is_view="forms_trx_trp_is_view" -->
-    <FormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
-    <FormsTrxTrpTicketOver :show="forms_trx_check_show" :fnClose="()=>{forms_trx_check_show=false}"/>
+    <LazyFormsTrxAbsen :show="forms_trx_absen_show" :fnClose="()=>{forms_trx_absen_show=false}" :index="forms_trx_absen_index" :p_data="trx_trps"/>
+    <LazyFormsTrxTrpTicketOver :show="forms_trx_check_show" :fnClose="()=>{forms_trx_check_show=false}"/>
 
     <div v-if="cogs_show" class="w-full h-full flex items-center justify-center fixed top-0 left-0 z-20 p-3"
     style="background-color: rgba(255,255,255,0.9);">

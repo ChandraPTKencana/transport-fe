@@ -77,8 +77,8 @@
         </div>
       </template>
     </PopupMini> -->
-    <FormsPotonganMst :show="forms_potongan_mst_show" :fnClose="()=>{forms_potongan_mst_show=false}" :id="forms_potongan_mst_id" :p_data="potongan_msts" :is_copy="forms_potongan_mst_copy" :is_view="forms_potongan_mst_is_view"/>
-    <FormsPotonganValidasi :show="forms_potongan_mst_valid_show" :fnClose="()=>{forms_potongan_mst_valid_show=false}" :id="forms_potongan_mst_valid_id" :p_data="potongan_msts"/>
+    <LazyFormsPotonganMst :show="forms_potongan_mst_show" :fnClose="()=>{forms_potongan_mst_show=false}" :id="forms_potongan_mst_id" :p_data="potongan_msts" :is_copy="forms_potongan_mst_copy" :is_view="forms_potongan_mst_is_view"/>
+    <LazyFormsPotonganValidasi :show="forms_potongan_mst_valid_show" :fnClose="()=>{forms_potongan_mst_valid_show=false}" :id="forms_potongan_mst_valid_id" :p_data="potongan_msts"/>
   
   </div>
 </template>

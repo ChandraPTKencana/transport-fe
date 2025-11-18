@@ -70,8 +70,8 @@
       </template>
     </PopupMini> -->
 
-    <FormsDestinationLocation :show="forms_destination_location_show" :fnClose="()=>{forms_destination_location_show=false}" :id="forms_destination_location_id" :p_data="destination_locations" :is_copy="forms_destination_location_copy"/>
-    <FormsDestinationLocationValidasi :show="forms_destination_location_valid_show" :fnClose="()=>{forms_destination_location_valid_show=false}" :id="forms_destination_location_valid_id" :p_data="destination_locations" :is_view="forms_destination_location_is_view"/>
+    <LazyFormsDestinationLocation :show="forms_destination_location_show" :fnClose="()=>{forms_destination_location_show=false}" :id="forms_destination_location_id" :p_data="destination_locations" :is_copy="forms_destination_location_copy"/>
+    <LazyFormsDestinationLocationValidasi :show="forms_destination_location_valid_show" :fnClose="()=>{forms_destination_location_valid_show=false}" :id="forms_destination_location_valid_id" :p_data="destination_locations" :is_view="forms_destination_location_is_view"/>
   </div>
 </template>
 

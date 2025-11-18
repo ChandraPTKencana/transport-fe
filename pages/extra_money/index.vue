@@ -61,17 +61,17 @@
       </TableView>
     </div>
 
-    <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk" >
+    <LazyPopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk" >
       <template #footer>
         Masukkan Alasan Penghapusan:
         <div class="grow mb-5" >
           <textarea  v-model="deleted_reason"></textarea>
         </div>
       </template>
-    </PopupMini>
+    </LazyPopupMini>
 
-    <FormsExtraMoney :show="forms_extra_money_show" :fnClose="()=>{forms_extra_money_show=false}" :id="forms_extra_money_id" :p_data="extra_moneys" :is_copy="forms_extra_money_copy"/>
-    <FormsExtraMoneyValidasi :show="forms_extra_money_valid_show" :fnClose="()=>{forms_extra_money_valid_show=false}" :id="forms_extra_money_valid_id" :p_data="extra_moneys" :is_view="forms_extra_money_is_view"/>
+    <LazyFormsExtraMoney :show="forms_extra_money_show" :fnClose="()=>{forms_extra_money_show=false}" :id="forms_extra_money_id" :p_data="extra_moneys" :is_copy="forms_extra_money_copy"/>
+    <LazyFormsExtraMoneyValidasi :show="forms_extra_money_valid_show" :fnClose="()=>{forms_extra_money_valid_show=false}" :id="forms_extra_money_valid_id" :p_data="extra_moneys" :is_view="forms_extra_money_is_view"/>
   </div>
 </template>
 

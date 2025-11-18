@@ -410,7 +410,7 @@
 
     </div>
 
-    <GAPIN :show="timeout_pin" @setTimeout="timeout_pin=$event"/>
+    <LazyGAPIN :show="timeout_pin" @setTimeout="timeout_pin=$event"/>
   </div>
 </template>
 

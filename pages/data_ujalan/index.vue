@@ -5,38 +5,38 @@
       <div class="w-full flex justify-between flex-wrap">
         <div class="grow flex">
           <div class="m-1">
-            <select class="" v-model="filter_status" >
+            <select aria-label="Filter Status" v-model="filter_status" >
               <option value="available">Available</option>
               <option value="unapprove">Unapprove</option>
               <option value="deleted">Trash</option>
               <option value="all">All</option>
             </select>
           </div>
-          <button v-if="enabled_copy" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_copy" type="button" name="button" aria-label="Copy Data" class="m-1 text-2xl "
             @click="form_copy()">
             <IconsCopy />
           </button>
-          <button v-if="enabled_add" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_add" type="button" name="button" aria-label="New Form" class="m-1 text-2xl "
             @click="form_add()">
             <IconsPlus />
           </button>
-          <button v-if="enabled_edit" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_edit" type="button" name="button" aria-label="Edit Form" class="m-1 text-2xl "
             @click="form_edit()">
             <IconsEdit/>
           </button>
-          <button v-if="selected > -1" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="selected > -1" type="button" name="button" aria-label="View Form" class="m-1 text-2xl "
             @click="form_view()">
             <IconsEyes/>
           </button>
-          <button  v-if="enabled_remove" type="button" name="button" class="m-1 text-2xl "
+          <button  v-if="enabled_remove" type="button" name="button" aria-label="Delete Data" class="m-1 text-2xl "
             @click="remove()">
             <IconsDelete />
           </button>
-          <button v-if="enabled_validasi" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_validasi" type="button" name="button" aria-label="Validate Data" class="m-1 text-2xl "
             @click="validasi()">
             <IconsSignature />
           </button>
-          <button v-if="enabled_unvalidasi" type="button" name="button" class="m-1 text-2xl "
+          <button v-if="enabled_unvalidasi" type="button" name="button" aria-label="Unvalidate Data" class="m-1 text-2xl "
             @click="unvalidasi()">
             <IconsSignatureOff />
           </button>
@@ -62,6 +62,14 @@
         </template>
         <template #[`val1`]="{item}">
           <IconsLine v-if="!item.val1"/>
+          <IconsCheck v-else/>
+        </template>
+        <template #[`val2`]="{item}">
+          <IconsLine v-if="!item.val2"/>
+          <IconsCheck v-else/>
+        </template>
+        <template #[`val3`]="{item}">
+          <IconsLine v-if="!item.val3"/>
           <IconsCheck v-else/>
         </template>
         <template #[`xto`]="{item}">
@@ -99,18 +107,18 @@
       </TableView>
     </div>
 
-    <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk" >
+    <LazyPopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk" >
       <template #footer>
         Masukkan Alasan Penghapusan:
         <div class="grow mb-5" >
           <textarea  v-model="deleted_reason"></textarea>
         </div>
       </template>
-    </PopupMini>
+    </LazyPopupMini>
 
-    <FormsUjalan :show="forms_ujalan_show" :fnClose="()=>{forms_ujalan_show=false}" :id="forms_ujalan_id" :p_data="ujalans" :is_copy="forms_ujalan_copy"/>
-    <FormsUjalanBatasPersenSusut :show="forms_ujalan_batas_persen_susut_show" :fnClose="()=>{forms_ujalan_batas_persen_susut_show=false}" :id="forms_ujalan_id" :p_data="ujalans" :is_copy="forms_ujalan_copy"/>
-    <FormsUjalanValidasi :show="forms_ujalan_valid_show" :fnClose="()=>{forms_ujalan_valid_show=false}" :id="forms_ujalan_valid_id" :p_data="ujalans" 
+    <LazyFormsUjalan :show="forms_ujalan_show" :fnClose="()=>{forms_ujalan_show=false}" :id="forms_ujalan_id" :p_data="ujalans" :is_copy="forms_ujalan_copy"/>
+    <LazyFormsUjalanBatasPersenSusut :show="forms_ujalan_batas_persen_susut_show" :fnClose="()=>{forms_ujalan_batas_persen_susut_show=false}" :id="forms_ujalan_id" :p_data="ujalans" :is_copy="forms_ujalan_copy"/>
+    <LazyFormsUjalanValidasi :show="forms_ujalan_valid_show" :fnClose="()=>{forms_ujalan_valid_show=false}" :id="forms_ujalan_valid_id" :p_data="ujalans" 
       :it_state="forms_ujalan_valid_state"/>
       <!-- :is_view="forms_ujalan_is_view"  -->
 
@@ -146,7 +154,7 @@ const rowBgColor=(data)=>{
   if(data.deleted==1) return "!bg-red-400";
   // if(data.pvr_id > 0 && data.req_deleted == 1) return "!bg-yellow-300"; 
   // if(data.pv_id > 0) return "!bg-blue-300"; 
-  if(data.val == 0 || data.val1 == 0) return "!bg-gray-300"; 
+  if(data.val == 0 || data.val1 == 0 || data.val2 == 0 || data.val3 == 0) return "!bg-gray-300"; 
   return "";
 }
 
@@ -495,8 +503,10 @@ const { printHtml } = useDownload();
 
 const fields_thead=ref([
   {key:"no",label:"No",isai:true},
-  {key:"val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"val1",label:"App 2",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val",label:"Staff Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val1",label:"Kasir",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val2",label:"SPV Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val3",label:"MGR Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"id",label:"ID",filter_on:1,type:"number"},
   {key:"xto",label:"Tujuan",freeze:1,filter_on:1,type:'string'},
   {key:"asst_opt",label:"Info",filter_on:1,type:'string'},
@@ -542,7 +552,9 @@ const enabled_edit = computed(()=>{
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   &&  (
         useUtils().checkPermission('ujalan.val') && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
-        useUtils().checkPermission('ujalan.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1
+        useUtils().checkPermission('ujalan.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1 || 
+        useUtils().checkPermission('ujalan.val2') && [undefined,0].indexOf(dt_selected.value.val2) > -1 || 
+        useUtils().checkPermission('ujalan.val3') && [undefined,0].indexOf(dt_selected.value.val3) > -1
       )
   && useUtils().checkPermissions(['ujalan.modify','ujalan.detail.modify','ujalan.detail2.modify']);
   return result;
@@ -553,7 +565,9 @@ const enabled_validasi = computed(()=>{
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && (
     useUtils().checkPermission('ujalan.val') && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
-    useUtils().checkPermission('ujalan.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1
+    useUtils().checkPermission('ujalan.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1 || 
+    useUtils().checkPermission('ujalan.val2') && [undefined,0].indexOf(dt_selected.value.val2) > -1 || 
+    useUtils().checkPermission('ujalan.val3') && [undefined,0].indexOf(dt_selected.value.val3) > -1
   );
   return result;
 })
@@ -564,7 +578,9 @@ const enabled_unvalidasi = computed(()=>{
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && (
     useUtils().checkPermission('ujalan.unval') && [1].indexOf(dt_selected.value.val) > -1 || 
-    useUtils().checkPermission('ujalan.unval1') && [1].indexOf(dt_selected.value.val1) > -1
+    useUtils().checkPermission('ujalan.unval1') && [1].indexOf(dt_selected.value.val1) > -1 || 
+    useUtils().checkPermission('ujalan.unval2') && [1].indexOf(dt_selected.value.val2) > -1 || 
+    useUtils().checkPermission('ujalan.unval3') && [1].indexOf(dt_selected.value.val3) > -1
   );
   return result;
 })

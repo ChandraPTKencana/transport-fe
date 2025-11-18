@@ -209,12 +209,20 @@
               <div>
                 Di Validasi oleh : 
               </div>
-              <div v-if="ujalan.val || ujalan.val1" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
+              <div v-if="ujalan.val || ujalan.val1 || ujalan.val2 || ujalan.val3" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
                 <div v-if="ujalan.val">
-                  App 1 : {{ ujalan.val_by.username}} ( {{ ujalan.val_at ? $moment(ujalan.val_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                  Staff Logistik : {{ ujalan.val_by.username}} ( {{ ujalan.val_at ? $moment(ujalan.val_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
                 <div v-if="ujalan.val1">
-                  App 2 : {{ ujalan.val1_by.username}} ( {{ ujalan.val1_at ? $moment(ujalan.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                  Kasir : {{ ujalan.val1_by.username}} ( {{ ujalan.val1_at ? $moment(ujalan.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
+
+                <div v-if="ujalan.val2">
+                  SPV Logistik: {{ ujalan.val2_by.username}} ( {{ ujalan.val2_at ? $moment(ujalan.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                </div>
+
+                <div v-if="ujalan.val3">
+                  MGR Logistik: {{ ujalan.val3_by.username}} ( {{ ujalan.val3_at ? $moment(ujalan.val3_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
               </div>
             </div>
@@ -295,6 +303,12 @@ const ujalan_temp = {
     val1:0,
     val1_by:{ username:"" },
     val1_at:"",
+    val2:0,
+    val2_by:{ username:"" },
+    val2_at:"",
+    val3:0,
+    val3_by:{ username:"" },
+    val3_at:"",
 };
 
 const ujalan = ref({...ujalan_temp});
@@ -353,6 +367,16 @@ const doValidate = async () => {
   ujalan.value.val1_by = data.value.val1_by;
   ujalan.value.val1_at = data.value.val1_at;
 
+  ujalan.value.val2 = data.value.val2;
+  ujalan.value.val2_user = data.value.val2_user;
+  ujalan.value.val2_by = data.value.val2_by;
+  ujalan.value.val2_at = data.value.val2_at;
+
+  ujalan.value.val3 = data.value.val3;
+  ujalan.value.val3_user = data.value.val3_user;
+  ujalan.value.val3_by = data.value.val3_by;
+  ujalan.value.val3_at = data.value.val3_at;
+
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
   if(idx>-1){
@@ -408,6 +432,16 @@ const doUnValidate = async () => {
   ujalan.value.val1_user = data.value.val1_user;
   ujalan.value.val1_by = data.value.val1_by;
   ujalan.value.val1_at = data.value.val1_at;
+
+  ujalan.value.val2 = data.value.val2;
+  ujalan.value.val2_user = data.value.val2_user;
+  ujalan.value.val2_by = data.value.val2_by;
+  ujalan.value.val2_at = data.value.val2_at;
+
+  ujalan.value.val3 = data.value.val3;
+  ujalan.value.val3_user = data.value.val3_user;
+  ujalan.value.val3_by = data.value.val3_by;
+  ujalan.value.val3_at = data.value.val3_at;
 
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);

@@ -3,6 +3,7 @@ export default function useApiBaseUrl() {
     const  apiBaseUrls:Record<string, string>= {
         '192.168.1.163/logistik': 'http://192.168.1.163/transport-be/a9p/',
         'localhost:3000/logistik': 'http://192.168.1.163/transport-be/a9p/',
+        'localhost/logistik': 'http://192.168.1.163/transport-be/a9p/',
 
         '10.10.30.196/logistik': 'http://10.10.30.196/transport-be/a9p/',
         '10.10.7.197/logistik': 'http://10.10.7.197/transport-be/a9p/',
@@ -34,12 +35,12 @@ export default function useApiBaseUrl() {
 
         // '110.232.82.16:8885/logistik': 'http://110.232.82.16:8885/transport-be/a9p/',
         
-        '27.131.248.29:8880/arp': 'http://27.131.248.29:9001',
-        '27.131.248.29:8880/kap': 'http://27.131.248.29:9002',
-        '27.131.248.29:8880/kas': 'http://27.131.248.29:9003',
-        '27.131.248.29:8880/kpn': 'http://27.131.248.29:9004',
-        '27.131.248.29:8880/kus': 'http://27.131.248.29:9005',
-        '27.131.248.29:8880/smp': 'http://27.131.248.29:9006',
+        // '27.131.248.29:8880/arp': 'http://27.131.248.29:9001',
+        // '27.131.248.29:8880/kap': 'http://27.131.248.29:9002',
+        // '27.131.248.29:8880/kas': 'http://27.131.248.29:9003',
+        // '27.131.248.29:8880/kpn': 'http://27.131.248.29:9004',
+        // '27.131.248.29:8880/kus': 'http://27.131.248.29:9005',
+        // '27.131.248.29:8880/smp': 'http://27.131.248.29:9006',
     };
 
     let apiBase = apiBaseUrls[url.host+"/"+(url.pathname.split("/")[1])];
