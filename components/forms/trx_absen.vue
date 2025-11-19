@@ -154,7 +154,7 @@ const token = useDynamicPathCookie('token');
 
 const callData = async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/trx_trp", {
+  const { data, error, status } = await useMyFetch("/trx_trp/absen_b", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
