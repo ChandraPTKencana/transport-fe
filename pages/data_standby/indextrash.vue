@@ -171,7 +171,11 @@ const { data: dt_async } = await useAsyncData(async () => {
   }
   standby_msts = data.value.data;
   return {standby_msts};
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,     // 🔥 penting untuk dashboard / auth page
+  });
 
 const standby_msts = ref(dt_async.value.standby_msts);
 // const popup_request = ref(false);

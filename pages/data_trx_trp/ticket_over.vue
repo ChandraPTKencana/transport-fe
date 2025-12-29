@@ -108,10 +108,23 @@
     trx_trps = data1.data.value.data;
   
     return { trx_trps };
+  },
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ trx_trps: [] }),     // 🔥 penting untuk dashboard / auth page
   });
   
-  const trx_trps = ref(dt_async.value.trx_trps || []);
-
+  const trx_trps = ref([]);
+  watch(
+  () => dt_async.value?.trx_trps,
+  (val) => {
+    if (val) {
+      trx_trps.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 
   
   const sort = ref({

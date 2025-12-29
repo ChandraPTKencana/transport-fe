@@ -142,7 +142,12 @@ const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = false;
 
   return { list_xto ,list_employee,list_vehicle};
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ list_xto: [],list_employee: [],list_vehicle: [] }),     // 🔥 penting untuk dashboard / auth page
+  });
 
 
 
@@ -150,32 +155,57 @@ const list_xto = ref([]);
 const list_employee = ref([]);
 const list_vehicle = ref([]);
 
-dt_async.value.list_xto.forEach(e => {
-  list_xto.value.push({
-    id:e,
-    name:e,
-    title:'',
-    checked:false
-  })
-});
+watch(
+  () => dt_async.value?.list_xto,
+  (val) => {
+    if (val) {
+      val.forEach(e => {
+        list_xto.value.push({
+          id:e,
+          name:e,
+          title:'',
+          checked:false
+        })
+      });
+    }
+  },
+  { immediate: true }
+);
 
-dt_async.value.list_employee.forEach(e => {
-  list_employee.value.push({
-    id:e.id,
+watch(
+  () => dt_async.value?.list_employee,
+  (val) => {
+    if (val) {
+      val.forEach(e => {
+        list_employee.value.push({
+          id:e.id,
     name:e.name,
     title:e.role,
     checked:false
-  })
-});
+        })
+      });
+    }
+  },
+  { immediate: true }
+);
 
-dt_async.value.list_vehicle.forEach(e => {
-  list_vehicle.value.push({
-    id:e.id,
+watch(
+  () => dt_async.value?.list_vehicle,
+  (val) => {
+    if (val) {
+      val.forEach(e => {
+        list_vehicle.value.push({
+          id:e.id,
     name:e.no_pol,
     title:'',
     checked:false
-  })
-});
+        })
+      });
+    }
+  },
+  { immediate: true }
+);
+
 
 const type = ref("header");
 const jenis = ref("");

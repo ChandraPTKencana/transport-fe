@@ -124,9 +124,23 @@ const { data: dt_async } = await useAsyncData(async () => {
   }
   permission_groups = data.value.data;
   return {permission_groups};
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ permission_groups: [] }),     // 🔥 penting untuk dashboard / auth page
+  });
 
-const permission_groups = ref(dt_async.value.permission_groups);
+const permission_groups = ref([]);
+watch(
+  () => dt_async.value?.permission_groups,
+  (val) => {
+    if (val) {
+      permission_groups.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 // const popup_request = ref(false);
 
 const search = ref("");

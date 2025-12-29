@@ -347,7 +347,11 @@ const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = false;
 
   return { trx_trps };
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,     // 🔥 penting untuk dashboard / auth page
+  });
 
 const trx_trps = ref(dt_async.value.trx_trps || []);
 

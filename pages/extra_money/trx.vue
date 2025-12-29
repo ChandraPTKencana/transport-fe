@@ -307,9 +307,24 @@ const { data: dt_async } = await useAsyncData(async () => {
 
   useCommonStore().loading_full = false;
   return { extra_money_trxs };
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ extra_money_trxs: [] }),     // 🔥 penting untuk dashboard / auth page
+  });
 
-const extra_money_trxs = ref(dt_async.value.extra_money_trxs || []);
+const extra_money_trxs = ref([]);
+
+watch(
+  () => dt_async.value?.extra_money_trxs,
+  (val) => {
+    if (val) {
+      extra_money_trxs.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 const list_cost_center = ref([]);
 const online_status=ref(false);
 const fnLoadDBData = async () => {

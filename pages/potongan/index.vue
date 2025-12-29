@@ -160,9 +160,23 @@ const { data: dt_async } = await useAsyncData(async () => {
   }
   potongan_msts = data.value.data;
   return {potongan_msts};
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ potongan_msts: [] }),     // 🔥 penting untuk dashboard / auth page
+  });
 
-const potongan_msts = ref(dt_async.value.potongan_msts);
+const potongan_msts = ref([]);
+watch(
+  () => dt_async.value?.potongan_msts,
+  (val) => {
+    if (val) {
+      potongan_msts.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 // const popup_request = ref(false);
 
 const search = ref("");

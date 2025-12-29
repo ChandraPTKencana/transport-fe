@@ -11,8 +11,22 @@
           <IconsBurger v-else />
         </button>
         <header class="h-full flex flex-col overflow-hidden">
+          <div class="p-2">
+            <input type="text" v-model="search" placeholder="search">
+          </div>
           <ul class="grow overflow-auto">
-            <li :class="activeMenu == '/'?'active':''" >
+            <template v-for="v in menuListFiltered">
+              <li v-if="v.showing" :class="activeMenu == v.activeMenu?'active':''" >
+                <nuxt-link :to="v.activeMenu" class="cursor-pointer" @click="goTo(v.activeMenu)">
+                  <component
+                    v-if="v.icon"
+                    :is="resolveComponent(v.icon)" class="mr-1"/>
+                  {{v.title}}
+                </nuxt-link>
+              </li>
+            </template>
+
+            <!-- <li :class="activeMenu == '/'?'active':''" >
               <nuxt-link to="/" class="cursor-pointer" @click="goTo('/')">
                 <IconsHome class="mr-1"/>
                 Dashboard
@@ -29,7 +43,7 @@
                 <IconsMoney class="mr-1"/>
                 UJ Mst
               </nuxt-link>
-            </li>
+            </li> 
             <li v-if="useUtils().checkPermission('trp_trx.views')" :class="activeMenu == '/data_trx_trp'?'active':''" >
               <nuxt-link to="/data_trx_trp"  class="cursor-pointer" @click="goTo('/data_trx_trp')">
                 <IconsProduct class="mr-1"/>
@@ -42,7 +56,7 @@
                 <IconsProduct class="mr-1"/>
                 Trx Transfer
               </nuxt-link>
-            </li>
+            </li>-->
 
             <!-- <li v-if="useUtils().checkPermission('trp_trx.transfer.views')" :class="activeMenu == '/data_trx_trp/transfer_mandiri'?'active':''" >
               <nuxt-link to="/data_trx_trp/transfer_mandiri"  class="cursor-pointer" @click="goTo('/data_trx_trp/transfer_mandiri')">
@@ -51,19 +65,19 @@
               </nuxt-link>
             </li> -->
 
-            <li v-if="useUtils().checkPermission('trp_trx.ticket.views')" :class="activeMenu == '/data_trx_trp/ticket'?'active':''" >
+            <!-- <li v-if="useUtils().checkPermission('trp_trx.ticket.views')" :class="activeMenu == '/data_trx_trp/ticket'?'active':''" >
               <nuxt-link to="/data_trx_trp/ticket"  class="cursor-pointer" @click="goTo('/data_trx_trp/ticket')">
                 <IconsProduct class="mr-1"/>
                 Ticket Logistik
               </nuxt-link>
-            </li>
+            </li> -->
 
             <!-- <li v-if="useUtils().checkPermission('trp_trx.ticket.views')" :class="activeMenu == '/data_trx_trp/ticket_over'?'active':''" >
               <nuxt-link to="/data_trx_trp/ticket_over"  class="cursor-pointer" @click="goTo('/data_trx_trp/ticket_over')">
                 <IconsProduct class="mr-1"/>
                 Check Ticket
               </nuxt-link>
-            </li> -->
+            </li> 
 
             <li v-if="useUtils().checkPermission('trp_trx.ritase.views')" :class="activeMenu == '/data_trx_trp/ritase'?'active':''" >
               <nuxt-link to="/data_trx_trp/ritase"  class="cursor-pointer" @click="goTo('/data_trx_trp/ritase')">
@@ -123,14 +137,14 @@
                 <IconsFileCopy class="mr-1"/>
                 Rpt Jarak
               </nuxt-link>
-            </li>
+            </li>-->
             <!-- <li v-if="useUtils().checkPermission('development')" :class="activeMenu == '/fin_payment_req'?'active':''" >
               <nuxt-link to="/fin_payment_req"  class="cursor-pointer" @click="goTo('/fin_payment_req')">
                 <IconsFileCopy class="mr-1"/>
                 Payment Request
               </nuxt-link>
             </li> -->
-            <li v-if="useUtils().checkPermission('vehicle.views')" :class="activeMenu == '/vehicle'?'active':''" >
+            <!-- <li v-if="useUtils().checkPermission('vehicle.views')" :class="activeMenu == '/vehicle'?'active':''" >
               <nuxt-link to="/vehicle"  class="cursor-pointer" @click="goTo('/vehicle')">
                 <IconsTruck class="mr-1"/>
                 Vehicle
@@ -160,7 +174,7 @@
                 <IconsMoneyMulti class="mr-1"/>
                 Extra Money Trx
               </nuxt-link>
-            </li>
+            </li> -->
 
             <!--<li v-if="useUtils().checkPermission('extra_money_trx.transfer.views')" :class="activeMenu == '/extra_money/transfer'?'active':''" >
               <nuxt-link to="/extra_money/transfer"  class="cursor-pointer" @click="goTo('/extra_money/transfer')">
@@ -169,7 +183,7 @@
               </nuxt-link>
             </li>-->
 
-            <li v-if="useUtils().checkPermission('salary_paid.views')" :class="activeMenu == '/salary_paid'?'active':''" >
+            <!-- <li v-if="useUtils().checkPermission('salary_paid.views')" :class="activeMenu == '/salary_paid'?'active':''" >
               <nuxt-link to="/salary_paid"  class="cursor-pointer" @click="goTo('/salary_paid')">
                 <IconsMoneyBag class="mr-1"/>
                 Salary Paid
@@ -202,7 +216,7 @@
                 <IconsPeople class="mr-1"/>
                 Permission Group
               </nuxt-link>
-            </li>
+            </li> -->
 
             <!-- <li :class="activeMenu == '/upload_image'?'active':''" >
               <nuxt-link to="/upload_image"  class="cursor-pointer" @click="goTo('/upload_image')">
@@ -257,6 +271,7 @@ import { useAuthStore } from '~/store/auth';
 
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
+import { computed } from 'vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -271,6 +286,167 @@ watch(() => route.path, (newVal, oldVal) => {
 }, {
   immediate: true
 });
+
+const menuList =[
+  {
+    activeMenu:"/",
+    showing:true,
+    title:"Dashboard",
+    icon:'IconsHome'
+  },
+  {
+    activeMenu:"/destination_location",
+    showing:useUtils().checkPermission('destination_location.views'),
+    title:"Dest.Location",
+    icon:'IconsLocationOn'
+  },
+  {
+    activeMenu:"/data_ujalan",
+    showing:useUtils().checkPermission('ujalan.views'),
+    title:"UJ Mst",
+    icon:'IconsMoney'
+  },
+  {
+    activeMenu:"/data_trx_trp",
+    showing:useUtils().checkPermission('trp_trx.views'),
+    title:"Trx Trp",
+    icon:'IconsProduct'
+  },
+  {
+    activeMenu:"/data_trx_trp/transfer",
+    showing:useUtils().checkPermission('trp_trx.transfer.views'),
+    title:"Trx Transfer",
+    icon:'IconsProduct'
+  },
+  {
+    activeMenu:"/data_trx_trp/ticket",
+    showing:useUtils().checkPermission('trp_trx.ticket.views'),
+    title:"Ticket Logistik",
+    icon:'IconsProduct'
+  },
+  {
+    activeMenu:"/data_trx_trp/ritase",
+    showing:useUtils().checkPermission('trp_trx.ritase.views'),
+    title:"Trx Ritase",
+    icon:'IconsProduct'
+  },
+  {
+    activeMenu:"/data_trx_trp/absen",
+    showing:useUtils().checkPermission('trp_trx.absen.views'),
+    title:"Trx Absen",
+    icon:'IconsProduct'
+  },
+  {
+    activeMenu:"/data_standby",
+    showing:useUtils().checkPermission('standby_mst.views'),
+    title:"StandBy Mst",
+    icon:'IconsMoney'
+  },
+  {
+    activeMenu:"/data_standby/trx",
+    showing:useUtils().checkPermission('standby_trx.views'),
+    title:"StandBy Trx",
+    icon:'IconsMoney'
+  },
+  {
+    activeMenu:"/report_trx_trp",
+    showing:useUtils().checkPermission('trp_trx.report.views'),
+    title:"Report Susut",
+    icon:'IconsFileCopy'
+  },
+  {
+    activeMenu:"/report_trx_trp/finance",
+    showing:useUtils().checkPermission('trp_trx.report.views'),
+    title:"Report Fin",
+    icon:'IconsFileCopy'
+  },
+  {
+    activeMenu:"/report/ramp",
+    showing:useUtils().checkPermission('report.ramp.views'),
+    title:"Rpt Hsl Trip",
+    icon:'IconsFileCopy'
+  },
+  {
+    activeMenu:"/report/ast_n_driver",
+    showing:useUtils().checkPermission('report.ast_n_driver.views'),
+    title:"Rpt Gaji Supir & Kernet",
+    icon:'IconsFileCopy'
+  },
+  {
+    activeMenu:"/report/distance",
+    showing:useUtils().checkPermission('report.distance.views'),
+    title:"Rpt Jarak",
+    icon:'IconsFileCopy'
+  },
+  {
+    activeMenu:"/vehicle",
+    showing:useUtils().checkPermission('vehicle.views'),
+    title:"Vehicle",
+    icon:'IconsTruck'
+  },
+  {
+    activeMenu:"/employee",
+    showing:useUtils().checkPermission('employee.views'),
+    title:"Employee",
+    icon:'IconsPerson'
+  },
+  {
+    activeMenu:"/potongan",
+    showing:useUtils().checkPermission('potongan_mst.views'),
+    title:"Potongan",
+    icon:'IconsMoneySlash'
+  },
+  {
+    activeMenu:"/extra_money",
+    showing:useUtils().checkPermission('extra_money.views'),
+    title:"Extra Money",
+    icon:'IconsMoneyMulti'
+  },
+  {
+    activeMenu:"/extra_money/trx",
+    showing:useUtils().checkPermission('extra_money_trx.views'),
+    title:"Extra Money Trx",
+    icon:'IconsMoneyMulti'
+  },
+  {
+    activeMenu:"/salary_paid",
+    showing:useUtils().checkPermission('salary_paid.views'),
+    title:"Salary Paid",
+    icon:'IconsMoneyBag'
+  },
+  {
+    activeMenu:"/salary_paid/rpt",
+    showing:useUtils().checkPermission('rpt_salary.views'),
+    title:"Salary Report",
+    icon:'IconsFileCopy'
+  },
+  {
+    activeMenu:"/salary_bonus",
+    showing:useUtils().checkPermission('salary_bonus.views'),
+    title:"Salary Additional",
+    icon:'IconsMoneyBag'
+  },
+  {
+    activeMenu:"/user",
+    showing:useUtils().checkPermission('user.views'),
+    title:"User",
+    icon:'IconsPerson'
+  },
+  {
+    activeMenu:"/permission_group",
+    showing:useUtils().checkPermission('permission_group.views'),
+    title:"Permission Group",
+    icon:'IconsPeople'
+  },
+];
+
+const search = ref('');
+const menuListFiltered = computed(()=>{
+  if(search.value!='')
+  return menuList.filter((x)=>{return x.showing && x.title.toLowerCase().includes(search.value.toLowerCase())})
+
+  return menuList;
+})
 
 
 const { logUserOut } = useAuthStore();

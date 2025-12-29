@@ -156,7 +156,8 @@ params._TimeZoneOffset = new Date().getTimezoneOffset();
 
 
 const token = useDynamicPathCookie('token');
-const { data: employees } = await useAsyncData(async () => {
+const { data: dt_async } = await useAsyncData(async () => {
+  let employees = [];
   useCommonStore().loading_full = true;
   const { data, error, status } = await useMyFetch("/employees", {
     method: 'get',
@@ -174,9 +175,25 @@ const { data: employees } = await useAsyncData(async () => {
     return [];
   }
 
-  return data.value.data;
-});
+  employees = data.value.data;
+  return {employees};
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ employees: [] }),     // 🔥 penting untuk dashboard / auth page
+  });
+  const employees = ref([]);
 
+watch(
+  () => dt_async.value?.employees,
+  (val) => {
+    if (val) {
+      employees.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 
 
 const sort = ref({

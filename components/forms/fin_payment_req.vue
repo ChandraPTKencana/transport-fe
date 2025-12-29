@@ -7,20 +7,35 @@
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex ">
-              <button type="button" name="button" class="m-1 text-2xl "
+              <!-- <button type="button" name="button" class="m-1 text-2xl "
                 @click="downloadExcel()">
                 <IconsTable2Column />
+              </button>-->
+              <button v-show="[4].indexOf(show_send)>-1" type="button" name="button" class="m-1 " :disabled="fin_payment_req.status=='CLOSE'"
+                @click="frmBatchNo()">
+                Batch No : {{ fin_payment_req.batch_no }}
               </button>
 
-              <button v-show="show_send==1" type="button" name="button" class="m-1 text-2xl "
+              <button v-show="[4].indexOf(show_send)>-1" type="button" name="button" class="m-1 bg-violet-600 text-white"
+                @click="setPaidDone()">
+                Set Paid Done
+              </button>
+
+              <button v-if="[0,1,3].indexOf(show_send)>-1" type="button" name="button" class="m-1 text-2xl "
+                @click="form_add()">
+                <IconsPlus />
+              </button>
+
+              <button v-show="[1].indexOf(show_send)>-1" type="button" name="button" class="m-1 text-2xl "
                 @click="genCSVandSend()">
                 <IconsSend />
               </button>
 
-              <button v-show="show_send==0" type="button" name="button" class="m-1 text-2xl "
+              <button v-show="[2].indexOf(show_send)>-1" type="button" name="button" class="m-1 text-2xl "
                 @click="getUpdate()">
-                <IconsRefresh />
-              </button>
+                <IconsCloudDownload />
+              </button> 
+
             </div>
             <div class="w-full flex p-1 2xl:overflow-hidden justify-between flex-wrap">
               <div class="w-full" role="sticky">
@@ -34,9 +49,9 @@
                   <tr class="sticky top-7 !z-[2]">
                     <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
                     <th class="min-w-[50px] !w-[50px] max-w-[50px] ">ID</th>
+                    <th>No Trx</th>
                     <th>Tujuan</th>
                     <th>Produk</th>
-                    <th>No Trx</th>
                     <th class="min-w-[75px] !w-[75px] max-w-[75px] ">No Pol</th>
                     <th>Jabatan</th>
                     <th>Nama</th>
@@ -53,7 +68,7 @@
                   </tr>
                 </thead>
                   <tbody ref="to_move">
-                    <template v-for="(detail, index) in details" :key="index">
+                    <template v-for="(detail, index) in fin_payment_req.details" :key="index">
                       <!-- <tr v-if="detail.p_status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)"> -->
                       <tr>
                         <td class="cell min-w-[50px] !w-[50px] max-w-[50px]">
@@ -66,6 +81,19 @@
                             {{ detail.id }}
                           </div>
                         </td>
+                        <td class="cell">
+                          <div class="w-full h-full flex items-center justify-center p-2">
+                            <!-- {{ detail.jabatan !='KERNET' ? detail.trx_trp_id :''  }}    -->
+
+                            <div class="pointer p-0 bg-red-500 text-white rounded flex items-center justify-center">
+                              <span class="px-2">
+                                {{ detail.trx_trp_id }} 
+                              </span>
+                              <IconsTimes v-show="[0,1,3].indexOf(show_send)>-1" @click.prevent="deleteRec(detail.id,detail.trx_trp_id)" class="cursor-pointer text-3xl font-bold p-0 border-l-2 border-red-300"/>
+                            </div>
+                            
+                          </div>
+                        </td>
                         <td class="cell min-w-[150px] !w-[150px] max-w-[150px]">
                           <div class="w-full h-full flex items-center justify-center">
                             {{ detail.jabatan !='KERNET' ? detail.tujuan :''  }}   
@@ -76,11 +104,7 @@
                             {{ detail.jabatan !='KERNET' ? detail.produk :''  }}    
                           </div>
                         </td>
-                        <td class="cell">
-                          <div class="w-full h-full flex items-center justify-center">
-                            {{ detail.jabatan !='KERNET' ? detail.trx_trp_id :''  }}   
-                          </div>
-                        </td>
+                        
                         <td class="cell">
                           <div class="w-full h-full flex items-center justify-center">
                             {{ detail.jabatan !='KERNET' ? detail.no_pol :''  }}   
@@ -165,6 +189,17 @@
         </form>
     </div>
   </section>
+  <LazyFormsFinPaymentReqTrxTrps :show="forms_fin_payment_req_trx_trp_show" :fnClose="()=>{forms_fin_payment_req_trx_trp_show=false}" :id="fin_payment_req.id" @setKData="fin_payment_req=$event" @setIsNew="($event)=>{if($event)p_data.push(fin_payment_req)}"/>
+  <div v-show="frm_show_batch" class="bg-white w-[250px] sm:w-1/2 md:w-1/3 lg:w-1/4 fixed z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-2 border-slate-700 shadow-2xl shadow-black p-2">
+    <label for="">Select Batch No</label>
+    <select v-model="batch_no">
+      <option v-for="n in 5" :value="n-1">{{ n-1 }}</option>
+    </select>
+    <div class="flex justify-end pt-2">
+      <button type="button" class="bg-blue-500 text-white" @click="saveBatchNo()">Save</button>
+      <button type="button" class="bg-yellow-500 text-white ml-2" @click="frm_show_batch=false">Cancel</button>
+    </div>
+  </div>
 
 </template>
 
@@ -192,15 +227,16 @@ const props = defineProps({
     required: false,
     default: 0,
   },
-  // p_data:{
-  //   type:Array,
-  //   required:true,
-  //   default:[]
-  // },
+  p_data:{
+    type:Array,
+    required:true,
+    default:[]
+  },
 })
 
 const fin_payment_req_temp = {
-    id: -1,
+    id: 0,
+    batch_no:0,
     details: [],
 };
 
@@ -208,13 +244,11 @@ const fin_payment_req = ref({...fin_payment_req_temp});
 
 const token = useDynamicPathCookie('token');
 
-const details = ref([]);
-
 
 const total_nominal = computed(()=>{
   let temp = 0;
 
-  details.value.forEach(e => {
+  fin_payment_req.value.details.forEach(e => {
     temp += parseInt(e.nominal); 
   });
   
@@ -224,7 +258,7 @@ const total_nominal = computed(()=>{
 const total_potongan_trx_ttl = computed(()=>{
   let temp = 0;
 
-  details.value.forEach(e => {
+  fin_payment_req.value.details.forEach(e => {
     temp += parseInt(e.potongan_trx_ttl);
   });
   
@@ -234,7 +268,7 @@ const total_potongan_trx_ttl = computed(()=>{
 const total_extra_money_trx_ttl = computed(()=>{
   let temp = 0;
 
-  details.value.forEach(e => {
+  fin_payment_req.value.details.forEach(e => {
     temp += parseInt(e.extra_money_trx_ttl);
   });
   
@@ -244,7 +278,7 @@ const total_extra_money_trx_ttl = computed(()=>{
 const total_jumlah = computed(()=>{
   let temp = 0;
 
-  details.value.forEach(e => {
+  fin_payment_req.value.details.forEach(e => {
     temp += parseInt(e.jumlah); 
   });
   
@@ -254,12 +288,22 @@ const total_jumlah = computed(()=>{
 const show_send = computed(()=>{
   let showit = 0;
 
-  details.value.every(e => {
+  fin_payment_req.value.details.every(e => {
     if(e.status=='READY') {
       showit = 1;
       return false;
-    }else if(e.status=='INQUIRY_FAILED'){
+    }else if(e.status=='INQUIRY_PROCESS'){
       showit = 2;
+      return false;
+    }else if(e.status=='INQUIRY_FAILED'){
+      showit = 3;
+      return false;
+    }
+    else if(e.status=='TRANSFER_PROCESS'){
+      showit = 4;
+      return false;
+    }else if(e.status=='DONE'){
+      showit = 5;
       return false;
     }
     return true;
@@ -300,7 +344,7 @@ const callData = async () => {
     fin_payment_req.value.val1 = 0;
   }
 
-  details.value = data.value.data.details; 
+  // details.value = data.value.data.details; 
 }
 const { downloadFile, viewFile } = useDownload();
 
@@ -312,7 +356,7 @@ const downloadExcel = async()=>{
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
-    params: {id:props.id},
+    params: {id:fin_payment_req.value.id},
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -329,7 +373,7 @@ const genCSVandSend = async () => {
   field_errors.value = {};
 
   const data_in = new FormData();
-  data_in.append("id", props.id);
+  data_in.append("id", fin_payment_req.value.id);
   data_in.append("_method", "PUT");
 
   let $method = "post";
@@ -353,7 +397,7 @@ const genCSVandSend = async () => {
   }
   display({ show: true, status: "Success", message: "Kirim Ke Mandiri Berhasil" });
 
-  details.value.forEach((x)=>{
+  fin_payment_req.value.details.forEach((x)=>{
     x.status="INQUIRY_PROCESS";
   });
   // trx_trps.value.splice(selected.value,1);
@@ -368,7 +412,7 @@ const getUpdate = async () => {
   field_errors.value = {};
 
   const data_in = new FormData();
-  data_in.append("id", props.id);
+  data_in.append("id", fin_payment_req.value.id);
   data_in.append("_method", "PUT");
 
   let $method = "post";
@@ -395,15 +439,15 @@ const getUpdate = async () => {
 
   data.value.details.forEach((dt)=>{
     // x.status="INQUIRY_PROCESS";
-    let idx = details.value.map((x)=>x.id).indexOf(dt.id);
+    let idx = fin_payment_req.value.details.map((x)=>x.id).indexOf(dt.id);
     if(idx>-1){
-      details.value[idx].status = dt.status;
-      details.value[idx].failed_reason = dt.failed_reason;
+      fin_payment_req.value.details[idx].status = dt.status;
+      fin_payment_req.value.details[idx].failed_reason = dt.failed_reason;
     }
   });
 
-  console.log(data.value.details);
-  console.log(details.value);
+  // console.log(data.value.details);
+  // console.log(details.value);
 
   
   
@@ -447,19 +491,20 @@ const renewData = async (id,idx) => {
   }
 
   
-  details.value[idx].rek_no             = data.value.employee_rek_no;
-  details.value[idx].rek_name           = data.value.employee_rek_name;
-  details.value[idx].bank_code          = data.value.employee_bank_code;
-  details.value[idx].status             = data.value.status;
-  details.value[idx].failed_reason      = data.value.failed_reason;
+  fin_payment_req.value.details[idx].rek_no             = data.value.employee_rek_no;
+  fin_payment_req.value.details[idx].rek_name           = data.value.employee_rek_name;
+  fin_payment_req.value.details[idx].bank_code          = data.value.employee_bank_code;
+  fin_payment_req.value.details[idx].status             = data.value.status;
+  fin_payment_req.value.details[idx].failed_reason      = data.value.failed_reason;
   
   display({ show: true, status: "Success", message: "Data Berhasil Diperbaharui" });
 }
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
+    if(props.id==0)
     fin_payment_req.value = {...fin_payment_req_temp};
-    details.value = [];
+    // details.value = [];
 
     if(props.id!=0)
     callData();
@@ -468,4 +513,153 @@ watch(() => props.show, (newVal, oldVal) => {
   immediate: true
 });
 
+// watch(() => props.id, (newVal, oldVal) => {
+//   if (oldVal==0 && newVal != 0){
+//     console.log('oldVal',oldVal);
+//     console.log('newVal',newVal);
+//     props.p_data.push(fin_payment_req.value);
+//     // fin_payment_req.value = {...fin_payment_req_temp};
+//     // // details.value = [];
+
+//     // if(props.id!=0)
+//     // callData();
+//   }
+// }, {
+//   // immediate: true
+// });
+
+
+
+
+const forms_fin_payment_req_trx_trp_show =  ref(false);
+const form_add = () => {
+  forms_fin_payment_req_trx_trp_show.value = true;
+}
+
+const deleteRec = async (id,trx_trp_id) => {
+  useCommonStore().loading_full = true;
+  field_errors.value = {};
+
+  const data_in = new FormData();
+  data_in.append("trx_trp_id", trx_trp_id);
+  data_in.append("_method", "DELETE");
+
+  let $method = "post";
+
+  const { data, error, status } = await useMyFetch("/fin_payment_req_dtl/delete_data", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // "Content-Type": "multipart/form-data",
+    },
+    body: data_in,
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error, field_errors);
+    return;
+  }
+
+  fin_payment_req.value.details = fin_payment_req.value.details.filter((x)=>{return x.trx_trp_id!=trx_trp_id});
+  // fin_payment_req.value.details[idx].rek_no             = data.value.employee_rek_no;
+  // fin_payment_req.value.details[idx].rek_name           = data.value.employee_rek_name;
+  // fin_payment_req.value.details[idx].bank_code          = data.value.employee_bank_code;
+  // fin_payment_req.value.details[idx].status             = data.value.status;
+  // fin_payment_req.value.details[idx].failed_reason      = data.value.failed_reason;
+  
+  // display({ show: true, status: "Success", message: "Data Berhasil Diperbaharui" });
+}
+
+
+const frm_show_batch=ref(false);
+const batch_no = ref(0);
+const frmBatchNo=()=>{
+  frm_show_batch.value = true;
+  batch_no.value = fin_payment_req.value.batch_no;
+}
+
+const saveBatchNo = async () => {
+  useCommonStore().loading_full = true;
+  field_errors.value = {};
+
+  const data_in = new FormData();
+  data_in.append("id", fin_payment_req.value.id);
+  data_in.append("batch_no", batch_no.value);
+  data_in.append("_method", "PUT");
+
+  let $method = "post";
+
+  const { data, error, status } = await useMyFetch("/fin_payment_req/set_batch_no", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // "Content-Type": "multipart/form-data",
+    },
+    body: data_in,
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error, field_errors);
+    return;
+  }
+
+  fin_payment_req.value.batch_no = batch_no.value;
+  
+  let idx= props.p_data.map((x)=>x.id).indexOf(fin_payment_req.value.id);
+  if(idx>-1){
+    props.p_data.splice(idx,1,{...fin_payment_req.value});    
+  }
+  frm_show_batch.value = false;
+
+  display({ show: true, status: "Success", message: "No Batch Berhasil Diperbaharui" });
+}
+
+const setPaidDone = async () => {
+  useCommonStore().loading_full = true;
+  field_errors.value = {};
+
+  const data_in = new FormData();
+  data_in.append("id", fin_payment_req.value.id);
+  data_in.append("_method", "PUT");
+
+  let $method = "post";
+
+  const { data, error, status } = await useMyFetch("/fin_payment_req/set_paid_done", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // "Content-Type": "multipart/form-data",
+    },
+    body: data_in,
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error, field_errors);
+    return;
+  }
+
+  fin_payment_req.value.status = 'CLOSE';
+  fin_payment_req.value.details.forEach((x)=>{
+    x.status="DONE";
+  });
+
+  let idx= props.p_data.map((x)=>x.id).indexOf(fin_payment_req.value.id);
+  if(idx>-1){
+    props.p_data.splice(idx,1,{...fin_payment_req.value});    
+  }
+
+  display({ show: true, status: "Success", message: "PAID IS DONE" });
+}
 </script>

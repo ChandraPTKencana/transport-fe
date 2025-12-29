@@ -96,6 +96,10 @@
         phone_number: "",
         photo:""
     };
+  },
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,     // 🔥 penting untuk dashboard / auth page
   });
 
 const photo_input = ref<HTMLInputElement | null>(null);

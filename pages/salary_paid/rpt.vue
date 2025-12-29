@@ -142,9 +142,23 @@ const { data: dt_async } = await useAsyncData(async () => {
   }
   rpt_salarys = data.value.data;
   return {rpt_salarys};
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ rpt_salarys: [] }),     // 🔥 penting untuk dashboard / auth page
+  });
 
-const rpt_salarys = ref(dt_async.value.rpt_salarys);
+const rpt_salarys = ref([]);
+watch(
+  () => dt_async.value?.rpt_salarys,
+  (val) => {
+    if (val) {
+      rpt_salarys.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 // const popup_request = ref(false);
 
 const search = ref("");

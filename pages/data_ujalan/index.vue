@@ -54,7 +54,7 @@
           </button> -->
         </div>
       </div>
-
+      
       <TableView :thead="fields_thead" :selected="selected" @setSelected="selected = $event" :tbody="ujalans" :fnCallData="callData" :scrolling="scrolling" @setScrollingPage="scrolling.page=$event"  @doFilter="searching()" :rowBgColor="rowBgColor">
         <template #[`val`]="{item}">
           <IconsLine v-if="!item.val"/>
@@ -227,9 +227,24 @@ const { data: dt_async } = await useAsyncData(async () => {
 
   useCommonStore().loading_full = false;
   return { ujalans };
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ ujalans: [] }),     // 🔥 penting untuk dashboard / auth page
+  });
 
-const ujalans = ref(dt_async.value.ujalans || []);
+const ujalans = ref([]);
+
+watch(
+  () => dt_async.value?.ujalans,
+  (val) => {
+    if (val) {
+      ujalans.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 
 const sort = ref({
   field: "tanggal",

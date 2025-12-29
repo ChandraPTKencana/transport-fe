@@ -183,9 +183,24 @@ const { data: dt_async } = await useAsyncData(async () => {
 
   useCommonStore().loading_full = false;
   return { extra_moneys };
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ ujalans: [] }),     // 🔥 penting untuk dashboard / auth page
+  });
 
-const extra_moneys = ref(dt_async.value.extra_moneys || []);
+const extra_moneys = ref([]);
+
+watch(
+  () => dt_async.value?.extra_moneys,
+  (val) => {
+    if (val) {
+      extra_moneys.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 
 const sort = ref({
   field: "tanggal",

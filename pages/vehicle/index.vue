@@ -134,7 +134,8 @@ params._TimeZoneOffset = new Date().getTimezoneOffset();
 
 
 const token = useDynamicPathCookie('token');
-const { data: vehicles } = await useAsyncData(async () => {
+const { data: dt_async } = await useAsyncData(async () => {
+  let vehicles = [];
   useCommonStore().loading_full = true;
   const { data, error, status } = await useMyFetch("/vehicles", {
     method: 'get',
@@ -152,8 +153,26 @@ const { data: vehicles } = await useAsyncData(async () => {
     return [];
   }
 
-  return data.value.data;
-});
+  vehicles = data.value.data;
+  return {vehicles};
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ vehicles: [] }),     // 🔥 penting untuk dashboard / auth page
+  });
+
+  const vehicles = ref([]);
+
+watch(
+  () => dt_async.value?.vehicles,
+  (val) => {
+    if (val) {
+      vehicles.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 
 
 const search = ref("");

@@ -1,0 +1,10 @@
+nuxt generate --no-ssr
+
+Di nuxt.config.js:
+
+export default {
+  fetch: {
+    client: true,
+    server: false
+  }
+}

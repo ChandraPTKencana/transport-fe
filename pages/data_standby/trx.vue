@@ -340,9 +340,25 @@ const { data: dt_async } = await useAsyncData(async () => {
 
   useCommonStore().loading_full = false;
   return { standby_trxs };
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ standby_trxs: [] }),
+         // 🔥 penting untuk dashboard / auth page
+  });
 
-const standby_trxs = ref(dt_async.value.standby_trxs || []);
+const standby_trxs = ref([]);
+
+watch(
+  () => dt_async.value?.standby_trxs,
+  (val) => {
+    if (val) {
+      standby_trxs.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 // const list_cost_center = ref([]);
 // const online_status=ref(false);
 // const fnLoadDBData = async () => {

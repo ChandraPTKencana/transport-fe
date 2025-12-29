@@ -118,9 +118,23 @@ const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = false;
 
   return { locations };
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ locations: [] }),     // 🔥 penting untuk dashboard / auth page
+  });
 
-const locations = ref(dt_async.value.locations || []);
+const locations = ref([]);
+watch(
+  () => dt_async.value?.locations,
+  (val) => {
+    if (val) {
+      locations.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 
 const location = ref("");
 

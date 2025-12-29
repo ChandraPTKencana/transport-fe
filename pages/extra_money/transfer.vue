@@ -320,9 +320,22 @@ const { data: dt_async } = await useAsyncData(async () => {
   extra_money_trxs = data1.data.value.data;
 
   return { extra_money_trxs };
-});
-const extra_money_trxs = ref(dt_async.value.extra_money_trxs || []);
-
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ extra_money_trxs: [] }),     // 🔥 penting untuk dashboard / auth page
+  });
+const extra_money_trxs = ref([]);
+watch(
+  () => dt_async.value?.extra_money_trxs,
+  (val) => {
+    if (val) {
+      extra_money_trxs.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 const field_errors = ref({})
 
 // const extra_money_trxs = ref(dt_async.value.extra_money_trxs || []);

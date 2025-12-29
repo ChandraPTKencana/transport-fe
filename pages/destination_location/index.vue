@@ -183,9 +183,23 @@ const { data: dt_async } = await useAsyncData(async () => {
 
   useCommonStore().loading_full = false;
   return { destination_locations };
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ destination_locations: [] }),     // 🔥 penting untuk dashboard / auth page
+  });
 
-const destination_locations = ref(dt_async.value.destination_locations || []);
+const destination_locations = ref([]);
+watch(
+  () => dt_async.value?.destination_locations,
+  (val) => {
+    if (val) {
+      destination_locations.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 
 const sort = ref({
   field: "tanggal",

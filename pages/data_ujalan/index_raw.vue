@@ -178,9 +178,24 @@ const { data: dt_async } = await useAsyncData(async () => {
   }
   ujalans = data.value.data;
   return {ujalans};
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,     // 🔥 penting untuk dashboard / auth page
+    default: () => ({ ujalans: [] }),
+  });
 
-const ujalans = ref(dt_async.value.ujalans);
+const ujalans = ref([]);
+
+watch(
+  () => dt_async.value?.ujalans,
+  (val) => {
+    if (val) {
+      ujalans.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 // const popup_request = ref(false);
 
 const search = ref("");

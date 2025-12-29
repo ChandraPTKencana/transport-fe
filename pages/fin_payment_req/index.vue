@@ -11,7 +11,7 @@
 
         <button type="button" name="button" class="m-1 text-2xl "
           @click="form_view()">
-          <IconsEyes />
+          <IconsEdit />
         </button>
 
         <button type="button" name="button" class="m-1 text-2xl "
@@ -72,6 +72,8 @@
                 <th>App</th>
                 <!-- <th>No</th> -->
                 <th>ID</th>
+                <th>Status</th>
+                <th>Batch no</th>
                 <th>Created At</th>
                 <th>Updated At</th>
               </tr>
@@ -87,6 +89,8 @@
                 </td>
                 <!-- <td>{{ index + 1 }}</td> -->
                 <td class="bold">{{ fin_payment_req.id }}</td>
+                <td class="bold">{{ fin_payment_req.status }}</td>
+                <td class="bold">{{ fin_payment_req.batch_no }}</td>
                 <!-- <td>{{ pointFormat(fin_payment_req.harga) }}</td> -->
                 <td>{{ fin_payment_req.created_at ? $moment(fin_payment_req.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <td>{{ fin_payment_req.updated_at ? $moment(fin_payment_req.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
@@ -105,9 +109,10 @@
         </div>
       </template>
     </PopupMini> -->
-    <LazyFormsFinPaymentReqTrxTrps :show="forms_fin_payment_req_show" :fnClose="()=>{forms_fin_payment_req_show=false}" :id="forms_fin_payment_req_id" :p_data="fin_payment_reqs"/>
-    <LazyFormsFinPaymentReqView :show="forms_fin_payment_req_view_show" :fnClose="()=>{forms_fin_payment_req_view_show=false}" :id="forms_fin_payment_req_view_id"/>
+    <!-- <LazyFormsFinPaymentReqTrxTrps :show="forms_fin_payment_req_show" :fnClose="()=>{forms_fin_payment_req_show=false}" :id="forms_fin_payment_req_id" :p_data="fin_payment_reqs"/> -->
+    <!-- <LazyFormsFinPaymentReqView :show="forms_fin_payment_req_view_show" :fnClose="()=>{forms_fin_payment_req_view_show=false}" :id="forms_fin_payment_req_view_id"/> -->
     <LazyFormsFinPaymentReqValidasi :show="forms_fin_payment_req_valid_show" :fnClose="()=>{forms_fin_payment_req_valid_show=false}" :id="forms_fin_payment_req_valid_id" :p_data="fin_payment_reqs"/>
+    <LazyFormsFinPaymentReq :show="forms_fin_payment_req_show" :fnClose="()=>{forms_fin_payment_req_show=false}" :id="forms_fin_payment_req_id" :p_data="fin_payment_reqs"/>
   
   </div>
 </template>
@@ -163,9 +168,24 @@ const { data: dt_async } = await useAsyncData(async () => {
   }
   fin_payment_reqs = data.value.data;
   return {fin_payment_reqs};
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ fin_payment_reqs: [] }),     // 🔥 penting untuk dashboard / auth page
+  });
 
-const fin_payment_reqs = ref(dt_async.value.fin_payment_reqs);
+const fin_payment_reqs = ref([]);
+
+watch(
+  () => dt_async.value?.fin_payment_reqs,
+  (val) => {
+    if (val) {
+      fin_payment_reqs.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 // const popup_request = ref(false);
 
 const search = ref("");
@@ -282,18 +302,16 @@ const form_add = () => {
 const { display } = useAlertStore();
 const { show, status, message } = storeToRefs(useAlertStore());
 
-const forms_fin_payment_req_view_show =  ref(false);
-const forms_fin_payment_req_view_id = ref(0);
+// const forms_fin_payment_req_view_show =  ref(false);
+// const forms_fin_payment_req_view_id = ref(0);
 const form_view = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    forms_fin_payment_req_view_id.value = fin_payment_reqs.value[selected.value].id;
-    forms_fin_payment_req_view_show.value = true;
+    forms_fin_payment_req_id.value = fin_payment_reqs.value[selected.value].id;
+    forms_fin_payment_req_show.value = true;
   }
 };
-
-
 
 const forms_fin_payment_req_valid_show =  ref(false);
 const forms_fin_payment_req_valid_id = ref(0);

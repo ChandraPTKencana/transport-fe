@@ -117,8 +117,9 @@ params._TimeZoneOffset = new Date().getTimezoneOffset();
 
 
 const token = useDynamicPathCookie('token');
-const { data: users } = await useAsyncData(async () => {
+const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
+  let users = [];
   const { data, error, status } = await useMyFetch("/users", {
     method: 'get',
     headers: {
@@ -135,8 +136,26 @@ const { data: users } = await useAsyncData(async () => {
     return [];
   }
 
-  return data.value.data;
-});
+  users = data.value.data;
+  return {users};
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ users: [] }),     // 🔥 penting untuk dashboard / auth page
+  });
+
+  const users = ref([]);
+
+watch(
+  () => dt_async.value?.users,
+  (val) => {
+    if (val) {
+      users.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 
 
 const search = ref("");

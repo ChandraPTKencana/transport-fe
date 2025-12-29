@@ -175,11 +175,24 @@ const { data: dt_async } = await useAsyncData(async () => {
   }
   salary_bonuses = data.value.data;
   return {salary_bonuses};
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ salary_bonuses: [] }),     // 🔥 penting untuk dashboard / auth page
+  });
 
-const salary_bonuses = ref(dt_async.value.salary_bonuses);
+const salary_bonuses = ref([]);
 // const popup_request = ref(false);
-
+watch(
+  () => dt_async.value?.salary_bonuses,
+  (val) => {
+    if (val) {
+      salary_bonuses.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
 const search = ref("");
 const sort = ref({
   field: "created_at",

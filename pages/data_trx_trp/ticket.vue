@@ -506,18 +506,52 @@ const { data: dt_async } = await useAsyncData(async () => {
 
   return { trx_trps, list_vehicle , vehicles_allowed};
   // return { trx_trps };
-});
+},
+  {
+    lazy: true,        // 🔥 INI KUNCINYA
+    server: false,
+    default: () => ({ trx_trps: [],list_vehicle:[] , vehicles_allowed:[] }),     // 🔥 penting untuk dashboard / auth page
+  });
 
-const trx_trps = ref(dt_async.value.trx_trps || []);
+const trx_trps = ref([]);
+
+watch(
+  () => dt_async.value?.trx_trps,
+  (val) => {
+    if (val) {
+      trx_trps.value = [...val]; // clone agar aman
+    }
+  },
+  { immediate: true }
+);
+
 const list_vehicle = ref([]);
-dt_async.value.list_vehicle.forEach(e => {
-  list_vehicle.value.push({
-    id:e.id,
-    name:e.no_pol,
-    title:'',
-    checked:dt_async.value.vehicles_allowed.indexOf(e.id) > -1 ? true : false
-  })
-});
+// dt_async.value.list_vehicle.forEach(e => {
+//   list_vehicle.value.push({
+//     id:e.id,
+//     name:e.no_pol,
+//     title:'',
+//     checked:dt_async.value.vehicles_allowed.indexOf(e.id) > -1 ? true : false
+//   })
+// });
+
+
+watch(
+  () => dt_async.value?.list_vehicle,
+  (val) => {
+    if (val) {
+      val.forEach(e => {
+        list_vehicle.value.push({
+          id:e.id,
+          name:e.no_pol,
+          title:'',
+          checked:dt_async.value.vehicles_allowed.indexOf(e.id) > -1 ? true : false
+        })
+      });
+    }
+  },
+  { immediate: true }
+);
 
 // const list_vehicle = ref(dt_async.value.list_vehicle || []);
 // const list_ticket = ref(dt_async.value.list_ticket);
