@@ -11,8 +11,11 @@
           <IconsBurger v-else />
         </button>
         <header class="h-full flex flex-col overflow-hidden">
-          <div class="p-2">
-            <input type="text" v-model="search" placeholder="search">
+          <div class="p-2 relative">
+            <input ref="searchInput" type="text" v-model="search" placeholder="search">
+            <div class="absolute z-10 top-3 right-3 bg-white cursor-pointer" @click="clearAndFocus()">
+              <IconsTimes class="text-red-900 text-3xl"/>
+            </div>
           </div>
           <ul class="grow overflow-auto">
             <template v-for="v in menuListFiltered">
@@ -307,6 +310,24 @@ const menuList =[
     icon:'IconsMoney'
   },
   {
+    activeMenu:"/potongan",
+    showing:useUtils().checkPermission('potongan_mst.views'),
+    title:"Potongan",
+    icon:'IconsMoneySlash'
+  },
+  {
+    activeMenu:"/extra_money",
+    showing:useUtils().checkPermission('extra_money.views'),
+    title:"Extra Money",
+    icon:'IconsMoneyMulti'
+  },
+  {
+    activeMenu:"/extra_money/trx",
+    showing:useUtils().checkPermission('extra_money_trx.views'),
+    title:"Extra Money Trx",
+    icon:'IconsMoneyMulti'
+  },
+  {
     activeMenu:"/data_trx_trp",
     showing:useUtils().checkPermission('trp_trx.views'),
     title:"Trx Trp",
@@ -349,36 +370,6 @@ const menuList =[
     icon:'IconsMoney'
   },
   {
-    activeMenu:"/report_trx_trp",
-    showing:useUtils().checkPermission('trp_trx.report.views'),
-    title:"Report Susut",
-    icon:'IconsFileCopy'
-  },
-  {
-    activeMenu:"/report_trx_trp/finance",
-    showing:useUtils().checkPermission('trp_trx.report.views'),
-    title:"Report Fin",
-    icon:'IconsFileCopy'
-  },
-  {
-    activeMenu:"/report/ramp",
-    showing:useUtils().checkPermission('report.ramp.views'),
-    title:"Rpt Hsl Trip",
-    icon:'IconsFileCopy'
-  },
-  {
-    activeMenu:"/report/ast_n_driver",
-    showing:useUtils().checkPermission('report.ast_n_driver.views'),
-    title:"Rpt Gaji Supir & Kernet",
-    icon:'IconsFileCopy'
-  },
-  {
-    activeMenu:"/report/distance",
-    showing:useUtils().checkPermission('report.distance.views'),
-    title:"Rpt Jarak",
-    icon:'IconsFileCopy'
-  },
-  {
     activeMenu:"/vehicle",
     showing:useUtils().checkPermission('vehicle.views'),
     title:"Vehicle",
@@ -390,24 +381,7 @@ const menuList =[
     title:"Employee",
     icon:'IconsPerson'
   },
-  {
-    activeMenu:"/potongan",
-    showing:useUtils().checkPermission('potongan_mst.views'),
-    title:"Potongan",
-    icon:'IconsMoneySlash'
-  },
-  {
-    activeMenu:"/extra_money",
-    showing:useUtils().checkPermission('extra_money.views'),
-    title:"Extra Money",
-    icon:'IconsMoneyMulti'
-  },
-  {
-    activeMenu:"/extra_money/trx",
-    showing:useUtils().checkPermission('extra_money_trx.views'),
-    title:"Extra Money Trx",
-    icon:'IconsMoneyMulti'
-  },
+  
   {
     activeMenu:"/salary_paid",
     showing:useUtils().checkPermission('salary_paid.views'),
@@ -438,9 +412,46 @@ const menuList =[
     title:"Permission Group",
     icon:'IconsPeople'
   },
+  {
+    activeMenu:"/report_trx_trp",
+    showing:useUtils().checkPermission('trp_trx.report.views'),
+    title:"Report Susut",
+    icon:'IconsFileCopy'
+  },
+  {
+    activeMenu:"/report_trx_trp/finance",
+    showing:useUtils().checkPermission('trp_trx.report.views'),
+    title:"Report Fin",
+    icon:'IconsFileCopy'
+  },
+  {
+    activeMenu:"/report/ramp",
+    showing:useUtils().checkPermission('report.ramp.views'),
+    title:"Rpt Hsl Trip",
+    icon:'IconsFileCopy'
+  },
+  {
+    activeMenu:"/report/ast_n_driver",
+    showing:useUtils().checkPermission('report.ast_n_driver.views'),
+    title:"Rpt Gaji Supir & Kernet",
+    icon:'IconsFileCopy'
+  },
+  {
+    activeMenu:"/report/distance",
+    showing:useUtils().checkPermission('report.distance.views'),
+    title:"Rpt Jarak",
+    icon:'IconsFileCopy'
+  },
 ];
 
 const search = ref('');
+const searchInput = ref(null)
+
+const clearAndFocus = async () => {
+  search.value = ''
+  await nextTick()
+  searchInput.value?.focus()
+}
 const menuListFiltered = computed(()=>{
   if(search.value!='')
   return menuList.filter((x)=>{return x.showing && x.title.toLowerCase().includes(search.value.toLowerCase())})

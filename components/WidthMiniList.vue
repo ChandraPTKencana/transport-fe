@@ -1,13 +1,13 @@
 <template>
   <div class="relative">
-    <div v-if="disabled" class="absolute w-full h-full">
+    <div v-if="disabled" class="absolute w-full h-full bg-gray-400 rounded">
 
     </div>
-    <div v-if="selected.id==''"  class="card-border cursor-pointer" @click="openSearch()">
+    <div v-if="selected.id==''"  class="card-border cursor-pointer rounded" @click="openSearch()">
 
 
     </div>
-    <div v-else class="card-border cursor-pointer !flex flex-row flex-nowrap">
+    <div v-else class="card-border cursor-pointer !flex flex-row flex-nowrap rounded">
       <div class="flex flex-wrap items-center grow" @click="openSearch()">
         <WidthMiniPart :selected="selected" />
       </div>

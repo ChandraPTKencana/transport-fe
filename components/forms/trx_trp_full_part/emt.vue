@@ -71,11 +71,11 @@
                     </div>
                     <div class="w-full flex">
                         <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
-                            <AttachmentSingle :label="'Attachment'" :value="emt.attachment_1_preview"/>
+                            <AttachmentSingleV1 :label="'Attachment'" :link="emt.attachment_1_preview"/>
                         </div>
     
                         <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
-                            <AttachmentSingle :label="'Attachment'" :value="emt.attachment_2_preview"/>
+                            <AttachmentSingleV1 :label="'Attachment'" :link="emt.attachment_2_preview"/>
                         </div>
                     </div>
                     <div class="w-full flex flex-row flex-wrap">

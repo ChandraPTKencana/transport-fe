@@ -8,3 +8,5 @@ export default {
     server: false
   }
 }
+
+potongan status OPEN,CLOSE,DONE

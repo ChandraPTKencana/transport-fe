@@ -11,27 +11,27 @@
                 @click="downloadExcel()">
                 <IconsTable2Column />
               </button>-->
-              <button v-show="[4].indexOf(show_send)>-1" type="button" name="button" class="m-1 " :disabled="fin_payment_req.status=='CLOSE'"
+              <button v-show="detailStatus('TRANSFER_PROCESS') && fin_payment_req.status=='WAIT'" type="button" name="button" class="m-1 " :disabled="fin_payment_req.status=='CLOSE'"
                 @click="frmBatchNo()">
                 Batch No : {{ fin_payment_req.batch_no }}
               </button>
 
-              <button v-show="[4].indexOf(show_send)>-1" type="button" name="button" class="m-1 bg-violet-600 text-white"
+              <button v-show="detailStatus('TRANSFER_PROCESS')" type="button" name="button" class="m-1 bg-violet-600 text-white"
                 @click="setPaidDone()">
                 Set Paid Done
               </button>
 
-              <button v-if="[0,1,3].indexOf(show_send)>-1" type="button" name="button" class="m-1 text-2xl "
+              <button v-if="!(detailStatus('TRANSFER_PROCESS') || detailStatus('INQUIRY_PROCESS'))" type="button" name="button" class="m-1 text-2xl "
                 @click="form_add()">
                 <IconsPlus />
               </button>
 
-              <button v-show="[1].indexOf(show_send)>-1" type="button" name="button" class="m-1 text-2xl "
+              <button v-show="detailStatus('READY')" type="button" name="button" class="m-1 text-2xl "
                 @click="genCSVandSend()">
                 <IconsSend />
               </button>
 
-              <button v-show="[2].indexOf(show_send)>-1" type="button" name="button" class="m-1 text-2xl "
+              <button v-show="detailStatus('INQUIRY_PROCESS')" type="button" name="button" class="m-1 text-2xl "
                 @click="getUpdate()">
                 <IconsCloudDownload />
               </button> 
@@ -285,6 +285,12 @@ const total_jumlah = computed(()=>{
   return temp;
 })
 
+const detailStatus = (v)=>{
+  let lngt = fin_payment_req.value.details.length;
+  if(lngt==0 && v=='READY') return true
+  return fin_payment_req.value.details.filter((x)=>x.status==v).length == fin_payment_req.value.details.length ? true : false;
+};
+
 const show_send = computed(()=>{
   let showit = 0;
 
@@ -446,11 +452,10 @@ const getUpdate = async () => {
     }
   });
 
+  fin_payment_req.value.status='WAIT';
+
   // console.log(data.value.details);
   // console.log(details.value);
-
-  
-  
 
   // details.value.forEach((x)=>{
   //   x.status="INQUIRY_PROCESS";

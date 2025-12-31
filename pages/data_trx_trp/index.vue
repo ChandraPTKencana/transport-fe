@@ -79,6 +79,25 @@
           </button>
         </div>
         <div class="flex">
+          <div class="m-1 p-1 border-2 border-gray-600 whitespace-nowrap flex flex-col">
+            <span class="w-full text-[10px] -mt-[3px]">
+              No Paid
+            </span>
+            <span class="w-full text-xs font-bold -mt-1">
+              Rp. {{ pointFormat(no_paid || 0) }}
+              <!-- Rp. {{ no_paid }} -->
+            </span>
+          </div>
+
+          <div class="m-1 p-1 border-2 border-blue-600 text-blue-600 whitespace-nowrap flex flex-col">
+            <span class="w-full text-[10px] -mt-[3px]">
+              All Total
+            </span>
+            <span class="w-full text-xs font-bold -mt-1">
+              Rp. {{ pointFormat(all_price || 0) }}
+            </span>
+          </div>
+
           <button type="button" name="button" class="m-1 text-2xl"
             @click="linkToExtraMoneyTrx()">
             <IconsChain />
@@ -296,6 +315,7 @@ import { useAuthStore } from '~/store/auth';
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
+import { computed } from 'vue';
 const { pointFormat } = useUtils();
 
 definePageMeta({
@@ -1023,7 +1043,8 @@ const fields_thead=ref([
   {key:"uj_xto",label:"Tujuan",filter_on:1,type:'string'},
   {key:"uj_asst_opt",label:"Info",filter_on:1,type:'select',select_item:['DENGAN KERNET','TANPA KERNET']},
   {key:"uj_tipe",label:"Tipe",filter_on:1,type:'string'},
-  {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK','LAIN','TUNGGU']},
+  {key:"jenis",label:"Jenis",filter_on:1,type:'string'},
+  // {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK','LAIN','TUNGGU']},
   {key:"uj_harga",label:"Amount",class:" justify-end",filter_on:1,type:"number"},
   {key:"transition",label:"Peralihan",childs:[
     {key:"transition_type",label:"Type",type:'select', filter_on:1,select_item:['To','From']},
@@ -1211,4 +1232,14 @@ const downloadExcelWUj = async()=>{
   }
   downloadFile(data.value);
 }
+
+
+const no_paid = computed(()=>{
+  let filtered= trx_trps.value.filter((x)=>x.received_payment == 0);
+  return filtered.reduce((temp,val)=>temp+ parseFloat(val.uj.harga),0);
+})
+
+const all_price = computed(()=>{
+  return trx_trps.value.reduce((temp,val)=>temp+ parseFloat(val.uj.harga),0);
+})
 </script>

@@ -28,6 +28,12 @@
               </div>
 
               <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <label for="">Trip Bonus Supir</label>
+                <div class="card-border disabled">
+                  {{ pointFormat(ujalan.bonus_trip_supir || 0) }}
+                </div>
+              </div>
+              <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Trip Bonus Kernet</label>
                 <div class="card-border disabled">
                   {{ pointFormat(ujalan.bonus_trip_kernet||0) }}
@@ -41,7 +47,7 @@
                 </div>
               </div>
 
-              <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <!-- <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">KM Range</label>
                 <div class="w-full" >
                   <InputPointFormat
@@ -51,7 +57,7 @@
                     @input="ujalan.km_range = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.km_range }}</p>
-              </div>
+              </div> -->
 
               <div class="w-1/2 sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Harga</label>

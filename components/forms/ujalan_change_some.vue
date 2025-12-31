@@ -1,7 +1,7 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Form Batas Persen Susut'" :fn="fnClose" class="w-100 flex align-items-center"
+      <HeaderPopup :title="'Form Change Some'" :fn="fnClose" class="w-100 flex align-items-center"
         style="color:white;" />
 
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
@@ -21,14 +21,7 @@
                   {{ ujalan.jenis }}
                 </div>
               </div>
-
-              <!-- <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
-                <label for="">Trip Bonus Supir</label>
-                <div class="card-border disabled">
-                  {{ pointFormat(ujalan.bonus_trip_supir||0) }}
-                </div>
-              </div> -->
-
+              
               <div class="w-1/2 sm:w-4/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Trip Bonus Supir</label>
                 <div class="w-full" >
@@ -36,7 +29,7 @@
                     class="w-full h-full p-1" 
                     type="text" 
                     :value="ujalan.bonus_trip_supir || 0" 
-                    @input="ujalan.bonus_trip_supir = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"/>
+                    @input="ujalan.bonus_trip_supir = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled || ['CPO','PK'].indexOf(ujalan.jenis) == -1"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.bonus_trip_supir }}</p>
               </div>
@@ -48,9 +41,21 @@
                     class="w-full h-full p-1" 
                     type="text" 
                     :value="ujalan.bonus_trip_kernet || 0" 
-                    @input="ujalan.bonus_trip_kernet = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"/>
+                    @input="ujalan.bonus_trip_kernet = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled || ['CPO','PK'].indexOf(ujalan.jenis) == -1"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.bonus_trip_kernet }}</p>
+              </div>
+
+              <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+                <label for="">KM Range</label>
+                <div class="w-full" >
+                  <InputPointFormat
+                    class="w-full h-full p-1" 
+                    type="text" 
+                    :value="ujalan.km_range || 0" 
+                    @input="ujalan.km_range = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"/>
+                </div>
+                <p class="text-red-500">{{ field_errors.km_range }}</p>
               </div>
 
               <div class="w-1/2 sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
@@ -74,7 +79,13 @@
                 </div>
               </div>
 
-              <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
+                <label for="">Dest. Location</label>
+                <WidthMiniList :arr="list_dest_loc" :selected="selected_destination_location" :pure="selected_temp_destination_location" @setSelected="selected_destination_location=$event" :disabled="disabled || ['TBS','TBSK'].indexOf(ujalan.jenis) == -1"/>
+                <p class="text-red-500">{{ field_errors.destination_location_id }}</p>
+              </div>
+
+              <div v-if="useUtils().checkPermissions(['ujalan.batas_persen_susut.full_act']) " class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Batas % Susut</label>
                 <div class="w-full" >
                   <!-- <InputPointFormat
@@ -86,13 +97,6 @@
                 </div>
                 <p class="text-red-500">{{ field_errors.batas_persen_susut }}</p>
               </div>
-
-              <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
-                <label for="">Dest. Location</label>
-                <WidthMiniList :arr="list_dest_loc" :selected="selected_destination_location" :pure="selected_temp_destination_location" @setSelected="selected_destination_location=$event" :disabled="disabled"/>
-                <p class="text-red-500">{{ field_errors.destination_location_id }}</p>
-              </div>
-
             </div>
           </div>
           
@@ -189,9 +193,11 @@ const doSave = async () => {
   field_errors.value = {};
 
   const data_in = new FormData();
+
   data_in.append("batas_persen_susut", ujalan.value.batas_persen_susut);
   data_in.append("bonus_trip_supir", ujalan.value.bonus_trip_supir);
   data_in.append("bonus_trip_kernet", ujalan.value.bonus_trip_kernet);
+  data_in.append("km_range", ujalan.value.km_range);
   data_in.append("jenis", ujalan.value.jenis);
   data_in.append("destination_location_id", selected_destination_location.value.id);
   
@@ -204,7 +210,7 @@ const doSave = async () => {
     data_in.append("_method", "PUT");
   }
 
-  const { data, error, status } = await useMyFetch("/ujalan/batas_persen_susut", {
+  const { data, error, status } = await useMyFetch("/ujalan/change_some", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -221,7 +227,6 @@ const doSave = async () => {
 
   ujalan.value.destination_location     = JSON.parse(JSON.stringify(selected_destination_location.value._raw));
 
-  
   if(id<=0){
     ujalan.value.id = data.value.id;
     ujalan.value.created_at = data.value.created_at;

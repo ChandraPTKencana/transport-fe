@@ -17,9 +17,12 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = import.meta.url + 'pdfjs-dist/build/pdf
 const props = defineProps({
     pdfBase64: {
         type: String,
-        required: true,
+        required: false,
     },
-
+    pdfObjUrl:{
+        type: String,
+        required: false,
+    }
 })
 const canvas = ref(null);
 const numPages = ref(null);
@@ -55,11 +58,17 @@ const getAllPage=async(pdf,$page)=>{
 
     if($page<numPages.value) getAllPage(pdf,$page);
 }
+let loadingTask="";
 
 onMounted(async() => {
-    let pdfasarray = convertDataURIToBinary(props.pdfBase64);
+    let pdfasarray="";
+    if(props.pdfObjUrl){
+        pdfasarray = props.pdfObjUrl;
+    }else{
+        pdfasarray = convertDataURIToBinary(props.pdfBase64);
+    }
     // const arrayBuffer = atob(base64Pdf.value).split('').map(char => char.charCodeAt(0));
-    const loadingTask = pdfjsLib.getDocument(pdfasarray);
+    loadingTask = pdfjsLib.getDocument(pdfasarray);
     const pdf = await loadingTask.promise;
 
     numPages.value = pdf._pdfInfo.numPages;
@@ -119,6 +128,9 @@ onMounted(async() => {
 //   immediate: true
 // });
 
+onUnmounted(() => {
+  loadingTask?.destroy()
+})
 </script>
 
 <style>

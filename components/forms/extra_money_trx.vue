@@ -65,11 +65,11 @@
             </div>
             
             <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
-              <AttachmentSingle :label="'Attachment'" :value="extra_money_trx.attachment_1_preview" @setFile="extra_money_trx.attachment_1=$event"  @setPreview="extra_money_trx.attachment_1_preview=$event" :can_remove="!disabled" :disabled="disabled"/>
+              <AttachmentSingleV1 :label="'Attachment'" :link="extra_money_trx.attachment_1_preview" @setFile="extra_money_trx.attachment_1=$event" :show="show"  @setPreview="extra_money_trx.attachment_1_preview=$event" :can_remove="!disabled" :disabled="disabled"/>
             </div>
 
             <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
-              <AttachmentSingle :label="'Attachment'" :value="extra_money_trx.attachment_2_preview" @setFile="extra_money_trx.attachment_2=$event"  @setPreview="extra_money_trx.attachment_2_preview=$event" :can_remove="true"/>
+              <AttachmentSingleV1 :label="'Attachment'" :link="extra_money_trx.attachment_2_preview" @setFile="extra_money_trx.attachment_2=$event" :show="show"  @setPreview="extra_money_trx.attachment_2_preview=$event" :can_remove="true"/>
             </div>
           </div>
         </div>

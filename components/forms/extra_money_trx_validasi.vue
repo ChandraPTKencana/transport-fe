@@ -56,11 +56,13 @@
 
               <div class="w-full flex">
                 <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
-                  <AttachmentSingle :label="'Attachment'" :value="extra_money_trx.attachment_1_preview"/>
+                  <AttachmentSingleV1  :label="'Attachment'" :link="extra_money_trx.attachment_1_preview" />
+                  
                 </div>
   
                 <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
-                  <AttachmentSingle :label="'Attachment'" :value="extra_money_trx.attachment_2_preview"/>
+                  <AttachmentSingleV1  :label="'Attachment'" :link="extra_money_trx.attachment_2_preview" />
+                  <!-- <AttachmentSingle :label="'Attachment'" :value="extra_money_trx.attachment_2_preview"/> -->
                 </div>
               </div>
 
@@ -225,6 +227,8 @@ const extra_money_trx_temp = {
   },
   extra_money_trx:{
     id:0,
+    attachment_1_preview:'',
+    attachment_2_preview:'',
   },
   payment_method:{
     name:""

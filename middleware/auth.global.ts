@@ -38,7 +38,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   if (to?.name !== 'login' && done_get_user_info.value == false) {
     const { checkUser } = useAuthStore();
-    checkUser()
+    await checkUser()
       .then((res) => {
       }).catch((error) => {
       })
