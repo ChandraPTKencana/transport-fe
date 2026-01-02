@@ -6,63 +6,140 @@
 
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
           <div class="w-full flex flex-col items-center grow overflow-auto">
+            <div class="w-full flex p-2">
+              Batch No : {{ fin_payment_req.batch_no }}
+            </div>
             <div class="w-full flex p-1 2xl:overflow-hidden justify-between flex-wrap">
               <div class="w-full" role="sticky">
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
                   <thead >
                   <tr class="sticky top-0 !z-[2]">
-                    <td :colspan="7" class="!bg-slate-800 text-white font-bold">
+                    <td :colspan="18" class="!bg-slate-800 text-white font-bold">
                       List Transaksi
                     </td>
                   </tr>
                   <tr class="sticky top-7 !z-[2]">
-                    <th rowspan="2" class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
-                    <th colspan="2">Transaction</th>
-                    <th colspan="2">PVR</th>
-                    <th colspan="2">PV</th>
-                  </tr>
-                  <tr class="sticky top-[60px] !z-[2]">
-                    <th>ID</th>
-                    <th>Amount</th>
-                    <th>No</th>
-                    <th>Amount</th>
-                    <th>No</th>
-                    <th>Amount</th>
+                    <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
+                    <th class="min-w-[50px] !w-[50px] max-w-[50px] ">ID</th>
+                    <th>No Trx</th>
+                    <th>Tujuan</th>
+                    <th>Produk</th>
+                    <th class="min-w-[75px] !w-[75px] max-w-[75px] ">No Pol</th>
+                    <th>Jabatan</th>
+                    <th>Nama</th>
+                    <th>Jumlah <br> ({{ pointFormat( total_nominal || 0) }})  </th>
+                    <th>Potongan <br> ({{ pointFormat( total_potongan_trx_ttl) }})</th>
+                    <th>ExtraMoney <br> ({{ pointFormat( total_extra_money_trx_ttl) }})</th>
+                    <th></th>
+                    <th>No Rek</th>
+                    <th>Nama Di Bank</th>
+                    <th>Nominal Transfer <br> ({{ pointFormat(total_jumlah || 0) }})</th>
+                    <th>Status </th>
+                    <th>Aksi </th>
+                    <th>Alasan Gagal </th>
                   </tr>
                 </thead>
                   <tbody ref="to_move">
-                    <template v-for="(detail, index) in details" :key="index">
+                    <template v-for="(detail, index) in fin_payment_req.details" :key="index">
                       <!-- <tr v-if="detail.p_status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)"> -->
-                      <tr v-if="detail.p_status!='Remove'"  :data-index="index">
-                        <td>{{ index + 1 }}.</td>
+                        <tr>
+                        <td class="cell min-w-[50px] !w-[50px] max-w-[50px]">
+                          <div class="w-full h-full flex items-center justify-center">
+                            {{ detail.no }}
+                          </div>
+                        </td>
                         <td class="cell min-w-[50px] !w-[50px] max-w-[50px]">
                           <div class="w-full h-full flex items-center justify-center">
                             {{ detail.id }}
                           </div>
                         </td>
                         <td class="cell">
-                          <div class="w-full h-full flex items-center justify-center">
-                            {{ pointFormat(detail.amount || 0) }}   
+                          <div class="w-full h-full flex items-center justify-center p-2">
+                            <!-- {{ detail.jabatan !='KERNET' ? detail.trx_trp_id :''  }}    -->
+
+                            <div class="pointer p-0 bg-red-500 text-white rounded flex items-center justify-center">
+                              <span class="px-2">
+                                {{ detail.trx_trp_id }} 
+                              </span>
+                            </div>
+                            
                           </div>
                         </td>
                         <td class="cell min-w-[150px] !w-[150px] max-w-[150px]">
                           <div class="w-full h-full flex items-center justify-center">
-                            {{ detail.pvr_no }}   
+                            {{ detail.jabatan !='KERNET' ? detail.tujuan :''  }}   
                           </div>
                         </td>
                         <td class="cell">
                           <div class="w-full h-full flex items-center justify-center">
-                            {{ pointFormat(detail.pvr_total || 0) }}   
+                            {{ detail.jabatan !='KERNET' ? detail.produk :''  }}    
+                          </div>
+                        </td>
+                        
+                        <td class="cell">
+                          <div class="w-full h-full flex items-center justify-center">
+                            {{ detail.jabatan !='KERNET' ? detail.no_pol :''  }}   
                           </div>
                         </td>
                         <td class="cell">
                           <div class="w-full h-full flex items-center justify-center">
-                            {{ detail.pv_no }}   
+                            {{ detail.jabatan }}   
                           </div>
                         </td>
                         <td class="cell">
-                          <div class="w-full h-full flex items-center justify-center unselectable">                       
-                            {{ pointFormat(detail.pv_total || 0) }}   
+                          <div class="w-full h-full flex items-center justify-center">
+                            {{ detail.nama }}   
+                          </div>
+                        </td>
+                        <td class="cell">
+                          <div class="w-full h-full flex items-center justify-end p-2">                       
+                            {{ pointFormat(detail.jumlah || 0) }}   
+                          </div>
+                        </td>
+                        <td class="cell">
+                          <div class="w-full h-full flex items-center justify-end p-2">                       
+                            {{ pointFormat(detail.potongan_trx_ttl) }}   
+                          </div>
+                        </td>
+                        <td class="cell">
+                          <div class="w-full h-full flex items-center justify-end p-2">                       
+                            {{ pointFormat(detail.extra_money_trx_ttl) }}   
+                          </div>
+                        </td>
+                        <td>
+                          <div class="w-full h-full flex items-center justify-end p-2">                         
+                          </div>
+                        </td>
+                        <td class="cell">
+                          <div class="w-full h-full flex items-center justify-center">
+                            {{ detail.rek_no }}   
+                          </div>
+                        </td>
+                        <td class="cell">
+                          <div class="w-full h-full flex items-center justify-center">
+                            {{ detail.rek_name }}   
+                          </div>
+                        </td>
+                        <td class="cell">
+                          <div class="w-full h-full flex items-center justify-end p-1">
+                            {{ pointFormat(detail.jumlah || 0) }}  
+                          </div>
+                        </td>
+                        <td class="cell">
+                          <div class="w-full h-full flex items-center justify-end p-1">
+                            {{detail.status}}  
+                          </div>
+                        </td>
+                        <td class="cell">
+                          <div class="w-full h-full flex items-center justify-end p-1">
+                            <button v-if="detail.status=='INQUIRY_FAILED'" class="bg-yellow-400 rounded" @click.prevent="renewData(detail.id,index)">
+                              Renew Data
+                            </button>
+                          </div>
+                        </td>
+                        <td class="cell">
+                          <div class="w-full h-full flex items-center justify-end p-1">
+                            {{detail.failed_reason}}  
                           </div>
                         </td>
                       </tr>
@@ -258,6 +335,46 @@ watch(() => props.show, (newVal, oldVal) => {
   immediate: true
 });
 
+
+const total_nominal = computed(()=>{
+  let temp = 0;
+
+  fin_payment_req.value.details.forEach(e => {
+    temp += parseInt(e.nominal); 
+  });
+  
+  return temp;
+})
+
+const total_potongan_trx_ttl = computed(()=>{
+  let temp = 0;
+
+  fin_payment_req.value.details.forEach(e => {
+    temp += parseInt(e.potongan_trx_ttl);
+  });
+  
+  return temp;
+})
+
+const total_extra_money_trx_ttl = computed(()=>{
+  let temp = 0;
+
+  fin_payment_req.value.details.forEach(e => {
+    temp += parseInt(e.extra_money_trx_ttl);
+  });
+  
+  return temp;
+})
+
+const total_jumlah = computed(()=>{
+  let temp = 0;
+
+  fin_payment_req.value.details.forEach(e => {
+    temp += parseInt(e.jumlah); 
+  });
+  
+  return temp;
+})
 </script>
 <style scoped="">
 /* table.sticky thead th:nth-child(2) {

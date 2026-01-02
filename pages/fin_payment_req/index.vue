@@ -210,7 +210,7 @@ const date = ref({
 const inject_params = () => {
   params.like = "";
   if (search.value != "") {
-    params.like = `id:%${search.value}%`;
+    params.like = `id:%${search.value}%,status:%${search.value}%`;
   }
   params.sort = "";
   if (sort.value.field) {

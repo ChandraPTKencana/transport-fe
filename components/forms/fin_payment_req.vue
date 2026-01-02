@@ -11,6 +11,11 @@
                 @click="downloadExcel()">
                 <IconsTable2Column />
               </button>-->
+
+              <div v-if="fin_payment_req.status=='CLOSE'" class="w-full flex p-2">
+                Batch No : {{ fin_payment_req.batch_no }}
+              </div>
+
               <button v-show="detailStatus('TRANSFER_PROCESS') && fin_payment_req.status=='WAIT'" type="button" name="button" class="m-1 " :disabled="fin_payment_req.status=='CLOSE'"
                 @click="frmBatchNo()">
                 Batch No : {{ fin_payment_req.batch_no }}
@@ -21,7 +26,7 @@
                 Set Paid Done
               </button>
 
-              <button v-if="!(detailStatus('TRANSFER_PROCESS') || detailStatus('INQUIRY_PROCESS'))" type="button" name="button" class="m-1 text-2xl "
+              <button v-show="detailStatus('') || detailStatus('READY')" type="button" name="button" class="m-1 text-2xl "
                 @click="form_add()">
                 <IconsPlus />
               </button>
@@ -89,7 +94,7 @@
                               <span class="px-2">
                                 {{ detail.trx_trp_id }} 
                               </span>
-                              <IconsTimes v-show="[0,1,3].indexOf(show_send)>-1" @click.prevent="deleteRec(detail.id,detail.trx_trp_id)" class="cursor-pointer text-3xl font-bold p-0 border-l-2 border-red-300"/>
+                              <IconsTimes v-show="detailStatus('') || detailStatus('READY')" @click.prevent="deleteRec(detail.id,detail.trx_trp_id)" class="cursor-pointer text-3xl font-bold p-0 border-l-2 border-red-300"/>
                             </div>
                             
                           </div>
@@ -287,36 +292,11 @@ const total_jumlah = computed(()=>{
 
 const detailStatus = (v)=>{
   let lngt = fin_payment_req.value.details.length;
-  if(lngt==0 && v=='READY') return true
+  if(lngt==0){
+    return v=='';
+  }
   return fin_payment_req.value.details.filter((x)=>x.status==v).length == fin_payment_req.value.details.length ? true : false;
 };
-
-const show_send = computed(()=>{
-  let showit = 0;
-
-  fin_payment_req.value.details.every(e => {
-    if(e.status=='READY') {
-      showit = 1;
-      return false;
-    }else if(e.status=='INQUIRY_PROCESS'){
-      showit = 2;
-      return false;
-    }else if(e.status=='INQUIRY_FAILED'){
-      showit = 3;
-      return false;
-    }
-    else if(e.status=='TRANSFER_PROCESS'){
-      showit = 4;
-      return false;
-    }else if(e.status=='DONE'){
-      showit = 5;
-      return false;
-    }
-    return true;
-  });
-  
-  return showit;
-})
 
 const callData = async () => {
   useCommonStore().loading_full = true;

@@ -66,10 +66,12 @@
             
             <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
               <AttachmentSingleV1 :label="'Attachment'" :link="extra_money_trx.attachment_1_preview" @setFile="extra_money_trx.attachment_1=$event" :show="show"  @setPreview="extra_money_trx.attachment_1_preview=$event" :can_remove="!disabled" :disabled="disabled"/>
+              <p class="text-red-500">{{ field_errors.attachment_1 }}</p>
             </div>
 
             <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
               <AttachmentSingleV1 :label="'Attachment'" :link="extra_money_trx.attachment_2_preview" @setFile="extra_money_trx.attachment_2=$event" :show="show"  @setPreview="extra_money_trx.attachment_2_preview=$event" :can_remove="true"/>
+              <p class="text-red-500">{{ field_errors.attachment_2 }}</p>
             </div>
           </div>
         </div>

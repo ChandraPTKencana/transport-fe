@@ -192,7 +192,8 @@
             </div>
 
             <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
-              <AttachmentSingle :label="'Photo'" :value="employee.face_loc_preview" @setFile="employee.face_loc=$event"  @setPreview="employee.face_loc_preview=$event" :can_remove="true" />
+              <AttachmentSingleV1 :show="show" :label="'Photo'" :link="employee.face_loc_preview" @setFile="employee.face_loc=$event"  @setPreview="employee.face_loc_preview=$event" :can_remove="true" />
+              <p class="text-red-500">{{ field_errors.face_loc }}</p>
             </div>
 
             <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
@@ -208,8 +209,10 @@
           </div>
 
           <div class="p-1 w-full sm:w-full md:w-2/3 md:overflow-auto max-h-full">
-              <AttachmentSingle :label="'Attachment'" :value="employee.attachment_1_preview" @setFile="employee.attachment_1=$event"  @setPreview="employee.attachment_1_preview=$event" :can_remove="true"/>
-          </div>
+              <AttachmentSingleV1 :show="show" :label="'Attachment'" :link="employee.attachment_1_preview" @setFile="employee.attachment_1=$event"  @setPreview="employee.attachment_1_preview=$event" :can_remove="true"/>
+              <p class="text-red-500">{{ field_errors.attachment_1 }}</p>
+          
+            </div>
         </div>
         
         <div class="w-full flex items-center justify-end">
