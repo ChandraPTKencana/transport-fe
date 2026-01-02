@@ -56,12 +56,12 @@
 
               <div class="w-full flex">
                 <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
-                  <AttachmentSingleV1  :label="'Attachment'" :link="extra_money_trx.attachment_1_preview" />
+                  <AttachmentSingleV1  :label="'Attachment'" :show="show" :link="extra_money_trx.attachment_1_preview" />
                   
                 </div>
   
                 <div class="p-1 w-full sm:w-full md:w-1/2 md:overflow-auto max-h-full">
-                  <AttachmentSingleV1  :label="'Attachment'" :link="extra_money_trx.attachment_2_preview" />
+                  <AttachmentSingleV1  :label="'Attachment'" :show="show" :link="extra_money_trx.attachment_2_preview" />
                   <!-- <AttachmentSingle :label="'Attachment'" :value="extra_money_trx.attachment_2_preview"/> -->
                 </div>
               </div>

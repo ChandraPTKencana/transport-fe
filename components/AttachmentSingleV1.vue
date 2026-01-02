@@ -5,7 +5,8 @@
       </div>
       <div  class="w-full flex justify-center items-center border-[1px] border-gray-300 mb-1">
         <div class="image-box">
-          <div v-if="src">
+          <div v-if="isLoading" class="skeleton w-full" />
+          <div v-else-if="src">
             <img
               v-if="blob?.type.match(/image/)"
               :src="src"
@@ -13,7 +14,6 @@
             />
             <PDFJsView v-if="blob?.type.match(/application\/pdf/)"  :pdfObjUrl="objectUrl" />
           </div>
-          <div v-else class="skeleton" />
         </div>
       </div>
       <button v-if="can_remove" type="button" v-show="src" class="bg-gray-600 w-36 text-white" @click="clearFile()">Clear</button>
@@ -64,6 +64,17 @@ const photo = ref(false);
 const photo_input = ref(null);
 const previewFile = ref(null);
 const previewFileType = ref(null);
+
+const wrapper = ref<HTMLElement | null>(null)
+const src = ref<string | null>(null)
+let objectUrl: string | null = null
+const token = useDynamicPathCookie('token');
+const { apiBase } = useApiBaseUrl();
+const blob = ref();
+const loadedOnce = ref(false)
+const isUserFile = ref(false)
+const isLoading = ref(false)
+
 // const changeFile = ($e) => {
 //   var files = $e.target.files;
 //   if (files.length > 0) {
@@ -77,7 +88,6 @@ const previewFileType = ref(null);
 //     emit('setFile',files[0]);
 //   }
 // };
-const isUserFile = ref(false)
 
 const changeFile = ($e) => {
   const files = $e.target.files
@@ -111,34 +121,40 @@ const clearFile = () => {
   emit('setPreview', null)
 };
 
-  const wrapper = ref<HTMLElement | null>(null)
-  const src = ref<string | null>(null)
-  let objectUrl: string | null = null
-  const token = useDynamicPathCookie('token');
-  const { apiBase } = useApiBaseUrl();
-  const blob = ref();
 
-  watch(
-  () => props.link,
-  (val) => {
-    if (!val) return
-    if (wrapper.value) {
-      load()
-    }
-  },
-  { immediate: true }
-)
-  const loadedOnce = ref(false)
 
   watch(
   () => props.show,
   (val) => {
+    // console.log("+showing",val);
     unload(true);
+    // src.value = null
+    // blob.value = null
     loadedOnce.value = false;
     isUserFile.value = false;
+    // objectUrl=null;
+    // console.log("-showing",val);
+
+  },
+  { immediate: true , deep:true}
+)
+
+  watch(
+  () => props.link,
+  (val) => {
+    // console.log("+openlink");
+
+    if (!val) return
+    if (wrapper.value) {
+      load()
+    }
+    // console.log("-openlink");
+
   },
   { immediate: true }
 )
+
+
   async function load() {
 
     // console.log("++++++trigger load");
@@ -150,28 +166,33 @@ const clearFile = () => {
 
     if (!props.link ||src.value || props.link =='exist' || isUserFile.value || loadedOnce.value) return
 
-    const url = props.link.startsWith('http')
-    ? props.link
-    : `${apiBase}${props.link}`
+    isLoading.value = true
+    try {
+      const url = props.link.startsWith('http')
+      ? props.link
+      : `${apiBase}${props.link}`
 
-    const res = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${token.value}`
-      },
-    })
+      const res = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token.value}`
+        },
+      })
 
-    if (!res.ok) {
-      let elPhotoInput = photo_input.value;
-      if (elPhotoInput) {
-        elPhotoInput.value = "";
+      if (!res.ok) {
+        let elPhotoInput = photo_input.value;
+        if (elPhotoInput) {
+          elPhotoInput.value = "";
+        }
+        return;
       }
-      return;
+    
+      blob.value = await res.blob()
+      objectUrl = URL.createObjectURL(blob.value)
+      src.value = objectUrl
+      loadedOnce.value = true
+    } finally {
+      isLoading.value = false
     }
-  
-    blob.value = await res.blob()
-    objectUrl = URL.createObjectURL(blob.value)
-    src.value = objectUrl
-    loadedOnce.value = true
   }
   
   function unload(force=false) {
@@ -195,13 +216,24 @@ const clearFile = () => {
 </script>
 
 <style scoped>
-    .skeleton {
-  background: linear-gradient(
-    90deg,
-    #eee 25%,
-    #ddd 37%,
-    #eee 63%
-  );
-  animation: shimmer 1.4s infinite;
-}
+  .skeleton {
+    aspect-ratio: 16/9;
+    background: linear-gradient(
+      90deg,
+      #eee 25%,
+      #ddd 37%,
+      #eee 63%
+    );
+    background-size: 400% 100%;
+    animation: shimmer 1.4s infinite linear;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 100% 0;
+    }
+    100% {
+      background-position: -100% 0;
+    }
+  }
 </style>
