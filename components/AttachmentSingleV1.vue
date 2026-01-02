@@ -3,10 +3,10 @@
       <div class="w-full">
         <label for="">{{label}}</label>
       </div>
-      <div  class="w-full flex justify-center items-center border-[1px] border-gray-300 mb-1">
-        <div class="image-box">
-          <div v-if="isLoading" class="skeleton w-full" />
-          <div v-else-if="src">
+      <div v-if="isLoading"  class="skeleton w-full" ></div>
+      <div v-else class="w-full flex justify-center items-center flex-col">
+        <div v-if="src" class="w-full flex justify-center items-center border-[1px] border-gray-300 mb-1">
+          <div class="image-box">
             <img
               v-if="blob?.type.match(/image/)"
               :src="src"
@@ -15,9 +15,9 @@
             <PDFJsView v-if="blob?.type.match(/application\/pdf/)"  :pdfObjUrl="objectUrl" />
           </div>
         </div>
+        <button v-if="can_remove" type="button" v-show="src" class="bg-gray-600 w-36 text-white" @click="clearFile()">Clear</button>
+        <input v-if="can_remove" class="w-full" v-show="!src" @change="changeFile($event)" ref="photo_input" type="file" name="photo">
       </div>
-      <button v-if="can_remove" type="button" v-show="src" class="bg-gray-600 w-36 text-white" @click="clearFile()">Clear</button>
-      <input v-if="can_remove" class="w-full" v-show="!src" @change="changeFile($event)" ref="photo_input" type="file" name="photo">
     </div>
 
     
@@ -73,7 +73,7 @@ const { apiBase } = useApiBaseUrl();
 const blob = ref();
 const loadedOnce = ref(false)
 const isUserFile = ref(false)
-const isLoading = ref(false)
+const isLoading = ref(true)
 
 // const changeFile = ($e) => {
 //   var files = $e.target.files;
@@ -146,6 +146,7 @@ const clearFile = () => {
 
     if (!val) return
     if (wrapper.value) {
+      isLoading.value = true
       load()
     }
     // console.log("-openlink");
@@ -155,8 +156,7 @@ const clearFile = () => {
 )
 
 
-  async function load() {
-
+  async function  load() {
     // console.log("++++++trigger load");
     // console.log("props.link",props.link);
     // console.log("src.value",src.value);
@@ -164,9 +164,11 @@ const clearFile = () => {
     // console.log("loadedOnce.value",loadedOnce.value);
     // console.log("------trigger load");
 
-    if (!props.link ||src.value || props.link =='exist' || isUserFile.value || loadedOnce.value) return
+    if (!props.link ||src.value || props.link =='exist' || isUserFile.value || loadedOnce.value) {
+      isLoading.value = false;
+      return
+    }
 
-    isLoading.value = true
     try {
       const url = props.link.startsWith('http')
       ? props.link
