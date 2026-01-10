@@ -143,7 +143,7 @@ const extra_money_trx_temp = {
     pvr_no:"",
     pvr_total:0,
     pvr_complete:"",
-    payment_method_id:2,
+    payment_method_id:4,
     payment_method:{
       id:0,
       name:"",

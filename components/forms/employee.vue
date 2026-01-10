@@ -37,6 +37,12 @@
             </div>
 
             <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+              <label for="">Nama SIM</label>
+              <input type="text" v-model="employee.sim_name" :disabled="employee.val1">
+              <p class="text-red-500">{{ field_errors.sim_name }}</p>
+            </div>
+
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
               <label for="">Pilih Bank</label>
               <select v-model="employee.bank_id">
                 <option value=""></option>
@@ -206,6 +212,14 @@
               </div>
               <p class="text-red-500">{{ field_errors.m_face_login }}</p>
             </div>
+            <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+              <label for="">Pekerja Dari</label>
+              <select v-model="employee.workers_from">
+                <!-- <option value=""></option> -->
+                <option v-for="v in useCommonStore().list_pabrik" :value="v">{{ v }}</option>
+              </select>
+              <p class="text-red-500">{{ field_errors.workers_from }}</p>
+            </div>
           </div>
 
           <div class="p-1 w-full sm:w-full md:w-2/3 md:overflow-auto max-h-full">
@@ -267,9 +281,11 @@ const employee_temp = {
   role: "Supir",
   ktp_no: "",
   sim_no: "",
+  sim_name: "",
   bank_id: 1,
   rek_no: "",
   rek_name: "",
+  workers_from:"",
   phone_number: "",
   attachment_1:"",
   attachment_1_preview:"",
@@ -305,6 +321,8 @@ const doSave = async () => {
   data_in.append("role", employee.value.role);
   data_in.append("ktp_no", employee.value.ktp_no);
   data_in.append("sim_no", employee.value.sim_no);
+  data_in.append("sim_name", employee.value.sim_name);
+  data_in.append("workers_from", employee.value.workers_from);
   data_in.append("bank_id", employee.value.bank_id);
   data_in.append("rek_no", employee.value.rek_no);
   data_in.append("rek_name", employee.value.rek_name);

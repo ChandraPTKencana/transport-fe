@@ -93,7 +93,7 @@
                         </td>
                         <td class="cell">
                           <div class="w-full h-full flex items-center justify-end p-2">                       
-                            {{ pointFormat(detail.jumlah || 0) }}   
+                            {{ pointFormat(detail.nominal || 0) }}   
                           </div>
                         </td>
                         <td class="cell">

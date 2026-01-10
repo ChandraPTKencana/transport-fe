@@ -26,7 +26,7 @@
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
                   <thead >
                     <tr class="sticky -top-1 !z-[2]">
-                      <td colspan="44" class="!bg-slate-800 text-white font-bold">
+                      <td colspan="46" class="!bg-slate-800 text-white font-bold">
                         Detail
                       </td>
                     </tr>
@@ -52,6 +52,8 @@
                       <th rowspan="2">U.Kerajinan <span class="text-sm">({{pointFormat(table_datas.perubahaan_kerajinan_ttl) }})</span></th>
                       <th colspan="3">Bonus Trip <span class="text-sm">({{pointFormat(table_datas.bonus_trip_ttl) }})</span></th>
                       <th rowspan="2">Periode 2 <span class="text-sm">({{pointFormat(table_datas.periode_2_ttl) }})</span></th>
+                      <th rowspan="2">Potongan Manual <span class="text-sm">({{pointFormat(table_datas.potongan_manual_ttl) }})</span></th>
+                      <th rowspan="2">Periode 2 setelah potongan <span class="text-sm">({{pointFormat(table_datas.periode_2_ttl_stlh_pot) }})</span></th>
                       <th rowspan="2">Periode 1+2 <span class="text-sm">({{pointFormat(table_datas.periode_ttl) }})</span></th>
                       <th colspan="4">Trip <span class="text-sm">({{pointFormat(table_datas.trip_umum_ttl) }})</span></th>
                       <th colspan="4">Trip Lain <span class="text-sm">({{pointFormat(table_datas.trip_lain_ttl) }})</span></th>
@@ -115,6 +117,8 @@
                         <td>{{ pointFormat(detail.bonus_trip_dinas) }}</td>
                         <td>{{ pointFormat(detail.salary_bonus_bonus_trip) }}</td>
                         <td>{{ pointFormat(detail.periode_2_ttl) }}</td>
+                        <td>{{ pointFormat(detail.potongan_manual) }}</td>
+                        <td>{{ pointFormat(detail.periode_2_ttl_stlh_pot) }}</td>
                         <td>{{ pointFormat(detail.periode_ttl) }}</td>
                         <td>{{ pointFormat(detail.trip_jumlah) }}</td>
                         <td>{{ pointFormat(detail.uj_gaji) }}</td>
@@ -656,6 +660,8 @@ const callData = async () => {
     perubahaan_lainnya_2_ttl:0,
     perubahaan_kerajinan_ttl:0,
     periode_2_ttl:0,
+    potongan_manual_ttl:0,
+    periode_2_ttl_stlh_pot:0,
     periode_ttl:0,
     trip_umum_ttl : 0,
     trip_umum_gaji : 0,
@@ -693,7 +699,9 @@ const callData = async () => {
     x.periode_2_ttl=parseFloat(x.sb_gaji_2)+parseFloat(x.sb_makan_2)+parseFloat(x.sb_dinas_2)+parseFloat(x.salary_bonus_nominal_2)+parseFloat(x.kerajinan)
     +parseFloat(x.bonus_trip_gaji)+parseFloat(x.bonus_trip_dinas) + parseFloat(x.salary_bonus_bonus_trip);
     
-    x.periode_ttl = x.periode_1_ttl +  x.periode_2_ttl;
+    x.periode_2_ttl_stlh_pot=x.periode_2_ttl-parseFloat(x.potongan_manual); 
+
+    x.periode_ttl = x.periode_1_ttl +  x.periode_2_ttl_stlh_pot;
     
     x.total = parseFloat(x.uj_gaji) + parseFloat(x.uj_makan)+ parseFloat(x.uj_dinas)
     + parseFloat(x.trip_lain_gaji)+ parseFloat(x.trip_lain_makan)+ parseFloat(x.trip_lain_dinas)
@@ -712,6 +720,8 @@ const callData = async () => {
     all_data.standby_2_dinas += parseFloat(x.sb_dinas_2);
     all_data.perubahaan_lainnya_2_ttl += parseFloat(x.salary_bonus_nominal_2);
     all_data.perubahaan_kerajinan_ttl += parseFloat(x.kerajinan);
+
+    all_data.potongan_manual_ttl += parseFloat(x.potongan_manual);
 
     all_data.trip_umum_gaji += parseFloat(x.uj_gaji);
     all_data.trip_umum_makan += parseFloat(x.uj_makan);
@@ -743,8 +753,9 @@ const callData = async () => {
 
   all_data.bonus_trip_ttl = all_data.bonus_trip_gaji + all_data.bonus_trip_dinas + all_data.bonus_trip_perubahaan; 
   all_data.periode_2_ttl = all_data.standby_2_ttl + all_data.perubahaan_lainnya_2_ttl + all_data.perubahaan_kerajinan_ttl + all_data.bonus_trip_ttl;  
+  all_data.periode_2_ttl_stlh_pot = all_data.periode_2_ttl + all_data.potongan_manual_ttl;  
   
-  all_data.periode_ttl = all_data.periode_1_ttl + all_data.periode_2_ttl; 
+  all_data.periode_ttl = all_data.periode_1_ttl + all_data.periode_2_ttl_stlh_pot; 
 
   all_data.trip_umum_ttl = all_data.trip_umum_gaji + all_data.trip_umum_makan + all_data.trip_umum_dinas; 
   all_data.trip_lain_ttl = all_data.trip_lain_gaji + all_data.trip_lain_makan + all_data.trip_lain_dinas; 

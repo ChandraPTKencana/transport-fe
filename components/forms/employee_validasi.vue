@@ -34,6 +34,12 @@
                   {{ employee.sim_no }}
                 </div>
               </div>
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+                <label for="">Nama SIM</label>
+                <div class="card-border">
+                  {{ employee.sim_name }}
+                </div>
+              </div>
 
               <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
                 <label for="">Bank Code</label>
@@ -138,6 +144,13 @@
                 <label for="">Face Login?</label>
                 <div class="card-border">
                   {{employee.m_face_login ? 'Ya' : 'Tidak'}}
+                </div>
+              </div>
+
+              <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+                <label for="">Pekerja Dari</label>
+                <div class="card-border">
+                  {{ employee.workers_from }}
                 </div>
               </div>
 

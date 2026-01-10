@@ -515,7 +515,10 @@ const generateCode = async() => {
 
 const fields_thead=ref([
   {key:"no",label:"No",isai:true},
-  {key:"val",label:"App 1",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  {key:"val",label:"APP",childs:[
+    {key:"val",label:"Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+    {key:"val1",label:"Kasir",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
+  ]},
   {key:"m_enkey",label:"Kode Kunci",filter_on:1},
   {key:"username",label:"Username",filter_on:1},
   {key:"id",label:"ID",freeze:1,filter_on:1,type:"number"},
@@ -523,6 +526,7 @@ const fields_thead=ref([
   {key:"role",label:"Jabatan",filter_on:1,type:'string'},
   {key:"ktp_no",label:"No KTP",filter_on:1,type:'string'},
   {key:"sim_no",label:"No SIM",filter_on:1,type:'string'},
+  {key:"sim_name",label:"Nama SIM",filter_on:1,type:'string'},
   {key:"bank_code",label:"Nama Bank",filter_on:1,type:'string'},
   {key:"rek_no",label:"No Rek",filter_on:1,type:'string'},
   {key:"rek_name",label:"Nama Rek",filter_on:1,type:'string'},
@@ -532,6 +536,7 @@ const fields_thead=ref([
   {key:"tmk",label:"TMK",type:'date',dateformat:"DD-MM-Y",filter_on:1},
   {key:"address",label:"Alamat",filter_on:1,type:'string'},
   {key:"status",label:"Status",filter_on:1,type:'string'},
+  {key:"workers_from",label:"Pekerja dari",filter_on:1,type:'string'},
   {key:"attachment_1_type",label:"File",type:'string'},
   // {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK']},
   {key:"bpjs_kesehatan",label:"BPJS Kesehatan",class:" justify-end",type:'number',filter_on:1},

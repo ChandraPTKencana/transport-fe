@@ -9,6 +9,12 @@
             <div class="w-full p-1">
               <div class="w-full flex flex-row flex-wrap bg-white">
                 <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+                  <label for="">Tanggal</label>
+                  <div class="card-border">
+                    {{ potongan_trx.tanggal ? $moment(potongan_trx.tanggal).format("DD-MM-YYYY") : "" }}
+                  </div>
+                </div>
+                <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                   <label for="">Nominal Potong</label>
                   <div class="card-border">
                     {{ useUtils().pointFormat(potongan_trx.nominal_cut) }}

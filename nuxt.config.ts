@@ -6,7 +6,9 @@ export default defineNuxtConfig({
       baseURL: process.env.MY_API_ADDR,
     },
   },
-  
+  image: {
+    provider: 'static'
+  },
   app: {
     baseURL: process.env.ROUTER_BASE || '/',
     buildAssetsDir: '_nuxt/',

@@ -135,8 +135,10 @@ definePageMeta({
     function (to, from) {
       // if (!useAuthStore().checkScopes(['ap-fin_payment_req-view']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["SuperAdmin","Finance"]))
-      return navigateTo('/');
+      if (!useAuthStore().checkPermission('fin_payment_req.views')){
+        useCommonStore().loading_full = false;
+        return navigateTo('/');
+      }
 
     },
     // 'auth',

@@ -26,10 +26,15 @@
             @click="form_view()">
             <IconsEyes/>
           </button>
-          <!-- <button  v-if="enabled_remove" type="button" name="button" class="m-1 text-2xl "
+          <button  v-if="enabled_remove" type="button" name="button" class="m-1 text-2xl "
             @click="remove()">
             <IconsDelete />
           </button>
+          <button  v-if="enabled_unremove" type="button" name="button" class="m-1 text-2xl "
+            @click="unRemove()">
+            <IconsDeleteOff />
+          </button>
+          <!-- 
           <button  v-if="enabled_void" type="button" name="button" class="m-1 text-2xl "
             @click="for_remove()">
             <IconsVoid />
@@ -77,6 +82,22 @@
         </div>
       </template>
     </PopupMini> -->
+    <LazyPopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" :enabledOk="enabledOk">
+      <template #footer>
+        Masukkan Alasan Penghapusan:
+        <div class="grow mb-5" >
+          <textarea  v-model="deleted_reason"></textarea>
+        </div>
+      </template>
+    </LazyPopupMini>
+
+    <LazyPopupMini :type="'custome'" :show="undelete_box" :fnClose="()=>undelete_box=false" :fnConfirm="confirmed_undelete" > 
+    <template #words>
+      Alasan hapus Sebelumnya : <b class="text-red-500"> {{ potongan_msts[selected].deleted_reason }}</b>. 
+      <br>
+      <b class="text-green-500">Aktifkan Kembali </b> , yakin untuk melanjutkan ?
+    </template>
+  </LazyPopupMini>
     <LazyFormsPotonganMst :show="forms_potongan_mst_show" :fnClose="()=>{forms_potongan_mst_show=false}" :id="forms_potongan_mst_id" :p_data="potongan_msts" :is_copy="forms_potongan_mst_copy" :is_view="forms_potongan_mst_is_view"/>
     <LazyFormsPotonganValidasi :show="forms_potongan_mst_valid_show" :fnClose="()=>{forms_potongan_mst_valid_show=false}" :id="forms_potongan_mst_valid_id" :p_data="potongan_msts"/>
   
@@ -393,6 +414,45 @@ const confirmed_delete = async() => {
   delete_box.value = false;
 }
 
+const confirmed_undelete = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("id", potongan_msts.value[selected.value].id);  
+  data_in.append("_method", "PUT");
+
+  const { data, error, status } = await useMyFetch("/potongan_mst_unremove", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  let old = {...potongan_msts.value[selected.value]};
+  old['deleted'] = data.value.deleted;
+  old['deleted_user'] = data.value.deleted_user;
+  old['deleted_at'] = data.value.deleted_at;
+  old['deleted_by'] = data.value.deleted_by;
+  old['deleted_reason'] = data.value.deleted_reason;
+  
+  if(filter_status.value!='all'){
+    potongan_msts.value.splice(selected.value,1);
+  }else{
+    potongan_msts.value.splice(selected.value,1,{...old});
+  }
+
+  selected.value = -1;
+  undelete_box.value = false;
+}
+
 const fields_thead=ref([
   {key:"no",label:"No",isai:true},
   {key:"valx",label:"APP",childs:[
@@ -460,4 +520,20 @@ const enabled_remove = computed(()=>{
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1;
   return result;
 })
+
+const enabled_unremove = computed(()=>{  
+  let result = selected.value > -1
+  && useUtils().checkPermission('potongan_mst.unremove') 
+  && [1].indexOf(dt_selected.value.deleted) > -1;
+  return result;
+})
+
+const undelete_box = ref(false);
+const unRemove = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    undelete_box.value = true;
+  }
+};
 </script>

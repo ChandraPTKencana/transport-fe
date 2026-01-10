@@ -6,7 +6,22 @@
       <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
         <div class="w-full flex flex-col items-center grow overflow-auto">
           <div class="w-full flex flex-row flex-wrap">
-            <div class="w-6/12 sm:w-3/12 md:w-2/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+            
+            <div class="w-6/12 sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
+              <label for="">Tanggal</label>
+              <div class="grow">
+                <ClientOnly>
+                  <vue-date-picker  v-model="potongan_trx.tanggal" 
+                  type="datetime" 
+                  format="dd-MM-yyyy"
+                  :enable-time-picker = "false" 
+                  text-input
+                  teleport-center></vue-date-picker>
+                </ClientOnly>
+              </div>
+              <p class="text-red-500">{{ field_errors.tanggal }}</p>
+            </div>
+            <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
               <label for="">Nominal Potong</label>
               <div class="w-full" >
                 <InputPointFormat
@@ -42,6 +57,8 @@
 </template>
 
 <script setup>
+const { $moment } = useNuxtApp()
+
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 
@@ -75,6 +92,7 @@ const potongan_trx_temp = {
   id: -1,
   note: "",
   nominal_cut: "",
+  tanggal: new Date(),
 };
 
 const potongan_trx = ref({...potongan_trx_temp});
@@ -89,6 +107,7 @@ const doSave = async () => {
   field_errors.value = {};
 
   const data_in = new FormData();
+  data_in.append("tanggal", $moment(potongan_trx.value.tanggal).format("Y-MM-DD"));  
   data_in.append("potongan_mst_id", props.potongan_mst_id);
   data_in.append("note", potongan_trx.value.note);
   data_in.append("nominal_cut", potongan_trx.value.nominal_cut);
