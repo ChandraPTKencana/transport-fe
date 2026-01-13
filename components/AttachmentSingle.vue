@@ -6,7 +6,7 @@
       <div v-if="previewFile" class="w-full flex justify-center items-center border-[1px] border-gray-300 mb-1">
         
         <img v-if="previewFile.match(/image/)" :src="previewFile" alt="" class=" max-w-full max-h-full">        
-        <PDFJsView v-if="previewFile.match(/application\/pdf/)"  :pdfBase64="previewFile" />
+        <LazyPDFJsView v-if="previewFile.match(/application\/pdf/)"  :pdfBase64="previewFile" />
         <!-- <iframe v-else ref="iframe" :src="previewFile+'#toolbar=0'" class=" max-w-full max-h-full w-full h-full aspect-square"></iframe> -->
       </div>
 

@@ -28,3 +28,9 @@ potongan status OPEN,CLOSE,DONE
 
 *untuk hapus file2 tidak terpakai
 rmdir /s /q _nuxt 
+
+
+
+UPDATE extra_money_trx
+SET attachment_1_loc = REPLACE(attachment_1_loc, '/files/', '')
+

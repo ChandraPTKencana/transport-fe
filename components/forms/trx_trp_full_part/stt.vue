@@ -178,7 +178,7 @@
                                     </td>
                                     <td class="cell">
                                     <div style="width:60vw;" class="h-auto flex items-center justify-center">
-                                        <AttachmentSingle :value="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event"/>
+                                        <AttachmentSingleV1 :show="show_for_att" :link="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event"/>
                                     </div>
                                     </td>
                                     <td class="cell">
@@ -294,6 +294,12 @@ const props = defineProps({
         type:Array,
         required:true,
         default:[]
+    },
+
+    show_for_att:{
+        type:Boolean,
+        required:true,
+        default:true
     },
 })
 

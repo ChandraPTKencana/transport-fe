@@ -12,7 +12,7 @@
               :src="src"
               class="w-full h-full object-cover"
             />
-            <PDFJsView v-if="blob?.type.match(/application\/pdf/)"  :pdfObjUrl="objectUrl" />
+            <LazyPDFJsView v-if="blob?.type.match(/application\/pdf/)"  :pdfObjUrl="objectUrl" />
           </div>
         </div>
         <button v-if="can_remove" type="button" v-show="src" class="bg-gray-600 w-36 text-white" @click="clearFile()">Clear</button>

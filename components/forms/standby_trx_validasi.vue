@@ -199,7 +199,7 @@
                           </td>
                           <td class="cell">
                             <div style="width:60vw;" class="h-auto flex items-center justify-center">
-                              <AttachmentSingle :value="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event"/>
+                              <AttachmentSingleV1 :show="show" :link="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event"/>
                             </div>
                           </td>
                           <td class="cell">
@@ -712,6 +712,7 @@ watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
     document.addEventListener('keydown', keydownListener);
     standby_trx.value = {...standby_trx_temp};
+    details.value = [];
     // if(props.is_view==false){
     //   setTimeout(()=>{
     //     it_val.value.focus();
@@ -736,6 +737,8 @@ const loadDown=()=>{
   emit('setID',props.p_data[$idx].id);
   emit('setIndex',$idx);
   setTimeout(()=>{
+    standby_trx.value = {...standby_trx_temp};
+    details.value = [];
     callData();
   },100);
 };
@@ -749,6 +752,8 @@ const loadTop=()=>{
   emit('setID',props.p_data[$idx].id);
   emit('setIndex',$idx);
   setTimeout(()=>{
+    standby_trx.value = {...standby_trx_temp};
+    details.value = [];
     callData();
   },100);
 };

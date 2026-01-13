@@ -9,7 +9,7 @@
           <FormsTrxTrpFullPartUj :trx_trp="trx_trp"/>
           <FormsTrxTrpFullPartAbsen :trx_trp="trx_trp"/>
           <FormsTrxTrpFullPartTicket :trx_trp="trx_trp"/>
-          <FormsTrxTrpFullPartStt :standby_trxs="trx_trp.standby_trxs" :p_data="p_data" :save_do="stt_save_do" :save_state="stt_save_state"/>
+          <FormsTrxTrpFullPartStt :show_for_att="show" :standby_trxs="trx_trp.standby_trxs" :p_data="p_data" :save_do="stt_save_do" :save_state="stt_save_state"/>
           <!-- kelompok : Extra Money , Trip , Potongan, Absen, Standby -->
         </div>
         <div class="w-full flex items-center justify-end">
@@ -204,7 +204,8 @@ const callData = async () => {
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
-    document.addEventListener('keydown', keydownListener);    
+    document.addEventListener('keydown', keydownListener);
+    trx_trp.value = {...trx_trp_temp};   
     callData();
   }else{
     document.removeEventListener('keydown', keydownListener);
@@ -225,6 +226,7 @@ const loadDown=()=>{
   emit('setID',props.p_data[$idx].id);
   emit('setIndex',$idx);
   setTimeout(()=>{
+    trx_trp.value = {...trx_trp_temp};
     callData();
   },100);
 };
@@ -238,6 +240,7 @@ const loadTop=()=>{
   emit('setID',props.p_data[$idx].id);
   emit('setIndex',$idx);
   setTimeout(()=>{
+    trx_trp.value = {...trx_trp_temp};
     callData();
   },100);
 };

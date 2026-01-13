@@ -41,6 +41,11 @@
                 <IconsCloudDownload />
               </button> 
 
+              <button v-show="detailStatus('INQUIRY_PROCESS')" type="button" name="button" class="m-1 text-2xl "
+                @click="setToReady()">
+                <IconsHistory />
+              </button> 
+
             </div>
             <div class="w-full flex p-1 2xl:overflow-hidden justify-between flex-wrap">
               <div class="w-full" role="sticky">
@@ -445,6 +450,43 @@ const getUpdate = async () => {
   // show_confirm.value = false;
   // pop_show.value = false;
 
+}
+
+const setToReady = async () => {
+  useCommonStore().loading_full = true;
+  field_errors.value = {};
+
+  const data_in = new FormData();
+  data_in.append("id", fin_payment_req.value.id);
+  data_in.append("_method", "PUT");
+
+  let $method = "post";
+
+  const { data, error, status } = await useMyFetch("/fin_payment_req/set_to_ready", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // "Content-Type": "multipart/form-data",
+    },
+    body: data_in,
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error, field_errors);
+    return;
+  }
+
+  display({ show: true, status: "Success", message: "Update Data Berhasil" });
+
+  fin_payment_req.value.details.forEach(el => {
+    el.status             = "READY";    
+  });
+
+  fin_payment_req.value.status='OPEN';
 }
 
 const renewData = async (id,idx) => {

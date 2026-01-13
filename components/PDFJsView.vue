@@ -9,10 +9,11 @@
 
 <script setup>
 // import { pdfjsLib } from 'pdfjs-dist';
-import * as pdfjsLib from "pdfjs-dist";
+// import * as pdfjsLib from "pdfjs-dist";
+let pdfjsLib
 import * as pdfjsWorker from "pdfjs-dist/build/pdf.worker.mjs"; 
 // pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-pdfjsLib.GlobalWorkerOptions.workerSrc = import.meta.url + 'pdfjs-dist/build/pdf.worker.mjs';
+// pdfjsLib.GlobalWorkerOptions.workerSrc = import.meta.url + 'pdfjs-dist/build/pdf.worker.mjs';
 
 const props = defineProps({
     pdfBase64: {
@@ -61,18 +62,18 @@ const getAllPage=async(pdf,$page)=>{
 let loadingTask="";
 
 onMounted(async() => {
-    let pdfasarray="";
-    if(props.pdfObjUrl){
-        pdfasarray = props.pdfObjUrl;
-    }else{
-        pdfasarray = convertDataURIToBinary(props.pdfBase64);
-    }
-    // const arrayBuffer = atob(base64Pdf.value).split('').map(char => char.charCodeAt(0));
-    loadingTask = pdfjsLib.getDocument(pdfasarray);
-    const pdf = await loadingTask.promise;
+    pdfjsLib = await import('pdfjs-dist/legacy/build/pdf')
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.js'
 
-    numPages.value = pdf._pdfInfo.numPages;
-    getAllPage(pdf,0);
+    const src = props.pdfObjUrl
+        ? props.pdfObjUrl
+        : convertDataURIToBinary(props.pdfBase64)
+
+    loadingTask = pdfjsLib.getDocument(src)
+    const pdf = await loadingTask.promise
+
+    numPages.value = pdf.numPages
+    getAllPage(pdf, 0) // masih boleh sementara
     // const page = await pdf.getPage(1); // Get the first page
 
     // const viewport = page.getViewport({ scale: 1.0 });
