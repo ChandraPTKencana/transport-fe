@@ -50,6 +50,11 @@
     required: false,
     default: false
   },
+  blob_file: {
+    type: [File,String,Boolean],
+    required: false,
+    default: false
+  },
 
   // fn: {
   //   type: Function,
@@ -102,12 +107,9 @@ const changeFile = ($e) => {
 
   objectUrl = URL.createObjectURL(file) // ✅ AMAN
   src.value = objectUrl
-  emit('setPreview',"exist");
+  emit('setPreview',objectUrl);
   emit('setFile', file)
 }
-
-
-
 
 const clearFile = () => {
   unload(true)
@@ -164,7 +166,13 @@ const clearFile = () => {
     // console.log("loadedOnce.value",loadedOnce.value);
     // console.log("------trigger load");
 
-    if (!props.link ||src.value || props.link =='exist' || isUserFile.value || loadedOnce.value) {
+    if(props.link && props.link.includes('blob:http')){
+      isUserFile.value = true
+      src.value = props.link;
+      blob.value = props.blob_file;
+    }
+
+    if (!props.link ||src.value || props.link=='Exists' || props.link.includes('blob:http') || isUserFile.value || loadedOnce.value) {
       isLoading.value = false;
       return
     }

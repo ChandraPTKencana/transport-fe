@@ -241,7 +241,7 @@
                           </td>
                           <td class="cell">
                             <div style="width:60vw;" class="h-auto flex items-center justify-center">
-                              <AttachmentSingleV1 :show="show" :link="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event" :can_remove="true"/>
+                              <AttachmentSingleV1 :key="detail.attachment_1_preview" :show="show" :link="detail.attachment_1_preview" :blob_file="detail.attachment_1" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event" :can_remove="true"/>
                             </div>
                             <!-- <div class="h-auto flex items-center justify-center">
                               <AttachmentSingle :value="detail.attachment_1_preview" @setFile="detail.attachment_1=$event"  @setPreview="detail.attachment_1_preview=$event" :can_remove="true"/>
