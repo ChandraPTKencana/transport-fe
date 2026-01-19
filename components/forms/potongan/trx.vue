@@ -9,16 +9,20 @@
             
             <div class="w-6/12 sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
               <label for="">Tanggal</label>
-              <div class="grow">
+              <div v-if="potongan_trx.trx_trp_id" class="grow card-border" >
+                  <div> {{ $moment(potongan_trx.tanggal).format("DD-MM-YYYY") }} </div>
+              </div>
+              <div v-else class="grow">
                 <ClientOnly>
                   <vue-date-picker  v-model="potongan_trx.tanggal" 
                   type="datetime" 
                   format="dd-MM-yyyy"
                   :enable-time-picker = "false" 
                   text-input
-                  teleport-center></vue-date-picker>
+                  teleport-center ></vue-date-picker>
                 </ClientOnly>
               </div>
+              
               <p class="text-red-500">{{ field_errors.tanggal }}</p>
             </div>
             <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">

@@ -6,48 +6,49 @@
 
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
           <div class="w-full flex flex-col items-center grow overflow-auto">
-            <div class="w-full flex ">
+            <div class="w-full flex  justify-evenly">
               <!-- <button type="button" name="button" class="m-1 text-2xl "
                 @click="downloadExcel()">
                 <IconsTable2Column />
               </button>-->
-
-              <div v-if="fin_payment_req.status=='CLOSE'" class="w-full flex p-2">
-                Batch No : {{ fin_payment_req.batch_no }}
+              <div>
+                <div v-if="fin_payment_req.status=='CLOSE'" class="w-full flex p-2">
+                  Batch No : {{ fin_payment_req.batch_no }}
+                </div>
+  
+                <button v-show="detailStatus('TRANSFER_PROCESS') && fin_payment_req.status=='WAIT'" type="button" name="button" class="m-1 " :disabled="fin_payment_req.status=='CLOSE'"
+                  @click="frmBatchNo()">
+                  Batch No : {{ fin_payment_req.batch_no }}
+                </button>
+  
+                <button v-show="detailStatus('TRANSFER_PROCESS')" type="button" name="button" class="m-1 bg-violet-600 text-white"
+                  @click="setPaidDone()">
+                  Set Paid Done
+                </button>
+  
+                <button v-show="detailStatus('') || detailStatus('READY')" type="button" name="button" class="m-1 text-2xl "
+                  @click="form_add()">
+                  <IconsPlus />
+                </button>
+  
+                <button v-show="detailStatus('READY')" type="button" name="button" class="m-1 text-2xl "
+                  @click="genCSVandSend()">
+                  <IconsSend />
+                </button>
+  
+                <button v-show="detailStatus('INQUIRY_PROCESS')" type="button" name="button" class="m-1 text-2xl "
+                  @click="getUpdate()">
+                  <IconsCloudDownload />
+                </button> 
               </div>
-
-              <button v-show="detailStatus('TRANSFER_PROCESS') && fin_payment_req.status=='WAIT'" type="button" name="button" class="m-1 " :disabled="fin_payment_req.status=='CLOSE'"
-                @click="frmBatchNo()">
-                Batch No : {{ fin_payment_req.batch_no }}
-              </button>
-
-              <button v-show="detailStatus('TRANSFER_PROCESS')" type="button" name="button" class="m-1 bg-violet-600 text-white"
-                @click="setPaidDone()">
-                Set Paid Done
-              </button>
-
-              <button v-show="detailStatus('') || detailStatus('READY')" type="button" name="button" class="m-1 text-2xl "
-                @click="form_add()">
-                <IconsPlus />
-              </button>
-
-              <button v-show="detailStatus('READY')" type="button" name="button" class="m-1 text-2xl "
-                @click="genCSVandSend()">
-                <IconsSend />
-              </button>
-
-              <button v-show="detailStatus('INQUIRY_PROCESS')" type="button" name="button" class="m-1 text-2xl "
-                @click="getUpdate()">
-                <IconsCloudDownload />
-              </button> 
-
-              <button v-show="detailStatus('INQUIRY_PROCESS')" type="button" name="button" class="m-1 text-2xl "
-                @click="setToReady()">
-                <IconsHistory />
-              </button> 
-
+              <div>
+                <button v-show="detailStatus('INQUIRY_PROCESS')" type="button" name="button" class="m-1 text-2xl "
+                  @click="setToReady()">
+                  <IconsHistory />
+                </button> 
+              </div>
             </div>
-            <div class="w-full flex p-1 2xl:overflow-hidden justify-between flex-wrap">
+            <div class="w-full flex p-1 overflow-auto flex-wrap">
               <div class="w-full" role="sticky">
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
                   <thead >
@@ -359,7 +360,14 @@ const downloadExcel = async()=>{
   downloadFile(data.value);
 }
 const field_errors = ref({})
+
+const sendCSV = ref(false);
+
 const genCSVandSend = async () => {
+
+  if(sendCSV.value) return;
+  sendCSV.value = true;
+  
   useCommonStore().loading_full = true;
   field_errors.value = {};
 
@@ -395,7 +403,7 @@ const genCSVandSend = async () => {
   // selected.value = -1;
   // show_confirm.value = false;
   // pop_show.value = false;
-
+  sendCSV.value = false;
 }
 
 const getUpdate = async () => {

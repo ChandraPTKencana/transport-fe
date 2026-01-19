@@ -77,12 +77,12 @@
                 </div>
 
                 <div class="w-full flex flex-col flex-wrap p-1">
-                  <AttachmentSingle :label="'Lampiran Pertama'" :value="potongan_mst.attachment_1_preview" @setFile="potongan_mst.attachment_1=$event"  @setPreview="potongan_mst.attachment_1_preview=$event" :can_remove="!disabled2"/>
+                  <AttachmentSingleV1 :label="'Lampiran Pertama'" :show="show" :link="potongan_mst.attachment_1_preview" :blob_file="potongan_mst.attachment_1" @setFile="potongan_mst.attachment_1=$event"  @setPreview="potongan_mst.attachment_1_preview=$event" :can_remove="!disabled2"/>
                   <p class="text-red-500">{{ field_errors.attachment_1 }}</p>
                 </div>
 
                 <div class="w-full flex flex-col flex-wrap p-1">
-                  <AttachmentSingle :label="'Lampiran Lanjutan'" :value="potongan_mst.attachment_2_preview" @setFile="potongan_mst.attachment_2=$event"  @setPreview="potongan_mst.attachment_2_preview=$event" :can_remove="!disabled"/>
+                  <AttachmentSingleV1 :label="'Lampiran Lanjutan'" :show="show" :link="potongan_mst.attachment_2_preview" :blob_file="potongan_mst.attachment_2" @setFile="potongan_mst.attachment_2=$event"  @setPreview="potongan_mst.attachment_2_preview=$event" :can_remove="!disabled"/>
                   <p class="text-red-500">{{ field_errors.attachment_2 }}</p>
                 </div>
 

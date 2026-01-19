@@ -72,13 +72,13 @@
             <div v-if="selected_uj._raw?.asst_opt" class="w-full flex flex-wrap">
               <div class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Supir</label>
-                <WidthMiniList :arr="list_emp" :selected="selected_supir" :pure="selected_mini_temp" @setSelected="selected_supir=$event" :disabled="trx_trp_loaded.supir_id > 1 || trx_trp.val1==1"/>
+                <WidthMiniList :arr="list_supir" :selected="selected_supir" :pure="selected_mini_temp" @setSelected="selected_supir=$event" :disabled="trx_trp_loaded.supir_id > 1 || trx_trp.val1==1"/>
                 <p class="text-red-500">{{ field_errors.supir_id }}</p>
               </div>
   
               <div v-show="selected_uj._raw?.asst_opt=='DENGAN KERNET'" class="w-full sm:w-6/12 md:w-6/12 lg:w-6/12 flex flex-col flex-wrap p-1">
                 <label for="">Kernet</label>
-                <WidthMiniList :arr="list_emp" :selected="selected_kernet" :pure="selected_mini_temp" @setSelected="selected_kernet=$event" :disabled="trx_trp_loaded.kernet_id > 1 || trx_trp.val1==1"/>
+                <WidthMiniList :arr="list_kernet" :selected="selected_kernet" :pure="selected_mini_temp" @setSelected="selected_kernet=$event" :disabled="trx_trp_loaded.kernet_id > 1 || trx_trp.val1==1"/>
                 <p class="text-red-500">{{ field_errors.kernet_id }}</p>
               </div>
             </div>
@@ -106,6 +106,7 @@ import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
 const { pointFormat } = useUtils();
+const company_code = useDynamicPathCookie('company_code');
 
 
 const props = defineProps({
@@ -493,6 +494,26 @@ watch(() => props.show, async(newVal, oldVal) => {
   immediate: true
 });
 
+const is_uj_for_dinas_supir = ref(false);
+const is_uj_for_dinas_kernet = ref(false);
+const list_supir = computed(()=>{
+  // console.log(list_emp.value);
+  // console.log(company_code.value);
+  // console.log(is_uj_for_dinas_supir.value);
+
+  if(is_uj_for_dinas_supir.value)
+    return list_emp.value.filter((x)=>{return x._raw.workers_from!=company_code.value});
+  else
+    return list_emp.value.filter((x)=>{return x._raw.workers_from==company_code.value});
+});
+
+const list_kernet = computed(()=>{
+  if(is_uj_for_dinas_kernet.value)
+    return list_emp.value.filter((x)=>{return x._raw.workers_from!=company_code.value});
+  else
+    return list_emp.value.filter((x)=>{return x._raw.workers_from==company_code.value});  
+});
+
 watch(()=>selected_uj.value._raw, (newVal, oldVal) => {
   if(newVal &&
     Object.keys(newVal).length === 0 &&
@@ -501,12 +522,34 @@ watch(()=>selected_uj.value._raw, (newVal, oldVal) => {
       selected_kernet.value = JSON.parse(JSON.stringify(selected_mini_temp));
       trx_trp.value.transition_target = "";
       trx_trp.value.transition_type = "";
-  } else if (newVal.asst_opt && newVal.asst_opt == 'TANPA KERNET') {
-      selected_kernet.value = JSON.parse(JSON.stringify(selected_mini_temp));
-      if(newVal.transition_from){
-        trx_trp.value.transition_target = newVal.transition_from;
-        trx_trp.value.transition_type = "From";
+      is_uj_for_dinas_supir.value = false;
+      is_uj_for_dinas_kernet.value = false;
+  } else if (newVal.asst_opt) {
+    selected_supir.value = JSON.parse(JSON.stringify(selected_mini_temp));
+    selected_kernet.value = JSON.parse(JSON.stringify(selected_mini_temp));
+    if(newVal.transition_from){
+      trx_trp.value.transition_target = newVal.transition_from;
+      trx_trp.value.transition_type = "From";
+    }
+
+    newVal.details2.forEach((x)=>{
+      // console.log(x);
+      if(x.xfor == 'Supir' && x.ac_account_name.toLowerCase().includes('dinas')){
+        is_uj_for_dinas_supir.value = true;
       }
+
+      if(x.xfor == 'Kernet' && x.ac_account_name.toLowerCase().includes('dinas')){
+        is_uj_for_dinas_kernet.value = true;
+      }
+    });
+
+    // if(newVal.asst_opt == 'TANPA KERNET'){
+    //   selected_kernet.value = JSON.parse(JSON.stringify(selected_mini_temp));
+    //   if(newVal.transition_from){
+    //     trx_trp.value.transition_target = newVal.transition_from;
+    //     trx_trp.value.transition_type = "From";
+    //   }
+    // }
   }
 }, {
   deep:true,

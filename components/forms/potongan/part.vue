@@ -57,6 +57,8 @@
                 <th>ID Trx Trp</th>
                 <th>Nominal Potong</th>
                 <th>Note</th>
+                <th>PVR No</th>
+                <th>PV No</th>
                 <th>Created At</th>
                 <th>Updated At</th>
                 <!-- <th>Deleted At</th>
@@ -88,6 +90,8 @@
                 <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.trx_trp_id }}</td>
                 <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ pointFormat(potongan_trx.nominal_cut) }}</td>
                 <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.note }}</td>
+                <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.trx_trp ? potongan_trx.trx_trp.pvr_no : "" }}</td>
+                <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.trx_trp ? potongan_trx.trx_trp.pv_no : "" }}</td>
                 <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.created_at ? $moment(potongan_trx.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.updated_at ? $moment(potongan_trx.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <!-- <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.deleted_at ? $moment(potongan_trx.deleted_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>

@@ -19,7 +19,7 @@
           </div>
           <ul class="grow overflow-auto">
             <template v-for="v in menuListFiltered">
-              <li v-if="v.showing" :class="activeMenu == v.activeMenu?'active':''" >
+              <li :class="activeMenu == v.activeMenu?'active':''" >
                 <nuxt-link :to="v.activeMenu" class="cursor-pointer" @click="goTo(v.activeMenu)">
                   <component
                     v-if="v.icon"
@@ -290,165 +290,177 @@ watch(() => route.path, (newVal, oldVal) => {
   immediate: true
 });
 
-const menuList =[
-  {
-    activeMenu:"/",
-    showing:true,
-    title:"Dashboard",
-    icon:'IconsHome'
-  },
-  {
-    activeMenu:"/destination_location",
-    showing:useUtils().checkPermission('destination_location.views'),
-    title:"Dest.Location",
-    icon:'IconsLocationOn'
-  },
-  {
-    activeMenu:"/data_ujalan",
-    showing:useUtils().checkPermission('ujalan.views'),
-    title:"UJ Mst",
-    icon:'IconsMoney'
-  },
-  {
-    activeMenu:"/potongan",
-    showing:useUtils().checkPermission('potongan_mst.views'),
-    title:"Potongan",
-    icon:'IconsMoneySlash'
-  },
-  {
-    activeMenu:"/extra_money",
-    showing:useUtils().checkPermission('extra_money.views'),
-    title:"Extra Money",
-    icon:'IconsMoneyMulti'
-  },
-  {
-    activeMenu:"/extra_money/trx",
-    showing:useUtils().checkPermission('extra_money_trx.views'),
-    title:"Extra Money Trx",
-    icon:'IconsMoneyMulti'
-  },
-  {
-    activeMenu:"/data_trx_trp",
-    showing:useUtils().checkPermission('trp_trx.views'),
-    title:"Trx Trp",
-    icon:'IconsProduct'
-  },
-  {
-    activeMenu:"/fin_payment_req",
-    showing:useUtils().checkPermission('fin_payment_req.views'),
-    title:"Mandiri TF",
-    icon:'IconsProduct'
-  },
-  {
-    activeMenu:"/data_trx_trp/transfer",
-    showing:useUtils().checkPermission('trp_trx.transfer.views'),
-    title:"Trx Transfer",
-    icon:'IconsProduct'
-  },
-  {
-    activeMenu:"/data_trx_trp/ticket",
-    showing:useUtils().checkPermission('trp_trx.ticket.views'),
-    title:"Ticket Logistik",
-    icon:'IconsProduct'
-  },
-  {
-    activeMenu:"/data_trx_trp/ritase",
-    showing:useUtils().checkPermission('trp_trx.ritase.views'),
-    title:"Trx Ritase",
-    icon:'IconsProduct'
-  },
-  {
-    activeMenu:"/data_trx_trp/absen",
-    showing:useUtils().checkPermission('trp_trx.absen.views'),
-    title:"Trx Absen",
-    icon:'IconsProduct'
-  },
-  {
-    activeMenu:"/data_standby",
-    showing:useUtils().checkPermission('standby_mst.views'),
-    title:"StandBy Mst",
-    icon:'IconsMoney'
-  },
-  {
-    activeMenu:"/data_standby/trx",
-    showing:useUtils().checkPermission('standby_trx.views'),
-    title:"StandBy Trx",
-    icon:'IconsMoney'
-  },
-  {
-    activeMenu:"/vehicle",
-    showing:useUtils().checkPermission('vehicle.views'),
-    title:"Vehicle",
-    icon:'IconsTruck'
-  },
-  {
-    activeMenu:"/employee",
-    showing:useUtils().checkPermission('employee.views'),
-    title:"Employee",
-    icon:'IconsPerson'
-  },
+import { menuList } from '~/config/menu'
+import { preloadByMenu } from '~/utils/preloadByMenu'
+
+// const menuListComputed = computed(() =>
+//   menuList.map(m => ({
+//     ...m,
+//     showing: m.permission
+//       ? useUtils().checkPermission(m.permission)
+//       : true,
+//   }))
+// )
+
+// const menuList =[
+//   {
+//     activeMenu:"/",
+//     showing:true,
+//     title:"Dashboard",
+//     icon:'IconsHome'
+//   },
+//   {
+//     activeMenu:"/destination_location",
+//     showing:useUtils().checkPermission('destination_location.views'),
+//     title:"Dest.Location",
+//     icon:'IconsLocationOn'
+//   },
+//   {
+//     activeMenu:"/data_ujalan",
+//     showing:useUtils().checkPermission('ujalan.views'),
+//     title:"UJ Mst",
+//     icon:'IconsMoney'
+//   },
+//   {
+//     activeMenu:"/potongan",
+//     showing:useUtils().checkPermission('potongan_mst.views'),
+//     title:"Potongan",
+//     icon:'IconsMoneySlash'
+//   },
+//   {
+//     activeMenu:"/extra_money",
+//     showing:useUtils().checkPermission('extra_money.views'),
+//     title:"Extra Money",
+//     icon:'IconsMoneyMulti'
+//   },
+//   {
+//     activeMenu:"/extra_money/trx",
+//     showing:useUtils().checkPermission('extra_money_trx.views'),
+//     title:"Extra Money Trx",
+//     icon:'IconsMoneyMulti'
+//   },
+//   {
+//     activeMenu:"/data_trx_trp",
+//     showing:useUtils().checkPermission('trp_trx.views'),
+//     title:"Trx Trp",
+//     icon:'IconsProduct'
+//   },
+//   {
+//     activeMenu:"/fin_payment_req",
+//     showing:useUtils().checkPermission('fin_payment_req.views'),
+//     title:"Mandiri TF",
+//     icon:'IconsProduct'
+//   },
+//   {
+//     activeMenu:"/data_trx_trp/transfer",
+//     showing:useUtils().checkPermission('trp_trx.transfer.views'),
+//     title:"Trx Transfer",
+//     icon:'IconsProduct'
+//   },
+//   {
+//     activeMenu:"/data_trx_trp/ticket",
+//     showing:useUtils().checkPermission('trp_trx.ticket.views'),
+//     title:"Ticket Logistik",
+//     icon:'IconsProduct'
+//   },
+//   {
+//     activeMenu:"/data_trx_trp/ritase",
+//     showing:useUtils().checkPermission('trp_trx.ritase.views'),
+//     title:"Trx Ritase",
+//     icon:'IconsProduct'
+//   },
+//   {
+//     activeMenu:"/data_trx_trp/absen",
+//     showing:useUtils().checkPermission('trp_trx.absen.views'),
+//     title:"Trx Absen",
+//     icon:'IconsProduct'
+//   },
+//   {
+//     activeMenu:"/data_standby",
+//     showing:useUtils().checkPermission('standby_mst.views'),
+//     title:"StandBy Mst",
+//     icon:'IconsMoney'
+//   },
+//   {
+//     activeMenu:"/data_standby/trx",
+//     showing:useUtils().checkPermission('standby_trx.views'),
+//     title:"StandBy Trx",
+//     icon:'IconsMoney'
+//   },
+//   {
+//     activeMenu:"/vehicle",
+//     showing:useUtils().checkPermission('vehicle.views'),
+//     title:"Vehicle",
+//     icon:'IconsTruck'
+//   },
+//   {
+//     activeMenu:"/employee",
+//     showing:useUtils().checkPermission('employee.views'),
+//     title:"Employee",
+//     icon:'IconsPerson'
+//   },
   
-  {
-    activeMenu:"/salary_paid",
-    showing:useUtils().checkPermission('salary_paid.views'),
-    title:"Salary Paid",
-    icon:'IconsMoneyBag'
-  },
-  {
-    activeMenu:"/salary_paid/rpt",
-    showing:useUtils().checkPermission('rpt_salary.views'),
-    title:"Salary Report",
-    icon:'IconsFileCopy'
-  },
-  {
-    activeMenu:"/salary_bonus",
-    showing:useUtils().checkPermission('salary_bonus.views'),
-    title:"Salary Additional",
-    icon:'IconsMoneyBag'
-  },
-  {
-    activeMenu:"/user",
-    showing:useUtils().checkPermission('user.views'),
-    title:"User",
-    icon:'IconsPerson'
-  },
-  {
-    activeMenu:"/permission_group",
-    showing:useUtils().checkPermission('permission_group.views'),
-    title:"Permission Group",
-    icon:'IconsPeople'
-  },
-  {
-    activeMenu:"/report_trx_trp",
-    showing:useUtils().checkPermission('trp_trx.report.views'),
-    title:"Report Susut",
-    icon:'IconsFileCopy'
-  },
-  {
-    activeMenu:"/report_trx_trp/finance",
-    showing:useUtils().checkPermission('trp_trx.report.views'),
-    title:"Report Fin",
-    icon:'IconsFileCopy'
-  },
-  {
-    activeMenu:"/report/ramp",
-    showing:useUtils().checkPermission('report.ramp.views'),
-    title:"Rpt Hsl Trip",
-    icon:'IconsFileCopy'
-  },
-  {
-    activeMenu:"/report/ast_n_driver",
-    showing:useUtils().checkPermission('report.ast_n_driver.views'),
-    title:"Rpt Gaji Supir & Kernet",
-    icon:'IconsFileCopy'
-  },
-  {
-    activeMenu:"/report/distance",
-    showing:useUtils().checkPermission('report.distance.views'),
-    title:"Rpt Jarak",
-    icon:'IconsFileCopy'
-  },
-];
+//   {
+//     activeMenu:"/salary_paid",
+//     showing:useUtils().checkPermission('salary_paid.views'),
+//     title:"Salary Paid",
+//     icon:'IconsMoneyBag'
+//   },
+//   {
+//     activeMenu:"/salary_paid/rpt",
+//     showing:useUtils().checkPermission('rpt_salary.views'),
+//     title:"Salary Report",
+//     icon:'IconsFileCopy'
+//   },
+//   {
+//     activeMenu:"/salary_bonus",
+//     showing:useUtils().checkPermission('salary_bonus.views'),
+//     title:"Salary Additional",
+//     icon:'IconsMoneyBag'
+//   },
+//   {
+//     activeMenu:"/user",
+//     showing:useUtils().checkPermission('user.views'),
+//     title:"User",
+//     icon:'IconsPerson'
+//   },
+//   {
+//     activeMenu:"/permission_group",
+//     showing:useUtils().checkPermission('permission_group.views'),
+//     title:"Permission Group",
+//     icon:'IconsPeople'
+//   },
+//   {
+//     activeMenu:"/report_trx_trp",
+//     showing:useUtils().checkPermission('trp_trx.report.views'),
+//     title:"Report Susut",
+//     icon:'IconsFileCopy'
+//   },
+//   {
+//     activeMenu:"/report_trx_trp/finance",
+//     showing:useUtils().checkPermission('trp_trx.report.views'),
+//     title:"Report Fin",
+//     icon:'IconsFileCopy'
+//   },
+//   {
+//     activeMenu:"/report/ramp",
+//     showing:useUtils().checkPermission('report.ramp.views'),
+//     title:"Rpt Hsl Trip",
+//     icon:'IconsFileCopy'
+//   },
+//   {
+//     activeMenu:"/report/ast_n_driver",
+//     showing:useUtils().checkPermission('report.ast_n_driver.views'),
+//     title:"Rpt Gaji Supir & Kernet",
+//     icon:'IconsFileCopy'
+//   },
+//   {
+//     activeMenu:"/report/distance",
+//     showing:useUtils().checkPermission('report.distance.views'),
+//     title:"Rpt Jarak",
+//     icon:'IconsFileCopy'
+//   },
+// ];
 
 const search = ref('');
 const searchInput = ref(null)
@@ -458,13 +470,22 @@ const clearAndFocus = async () => {
   await nextTick()
   searchInput.value?.focus()
 }
-const menuListFiltered = computed(()=>{
-  if(search.value!='')
-  return menuList.filter((x)=>{return x.showing && x.title.toLowerCase().includes(search.value.toLowerCase())})
+const menuListFiltered = computed(() => {
+  // 1️⃣ permission filter
+  let result = menuList.filter(menu =>
+    (menu.permission=='dashboard') ? true :(!menu.permission || useUtils().checkPermission(menu.permission))    
+  )
 
-  return menuList;
+  // 2️⃣ search filter
+  if (search.value.trim() !== '') {
+    const keyword = search.value.toLowerCase()
+    result = result.filter(menu =>
+      menu.title.toLowerCase().includes(keyword)
+    )
+  }
+
+  return result
 })
-
 
 const { logUserOut } = useAuthStore();
 const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive
@@ -537,6 +558,11 @@ onMounted(() => {
         }
       }
     }
+
+      // tunggu UI stabil dulu
+  setTimeout(() => {
+    preloadByMenu(menuListFiltered.value)
+  }, 300)
 });
 
 const goTo=(url:any)=>{

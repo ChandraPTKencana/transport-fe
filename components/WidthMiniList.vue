@@ -1,13 +1,13 @@
 <template>
   <div class="relative">
-    <div v-if="disabled" class="absolute w-full h-full bg-gray-400 rounded">
+    <!-- <div v-if="disabled" class="absolute w-full h-full cursor-not-allowed">
 
-    </div>
+    </div> -->
     <div v-if="selected.id==''"  class="card-border cursor-pointer rounded" @click="openSearch()">
 
 
     </div>
-    <div v-else class="card-border cursor-pointer !flex flex-row flex-nowrap rounded">
+    <div v-else class="card-border cursor-pointer !flex flex-row flex-nowrap rounded" :class="disabled?'bg-gray-400 cursor-not-allowed':''">
       <div class="flex flex-wrap items-center grow" @click="openSearch()">
         <WidthMiniPart :selected="selected" />
       </div>
@@ -81,6 +81,7 @@ const search_words = ref<HTMLElement | null>(null);
 const search = ref("");
 
 const openSearch=()=>{
+  if(props.disabled) return;
   setTimeout(()=>{
     open_search.value = true;
   },1);
