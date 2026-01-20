@@ -32,5 +32,5 @@ rmdir /s /q _nuxt
 
 
 UPDATE extra_money_trx
-SET attachment_1_loc = REPLACE(attachment_1_loc, '/files/', '')
+SET attachment_2_loc = REPLACE(attachment_2_loc, '/files/', '')
 

@@ -55,6 +55,11 @@
             <IconsPrinterEye />
           </button>
 
+          <button v-if="enabled_print_preview_qr" type="button" name="button" class="m-1 text-2xl "
+            @click="printPreviewQR()">
+            <IconsQrCode />
+          </button>
+
           <button v-if="enabled_print_preview_bt" type="button" name="button" class="m-1 text-2xl "
             @click="printPreviewBT()">
             <IconsPrinterEye />
@@ -853,6 +858,32 @@ const printPreview = async()=>{
   printHtml(data.value.html,318);
 }
 
+const printPreviewQR = async()=>{
+  
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+    return;
+  } 
+  
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useMyFetch("/trx_trp_preview_file_qr", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json'
+    },
+    params: {id : trx_trps.value[selected.value].id},
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  printHtml(data.value.html,318);
+}
+
 
 const printPreviewBT = async()=>{
   
@@ -1178,6 +1209,14 @@ const enabled_print_preview = computed(()=>{
   && useUtils().checkPermission('trp_trx.preview_file');
   return result;
 })
+
+const enabled_print_preview_qr = computed(()=>{ 
+  let result = selected.value > -1 
+  && dt_selected.value.val == 1
+  && useUtils().checkPermission('trp_trx.preview_file');
+  return result;
+})
+
 
 const enabled_print_preview_bt = computed(()=>{ 
   let result = selected.value > -1 
