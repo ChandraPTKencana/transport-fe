@@ -200,7 +200,7 @@
         </form>
     </div>
   </section>
-  <LazyFormsFinPaymentReqTrxTrps :show="forms_fin_payment_req_trx_trp_show" :fnClose="()=>{forms_fin_payment_req_trx_trp_show=false}" :id="fin_payment_req.id" @setKData="fin_payment_req=$event" @setIsNew="($event)=>{if($event)p_data.push(fin_payment_req)}"/>
+  <LazyFormsFinPaymentReqTrxTrps :show="forms_fin_payment_req_trx_trp_show" :fnClose="()=>{forms_fin_payment_req_trx_trp_show=false}" :id="fin_payment_req.id" @setKData="fin_payment_req=$event" @setIsNew="($event)=>{if($event)p_data.unshift(fin_payment_req)}"/>
   <div v-show="frm_show_batch" class="bg-white w-[250px] sm:w-1/2 md:w-1/3 lg:w-1/4 fixed z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-2 border-slate-700 shadow-2xl shadow-black p-2">
     <label for="">Select Batch No</label>
     <select v-model="batch_no">

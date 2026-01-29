@@ -1,6 +1,14 @@
 <script lang="ts" setup>
 import { useCommonStore } from '~/store/common';
 useCommonStore().loading_full = false;
+let hostname =window.location.hostname;
+const linkRef = ()=>{
+     if(hostname=='110.232.82.16'){
+        return 'http://110.232.82.16:8888/genk/logistik/';
+     }else{
+        return 'http://192.168.1.248/genk/logistik/';
+     }
+}
 
 </script>
 <template>
@@ -20,7 +28,7 @@ useCommonStore().loading_full = false;
                 </div>
             </a>
     
-            <a href="http://192.168.1.248/genk/logistik/" target="_blank"> 
+            <a :href="linkRef()" target="_blank"> 
                 <div class="bg-blue-400 rounded p-2 text-white flex items-center aspect-square grid grid-row-2 place-items-center text-center">
                     <div>
                         <IconsSyncCloud class="mr-2 text-8xl"/>  
