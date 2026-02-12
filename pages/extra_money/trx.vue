@@ -1033,8 +1033,6 @@ const enabled_approve_void = computed(()=>{
 const enabled_print_preview = computed(()=>{
   let result = useUtils().checkPermission('extra_money_trx.preview_file') 
   && selected.value > -1 
-  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && dt_selected.value.val1 == 1;
   return result;
 })
@@ -1042,8 +1040,6 @@ const enabled_print_preview = computed(()=>{
 
 const enabled_print_preview_bt = computed(()=>{ 
   let result = selected.value > -1 
-  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
-  && [undefined,0].indexOf(dt_selected.value.req_deleted) > -1
   && dt_selected.value.payment_method_id == 2
   && dt_selected.value.received_payment == 1
   && dt_selected.value.duitku_employee_disburseId != ''
