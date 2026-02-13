@@ -53,6 +53,7 @@
                 <th>No</th>
                 <th>App 1</th>
                 <th>App 2</th>
+                <th>Sumber</th>
                 <th>ID</th>
                 <th>ID Trx Trp</th>
                 <th>Nominal Potong</th>
@@ -86,6 +87,7 @@
                     <IconsCheck v-else/>
                   </div>
                 </td>
+                <td :class="potongan_trx.deleted ? '!bg-red-500' :''" class="bold">{{ potongan_trx.sumber }}</td>
                 <td :class="potongan_trx.deleted ? '!bg-red-500' :''" class="bold">{{ potongan_trx.id }}</td>
                 <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ potongan_trx.trx_trp_id }}</td>
                 <td :class="potongan_trx.deleted ? '!bg-red-500' :''">{{ pointFormat(potongan_trx.nominal_cut) }}</td>

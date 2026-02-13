@@ -25,6 +25,14 @@
               
               <p class="text-red-500">{{ field_errors.tanggal }}</p>
             </div>
+            <div v-if="potongan_trx.sumber!='TRIP'" class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
+              <label for="">Sumber</label>
+              <select v-model="potongan_trx.sumber">
+                <option value="MANUAL">MANUAL</option>
+                <option value="PENERIMAAN">PENERIMAAN</option>
+              </select>
+              <p class="text-red-500">{{ field_errors.sumber }}</p>
+            </div>
             <div class="w-6/12 sm:w-3/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
               <label for="">Nominal Potong</label>
               <div class="w-full" >
@@ -97,6 +105,7 @@ const potongan_trx_temp = {
   note: "",
   nominal_cut: "",
   tanggal: new Date(),
+  sumber:'MANUAL'
 };
 
 const potongan_trx = ref({...potongan_trx_temp});
@@ -115,6 +124,7 @@ const doSave = async () => {
   data_in.append("potongan_mst_id", props.potongan_mst_id);
   data_in.append("note", potongan_trx.value.note);
   data_in.append("nominal_cut", potongan_trx.value.nominal_cut);
+  data_in.append("sumber", potongan_trx.value.sumber);
 
   let $method = "post";
 
