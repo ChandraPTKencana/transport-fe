@@ -325,6 +325,11 @@ const doSave = async () => {
   // trx_trp.value.ritase_return_at  = trx_trp.value.img_return_ts;
   // trx_trp.value.ritase_till_at    = trx_trp.value.img_till_ts;
 
+  trx_trp.value.timbang_a_img_in_exists = trx_trp.value.timbang_a_img_in ? true : false;
+  trx_trp.value.timbang_a_img_out_exists = trx_trp.value.timbang_a_img_out ? true : false;
+  trx_trp.value.timbang_b_img_in_exists = trx_trp.value.timbang_b_img_in ? true : false;
+  trx_trp.value.timbang_b_img_out_exists = trx_trp.value.timbang_b_img_out ? true : false;
+
   trx_trp.value.updated_at = data.value.updated_at;
   if(props.id<=0){
     trx_trp.value.id = data.value.id;

@@ -159,6 +159,10 @@
         <template #[`uj_asst_opt`]="{item}">
           {{ item.uj?.asst_opt }}
         </template>
+
+        <template #[`uj_id`]="{item}">
+          {{ item.uj?.id }}
+        </template>
         <!-- <template #[`susut_bruto_a`]="{item}">
           {{pointFormat(item.ticket_a_bruto)}}
         </template>
@@ -1004,10 +1008,13 @@ const fields_thead=ref([
   {key:"status_batas_susut",label:"Batas Susut",type:'string'},
   {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
-  {key:"xto",label:"Tujuan",filter_on:1,type:'string'},
-  {key:"uj_asst_opt",label:"Info",filter_on:1,type:'select',select_item:['DENGAN KERNET','TANPA KERNET']},
-  {key:"tipe",label:"Tipe",filter_on:1,type:'string'},
-  {key:"jenis",label:"Jenis",filter_on:1,type:'string'},
+  {key:"uj",label:"Uang Jalan",childs:[
+    {key:"uj_id",label:"ID",filter_on:0,type:'string'},
+    {key:"xto",label:"Tujuan",filter_on:1,type:'string'},
+    {key:"uj_asst_opt",label:"Info",filter_on:1,type:'select',select_item:['DENGAN KERNET','TANPA KERNET']},
+    {key:"tipe",label:"Tipe",filter_on:1,type:'string'},
+    {key:"jenis",label:"Jenis",filter_on:1,type:'string'},
+  ]},
   // {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK','LAIN','TUNGGU']},
   {key:"amount",label:"Amount",class:" justify-end",filter_on:1,type:"number"},
   {key:"transition",label:"Peralihan",childs:[
