@@ -571,7 +571,7 @@ const fields_thead=ref([
 
 const enabled_copy = computed(()=>{  
   let result = selected.value > -1 
-  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  // && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && useUtils().checkPermission('ujalan.create');
   return result;
 })

@@ -72,6 +72,12 @@ export const menuList = [
         icon:'IconsProduct'
       },
       {
+        activeMenu:"/data_trx_trp/timbang_info",
+        permission:'trp_trx.timbang_info.views',
+        title:"Trx Timbang",
+        icon:'IconsProduct'
+      },
+      {
         activeMenu:"/data_standby",
         permission:'standby_mst.views',
         title:"StandBy Mst",

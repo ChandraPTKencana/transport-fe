@@ -73,52 +73,39 @@
           <div class="w-full flex flex-wrap items-center grow overflow-auto">
             <div class="w-full sm:w-1/2 text-center p-1">
               <div class="border-[1px] p-1">
-                <label class="font-bold">Berangkat : {{ trx_trp.img_leave_ts ? $moment(trx_trp.img_leave_ts).format("DD-MM-YYYY HH:mm") : "" }} {{ trx_trp.img_leave_is_manual ? '(Manual)' : '(System)' }}</label>
-                <div class="w-full flex justify-center items-center">
-                  <img :src="trx_trp.img_leave" alt="">
-                </div>
+                <label class="font-bold">Timbang Masuk </label>
+                <AttachmentSingleV1 :key="trx_trp.timbang_a_img_in_preview" :show="show" :label="''" :link="trx_trp.timbang_a_img_in_preview" @setFile="trx_trp.timbang_a_img_in=$event"  @setPreview="trx_trp.timbang_a_img_in_preview=$event"/>
               </div>
             </div>
 
             <div class="w-full sm:w-1/2 text-center p-1">
               <div class="border-[1px] p-1">
-                <div class="border-[1px] p-1">
-                  <label class="font-bold">Tiba : {{ trx_trp.img_arrive_ts ? $moment(trx_trp.img_arrive_ts).format("DD-MM-YYYY HH:mm") : "" }} {{ trx_trp.img_arrive_is_manual ? '(Manual)' : '(System)' }}</label>
-                  <div class="w-full flex justify-center items-center">
-                    <img :src="trx_trp.img_arrive" alt="">
-                  </div>
-                </div>
+                <label class="font-bold">Timbang Keluar </label>
+                <AttachmentSingleV1 :key="trx_trp.timbang_a_img_out_preview" :show="show" :label="''" :link="trx_trp.timbang_a_img_out_preview" @setFile="trx_trp.timbang_a_img_out=$event"  @setPreview="trx_trp.timbang_a_img_out_preview=$event" />
               </div>
             </div>
 
             <div class="w-full sm:w-1/2 text-center p-1">
               <div class="border-[1px] p-1">
-                <div class="border-[1px] p-1">
-                  <label class="font-bold">Kembali : {{ trx_trp.img_return_ts ? $moment(trx_trp.img_return_ts).format("DD-MM-YYYY HH:mm") : "" }} {{ trx_trp.img_return_is_manual ? '(Manual)' : '(System)' }}</label>
-                  <div class="w-full flex justify-center items-center">
-                    <img :src="trx_trp.img_return" alt="">
-                  </div>
-                </div>
+                <label class="font-bold">Timbang Masuk </label>
+                <AttachmentSingleV1 :key="trx_trp.timbang_b_img_in_preview" :show="show" :label="''" :link="trx_trp.timbang_b_img_in_preview" @setFile="trx_trp.timbang_b_img_in=$event"  @setPreview="trx_trp.timbang_b_img_in_preview=$event" />
               </div>
             </div>
 
             <div class="w-full sm:w-1/2 text-center p-1">
               <div class="border-[1px] p-1">
-                <div class="border-[1px] p-1">
-                  <label class="font-bold">Sampai : {{ trx_trp.img_till_ts ? $moment(trx_trp.img_till_ts).format("DD-MM-YYYY HH:mm") : "" }} {{ trx_trp.img_till_is_manual ? '(Manual)' : '(System)' }}</label>
-                  <div class="w-full flex justify-center items-center">
-                    <img :src="trx_trp.img_till" alt="">
-                  </div>
-                </div>
+                <label class="font-bold">Timbang Keluar </label>
+                <AttachmentSingleV1 :key="trx_trp.timbang_b_img_out_preview" :show="show" :label="''" :link="trx_trp.timbang_b_img_out_preview" @setFile="trx_trp.timbang_b_img_out=$event"  @setPreview="trx_trp.timbang_b_img_out_preview=$event" />
               </div>
             </div>
 
             <div class="w-full p-1">
               <label for=""> Note </label>
               <div class="card-border">
-                {{ trx_trp.ritase_note }}
-              </div>
+                {{ trx_trp.timbang_note }}
+              </div>  
             </div>
+
           </div>
         </div>
         
@@ -127,15 +114,9 @@
             <div>
               Di Validasi oleh : 
             </div>
-            <div v-if="trx_trp.ritase_val || trx_trp.ritase_val1 || trx_trp.ritase_val2" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
-              <div v-if="trx_trp.ritase_val">
-                App 1 : {{ trx_trp.ritase_val_by.username}} ( {{ trx_trp.ritase_val_at ? $moment(trx_trp.ritase_val_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
-              </div>
-              <div v-if="trx_trp.ritase_val1">
-                App 2 : {{ trx_trp.ritase_val1_by.username}} ( {{ trx_trp.ritase_val1_at ? $moment(trx_trp.ritase_val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
-              </div>
-              <div v-if="trx_trp.ritase_val2">
-                App 3 : {{ trx_trp.ritase_val2_by.username}} ( {{ trx_trp.ritase_val2_at ? $moment(trx_trp.ritase_val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+            <div v-if="trx_trp.timbang_val1" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
+              <div v-if="trx_trp.timbang_val1">
+                App 1 : {{ trx_trp.timbang_val1_by.username}} ( {{ trx_trp.timbang_val1_at ? $moment(trx_trp.timbang_val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
               </div>
             </div>
           </div>
@@ -224,33 +205,28 @@ const trx_trp_temp = {
     jenis:"",
     amount: 0,
 
-    img_leaves:[],
-    img_leave:"",
-    img_arrive:"",
-    img_return:"",
-    img_till:"",
+    timbang_a_img_in:"",
+    timbang_a_img_out:"",
+    timbang_b_img_in:"",
+    timbang_b_img_out:"",
 
-    img_leave_file:"",
-    img_arrive_file:"",
-    img_return_file:"",
-    img_till_file:"",
+    timbang_a_img_in_preview:"",
+    timbang_a_img_out_preview:"",
+    timbang_b_img_in_preview:"",
+    timbang_b_img_out_preview:"",
     
-    img_leave_ts:"",
-    img_arrive_ts:"",
-    img_return_ts:"",
-    img_till_ts:"",
+    timbang_a_img_in_ts:"",
+    timbang_a_img_out_ts:"",
+    timbang_b_img_in_ts:"",
+    timbang_b_img_out_ts:"",
 
-    ritase_note:"",
-    ritase_val:0,
-    ritase_val_by:{ username:"" },
-    ritase_val_at:"",
-    ritase_val1:0,
-    ritase_val1_by:{ username:"" },
-    ritase_val1_at:"",
+    timbang_note:"",
 
-    ritase_val2:0,
-    ritase_val2_by:{ username:"" },
-    ritase_val2_at:"",
+
+    timbang_val1:0,
+    timbang_val1_by:{ username:"" },
+    timbang_val1_at:""
+
 
 };
 const trx_trp = ref({...trx_trp_temp});
@@ -273,7 +249,7 @@ const doSave = async () => {
     data_in.append("_method", "PUT");
   }
 
-  const { data, error, status } = await useMyFetch("/trx_trp/absen/validasi", {
+  const { data, error, status } = await useMyFetch("/trx_trp/timbang_info/validasi", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -290,20 +266,11 @@ const doSave = async () => {
   }
   
 
-  trx_trp.value.ritase_val = data.value.ritase_val;
-  // trx_trp.value.ritase_val_user = data.value.ritase_val_user;
-  trx_trp.value.ritase_val_by = data.value.ritase_val_by;
-  trx_trp.value.ritase_val_at = data.value.ritase_val_at;
+  trx_trp.value.timbang_val1 = data.value.timbang_val1;
+  // trx_trp.value.timbang_val1_user = data.value.timbang_val1_user;
+  trx_trp.value.timbang_val1_by = data.value.timbang_val1_by;
+  trx_trp.value.timbang_val1_at = data.value.timbang_val1_at;
 
-  trx_trp.value.ritase_val1 = data.value.ritase_val1;
-  // trx_trp.value.ritase_val1_user = data.value.ritase_val1_user;
-  trx_trp.value.ritase_val1_by = data.value.ritase_val1_by;
-  trx_trp.value.ritase_val1_at = data.value.ritase_val1_at;
-
-  trx_trp.value.ritase_val2 = data.value.ritase_val2;
-  // trx_trp.value.ritase_val2_user = data.value.ritase_val2_user;
-  trx_trp.value.ritase_val2_by = data.value.ritase_val2_by;
-  trx_trp.value.ritase_val2_at = data.value.ritase_val2_at;
 
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
@@ -319,7 +286,7 @@ const callData = async () => {
   save_state.value = '';
 
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useMyFetch("/trx_trp/absen", {
+  const { data, error, status } = await useMyFetch("/trx_trp/timbang_info", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -346,6 +313,7 @@ watch(() => props.show, (newVal, oldVal) => {
         it_val.value.focus();
       },1);
     }
+    trx_trp.value = {...trx_trp_temp};
     callData();
   }else{
     document.removeEventListener('keydown', keydownListener);
@@ -365,6 +333,7 @@ const loadDown=()=>{
   $idx++;
   emit('setID',props.p_data[$idx].id);
   emit('setIndex',$idx);
+  trx_trp.value = {...trx_trp_temp};
   setTimeout(()=>{
     callData();
   },100);
@@ -378,6 +347,7 @@ const loadTop=()=>{
   $idx--;
   emit('setID',props.p_data[$idx].id);
   emit('setIndex',$idx);
+  trx_trp.value = {...trx_trp_temp};
   setTimeout(()=>{
     callData();
   },100);
