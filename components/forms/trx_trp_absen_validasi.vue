@@ -77,6 +77,17 @@
                 <div class="w-full flex justify-center items-center">
                   <AttachmentSingleV1 :key="trx_trp.img_leave_preview" :show="show" :label="''" :link="trx_trp.img_leave_preview" @setFile="trx_trp.img_leave=$event"  @setPreview="trx_trp.img_leave_preview=$event"/>
                 </div>
+                <div v-if="trx_trp.img_leave_latitude!=''" class="w-full flex justify-center items-center">
+                    <iframe 
+                      width="600" 
+                      height="450" 
+                      frameborder="0" 
+                      scrolling="no" 
+                      marginheight="0" 
+                      marginwidth="0" 
+                        :src="`https://www.google.com/maps?q=loc:${trx_trp.img_leave_latitude},${trx_trp.img_leave_longitude}&z=15&output=embed`">
+                    </iframe>
+                  </div>
               </div>
             </div>
 
@@ -86,6 +97,17 @@
                   <label class="font-bold">Tiba : {{ trx_trp.img_arrive_ts ? $moment(trx_trp.img_arrive_ts).format("DD-MM-YYYY HH:mm") : "" }} {{ trx_trp.img_arrive_is_manual ? '(Manual)' : '(System)' }}</label>
                   <div class="w-full flex justify-center items-center">
                     <AttachmentSingleV1 :key="trx_trp.img_arrive_preview" :show="show" :label="''" :link="trx_trp.img_arrive_preview" @setFile="trx_trp.img_arrive=$event"  @setPreview="trx_trp.img_arrive_preview=$event"/>
+                  </div>
+                  <div v-if="trx_trp.img_arrive_latitude!=''" class="w-full flex justify-center items-center">
+                    <iframe 
+                      width="600" 
+                      height="450" 
+                      frameborder="0" 
+                      scrolling="no" 
+                      marginheight="0" 
+                      marginwidth="0" 
+                        :src="`https://www.google.com/maps?q=loc:${trx_trp.img_arrive_latitude},${trx_trp.img_arrive_longitude}&z=15&output=embed`">
+                    </iframe>
                   </div>
                 </div>
               </div>
@@ -98,6 +120,17 @@
                   <div class="w-full flex justify-center items-center">
                     <AttachmentSingleV1 :key="trx_trp.img_return_preview" :show="show" :label="''" :link="trx_trp.img_return_preview" @setFile="trx_trp.img_return=$event"  @setPreview="trx_trp.img_return_preview=$event"/>
                   </div>
+                  <div v-if="trx_trp.img_return_latitude!=''" class="w-full flex justify-center items-center">
+                    <iframe 
+                      width="600" 
+                      height="450" 
+                      frameborder="0" 
+                      scrolling="no" 
+                      marginheight="0" 
+                      marginwidth="0" 
+                        :src="`https://www.google.com/maps?q=loc:${trx_trp.img_return_latitude},${trx_trp.img_return_longitude}&z=15&output=embed`">
+                    </iframe>
+                  </div>
                 </div>
               </div>
             </div>
@@ -108,6 +141,17 @@
                   <label class="font-bold">Sampai : {{ trx_trp.img_till_ts ? $moment(trx_trp.img_till_ts).format("DD-MM-YYYY HH:mm") : "" }} {{ trx_trp.img_till_is_manual ? '(Manual)' : '(System)' }}</label>
                   <div class="w-full flex justify-center items-center">
                     <AttachmentSingleV1 :key="trx_trp.img_till_preview" :show="show" :label="''" :link="trx_trp.img_till_preview" @setFile="trx_trp.img_till=$event"  @setPreview="trx_trp.img_till_preview=$event"/>
+                  </div>
+                  <div v-if="trx_trp.img_till_latitude!=''" class="w-full flex justify-center items-center">
+                    <iframe 
+                      width="600" 
+                      height="450" 
+                      frameborder="0" 
+                      scrolling="no" 
+                      marginheight="0" 
+                      marginwidth="0" 
+                        :src="`https://www.google.com/maps?q=loc:${trx_trp.img_till_latitude},${trx_trp.img_till_longitude}&z=15&output=embed`">
+                    </iframe>
                   </div>
                 </div>
               </div>
