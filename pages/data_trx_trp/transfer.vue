@@ -327,7 +327,7 @@
           </div>
 
           <div class="w-full sm:w-1/2 h-full">
-            <img  v-if="trx_trp.trx_absens?.length > 0" class="w-full" :src="trx_trp.trx_absens[0].gambar">
+            <AttachmentSingleV1 v-if="trx_trp.trx_absens?.length > 0" :key="trx_trp.trx_absens[0].gambar_preview" :show="show" :label="''" :link="trx_trp.trx_absens[0].gambar_preview" @setFile="trx_trp.trx_absens[0].gambar=$event"  @setPreview="trx_trp.trx_absens[0].gambar_preview=$event"/>
             <div v-else class="flex flex-col justify-center items-center px-2 py-8 border border-gray-700 bg-gray-300">
               <IconsImage />
               Tidak Ada Foto Berangkat

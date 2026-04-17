@@ -7,7 +7,7 @@
             <div class="border-[1px] p-1">
                 <label class="font-bold">Berangkat : {{ trx_trp.img_leave_ts ? $moment(trx_trp.img_leave_ts).format("DD-MM-YYYY HH:mm") : "" }} {{ trx_trp.img_leave_is_manual ? '(Manual)' : '(System)' }}</label>
                 <div class="w-full flex justify-center items-center">
-                <img :src="trx_trp.img_leave" alt="">
+                    <AttachmentSingleV1 :key="trx_trp.img_leave_preview" :show="show" :label="''" :link="trx_trp.img_leave_preview" @setFile="trx_trp.img_leave=$event"  @setPreview="trx_trp.img_leave_preview=$event"/>
                 </div>
             </div>
             </div>
@@ -17,7 +17,7 @@
                 <div class="border-[1px] p-1">
                 <label class="font-bold">Tiba : {{ trx_trp.img_arrive_ts ? $moment(trx_trp.img_arrive_ts).format("DD-MM-YYYY HH:mm") : "" }} {{ trx_trp.img_arrive_is_manual ? '(Manual)' : '(System)' }}</label>
                 <div class="w-full flex justify-center items-center">
-                    <img :src="trx_trp.img_arrive" alt="">
+                    <AttachmentSingleV1 :key="trx_trp.img_arrive_preview" :show="show" :label="''" :link="trx_trp.img_arrive_preview" @setFile="trx_trp.img_arrive=$event"  @setPreview="trx_trp.img_arrive_preview=$event"/>
                 </div>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                 <div class="border-[1px] p-1">
                 <label class="font-bold">Kembali : {{ trx_trp.img_return_ts ? $moment(trx_trp.img_return_ts).format("DD-MM-YYYY HH:mm") : "" }} {{ trx_trp.img_return_is_manual ? '(Manual)' : '(System)' }}</label>
                 <div class="w-full flex justify-center items-center">
-                    <img :src="trx_trp.img_return" alt="">
+                    <AttachmentSingleV1 :key="trx_trp.img_return_preview" :show="show" :label="''" :link="trx_trp.img_return_preview" @setFile="trx_trp.img_return=$event"  @setPreview="trx_trp.img_return_preview=$event"/>
                 </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                 <div class="border-[1px] p-1">
                 <label class="font-bold">Sampai : {{ trx_trp.img_till_ts ? $moment(trx_trp.img_till_ts).format("DD-MM-YYYY HH:mm") : "" }} {{ trx_trp.img_till_is_manual ? '(Manual)' : '(System)' }}</label>
                 <div class="w-full flex justify-center items-center">
-                    <img :src="trx_trp.img_till" alt="">
+                    <AttachmentSingleV1 :key="trx_trp.img_till_preview" :show="show" :label="''" :link="trx_trp.img_till_preview" @setFile="trx_trp.img_till=$event"  @setPreview="trx_trp.img_till_preview=$event"/>
                 </div>
                 </div>
             </div>

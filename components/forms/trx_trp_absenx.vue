@@ -84,13 +84,13 @@
                   placeholder="Waktu Berangkat"></vue-date-picker>
                 </ClientOnly>
                 <p class="text-red-500">{{ field_errors.img_leave_ts }}</p>             
-                <AttachmentSingleV1 :key="trx_trp.id+trx_trp.img_leave_preview" :show="show" :label="''" :link="trx_trp.img_leave_preview" :blob_file="trx_trp.img_leave" @setFile="trx_trp.img_leave=$event"  @setPreview="trx_trp.img_leave_preview=$event" :can_remove="true" />
+                <AttachmentSingle :value="trx_trp.img_leave" @setFile="trx_trp.img_leave_file=$event"  @setPreview="trx_trp.img_leave=$event" :can_remove="true"/>
                 <p class="text-red-500">{{ field_errors.img_leave }}</p>             
 
                 
                 <div v-if="trx_trp.img_leaves.length > 1" class="flex flex-wrap">
                   <div v-for="il in trx_trp.img_leaves" class="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/6 p-1">
-                    <AttachmentSingleV1 class="w-full cursor-pointer" :key="il.gambar_preview" :show="show" :label="''" :link="il.gambar_preview" @setFile="il.gambar=$event"  @setPreview="il.gambar_preview=$event" @click="trx_trp.img_leave=il.gambar,trx_trp.img_leave_preview=il.gambar_preview"/>
+                    <img class="w-full cursor-pointer" :src="il.gambar" @click="trx_trp.img_leave=il.gambar,trx_trp.img_leave_file=''">
                   </div>
                 </div>
               </div>
@@ -110,7 +110,7 @@
                   placeholder="Waktu Tiba"></vue-date-picker>
                 </ClientOnly>
                 <p class="text-red-500">{{ field_errors.img_arrive_ts }}</p>             
-                <AttachmentSingleV1 :show="show" :label="''" :link="trx_trp.img_arrive_preview" :blob_file="trx_trp.img_arrive" @setFile="trx_trp.img_arrive=$event"  @setPreview="trx_trp.img_arrive_preview=$event" :can_remove="true" />
+                <AttachmentSingle :value="trx_trp.img_arrive" @setFile="trx_trp.img_arrive_file=$event"  @setPreview="trx_trp.img_arrive=$event" :can_remove="true"/>
                 <p class="text-red-500">{{ field_errors.img_arrive }}</p>             
               </div>
             </div>
@@ -129,7 +129,7 @@
                   placeholder="Waktu Kembali"></vue-date-picker>
                 </ClientOnly>
                 <p class="text-red-500">{{ field_errors.img_return_ts }}</p>             
-                <AttachmentSingleV1 :show="show" :label="''" :link="trx_trp.img_return_preview" :blob_file="trx_trp.img_return" @setFile="trx_trp.img_return=$event"  @setPreview="trx_trp.img_return_preview=$event" :can_remove="true" />
+                <AttachmentSingle :value="trx_trp.img_return" @setFile="trx_trp.img_return_file=$event"  @setPreview="trx_trp.img_return=$event" :can_remove="true"/>
                 <p class="text-red-500">{{ field_errors.img_return }}</p>             
               </div>
             </div>
@@ -148,7 +148,7 @@
                   placeholder="Waktu Sampai"></vue-date-picker>
                 </ClientOnly>
                 <p class="text-red-500">{{ field_errors.img_till_ts }}</p>             
-                <AttachmentSingleV1 :show="show" :label="''" :link="trx_trp.img_till_preview" :blob_file="trx_trp.img_till" @setFile="trx_trp.img_till=$event"  @setPreview="trx_trp.img_till_preview=$event" :can_remove="true" />
+                <AttachmentSingle :value="trx_trp.img_till" @setFile="trx_trp.img_till_file=$event"  @setPreview="trx_trp.img_till=$event" :can_remove="true"/>
                 <p class="text-red-500">{{ field_errors.img_till }}</p>             
               </div>
             </div>
@@ -222,10 +222,10 @@ const trx_trp_temp = {
     img_return:"",
     img_till:"",
 
-    img_leave_preview:"",
-    img_arrive_preview:"",
-    img_return_preview:"",
-    img_till_preview:"",
+    img_leave_file:"",
+    img_arrive_file:"",
+    img_return_file:"",
+    img_till_file:"",
     
     img_leave_ts:"",
     img_arrive_ts:"",
@@ -267,7 +267,6 @@ const callData = async () => {
 
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
-    trx_trp.value = {...trx_trp_temp};
     callData();
   }
 }, {
@@ -279,21 +278,31 @@ const doSave = async () => {
   useCommonStore().loading_full = true;
   field_errors.value = {};
 
-  const data_in = new FormData(); 
-  data_in.append("img_leave", trx_trp.value.img_leave);
-  data_in.append("img_leave_preview", trx_trp.value.img_leave_preview);
+  const data_in = new FormData();
+  if(trx_trp.value.img_leave){
+    let idx = trx_trp.value.img_leaves.map((x)=>x.gambar).indexOf(trx_trp.value.img_leave); 
+    if(idx==-1){
+      data_in.append('img_leave', "ada");
+    }else{
+      data_in.append('img_leave', trx_trp.value.img_leaves[idx]['id']);
+    }
+  }else{
+    data_in.append('img_leave', "");
+  }
+
+  data_in.append("img_leave_file", trx_trp.value.img_leave_file);
   data_in.append("img_leave_ts", (trx_trp.value.img_leave_ts) ? $moment(trx_trp.value.img_leave_ts).format("YYYY-MM-DD HH:mm") : '');
 
-  data_in.append("img_arrive", trx_trp.value.img_arrive);
-  data_in.append("img_arrive_preview", trx_trp.value.img_arrive_preview);
+  data_in.append("img_arrive", trx_trp.value.img_arrive ? "ada" : "");
+  data_in.append("img_arrive_file", trx_trp.value.img_arrive_file);
   data_in.append("img_arrive_ts", (trx_trp.value.img_arrive_ts) ? $moment(trx_trp.value.img_arrive_ts).format("YYYY-MM-DD HH:mm") : '');
 
-  data_in.append("img_return", trx_trp.value.img_return);
-  data_in.append("img_return_preview", trx_trp.value.img_return_preview);
+  data_in.append("img_return", trx_trp.value.img_return ? "ada" : "");
+  data_in.append("img_return_file", trx_trp.value.img_return_file);
   data_in.append("img_return_ts", (trx_trp.value.img_return_ts) ? $moment(trx_trp.value.img_return_ts).format("YYYY-MM-DD HH:mm") : '');
   
-  data_in.append("img_till", trx_trp.value.img_till);
-  data_in.append("img_till_preview", trx_trp.value.img_till_preview);
+  data_in.append("img_till", trx_trp.value.img_till ? "ada" : "");
+  data_in.append("img_till_file", trx_trp.value.img_till_file);
   data_in.append("img_till_ts", (trx_trp.value.img_till_ts) ? $moment(trx_trp.value.img_till_ts).format("YYYY-MM-DD HH:mm") : '');
   data_in.append("ritase_note", trx_trp.value.ritase_note);
 

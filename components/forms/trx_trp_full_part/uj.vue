@@ -126,6 +126,41 @@
                     </template>
                     </tfoot>
                 </table>
+
+                <div class="w-full font-bold text-xl  text-center mt-2">
+                    BIAYA PERJALANAN ACCOUNT
+                </div>
+                <table class="w-full text-xs sm:text-sm">
+                    <thead>
+                    <tr>
+                        <th class="border-2 border-black p-1">No</th>
+                        <th class="border-2 border-black p-1">Desc</th>
+                        <th class="border-2 border-black p-1">Qty</th>
+                        <th class="border-2 border-black p-1">Harga</th>
+                        <th class="border-2 border-black p-1">Jumlah</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(du,idx) in trx_trp.uj_details2">
+                        <td class="border-2 border-black p-1">{{idx+1}}</td>
+                        <td class="border-2 border-black p-1">
+                            {{du.description}} 
+                            <br>
+                            <div class="text-xs">[{{du.ac_account_code}}/{{du.ac_account_name}}]</div>
+                        </td>
+                        <td class="border-2 border-black p-1 text-right">{{pointFormat(du.qty)}}</td>
+                        <td class="border-2 border-black p-1 text-right">{{pointFormat(du.amount)}}</td>
+                        <td class="border-2 border-black p-1 text-right">{{pointFormat(du.qty * du.amount)}}</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th class="border-2 border-black p-1" colspan="4"> Total </th>
+                        <th class="border-2 border-black p-1" v-if="trx_trp.uj_details2 && trx_trp.uj_details2.length > 0">{{ pointFormat(trx_trp.uj_details2.map((x)=>x.qty*x.amount).reduce((prev,curr)=>{prev+=curr; return prev})) }}</th>
+                    </tr>
+                    
+                    </tfoot>
+                </table>
             </div>
             <div class="w-full sm:w-5/12 md:w-1/2 p-2">
                 <div class="w-full font-bold text-xl  text-center mt-2">

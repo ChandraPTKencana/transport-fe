@@ -14,7 +14,7 @@
                   @click="absen.checked = !absen.checked">
                     <IconsCheck v-if="absen.checked" class="text-xl"/>
                   </div>
-                  <img :src="absen.gambar" class="max-w-full max-h-full w-full"/>
+                  <AttachmentSingleV1 class="max-w-full max-h-full w-full" :key="absen.gambar_preview" :show="show" :label="''" :link="absen.gambar_preview" @setFile="absen.gambar=$event"  @setPreview="absen.gambar_preview=$event"/>
                 </div>
               </div>
             </div>
