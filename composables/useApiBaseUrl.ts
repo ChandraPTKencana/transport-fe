@@ -1,9 +1,9 @@
 export default function useApiBaseUrl() {
     const url = useRequestURL()
     const  apiBaseUrls:Record<string, string>= {
-        '192.168.1.163/logistik': 'http://192.168.1.163/transport-be/a9p/',
-        'localhost:3000/logistik': 'http://192.168.1.163/transport-be/a9p/',
-        'localhost/logistik': 'http://192.168.1.163/transport-be/a9p/',
+        '192.168.1.98/logistik': 'http://192.168.1.98/transport-be/a9p/',
+        'localhost:3000/logistik': 'http://192.168.1.98/transport-be/a9p/',
+        'localhost/logistik': 'http://192.168.1.98/transport-be/a9p/',
 
         '10.10.30.196/logistik': 'http://10.10.30.196/transport-be/a9p/',
         '10.10.7.197/logistik': 'http://10.10.7.197/transport-be/a9p/',

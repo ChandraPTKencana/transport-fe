@@ -226,6 +226,9 @@
         <template #[`salary_paid`]="{item}">
           {{ (item.salary_paid) ? $moment(item.salary_paid?.period_end).format("MM-Y") + '['+item.salary_paid?.period_part+']' : "" }}
         </template>
+        <template #[`uj_id`]="{item}">
+          {{ item.uj?.id }}
+        </template>
         <template #[`uj_xto`]="{item}">
           {{ item.uj?.xto }}
         </template>
@@ -1071,12 +1074,15 @@ const fields_thead=ref([
   {key:"absen",label:"Absen"},
   {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1,sort:{priority:1,type:"desc"}},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
-  {key:"uj_xto",label:"Tujuan",filter_on:1,type:'string'},
-  {key:"uj_asst_opt",label:"Info",filter_on:1,type:'select',select_item:['DENGAN KERNET','TANPA KERNET']},
-  {key:"uj_tipe",label:"Tipe",filter_on:1,type:'string'},
+  {key:"uj",label:"UJ",childs:[
+    {key:"uj_id",label:"ID",type:'string', filter_on:1},
+    {key:"uj_xto",label:"Tujuan",filter_on:1,type:'string'},
+    {key:"uj_asst_opt",label:"Info",filter_on:1,type:'select',select_item:['DENGAN KERNET','TANPA KERNET']},
+    {key:"uj_tipe",label:"Tipe",filter_on:1,type:'string'},
+    {key:"uj_harga",label:"Amount",class:" justify-end",filter_on:1,type:"number"},
+  ]},
   {key:"jenis",label:"Jenis",filter_on:1,type:'string'},
   // {key:"jenis",label:"Jenis",filter_on:1,type:"select",select_item:['TBS','TBSK','CPO','PK','LAIN','TUNGGU']},
-  {key:"uj_harga",label:"Amount",class:" justify-end",filter_on:1,type:"number"},
   {key:"transition",label:"Peralihan",childs:[
     {key:"transition_type",label:"Type",type:'select', filter_on:1,select_item:['To','From']},
     {key:"transition_target",label:"Target",type:'select',filter_on:1,select_item:useCommonStore().list_pabrik},
