@@ -71,33 +71,43 @@
           </div>
 
           <div class="w-full flex flex-wrap items-center grow overflow-auto">
-            <div class="w-full sm:w-1/2 text-center p-1">
+            <template v-for="(ttti,ky) in trx_trp.trip_infos">
+              <div class="w-full sm:w-1/2 text-center p-1">
+                <div class="border-[1px] p-1">
+                  <label class="font-bold">{{ttti.trip_info_ordinal.title}} [{{ ttti.img_at ? $moment(ttti.img_at).format("DD-MM-YYYY HH:mm") : "" }}] </label>
+                  <!-- <p class="text-red-500">{{ field_errors.img_at }}</p>              -->
+                  <AttachmentSingleV1 :key="ky" :show="show" :label="''" :link="ttti.img_preview" :blob_file="ttti.img" @setFile="ttti.img=$event"  @setPreview="ttti.img_preview=$event" />
+                  <!-- <p class="text-red-500">{{ field_errors.img }}</p>              -->
+                </div>
+              </div>
+            </template>
+            <!-- <div class="w-full sm:w-1/2 text-center p-1">
               <div class="border-[1px] p-1">
                 <label class="font-bold">Timbang Masuk </label>
-                <AttachmentSingleV1 :key="trx_trp.timbang_a_img_in_preview" :show="show" :label="''" :link="trx_trp.timbang_a_img_in_preview" @setFile="trx_trp.timbang_a_img_in=$event"  @setPreview="trx_trp.timbang_a_img_in_preview=$event"/>
+                <AttachmentSingleV1 :key="trx_trp.timbang_a_1_img_in_preview" :show="show" :label="''" :link="trx_trp.timbang_a_1_img_in_preview" @setFile="trx_trp.timbang_a_1_img_in=$event"  @setPreview="trx_trp.timbang_a_1_img_in_preview=$event"/>
               </div>
             </div>
 
             <div class="w-full sm:w-1/2 text-center p-1">
               <div class="border-[1px] p-1">
                 <label class="font-bold">Timbang Keluar </label>
-                <AttachmentSingleV1 :key="trx_trp.timbang_a_img_out_preview" :show="show" :label="''" :link="trx_trp.timbang_a_img_out_preview" @setFile="trx_trp.timbang_a_img_out=$event"  @setPreview="trx_trp.timbang_a_img_out_preview=$event" />
+                <AttachmentSingleV1 :key="trx_trp.timbang_a_1_img_out_preview" :show="show" :label="''" :link="trx_trp.timbang_a_1_img_out_preview" @setFile="trx_trp.timbang_a_1_img_out=$event"  @setPreview="trx_trp.timbang_a_1_img_out_preview=$event" />
               </div>
             </div>
 
             <div class="w-full sm:w-1/2 text-center p-1">
               <div class="border-[1px] p-1">
                 <label class="font-bold">Timbang Masuk </label>
-                <AttachmentSingleV1 :key="trx_trp.timbang_b_img_in_preview" :show="show" :label="''" :link="trx_trp.timbang_b_img_in_preview" @setFile="trx_trp.timbang_b_img_in=$event"  @setPreview="trx_trp.timbang_b_img_in_preview=$event" />
+                <AttachmentSingleV1 :key="trx_trp.timbang_a_2_img_in_preview" :show="show" :label="''" :link="trx_trp.timbang_a_2_img_in_preview" @setFile="trx_trp.timbang_a_2_img_in=$event"  @setPreview="trx_trp.timbang_a_2_img_in_preview=$event" />
               </div>
             </div>
 
             <div class="w-full sm:w-1/2 text-center p-1">
               <div class="border-[1px] p-1">
                 <label class="font-bold">Timbang Keluar </label>
-                <AttachmentSingleV1 :key="trx_trp.timbang_b_img_out_preview" :show="show" :label="''" :link="trx_trp.timbang_b_img_out_preview" @setFile="trx_trp.timbang_b_img_out=$event"  @setPreview="trx_trp.timbang_b_img_out_preview=$event" />
+                <AttachmentSingleV1 :key="trx_trp.timbang_a_2_img_out_preview" :show="show" :label="''" :link="trx_trp.timbang_a_2_img_out_preview" @setFile="trx_trp.timbang_a_2_img_out=$event"  @setPreview="trx_trp.timbang_a_2_img_out_preview=$event" />
               </div>
-            </div>
+            </div> -->
 
             <div class="w-full p-1">
               <label for=""> Note </label>
@@ -205,24 +215,24 @@ const trx_trp_temp = {
     jenis:"",
     amount: 0,
 
-    timbang_a_img_in:"",
-    timbang_a_img_out:"",
-    timbang_b_img_in:"",
-    timbang_b_img_out:"",
+    timbang_a_1_img_in:"",
+    timbang_a_1_img_out:"",
+    timbang_a_2_img_in:"",
+    timbang_a_2_img_out:"",
 
-    timbang_a_img_in_preview:"",
-    timbang_a_img_out_preview:"",
-    timbang_b_img_in_preview:"",
-    timbang_b_img_out_preview:"",
+    timbang_a_1_img_in_preview:"",
+    timbang_a_1_img_out_preview:"",
+    timbang_a_2_img_in_preview:"",
+    timbang_a_2_img_out_preview:"",
     
-    timbang_a_img_in_ts:"",
-    timbang_a_img_out_ts:"",
-    timbang_b_img_in_ts:"",
-    timbang_b_img_out_ts:"",
+    timbang_a_1_img_in_ts:"",
+    timbang_a_1_img_out_ts:"",
+    timbang_a_2_img_in_ts:"",
+    timbang_a_2_img_out_ts:"",
 
     timbang_note:"",
 
-
+    trip_infos:[],
     timbang_val1:0,
     timbang_val1_by:{ username:"" },
     timbang_val1_at:""

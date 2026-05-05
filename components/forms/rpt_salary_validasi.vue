@@ -753,7 +753,7 @@ const callData = async () => {
 
   all_data.bonus_trip_ttl = all_data.bonus_trip_gaji + all_data.bonus_trip_dinas + all_data.bonus_trip_perubahaan; 
   all_data.periode_2_ttl = all_data.standby_2_ttl + all_data.perubahaan_lainnya_2_ttl + all_data.perubahaan_kerajinan_ttl + all_data.bonus_trip_ttl;  
-  all_data.periode_2_ttl_stlh_pot = all_data.periode_2_ttl + all_data.potongan_manual_ttl;  
+  all_data.periode_2_ttl_stlh_pot = all_data.periode_2_ttl - all_data.potongan_manual_ttl;  
   
   all_data.periode_ttl = all_data.periode_1_ttl + all_data.periode_2_ttl_stlh_pot; 
 

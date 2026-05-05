@@ -59,8 +59,8 @@
           {{ item.ritase_leave_at ? $moment(item.ritase_leave_at).format("DD-MM-YYYY HH:mm:ss") :'' }}
         </template> -->
 
-        <template #[`tai`]="{item}">
-          <div class="bg-red-700 rounded-sm" v-if="!item.timbang_a_img_in_exists">
+        <template #[`taime`]="{item}">
+          <div class="bg-red-700 rounded-sm" v-if="!item.timbang_a_in_mobil_exists">
             <IconsTimes  class="text-white text-xl font-bold"/>
           </div>
           <div class="bg-green-500 rounded-sm" v-else>
@@ -71,8 +71,17 @@
           {{ item.ritase_arrive_at ? $moment(item.ritase_arrive_at).format("DD-MM-YYYY HH:mm:ss") :'' }}
         </template> -->
 
-        <template #[`tao`]="{item}">
-          <div class="bg-red-700 rounded-sm" v-if="!item.timbang_a_img_out_exists">
+        <template #[`taige`]="{item}">
+          <div class="bg-red-700 rounded-sm" v-if="!item.timbang_a_in_gasoli_exists">
+            <IconsTimes  class="text-white text-xl font-bold"/>
+          </div>
+          <div class="bg-green-500 rounded-sm" v-else>
+            <IconsCheck class="text-white text-xl font-bold"/>
+          </div>
+        </template>
+
+        <template #[`taice`]="{item}">
+          <div class="bg-red-700 rounded-sm" v-if="!item.timbang_a_in_cabin_exists">
             <IconsTimes  class="text-white text-xl font-bold"/>
           </div>
           <div class="bg-green-500 rounded-sm" v-else>
@@ -83,8 +92,25 @@
         <!-- <template #[`ritase_return_at`]="{item}">
           {{ item.ritase_return_at ? $moment(item.ritase_return_at).format("DD-MM-YYYY HH:mm:ss") :'' }}
         </template> -->
-        <template #[`tbi`]="{item}">
-          <div class="bg-red-700 rounded-sm" v-if="!item.timbang_b_img_in_exists">
+        <template #[`taome`]="{item}">
+          <div class="bg-red-700 rounded-sm" v-if="!item.timbang_a_out_mobil_exists">
+            <IconsTimes  class="text-white text-xl font-bold"/>
+          </div>
+          <div class="bg-green-500 rounded-sm" v-else>
+            <IconsCheck class="text-white text-xl font-bold"/>
+          </div>
+        </template>
+        <template #[`taoge`]="{item}">
+          <div class="bg-red-700 rounded-sm" v-if="!item.timbang_a_out_gasoli_exists">
+            <IconsTimes  class="text-white text-xl font-bold"/>
+          </div>
+          <div class="bg-green-500 rounded-sm" v-else>
+            <IconsCheck class="text-white text-xl font-bold"/>
+          </div>
+        </template>
+
+        <template #[`taoce`]="{item}">
+          <div class="bg-red-700 rounded-sm" v-if="!item.timbang_a_out_cabin_exists">
             <IconsTimes  class="text-white text-xl font-bold"/>
           </div>
           <div class="bg-green-500 rounded-sm" v-else>
@@ -95,8 +121,17 @@
         <!-- <template #[`ritase_till_at`]="{item}">
           {{ item.ritase_till_at ? $moment(item.ritase_till_at).format("DD-MM-YYYY HH:mm:ss") :'' }}
         </template> -->
-        <template #[`tbo`]="{item}">
-          <div class="bg-red-700 rounded-sm" v-if="!item.timbang_b_img_out_exists">
+        <template #[`tbime`]="{item}">
+          <div class="bg-red-700 rounded-sm" v-if="!item.timbang_b_in_mobil_exists">
+            <IconsTimes  class="text-white text-xl font-bold"/>
+          </div>
+          <div class="bg-green-500 rounded-sm" v-else>
+            <IconsCheck class="text-white text-xl font-bold"/>
+          </div>
+        </template>
+
+        <template #[`tbome`]="{item}">
+          <div class="bg-red-700 rounded-sm" v-if="!item.timbang_b_out_mobil_exists">
             <IconsTimes  class="text-white text-xl font-bold"/>
           </div>
           <div class="bg-green-500 rounded-sm" v-else>
@@ -372,11 +407,11 @@ const form_view = () => {
   }
 };
 
-const forms_trx_timbang_show =  ref(false);
-const forms_trx_timbang_index = ref(0);
+const forms_trx_timbang_a_show =  ref(false);
+const forms_trx_timbang_a_index = ref(0);
 const form_timbang = (index) => {
-  forms_trx_timbang_index.value = index;
-  forms_trx_timbang_show.value = true;
+  forms_trx_timbang_a_index.value = index;
+  forms_trx_timbang_a_show.value = true;
 };
 
 const checkbox_arr = ref([]);
@@ -427,12 +462,20 @@ const fields_thead=ref([
   {key:"tanggal",label:"U.Jalan Per",type:'date',dateformat:"DD-MM-Y",filter_on:1,sort:{priority:1,type:"desc"}},
   {key:"no_pol",label:"No Pol",freeze:1,filter_on:1,type:'string'},
   {key:"timbang_a",label:"Timbang A",childs:[
-    {key:"tai",label:"In"},
-    {key:"tao",label:"Out"},
+    {key:"timbang_a_in",label:"In",childs:[
+      {key:"taime",label:"Car"},
+      {key:"taige",label:"Gas"},
+      {key:"taice",label:"Cab"},
+    ]},
+    {key:"timbang_a_out",label:"Out",childs:[
+      {key:"taome",label:"Car"},
+      {key:"taoge",label:"Gas"},
+      {key:"taoce",label:"Cab"},
+    ]},
   ]},
-  {key:"timbang_b",label:"Timbang B",childs:[
-    {key:"tbi",label:"In"},
-    {key:"tbo",label:"Out"},
+  {key:"timbang_b",label:"Timbang B Car",childs:[
+    {key:"tbime",label:"In"},
+    {key:"tbome",label:"Out"},
   ]},
   // {key:"ritase_leave_at",label:"Berangkat"},
   // {key:"ritase_arrive_at",label:"Tiba"},

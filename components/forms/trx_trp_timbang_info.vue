@@ -70,92 +70,32 @@
           </div>
 
           <div class="w-full flex flex-wrap items-center grow overflow-auto">
-            <div class="w-full sm:w-1/2 text-center p-1">
-              <div class="border-[1px] p-1">
-                <label class="font-bold">Timbang Masuk </label>
-                <!-- <ClientOnly>
-                  <vue-date-picker  v-model="trx_trp.img_arrive_ts" 
-                  type="datetime" 
-                  format="dd-MM-yyyy HH:mm" 
-                  :enable-time-picker = "true" 
-                  text-input
-                  teleport-center
-                  class="flex-grow"
-                  placeholder="Waktu Tiba"></vue-date-picker>
-                </ClientOnly>
-                <p class="text-red-500">{{ field_errors.img_arrive_ts }}</p>              -->
-                <AttachmentSingleV1 :show="show" :label="''" :link="trx_trp.timbang_a_img_in_preview" :blob_file="trx_trp.timbang_a_img_in" @setFile="trx_trp.timbang_a_img_in=$event"  @setPreview="trx_trp.timbang_a_img_in_preview=$event" :can_remove="true" />
-                <p class="text-red-500">{{ field_errors.timbang_a_img_in }}</p>             
+            <template v-for="(ttti,ky) in trx_trp.trip_infos">
+              <div v-if="!ttti.trip_info_ordinal.title.includes('Bensin') && !ttti.trip_info_ordinal.title.includes('Kabin')" class="w-full sm:w-1/2 text-center p-1">
+                <div class="border-[1px] p-1">
+                  <label class="font-bold">{{ttti.trip_info_ordinal.title}} </label>
+                  <ClientOnly>
+                    <vue-date-picker  v-model="ttti.img_at" 
+                    type="datetime" 
+                    format="dd-MM-yyyy HH:mm" 
+                    :enable-time-picker = "true" 
+                    text-input
+                    teleport-center
+                    class="flex-grow"
+                    placeholder="Tanggal & Waktu"></vue-date-picker>
+                  </ClientOnly>
+                  <!-- <p class="text-red-500">{{ field_errors.img_at }}</p>              -->
+                  <AttachmentSingleV1 :key="ky" :show="show" :label="''" :link="ttti.img_preview" :blob_file="ttti.img" @setFile="ttti.img=$event"  @setPreview="ttti.img_preview=$event" :can_remove="!!ttti.trip_info_ordinal.permit_manual_input" />
+                  <!-- <p class="text-red-500">{{ field_errors.img }}</p>              -->
+                </div>
               </div>
-            </div>
-
-            <div class="w-full sm:w-1/2 text-center p-1">
-              <div class="border-[1px] p-1">
-                <label class="font-bold">Timbang Keluar </label>
-                <!-- <ClientOnly>
-                  <vue-date-picker  v-model="trx_trp.img_arrive_ts" 
-                  type="datetime" 
-                  format="dd-MM-yyyy HH:mm" 
-                  :enable-time-picker = "true" 
-                  text-input
-                  teleport-center
-                  class="flex-grow"
-                  placeholder="Waktu Tiba"></vue-date-picker>
-                </ClientOnly>
-                <p class="text-red-500">{{ field_errors.img_arrive_ts }}</p>              -->
-                <AttachmentSingleV1 :show="show" :label="''" :link="trx_trp.timbang_a_img_out_preview" :blob_file="trx_trp.timbang_a_img_out" @setFile="trx_trp.timbang_a_img_out=$event"  @setPreview="trx_trp.timbang_a_img_out_preview=$event" :can_remove="true" />
-                <p class="text-red-500">{{ field_errors.timbang_a_img_out }}</p>             
-              </div>
-            </div>
-
-            <div class="w-full sm:w-1/2 text-center p-1">
-              <div class="border-[1px] p-1">
-                <label class="font-bold">Timbang Masuk </label>
-                <!-- <ClientOnly>
-                  <vue-date-picker  v-model="trx_trp.img_arrive_ts" 
-                  type="datetime" 
-                  format="dd-MM-yyyy HH:mm" 
-                  :enable-time-picker = "true" 
-                  text-input
-                  teleport-center
-                  class="flex-grow"
-                  placeholder="Waktu Tiba"></vue-date-picker>
-                </ClientOnly>
-                <p class="text-red-500">{{ field_errors.img_arrive_ts }}</p>              -->
-                <AttachmentSingleV1 :show="show" :label="''" :link="trx_trp.timbang_b_img_in_preview" :blob_file="trx_trp.timbang_b_img_in" @setFile="trx_trp.timbang_b_img_in=$event"  @setPreview="trx_trp.timbang_b_img_in_preview=$event" :can_remove="true" />
-                <p class="text-red-500">{{ field_errors.timbang_b_img_in }}</p>             
-              </div>
-            </div>
-
-            <div class="w-full sm:w-1/2 text-center p-1">
-              <div class="border-[1px] p-1">
-                <label class="font-bold">Timbang Keluar </label>
-                <!-- <ClientOnly>
-                  <vue-date-picker  v-model="trx_trp.img_arrive_ts" 
-                  type="datetime" 
-                  format="dd-MM-yyyy HH:mm" 
-                  :enable-time-picker = "true" 
-                  text-input
-                  teleport-center
-                  class="flex-grow"
-                  placeholder="Waktu Tiba"></vue-date-picker>
-                </ClientOnly>
-                <p class="text-red-500">{{ field_errors.img_arrive_ts }}</p>              -->
-
-                <AttachmentSingleV1 :show="show" :label="''" :link="trx_trp.timbang_b_img_out_preview" :blob_file="trx_trp.timbang_b_img_out" @setFile="trx_trp.timbang_b_img_out=$event"  @setPreview="trx_trp.timbang_b_img_out_preview=$event" :can_remove="true" />
-                <p class="text-red-500">{{ field_errors.timbang_b_img_out }}</p>             
-              </div>
-            </div>
-
+            </template>
             <div class="w-full p-1">
               <label for=""> Note </label>
               <textarea v-model="trx_trp.timbang_note"></textarea>
             </div>
-
           </div>
-          
           <div class="w-full flex items-center justify-end">
-
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
@@ -203,27 +143,22 @@ const props = defineProps({
 
 const trx_trp_temp = {
     id: -1,
-    tanggal: new Date(),
-    id_uj: -1,
-    xto: "",
-    tipe: "",
-    jenis:"",
-    amount: 0,
+    timbang_note: "",
+    trip_infos:[],
+    // timbang_a_1_img_in:"",
+    // timbang_a_1_img_out:"",
+    // timbang_a_2_img_in:"",
+    // timbang_a_2_img_out:"",
 
-    timbang_a_img_in:"",
-    timbang_a_img_out:"",
-    timbang_b_img_in:"",
-    timbang_b_img_out:"",
-
-    timbang_a_img_in_preview:"",
-    timbang_a_img_out_preview:"",
-    timbang_b_img_in_preview:"",
-    timbang_b_img_out_preview:"",
+    // timbang_a_1_img_in_preview:"",
+    // timbang_a_1_img_out_preview:"",
+    // timbang_a_2_img_in_preview:"",
+    // timbang_a_2_img_out_preview:"",
     
-    timbang_a_img_in_ts:"",
-    timbang_a_img_out_ts:"",
-    timbang_b_img_in_ts:"",
-    timbang_b_img_out_ts:"",
+    // timbang_a_1_img_in_ts:"",
+    // timbang_a_1_img_out_ts:"",
+    // timbang_a_2_img_in_ts:"",
+    // timbang_a_2_img_out_ts:"",
 
     timbang_note:""
 };
@@ -274,30 +209,20 @@ const doSave = async () => {
   field_errors.value = {};
 
   const data_in = new FormData();
-  data_in.append("timbang_a_img_in", trx_trp.value.timbang_a_img_in);
-  data_in.append("timbang_a_img_in_exists", trx_trp.value.timbang_a_img_in ? true : false);
-  data_in.append("timbang_a_img_in_preview", trx_trp.value.timbang_a_img_in_preview);
-  // data_in.append("timbang_a_img_in_ts", (trx_trp.value.timbang_a_img_in_ts) ? $moment(trx_trp.value.timbang_a_img_in_ts).format("YYYY-MM-DD HH:mm") : '');
-
-  data_in.append("timbang_a_img_out", trx_trp.value.timbang_a_img_out);
-  data_in.append("timbang_a_img_out_exists", trx_trp.value.timbang_a_img_out ? true : false);
-  data_in.append("timbang_a_img_out_preview", trx_trp.value.timbang_a_img_out_preview);
-  // data_in.append("timbang_a_img_out_ts", (trx_trp.value.timbang_a_img_out_ts) ? $moment(trx_trp.value.timbang_a_img_out_ts).format("YYYY-MM-DD HH:mm") : '');
-
-  data_in.append("timbang_b_img_in", trx_trp.value.timbang_b_img_in);
-  data_in.append("timbang_b_img_in_exists", trx_trp.value.timbang_b_img_in ? true : false);
-  data_in.append("timbang_b_img_in_preview", trx_trp.value.timbang_b_img_in_preview);
-  // data_in.append("timbang_b_img_in_ts", (trx_trp.value.timbang_b_img_in_ts) ? $moment(trx_trp.value.timbang_b_img_in_ts).format("YYYY-MM-DD HH:mm") : '');
-  
-  data_in.append("timbang_b_img_out", trx_trp.value.timbang_b_img_out);
-  data_in.append("timbang_b_img_out_exists", trx_trp.value.timbang_b_img_out ? true : false);
-  data_in.append("timbang_b_img_out_preview", trx_trp.value.timbang_b_img_out_preview);
-  // data_in.append("timbang_b_img_out_ts", (trx_trp.value.timbang_b_img_out_ts) ? $moment(trx_trp.value.timbang_b_img_out_ts).format("YYYY-MM-DD HH:mm") : '');
-  
+  let tDetails = [...trx_trp.value.trip_infos];
+  tDetails = tDetails.map((el,k)=>{
+    // el.trip_info_ordinal_id = el.trip_info_ordinal.id;
+    // el.trip_info_ordinal_dkey = el.trip_info_ordinal.dkey;
+    // el.trip_info_ordinal_title = el.trip_info_ordinal.title;
+    el.img_at_ts = (el.img_at) ? $moment(el.img_at).format("YYYY-MM-DD HH:mm") : '';
+    data_in.append(`attachments[${el.trip_info_ordinal.id}]`, el.img);
+    return el;
+  });
+  data_in.append("details", JSON.stringify(tDetails));
+ 
   data_in.append("timbang_note", trx_trp.value.timbang_note);
 
   let $method = "post";
-
   let id = props.id;
   if (id == 0) {
   } else {
@@ -325,10 +250,37 @@ const doSave = async () => {
   // trx_trp.value.ritase_return_at  = trx_trp.value.img_return_ts;
   // trx_trp.value.ritase_till_at    = trx_trp.value.img_till_ts;
 
-  trx_trp.value.timbang_a_img_in_exists = trx_trp.value.timbang_a_img_in ? true : false;
-  trx_trp.value.timbang_a_img_out_exists = trx_trp.value.timbang_a_img_out ? true : false;
-  trx_trp.value.timbang_b_img_in_exists = trx_trp.value.timbang_b_img_in ? true : false;
-  trx_trp.value.timbang_b_img_out_exists = trx_trp.value.timbang_b_img_out ? true : false;
+  trx_trp.value.trip_infos.forEach(el => {
+    if (el.trip_info_ordinal.dkey == "aksi.saat_timbang_a.masuk.mobil") {
+      trx_trp.value.timbang_a_in_mobil_exists = el.img || el.img_preview ? true : false;
+    }
+    if (el.trip_info_ordinal.dkey == "aksi.saat_timbang_a.masuk.gasoli") {
+      trx_trp.value.timbang_a_in_gasoli_exists = el.img || el.img_preview ? true : false;
+    }
+    if (el.trip_info_ordinal.dkey == "aksi.saat_timbang_a.masuk.cabin") {
+      trx_trp.value.timbang_a_in_cabin_exists = el.img || el.img_preview ? true : false;
+    }
+    if (el.trip_info_ordinal.dkey == "aksi.saat_timbang_a.keluar.mobil") {
+      trx_trp.value.timbang_a_out_mobil_exists = el.img || el.img_preview ? true : false;
+    }
+    if (el.trip_info_ordinal.dkey == "aksi.saat_timbang_a.keluar.gasoli") {
+      trx_trp.value.timbang_a_out_gasoli_exists = el.img || el.img_preview ? true : false;
+    }
+    if (el.trip_info_ordinal.dkey == "aksi.saat_timbang_a.keluar.cabin") {
+      trx_trp.value.timbang_a_out_cabin_exists = el.img || el.img_preview ? true : false;
+    }
+    if (el.trip_info_ordinal.dkey == "aksi.saat_timbang_b.masuk.mobil") {
+      trx_trp.value.timbang_b_in_mobil_exists = el.img || el.img_preview ? true : false;
+    }
+    if (el.trip_info_ordinal.dkey == "aksi.saat_timbang_b.keluar.mobil") {
+      trx_trp.value.timbang_b_out_mobil_exists = el.img || el.img_preview ? true : false;
+    }
+  });
+
+  // trx_trp.value.timbang_a_1_img_in_exists = trx_trp.value.timbang_a_1_img_in || trx_trp.value.timbang_a_1_img_in_preview ? true : false;
+  // trx_trp.value.timbang_a_1_img_out_exists = trx_trp.value.timbang_a_1_img_out || trx_trp.value.timbang_a_1_img_out_preview ? true : false;
+  // trx_trp.value.timbang_a_2_img_in_exists = trx_trp.value.timbang_a_2_img_in || trx_trp.value.timbang_a_2_img_in_preview ? true : false;
+  // trx_trp.value.timbang_a_2_img_out_exists = trx_trp.value.timbang_a_2_img_out || trx_trp.value.timbang_a_2_img_out_preview ? true : false;
 
   trx_trp.value.updated_at = data.value.updated_at;
   if(props.id<=0){
