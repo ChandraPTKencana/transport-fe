@@ -83,36 +83,74 @@ export const useDownload = () => {
     //     };
     // }
 
-    const printHtml = (html:any, width:any) => {
-        if (document.getElementById("print_target")) {
-          document.getElementById("print_target")?.remove();
-        }
-        let el = document.createElement('iframe');
-        el.setAttribute("id", "print_target");
-        el.style.cssText = `width:${width}px`;
-        el.style.cssText = `height:inherit`;
-        document.body.appendChild(el);
-        if (el.contentWindow) {
-          el.contentWindow.document.open();
-          el.contentWindow.document.write(html);
-          el.contentWindow.document.close(); // add this line to ensure the document is fully loaded
-          const img = el.contentWindow.document.querySelector('img');
-          if (img) {
-            img.onload = function() {
-              window.print();
-            };
-          } else {
-            window.print(); // if no img tag, print immediately
-          }
-        }
-        window.onafterprint = function() {
-          if (el != null) {
-            document.body.removeChild(el)
-            el = null;
+    // const printHtml = (html:any, width:any) => {
+    //   if (document.getElementById("print_target")) {
+    //     document.getElementById("print_target")?.remove();
+    //   }
+    //   let el = document.createElement('iframe');
+    //   el.setAttribute("id", "print_target");
+    //   // el.style.cssText = `width:${width}px`;
+    //   // el.style.cssText = `height:inherit`;
+    //   el.style.cssText = `
+    //     width:${width}px;
+    //     height:inherit;
+    //   `;
+    //   document.body.appendChild(el);
+    //   if (el.contentWindow) {
+    //     el.contentWindow.document.open();
+    //     el.contentWindow.document.write(html);
+    //     el.contentWindow.document.close(); // add this line to ensure the document is fully loaded
+    //     const img = el.contentWindow.document.querySelector('img');
+    //     if (img) {
+    //       img.onload = function() {
+    //         window.print();
+    //       };
+    //     } else {
+    //       window.print(); // if no img tag, print immediately
+    //     }
+    //   }
+    //   window.onafterprint = function() {
+    //     if (el != null) {
+    //       document.body.removeChild(el)
+    //       el = null;
+    //     };
+    //     console.log('Printing has been completed or the print preview mode has been closed');
+    //   };
+    // };
+
+    const printHtml = (html: any, width: any) => {
+      const old = document.getElementById("print_target");
+      if (old) old.remove();
+    
+      let el = document.createElement("iframe");
+      el.id = "print_target";
+    
+      // el.style.width = `${width}px`; unused
+      el.style.height = "inherit";
+    
+      document.body.appendChild(el);
+    
+      if (el.contentWindow) {
+        el.contentWindow.document.open();
+        el.contentWindow.document.write(html);
+        el.contentWindow.document.close();
+    
+        const img = el.contentWindow.document.querySelector("img");
+    
+        if (img) {
+          img.onload = () => {
+            el.contentWindow?.print();
           };
-          console.log('Printing has been completed or the print preview mode has been closed');
-        };
+        } else {
+          el.contentWindow.print();
+        }
+      }
+    
+      window.onafterprint = () => {
+        el?.remove();
+        console.log("Printing completed");
       };
+    };
 
     return {
         toBlob,
