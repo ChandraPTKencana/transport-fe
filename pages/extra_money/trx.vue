@@ -61,6 +61,24 @@
           </button>
         </div>
         <div  class="flex">
+          <div class="m-1 p-1 border-2 border-gray-600 whitespace-nowrap flex flex-col">
+            <span class="w-full text-[10px] -mt-[3px]">
+              No Paid
+            </span>
+            <span class="w-full text-xs font-bold -mt-1">
+              Rp. {{ pointFormat(no_paid || 0) }}
+              <!-- Rp. {{ no_paid }} -->
+            </span>
+          </div>
+
+          <div class="m-1 p-1 border-2 border-blue-600 text-blue-600 whitespace-nowrap flex flex-col">
+            <span class="w-full text-[10px] -mt-[3px]">
+              All Total
+            </span>
+            <span class="w-full text-xs font-bold -mt-1">
+              Rp. {{ pointFormat(all_price || 0) }}
+            </span>
+          </div>
 
           <button v-if="useUtils().checkPermission('extra_money_trx.generate_pvr')" type="button" name="button" class="m-1 text-xs whitespace-nowrap"
             @click="generatePVR()">
@@ -1045,5 +1063,14 @@ const enabled_print_preview_bt = computed(()=>{
   && dt_selected.value.duitku_employee_disburseId != ''
   && useUtils().checkPermission('extra_money_trx.preview_file');
   return result;
+})
+
+const no_paid = computed(()=>{
+  let filtered= extra_money_trxs.value.filter((x)=>x.received_payment == 0);
+  return filtered.reduce((temp,val)=>temp+ parseFloat(val.extra_money.total),0);
+})
+
+const all_price = computed(()=>{
+  return extra_money_trxs.value.reduce((temp,val)=>temp+ parseFloat(val.extra_money.total),0);
 })
 </script>
