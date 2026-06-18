@@ -608,7 +608,8 @@ const enabled_unremove = computed(()=>{
 const enabled_qen_code = computed(()=>{  
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
-  &&  [1].indexOf(dt_selected.value.val) > -1;
+  &&  [1].indexOf(dt_selected.value.val) > -1
+  && useUtils().checkPermissions(['employee.modify']);
   return result;
 })
 
