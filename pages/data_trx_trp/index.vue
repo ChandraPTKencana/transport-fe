@@ -1146,7 +1146,7 @@ const enabled_view = computed(()=>{
 
 const enabled_view_full = computed(()=>{ 
   let result = selected.value > -1
-  && useUtils().checkPermission('trp_trx.ticket.views');
+  && useUtils().checkPermission('trp_trx.view');
   return result;
 })
 
