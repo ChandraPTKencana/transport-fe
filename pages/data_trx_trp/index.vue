@@ -262,6 +262,30 @@
           {{ item.deleted_by?.username }}
         </template>
 
+        <template #[`uj_details2_supir_gaji`]="{item}">
+          {{ pointFormat(item.uj.details2.filter((x)=>x.xfor=='Supir' && x.ac_account_code=='01.510.001').reduce((prev, curr) => prev + (curr.amount * curr.qty), 0)) }}
+        </template>
+
+        <template #[`uj_details2_supir_makan`]="{item}">
+          {{ pointFormat(item.uj.details2.filter((x)=>x.xfor=='Supir' && x.ac_account_code=='01.510.005').reduce((prev, curr) => prev + (curr.amount * curr.qty), 0)) }}
+        </template>
+
+        <template #[`uj_details2_supir_dinas`]="{item}">
+          {{ pointFormat(item.uj.details2.filter((x)=>x.xfor=='Supir' && x.ac_account_code=='01.575.002').reduce((prev, curr) => prev + (curr.amount * curr.qty), 0)) }}
+        </template>
+
+        <template #[`uj_details2_kernet_gaji`]="{item}">
+          {{ pointFormat(item.uj.details2.filter((x)=>x.xfor=='Kernet' && x.ac_account_code=='01.510.001').reduce((prev, curr) => prev + (curr.amount * curr.qty), 0)) }}
+        </template>
+
+        <template #[`uj_details2_kernet_makan`]="{item}">
+          {{ pointFormat(item.uj.details2.filter((x)=>x.xfor=='Kernet' && x.ac_account_code=='01.510.005').reduce((prev, curr) => prev + (curr.amount * curr.qty), 0)) }}
+        </template>
+
+        <template #[`uj_details2_kernet_dinas`]="{item}">
+          {{ pointFormat(item.uj.details2.filter((x)=>x.xfor=='Kernet' && x.ac_account_code=='01.575.002').reduce((prev, curr) => prev + (curr.amount * curr.qty), 0)) }}
+        </template>
+
         <template #[`req_deleted_by_username`]="{item}">
           {{ item.req_deleted_by?.username }}
         </template>
@@ -1121,6 +1145,12 @@ const fields_thead=ref([
   {key:"duitku_kernet_disburseId",label:"ID Duitku Kernet",type:'string'},
   {key:"duitku_kernet_inv_res_desc",label:"Ket Inquery Duitku Kernet",type:'string'},
   {key:"duitku_kernet_trf_res_desc",label:"Ket Pengiriman Duitku Kernet",type:'string'},
+  {key:"uj_details2_supir_gaji",label:"Supir Gaji",filter_on:0,type:'number'},
+  {key:"uj_details2_supir_makan",label:"Supir Makan",filter_on:0,type:'number'},
+  {key:"uj_details2_supir_dinas",label:"Supir Dinas",filter_on:0,type:'number'},
+  {key:"uj_details2_kernet_gaji",label:"Kernet Gaji",filter_on:0,type:'number'},
+  {key:"uj_details2_kernet_makan",label:"Kernet Makan",filter_on:0,type:'number'},
+  {key:"uj_details2_kernet_dinas",label:"Kernet Dinas",filter_on:0,type:'number'},
   {key:"created_at",label:"Created At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   {key:"updated_at",label:"Updated At",type:'datetime',dateformat:"DD-MM-Y HH:mm:ss",filter_on:1},
   {key:"salary_paid",label:"Salary Paid",type:'string'},

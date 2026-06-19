@@ -101,6 +101,12 @@ export const menuList = [
         title:"Employee",
         icon:'IconsPerson'
       },
+      {
+        activeMenu:"/employee/info",
+        permission:'employee.views',
+        title:"Employee Info",
+        icon:'IconsPerson'
+      },
       
       {
         activeMenu:"/salary_paid",
