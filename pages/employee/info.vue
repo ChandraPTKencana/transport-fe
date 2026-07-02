@@ -65,12 +65,8 @@
             <td class="border border-slate-300 px-4 py-2">{{ pointFormat(v.jlh_trip) }}</td>
             <td class="border border-slate-300 px-4 py-2"> 
               <div class="border-[1px] p-2 rounded bg-blue-300 border-blue-500" v-for="vv in v.location"> 
-                <div>ID: {{ pointFormat(vv.uj.id) }}</div>
-                <div>To: {{ vv.uj.xto }}</div>
-                <div>Gaji: {{ pointFormat(vv.gaji) }}</div>
-                <div>Makan: {{ pointFormat(vv.makan) }}</div>
-                <div>Dinas: {{ pointFormat(vv.dinas) }}</div>
-                <div>Jlh Trip: {{ pointFormat(vv.jlh_trip) }}</div>
+                <div class="">#{{ pointFormat(vv.uj.id) }} {{ vv.uj.xto }} [{{ pointFormat(vv.jlh_trip) }} Trip]</div>
+                <div class="">G:{{ pointFormat(vv.gaji) }} M:{{ pointFormat(vv.makan) }} D:{{ pointFormat(vv.dinas) }}</div>
               </div>
             </td>
             <td class="border border-slate-300 px-4 py-2">{{ pointFormat(v.gaji) }}</td>
