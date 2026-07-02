@@ -47,6 +47,7 @@
         <thead class="sticky top-0 !z-[1]">
           <tr>
             <th class="border ring-1 ring-inset ring-slate-300 px-4 py-2 bg-slate-600 text-white">Nama</th>
+            <th class="border ring-1 ring-inset ring-slate-300 px-4 py-2 bg-slate-600 text-white">Jlh Trip</th>
             <th class="border ring-1 ring-inset ring-slate-300 px-4 py-2 bg-slate-600 text-white">Lokasi</th>
             <th class="border ring-1 ring-inset ring-slate-300 px-4 py-2 bg-slate-600 text-white">Gaji</th>
             <th class="border ring-1 ring-inset ring-slate-300 px-4 py-2 bg-slate-600 text-white">Makan</th>
@@ -61,8 +62,16 @@
               {{ v.employee.name }}  
               <span class="text-gray-600 text-xs"> [#{{ v.employee.id }}] </span> 
             </td>
+            <td class="border border-slate-300 px-4 py-2">{{ pointFormat(v.jlh_trip) }}</td>
             <td class="border border-slate-300 px-4 py-2"> 
-              <div v-for="vv in v.location"> {{ vv.xto }} <span class="text-gray-600 text-xs"> [#{{ vv.id }}] </span> {{ v.location.length > 1 ? "," : ""  }} </div>
+              <div class="border-[1px] p-2 rounded bg-blue-300 border-blue-500" v-for="vv in v.location"> 
+                <div>ID: {{ pointFormat(vv.uj.id) }}</div>
+                <div>To: {{ vv.uj.xto }}</div>
+                <div>Gaji: {{ pointFormat(vv.gaji) }}</div>
+                <div>Makan: {{ pointFormat(vv.makan) }}</div>
+                <div>Dinas: {{ pointFormat(vv.dinas) }}</div>
+                <div>Jlh Trip: {{ pointFormat(vv.jlh_trip) }}</div>
+              </div>
             </td>
             <td class="border border-slate-300 px-4 py-2">{{ pointFormat(v.gaji) }}</td>
             <td class="border border-slate-300 px-4 py-2">{{ pointFormat(v.makan) }}</td>
