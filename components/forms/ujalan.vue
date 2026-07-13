@@ -19,6 +19,7 @@
                 <select v-model="ujalan.jenis" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled">
                   <option value="PK">PK</option>
                   <option value="CPO">CPO</option>
+                  <option value="CANGKANG">CANGKANG</option>
                   <option value="TBS">TBS</option>
                   <option value="TBSK">TBSK</option>
                   <option value="LAIN">LAIN</option>

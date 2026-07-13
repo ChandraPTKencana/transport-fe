@@ -466,7 +466,7 @@ const ttl_bonus_jmlh = computed(()=>{
   let temp = 0;
 
   details.value.forEach(e => {
-    temp += parseFloat(e.trip_cpo)+ parseFloat(e.trip_pk)+parseFloat(e.trip_tbs) +parseFloat(e.trip_tbsk);
+    temp += parseFloat(e.trip_cpo)+ parseFloat(e.trip_pk)+ parseFloat(e.trip_cangkang)+parseFloat(e.trip_tbs) +parseFloat(e.trip_tbsk);
   });
   return temp;
 })
@@ -475,7 +475,7 @@ const ttl_bonus_gaji = computed(()=>{
   let temp = 0;
 
   details.value.forEach(e => {
-    temp += parseFloat(e.trip_cpo_bonus_gaji)+ parseFloat(e.trip_pk_bonus_gaji)+parseFloat(e.trip_tbs_bonus_gaji) +parseFloat(e.trip_tbsk_bonus_gaji);
+    temp += parseFloat(e.trip_cpo_bonus_gaji)+ parseFloat(e.trip_pk_bonus_gaji)+ parseFloat(e.trip_cangkang_bonus_gaji)+parseFloat(e.trip_tbs_bonus_gaji) +parseFloat(e.trip_tbsk_bonus_gaji);
   });
   return temp;
 })
@@ -484,7 +484,7 @@ const ttl_bonus_dinas = computed(()=>{
   let temp = 0;
 
   details.value.forEach(e => {
-    temp += parseFloat(e.trip_cpo_bonus_dinas)+ parseFloat(e.trip_pk_bonus_dinas)+parseFloat(e.trip_tbs_bonus_dinas) +parseFloat(e.trip_tbsk_bonus_dinas);
+    temp += parseFloat(e.trip_cpo_bonus_dinas)+ parseFloat(e.trip_pk_bonus_dinas)+ parseFloat(e.trip_cangkang_bonus_dinas)+parseFloat(e.trip_tbs_bonus_dinas) +parseFloat(e.trip_tbsk_bonus_dinas);
   });
   return temp;
 })
@@ -598,6 +598,7 @@ const cal_periode_2 = (dtl)=>{
   return parseFloat(dtl.sb_gaji_2) + parseFloat(dtl.sb_makan_2) + parseFloat(dtl.sb_dinas_2) + parseFloat(dtl.salary_bonus_nominal_2) + parseFloat(dtl.kerajinan)  +
   parseFloat(dtl.trip_cpo_bonus_gaji) + parseFloat(dtl.trip_cpo_bonus_dinas) +
   parseFloat(dtl.trip_pk_bonus_gaji) + parseFloat(dtl.trip_pk_bonus_dinas) +
+  parseFloat(dtl.trip_cangkang_bonus_gaji) + parseFloat(dtl.trip_cangkang_bonus_dinas) +
   parseFloat(dtl.trip_tbs_bonus_gaji) + parseFloat(dtl.trip_tbs_bonus_dinas) +
   parseFloat(dtl.trip_tbsk_bonus_gaji) + parseFloat(dtl.trip_tbsk_bonus_dinas) +
   parseFloat(dtl.salary_bonus_bonus_trip);
@@ -692,9 +693,9 @@ const callData = async () => {
   all_data.details.forEach(x=>{
     x.periode_1_ttl=parseFloat(x.sb_gaji)+parseFloat(x.sb_makan)+parseFloat(x.sb_dinas)+parseFloat(x.salary_bonus_nominal);
 
-    x.trip_jumlah = x.trip_cpo + x.trip_pk + x.trip_tbs + x.trip_tbsk;
-    x.bonus_trip_gaji = parseFloat(x.trip_cpo_bonus_gaji) + parseFloat(x.trip_pk_bonus_gaji) + parseFloat(x.trip_tbs_bonus_gaji) + parseFloat(x.trip_tbsk_bonus_gaji);
-    x.bonus_trip_dinas = parseFloat(x.trip_cpo_bonus_dinas) + parseFloat(x.trip_pk_bonus_dinas) + parseFloat(x.trip_tbs_bonus_dinas) + parseFloat(x.trip_tbsk_bonus_dinas);
+    x.trip_jumlah = x.trip_cpo + x.trip_pk + x.trip_cangkang + x.trip_tbs + x.trip_tbsk;
+    x.bonus_trip_gaji = parseFloat(x.trip_cpo_bonus_gaji) + parseFloat(x.trip_pk_bonus_gaji) + parseFloat(x.trip_cangkang_bonus_gaji) + parseFloat(x.trip_tbs_bonus_gaji) + parseFloat(x.trip_tbsk_bonus_gaji);
+    x.bonus_trip_dinas = parseFloat(x.trip_cpo_bonus_dinas) + parseFloat(x.trip_pk_bonus_dinas) + parseFloat(x.trip_cangkang_bonus_dinas) + parseFloat(x.trip_tbs_bonus_dinas) + parseFloat(x.trip_tbsk_bonus_dinas);
 
     x.periode_2_ttl=parseFloat(x.sb_gaji_2)+parseFloat(x.sb_makan_2)+parseFloat(x.sb_dinas_2)+parseFloat(x.salary_bonus_nominal_2)+parseFloat(x.kerajinan)
     +parseFloat(x.bonus_trip_gaji)+parseFloat(x.bonus_trip_dinas) + parseFloat(x.salary_bonus_bonus_trip);

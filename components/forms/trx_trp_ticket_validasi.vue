@@ -189,35 +189,35 @@
                 </div>
               </div>
               
-              <div v-if="['CPO','PK'].indexOf(trx_trp.jenis) > -1" class="w-full sm:w-6/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <div v-if="['CPO','PK','CANGKANG'].indexOf(trx_trp.jenis) > -1" class="w-full sm:w-6/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">In At</label>
                 <div class="card-border">
                   {{ trx_trp.ticket_b_in_at ? $moment(trx_trp.ticket_b_in_at).format("DD-MM-Y HH:mm:ss") : "" }}
                 </div>
               </div>
 
-              <div v-if="['CPO','PK'].indexOf(trx_trp.jenis) > -1" class="w-full sm:w-6/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
+              <div v-if="['CPO','PK','CANGKANG'].indexOf(trx_trp.jenis) > -1" class="w-full sm:w-6/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Out At</label>
                 <div class="card-border">
                   {{trx_trp.ticket_b_out_at ? $moment(trx_trp.ticket_b_out_at).format("DD-MM-Y HH:mm:ss"):"" }}
                 </div>
               </div>
                      
-              <div v-if="['CPO','PK'].indexOf(trx_trp.jenis) > -1" class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+              <div v-if="['CPO','PK','CANGKANG'].indexOf(trx_trp.jenis) > -1" class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
                 <label for="">Bruto</label>
                 <div class="card-border">
                     {{ pointFormat(trx_trp.ticket_b_bruto || 0) }}
                   </div>
               </div>
 
-              <div v-if="['CPO','PK'].indexOf(trx_trp.jenis) > -1" class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+              <div v-if="['CPO','PK','CANGKANG'].indexOf(trx_trp.jenis) > -1" class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
                 <label for="">Tara</label>
                 <div class="card-border">
                     {{ pointFormat(trx_trp.ticket_b_tara || 0) }}
                   </div>
               </div>
 
-              <div v-if="['CPO','PK'].indexOf(trx_trp.jenis) > -1" class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
+              <div v-if="['CPO','PK','CANGKANG'].indexOf(trx_trp.jenis) > -1" class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
                 <label for="">Netto</label>
                 <div class="card-border ">
                     {{ pointFormat(trx_trp.ticket_b_netto || 0) }}

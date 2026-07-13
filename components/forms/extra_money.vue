@@ -22,6 +22,7 @@
                 <select v-model="extra_money.jenis">
                   <option value="PK">PK</option>
                   <option value="CPO">CPO</option>
+                  <option value="CANGKANG">CANGKANG</option>
                   <option value="TBS">TBS</option>
                   <option value="TBSK">TBSK</option>
                   <option value="LAIN">LAIN</option>

@@ -33,6 +33,7 @@
                 <option value="TBSK">TBSK</option>
                 <option value="CPO">CPO</option>
                 <option value="PK">PK</option>
+                <option value="CANGKANG">CANGKANG</option>
                 <option value="LAIN">LAIN</option>
                 <option value="TUNGGU">TUNGGU</option>
               </select>

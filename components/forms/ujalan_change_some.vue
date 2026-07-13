@@ -29,7 +29,7 @@
                     class="w-full h-full p-1" 
                     type="text" 
                     :value="ujalan.bonus_trip_supir || 0" 
-                    @input="ujalan.bonus_trip_supir = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled || ['CPO','PK'].indexOf(ujalan.jenis) == -1"/>
+                    @input="ujalan.bonus_trip_supir = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled || ['CPO','PK','CANGKANG'].indexOf(ujalan.jenis) == -1"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.bonus_trip_supir }}</p>
               </div>
@@ -41,7 +41,7 @@
                     class="w-full h-full p-1" 
                     type="text" 
                     :value="ujalan.bonus_trip_kernet || 0" 
-                    @input="ujalan.bonus_trip_kernet = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled || ['CPO','PK'].indexOf(ujalan.jenis) == -1"/>
+                    @input="ujalan.bonus_trip_kernet = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled || ['CPO','PK','CANGKANG'].indexOf(ujalan.jenis) == -1"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.bonus_trip_kernet }}</p>
               </div>
