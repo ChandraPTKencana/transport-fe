@@ -763,7 +763,13 @@ const printPreviewBT = async()=>{
   printHtml(data.value.html,318);
 }
 
+const limitGenPVRBtn = ref(false);
+const limitGenPVBtn = ref(false);
+
 const generatePVR = async() => {
+  if(limitGenPVRBtn.value) return;
+  limitGenPVRBtn.value = true;
+
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
@@ -799,11 +805,14 @@ const generatePVR = async() => {
     }
     
   });
+  limitGenPVRBtn.value = false;
 
   display({ show: true, status: "Success", message: "Generate Or Update PVR Done" });
 }
 
 const generatePV = async() => {
+  if(limitGenPVBtn.value) return;
+  limitGenPVBtn.value = true;
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
@@ -840,6 +849,7 @@ const generatePV = async() => {
     }
     
   });
+  limitGenPVBtn.value = false;
 
   display({ show: true, status: "Success", message: "Generate Or Update PV Done" });
 }
