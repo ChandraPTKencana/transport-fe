@@ -252,7 +252,7 @@
                   SPV Logistik : {{ standby_trx.val4_by.username}} ( {{ standby_trx.val4_at ? $moment(standby_trx.val4_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
                 <div v-if="standby_trx.val5">
-                  MGR HRD : {{ standby_trx.val5_by.username}} ( {{ standby_trx.val5_at ? $moment(standby_trx.val5_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
+                  HRD : {{ standby_trx.val5_by.username}} ( {{ standby_trx.val5_at ? $moment(standby_trx.val5_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
                 </div>
               </div>
             </div>
