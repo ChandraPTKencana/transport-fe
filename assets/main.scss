@@ -37,6 +37,57 @@ table .dp__input{
     font-size: 1em;
 }
 
+table.backy {
+    @apply border-collapse border-spacing-0 table-auto;
+    // @apply flex flex-col  ;
+    @apply items-stretch min-h-full;
+}
+
+table.backy thead th,
+table.backy thead td,
+table.backy tbody th,
+table.backy tbody td {
+    @apply p-1; 
+    // @apply w-[25vw];
+}
+
+table.backy{
+    @apply border-x-[1px] border-b-[1px] border-solid border-slate-700;
+}
+
+table.backy thead th div::before,
+table.backy thead td div::before{
+    @apply bg-slate-700;
+    // @apply ring-1 ring-inset ring-slate-700;
+    @apply border-2 border-slate-600;
+    @apply absolute top-0 left-0 w-full h-full z-[-1];
+    content: "";
+}
+
+// table.backy th *,
+// table.backy td *:not(.dp__main *){
+//     @apply relative;
+// }
+
+table.backy thead th,table.backy thead td {
+    @apply text-white;
+    // width: 25vw;
+}
+
+// table.backy td {
+//     @apply bg-white py-1 px-2 text-center h-1;
+// }
+
+// table.backy tbody th {
+//     @apply sticky left-0 bg-white z-[3];
+// }
+
+// table.backy thead th.tools,
+// table.backy tbody td.tools {
+//     @apply p-3 w-10;
+// }
+
+
 table.tacky {
     @apply whitespace-nowrap m-0 border-none border-collapse border-spacing-0 ;
     @apply table-fixed;

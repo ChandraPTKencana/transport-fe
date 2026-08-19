@@ -245,6 +245,9 @@ const employee_temp = {
     val1:0,
     val1_by:{ username:"" },
     val1_at:"",
+    val2:0,
+    val2_by:{ username:"" },
+    val2_at:"",
     attachment_1:"",
     attachment_1_preview:"",
 };
@@ -295,10 +298,15 @@ const doValidate = async () => {
   employee.value.val_by = data.value.val_by;
   employee.value.val_at = data.value.val_at;
 
-  // employee.value.val1 = data.value.val1;
-  // employee.value.val1_user = data.value.val1_user;
-  // employee.value.val1_by = data.value.val1_by;
-  // employee.value.val1_at = data.value.val1_at;
+  employee.value.val1 = data.value.val1;
+  employee.value.val1_user = data.value.val1_user;
+  employee.value.val1_by = data.value.val1_by;
+  employee.value.val1_at = data.value.val1_at;
+
+  employee.value.val2 = data.value.val2;
+  employee.value.val2_user = data.value.val2_user;
+  employee.value.val2_by = data.value.val2_by;
+  employee.value.val2_at = data.value.val2_at;
 
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);
@@ -348,10 +356,15 @@ const doUnValidate = async () => {
   employee.value.val_by = data.value.val_by;
   employee.value.val_at = data.value.val_at;
 
-  // employee.value.val1 = data.value.val1;
-  // employee.value.val1_user = data.value.val1_user;
-  // employee.value.val1_by = data.value.val1_by;
-  // employee.value.val1_at = data.value.val1_at;
+  employee.value.val1 = data.value.val1;
+  employee.value.val1_user = data.value.val1_user;
+  employee.value.val1_by = data.value.val1_by;
+  employee.value.val1_at = data.value.val1_at;
+
+  employee.value.val2 = data.value.val2;
+  employee.value.val2_user = data.value.val2_user;
+  employee.value.val2_by = data.value.val2_by;
+  employee.value.val2_at = data.value.val2_at;
 
 
   let idx= props.p_data.map((x)=>x.id).indexOf(props.id);

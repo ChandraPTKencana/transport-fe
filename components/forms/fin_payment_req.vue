@@ -390,6 +390,8 @@ const genCSVandSend = async () => {
     // server: true
   });
   useCommonStore().loading_full = false;
+  sendCSV.value = false;
+
   if (status.value === 'error') {
     useErrorStore().trigger(error, field_errors);
     return;
@@ -403,7 +405,6 @@ const genCSVandSend = async () => {
   // selected.value = -1;
   // show_confirm.value = false;
   // pop_show.value = false;
-  sendCSV.value = false;
 }
 
 const getUpdate = async () => {

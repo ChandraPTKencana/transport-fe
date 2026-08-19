@@ -24,6 +24,11 @@
             @click="form_edit()">
             <IconsEdit/>
           </button>
+          <button v-if="enabled_edit_bpjs" type="button" name="button" 
+          class="m-1 text-2xl flex items-center justify-center"
+            @click="form_edit_bpjs()">
+            <IconsEdit/> <span class="text-xs">BPJS</span>
+          </button>
           <button v-if="selected > -1" type="button" name="button" class="m-1 text-2xl "
             @click="form_view()">
             <IconsEyes/>
@@ -64,6 +69,10 @@
           <IconsLine v-if="!item.val1"/>
           <IconsCheck v-else/>
         </template>
+        <template #[`val2`]="{item}">
+          <IconsLine v-if="!item.val2"/>
+          <IconsCheck v-else/>
+        </template>
 
         <template #[`bank_code`]="{item}">
           {{ item.bank?.code }}
@@ -92,6 +101,7 @@
     </template>
   </LazyPopupMini>
   <LazyFormsEmployee :show="forms_employee_show" :fnClose="()=>{forms_employee_show=false}" :id="forms_employee_id" :p_data="employees" :is_copy="forms_employee_copy"/>
+  <LazyFormsEmployeeBpjs :show="forms_employee_bpjs_show" :fnClose="()=>{forms_employee_bpjs_show=false}" :id="forms_employee_id" :p_data="employees" :is_copy="forms_employee_copy"/>
   <LazyFormsEmployeeValidasi :show="forms_employee_valid_show" :fnClose="()=>{forms_employee_valid_show=false}" :id="forms_employee_valid_id" :p_data="employees" :it_state="forms_employee_valid_state"/>
   <LazyPopupMini :type="'custome'" :show="undelete_box" :fnClose="()=>undelete_box=false" :fnConfirm="confirmed_undelete" > 
     <template #words>
@@ -308,6 +318,21 @@ const form_edit = () => {
   }
 };
 
+const forms_employee_bpjs_show =  ref(false);
+const form_edit_bpjs = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_employee_id.value = employees.value[selected.value].id;
+    // forms_employee_is_view.value = false;
+    forms_employee_valid_state.value = -1;
+    forms_employee_copy.value = false;
+    forms_employee_bpjs_show.value = true;
+  }
+};
+
+
+
 const form_copy = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
@@ -519,6 +544,7 @@ const fields_thead=ref([
     {key:"val",label:"Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
     {key:"val1",label:"Kasir",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   ]},
+  {key:"val2",label:"HR",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"m_enkey",label:"Kode Kunci",filter_on:1},
   {key:"username",label:"Username",filter_on:1},
   {key:"id",label:"ID",freeze:1,filter_on:1,type:"number"},
@@ -573,12 +599,23 @@ const enabled_edit = computed(()=>{
   return result;
 })
 
+const enabled_edit_bpjs = computed(()=>{  
+  let result = selected.value > -1 
+  && [undefined,0].indexOf(dt_selected.value.deleted) > -1
+  &&  (
+        useUtils().checkPermission('employee.val2') && [undefined,0].indexOf(dt_selected.value.val2) > -1
+      )
+  && useUtils().checkPermissions(['employee.modify.bpjs']);
+  return result;
+})
+
 const enabled_validasi = computed(()=>{  
   let result = selected.value > -1 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1
   && (
     useUtils().checkPermission('employee.val') && [undefined,0].indexOf(dt_selected.value.val) > -1 || 
-    useUtils().checkPermission('employee.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1
+    useUtils().checkPermission('employee.val1') && [undefined,0].indexOf(dt_selected.value.val1) > -1 || 
+    useUtils().checkPermission('employee.val2') && [undefined,0].indexOf(dt_selected.value.val2) > -1
   );
   return result;
 })

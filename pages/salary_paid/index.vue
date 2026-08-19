@@ -15,6 +15,10 @@
           @click="validasi()">
           <IconsSignature />
         </button>
+        <button v-if="useUtils().checkPermissions(['salary_paid.gen_mandiri']) && selected > -1  && dt_selected.val2 == 1  && dt_selected.period_part == 1" type="button" name="button" class="m-1 text-2xl "
+          @click="openToGen()">
+          <IconsMoney />
+        </button>
         <!-- <button v-if="selected>-1 && salary_paids[selected].val1==1" type="button" name="button" class="m-1 text-2xl "
           @click="printPreview()">
           <IconsPrinterEye />
@@ -69,12 +73,14 @@
           <table class="tacky">
             <thead>
               <tr class="sticky top-0 !z-[2]">
+                <th>ID</th>
                 <th>Logistik</th>
+                <th>HR</th>
                 <!-- <th>App 2</th>
                 <th>App 3</th> -->
-                <th>ID</th>
                 <th>Period End</th>
                 <th>Period Part</th>
+                <th>Payment Complete?</th>
                 <th>Created At</th>
                 <th>Updated At</th>
               </tr>
@@ -82,9 +88,16 @@
             <tbody>
               <tr v-for="(salary_paid, index) in salary_paids" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
+                <td class="bold">{{ salary_paid.id }}</td>
                 <td>
                   <div class="flex items-center justify-center">
                     <IconsLine v-if="!salary_paid.val1"/>
+                    <IconsCheck v-else/>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex items-center justify-center">
+                    <IconsLine v-if="!salary_paid.val2"/>
                     <IconsCheck v-else/>
                   </div>
                 </td>
@@ -100,9 +113,13 @@
                     <IconsCheck v-else/>
                   </div>
                 </td> -->
-                <td class="bold">{{ salary_paid.id }}</td>
                 <td>{{ salary_paid.period_end ? $moment(salary_paid.period_end).format("MM-Y") : "" }}</td>
                 <td>{{ salary_paid.period_part }}</td>
+                <td>
+                  <div class="flex items-center justify-center">
+                    {{ salary_paid.payment_status }}
+                  </div>
+                </td>
                 <td>{{ salary_paid.created_at ? $moment(salary_paid.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <td>{{ salary_paid.updated_at ? $moment(salary_paid.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
               </tr>
@@ -123,6 +140,7 @@
     <!-- <salary_paidsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
     <LazyFormsSalaryPaid :show="forms_salary_paid_show" :fnClose="()=>{forms_salary_paid_show=false}" :id="forms_salary_paid_id" :p_data="salary_paids" :is_copy="forms_salary_paid_copy"/>
     <LazyFormsSalaryPaidValidasi :show="forms_salary_paid_valid_show" :fnClose="()=>{forms_salary_paid_valid_show=false}" :id="forms_salary_paid_valid_id" :p_data="salary_paids"/>
+    <LazyFormsSalaryPaidPayment :show="forms_salary_paid_gen_show" :fnClose="()=>{forms_salary_paid_gen_show=false}" :id="forms_salary_paid_id" :p_data="salary_paids" :is_copy="forms_salary_paid_copy"/>
     <LazyPDFView :show="prtView" :pdfContent="pdfContent" @close="prtView=!prtView"/>
   
   </div>
@@ -196,6 +214,10 @@ watch(
   },
   { immediate: true }
 );
+
+const dt_selected = computed(()=>{  
+  return salary_paids.value[selected.value];
+})
 const search = ref("");
 const sort = ref({
   field: "created_at",
@@ -334,6 +356,18 @@ const validasi = () => {
     forms_salary_paid_valid_show.value = true;
   }
 };
+
+const forms_salary_paid_gen_show =  ref(false);
+const openToGen = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_salary_paid_id.value = salary_paids.value[selected.value].id;
+    forms_salary_paid_copy.value = false;
+    forms_salary_paid_gen_show.value = true;
+  }
+};
+
 
 const enabledOk = ref(false);
 const delete_data = ref({});

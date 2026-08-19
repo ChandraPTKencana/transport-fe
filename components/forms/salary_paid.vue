@@ -75,19 +75,20 @@
                     <template v-for="(detail, index) in source" :key="index">
                       <tr v-if="detail.p_status!='Remove'"  :data-index="index">
                         <td>{{ index + 1 }}.</td>
-                        <td>{{ detail.employee?.role }}</td>
-                        <td>{{ detail.employee?.name }}</td>
-                        <td>{{ detail.employee?.ktp_no }}</td>
-                        <!-- <td>{{ detail.employee?.sim_no }}</td> -->
-                        <td>{{ detail.employee?.rek_no }}</td>
-                        <td>{{ detail.employee?.rek_name }}</td>
-                        <td>{{ detail.employee?.bank?.code }}</td>
+                        <td>{{ detail.employee_role }}</td>
+                        <td>{{ detail.employee_name }}</td>
+                        <td>{{ detail.employee_ktp_no }}</td>
+                        <!-- <td>{{ detail.employee_sim_no }}</td> -->
+                        <td>{{ detail.employee_rek_no }}</td>
+                        <td>{{ detail.employee_rek_name }}</td>
+                        <td>{{ detail.employee_bank_code }}</td>
                         <td>{{ pointFormat(detail.sb_gaji) }}</td>
                         <td>{{ pointFormat(detail.sb_makan) }}</td>
                         <td>{{ pointFormat(detail.sb_dinas) }}</td>
                         <!-- <td>{{ pointFormat(detail.standby_nominal) }}</td> -->
                         <td>{{ pointFormat(detail.salary_bonus_nominal) }}</td>
-                        <td>{{ pointFormat(parseFloat(detail.sb_gaji) + parseFloat(detail.sb_makan) + parseFloat(detail.sb_dinas) + parseFloat(detail.salary_bonus_nominal)) }}</td>
+                        <!-- <td>{{ pointFormat(parseFloat(detail.sb_gaji) + parseFloat(detail.sb_makan) + parseFloat(detail.sb_dinas) + parseFloat(detail.salary_bonus_nominal)) }}</td> -->
+                        <td>{{ pointFormat(detail.payment_total) }}</td>
                       </tr>
                     </template>
                   </tbody>
