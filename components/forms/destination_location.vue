@@ -17,11 +17,10 @@
               <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Min Trip</label>
                 <div class="w-full" >
-                  <InputPointFormat
+                  <InputPointFormatV2
                   class="w-full h-full p-1" 
-                  type="text" 
-                  :value="destination_location.minimal_trip || 0" 
-                  @input="destination_location.minimal_trip = $event"/>
+                  v-model="destination_location.minimal_trip" 
+                  placeholder="0,00"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.minimal_trip }}</p>
               </div>
@@ -29,11 +28,10 @@
               <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Bonus Trip Supir</label>
                 <div class="w-full" >
-                  <InputPointFormat
+                  <InputPointFormatV2
                   class="w-full h-full p-1" 
-                  type="text" 
-                  :value="destination_location.bonus_trip_supir || 0" 
-                  @input="destination_location.bonus_trip_supir = $event"/>
+                  v-model="destination_location.bonus_trip_supir" 
+                  placeholder="0,00"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.bonus_trip_supir }}</p>
               </div>
@@ -41,11 +39,10 @@
               <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Bonus Next Trip Supir</label>
                 <div class="w-full" >
-                  <InputPointFormat
+                  <InputPointFormatV2
                   class="w-full h-full p-1" 
-                  type="text" 
-                  :value="destination_location.bonus_next_trip_supir || 0" 
-                  @input="destination_location.bonus_next_trip_supir = $event"/>
+                  v-model="destination_location.bonus_next_trip_supir" 
+                  placeholder="0,00"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.bonus_next_trip_supir }}</p>
               </div>
@@ -53,11 +50,10 @@
               <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Bonus Trip Kernet</label>
                 <div class="w-full" >
-                  <InputPointFormat
+                  <InputPointFormatV2
                   class="w-full h-full p-1" 
-                  type="text" 
-                  :value="destination_location.bonus_trip_kernet || 0" 
-                  @input="destination_location.bonus_trip_kernet = $event"/>
+                  v-model="destination_location.bonus_trip_kernet" 
+                  placeholder="0,00"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.bonus_trip_kernet }}</p>
               </div>
@@ -65,11 +61,10 @@
               <div class="w-6/12 sm:w-4/12 md:w-4/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Bonus Next Trip Kernet</label>
                 <div class="w-full" >
-                  <InputPointFormat
+                  <InputPointFormatV2
                   class="w-full h-full p-1" 
-                  type="text" 
-                  :value="destination_location.bonus_next_trip_kernet || 0" 
-                  @input="destination_location.bonus_next_trip_kernet = $event"/>
+                  v-model="destination_location.bonus_next_trip_kernet" 
+                  placeholder="0,00"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.bonus_next_trip_kernet }}</p>
               </div>

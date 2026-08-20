@@ -51,13 +51,9 @@
               <!-- <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">KM Range</label>
                 <div class="w-full" >
-                  <InputPointFormat
+                  <InputPointFormatV2
                     class="w-full h-full p-1" 
-                    type="text" 
-                    :value="ujalan.km_range || 0" 
-                    @input="ujalan.km_range = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"/>
-                </div>
-                <p class="text-red-500">{{ field_errors.km_range }}</p>
+                    v-model="ujalan.km_rangeevent" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabledplaceholder="0,00""text-red-500">{{ field_errors.km_range }}</p>
               </div> -->
 
               <div class="w-1/2 sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
@@ -135,23 +131,19 @@
                           </td>
                           <td class="cell bold" :class="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled ? 'unselectable' : ''">
                             <div class="w-full h-auto flex items-center justify-center">
-                              <InputPointFormat
+                              <InputPointFormatV2
                               :key="index" 
-                              class="w-full h-full p-1" 
-                              type="text" 
-                              :value="detail.harga || 0" 
-                              @input="detail.harga = $event"
+                              v-model="detail.harga" 
+                              placeholder="0,00"
                               :show="show" :disabled="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled"/>
                             </div>
                           </td>
                           <td class="cell" :class="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled ? 'unselectable' : ''">
                             <div class="w-full h-auto flex items-center justify-center">
-                              <InputPointFormat
+                              <InputPointFormatV2
                               :key="index" 
-                              class="w-full h-full p-1" 
-                              type="text" 
-                              :value="detail.qty || 0" 
-                              @input="detail.qty = $event"
+                              v-model="detail.qty" 
+                              placeholder="0,00"
                               :show="show" :disabled="!useUtils().checkPermissions(['ujalan.detail.create','ujalan.detail.modify']) || disabled"/>
                             </div>
                           </td>
@@ -261,23 +253,19 @@
                           </td>
                           <td class="cell bold" :class="disabled ? 'unselectable' : ''">
                             <div class="w-full h-auto flex items-center justify-center">
-                              <InputPointFormat
+                              <InputPointFormatV2
                               :key="index" 
-                              class="w-full h-full p-1" 
-                              type="text" 
-                              :value="detail.amount || 0" 
-                              @input="detail.amount = $event"
+                              v-model="detail.amount" 
+                              placeholder="0,00"
                               :show="show" :disabled="disabled"/>
                             </div>
                           </td>
                           <td class="cell" :class="disabled ? 'unselectable' : ''">
                             <div class="w-full h-auto flex items-center justify-center">
-                              <InputPointFormat
+                              <InputPointFormatV2
                               :key="index" 
-                              class="w-full h-full p-1" 
-                              type="text" 
-                              :value="detail.qty || 0" 
-                              @input="detail.qty = $event"
+                              v-model="detail.qty" 
+                              placeholder="0,00"
                               :show="show" :disabled="disabled"/>
                             </div>
                           </td>

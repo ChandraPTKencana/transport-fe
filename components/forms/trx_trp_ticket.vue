@@ -227,11 +227,10 @@
               <div v-if="['CPO','PK','CANGKANG'].indexOf(trx_trp.jenis) > -1" class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
                 <label for="">Bruto</label>
                 <div>
-                  <InputPointFormat
+                  <InputPointFormatV2
                     class="card-border p-1" 
-                    type="text" 
-                    :value="trx_trp.ticket_b_bruto || 0" 
-                    @input="trx_trp.ticket_b_bruto = $event"
+                    v-model="trx_trp.ticket_b_bruto"
+                    placeholder="0,00" 
                     :show="show"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.ticket_b_bruto }}</p>
@@ -240,11 +239,10 @@
               <div v-if="['CPO','PK','CANGKANG'].indexOf(trx_trp.jenis) > -1" class="w-3/12 sm:w-2/12 md:w-1/12 lg:w-1/12 flex flex-col flex-wrap p-1">
                 <label for="">Tara</label>
                 <div>
-                  <InputPointFormat
+                  <InputPointFormatV2
                     class="card-border p-1" 
-                    type="text" 
-                    :value="trx_trp.ticket_b_tara || 0" 
-                    @input="trx_trp.ticket_b_tara = $event"
+                    v-model="trx_trp.ticket_b_tara"
+                    placeholder="0,00" 
                     :show="show"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.ticket_b_tara }}</p>

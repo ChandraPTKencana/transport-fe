@@ -32,11 +32,11 @@
               <div class="w-1/2 sm:w-4/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Trip Bonus Supir</label>
                 <div class="w-full" >
-                  <InputPointFormat
+                  <InputPointFormatV2
                     class="w-full h-full p-1" 
-                    type="text" 
-                    :value="ujalan.bonus_trip_supir || 0" 
-                    @input="ujalan.bonus_trip_supir = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"/>
+                    v-model="ujalan.bonus_trip_supir"
+                    placeholder="0,00" 
+                     :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.bonus_trip_supir }}</p>
               </div>
@@ -44,11 +44,11 @@
               <div class="w-1/2 sm:w-3/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Trip Bonus Kernet</label>
                 <div class="w-full" >
-                  <InputPointFormat
+                  <InputPointFormatV2
                     class="w-full h-full p-1" 
-                    type="text" 
-                    :value="ujalan.bonus_trip_kernet || 0" 
-                    @input="ujalan.bonus_trip_kernet = $event" :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"/>
+                    v-model="ujalan.bonus_trip_kernet"
+                    placeholder="0,00" 
+                     :disabled="!useUtils().checkPermissions(['ujalan.create','ujalan.modify']) || disabled"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.bonus_trip_kernet }}</p>
               </div>
@@ -77,11 +77,11 @@
               <div class="w-1/2 sm:w-3/12 md:w-2/12 lg:w-2/12 flex flex-col flex-wrap p-1">
                 <label for="">Batas % Susut</label>
                 <div class="w-full" >
-                  <!-- <InputPointFormat
+                  <!-- <InputPointFormatV2
                     class="w-full h-full p-1" 
-                    type="text" 
-                    :value="ujalan.batas_persen_susut || 0" 
-                    @input="ujalan.batas_persen_susut = $event"/> -->
+                    v-model="ujalan.batas_persen_susut"
+                    placeholder="0,00" 
+                    /> -->
                   <input v-model="ujalan.batas_persen_susut">
                 </div>
                 <p class="text-red-500">{{ field_errors.batas_persen_susut }}</p>

@@ -24,11 +24,10 @@
             <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
               <label for="">BPJS Kesehatan</label>
               <div class="w-full" >
-                <InputPointFormat
+                <InputPointFormatV2
                 class="w-full h-full p-1" 
-                type="text" 
-                :value="employee.bpjs_kesehatan || 0" 
-                @input="employee.bpjs_kesehatan = $event"/>
+                v-model="employee.bpjs_kesehatan" 
+                placeholder="0,00"/>
               </div>
               <p class="text-red-500">{{ field_errors.bpjs_kesehatan }}</p>
             </div>
@@ -36,11 +35,10 @@
             <div class="w-1/2 sm:w-1/2 md:w-full flex flex-col flex-wrap p-1">
               <label for="">BPJS Jamsos</label>
               <div class="w-full" >
-                <InputPointFormat
+                <InputPointFormatV2
                 class="w-full h-full p-1" 
-                type="text" 
-                :value="employee.bpjs_jamsos || 0" 
-                @input="employee.bpjs_jamsos = $event"/>
+                v-model="employee.bpjs_jamsos" 
+                placeholder="0,00"/>
               </div>
               <p class="text-red-500">{{ field_errors.bpjs_jamsos }}</p>
             </div>

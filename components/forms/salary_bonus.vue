@@ -44,11 +44,10 @@
               <div class="w-full sm:w-6/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Nominal</label>
                 <div>
-                  <InputPointFormat
+                  <InputPointFormatV2
                   class="w-full h-full p-1" 
-                  type="text" 
-                  :value="salary_bonus.nominal || 0" 
-                  @input="salary_bonus.nominal = $event" :disabled="disabled"/>
+                  v-model="salary_bonus.nominal" 
+                  placeholder="0,00"/>
                 </div>
                 <p class="text-red-500">{{ field_errors.nominal }}</p>
               </div>

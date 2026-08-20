@@ -112,12 +112,11 @@
                         </td>
                         <td class="cell bold" :class="disabled ? 'unselectable' : ''">
                           <div class="w-full h-auto flex items-center justify-center">
-                            <InputPointFormat
+                            <InputPointFormatV2
                             :key="index" 
                             class="w-full h-full p-1" 
-                            type="text" 
-                            :value="detail.amount || 0" 
-                            @input="detail.amount = $event"
+                            v-model="detail.amount" 
+                            placeholder="0,00"
                             :show="show" :disabled="disabled"/>
                           </div>
                         </td>

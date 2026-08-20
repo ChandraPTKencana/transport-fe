@@ -42,7 +42,7 @@
                 <table class="backy w-full" style="white-space:normal;">
                   <thead >
                     <tr >
-                      <td colspan="50" class="sticky -top-1 !z-[2] !bg-slate-800 text-white font-bold">
+                      <td colspan="50" class="sticky -top-1 !z-[4] !bg-slate-800 text-white font-bold">
                         Detail
                       </td>
                     </tr>
@@ -53,7 +53,7 @@
                       <th  class="sticky top-7 !z-[2]" rowspan="2">
                         <div>ID</div>
                       </th>
-                      <th  class="sticky top-7 left-0 !z-[3]" rowspan="2" >
+                      <th  class="sticky top-7 -left-1 !z-[4]" rowspan="2" >
                         <div>Nama Pekerja</div>
                       </th>
                       <th  class="sticky top-7 !z-[2]" rowspan="2" >
@@ -63,10 +63,10 @@
                         <div>Tmpt Lahir</div>
                       </th>
                       <th  class="sticky top-7 !z-[2]" rowspan="2" >
-                        <div>Tgl Lahir</div>
+                        <div class="w-[85px]">Tgl Lahir</div>
                       </th>
                       <th  class="sticky top-7 !z-[2]" rowspan="2" >
-                        <div>TMK</div>
+                        <div class="w-[85px]">TMK</div>
                       </th>
                       <th  class="sticky top-7 !z-[2]" rowspan="2" >
                         <div>No KTP</div>
@@ -314,7 +314,7 @@
                       <tr v-if="detail.p_status!='Remove'"  :data-index="index">
                         <td>{{ index + 1 }}.</td>
                         <td>{{ detail.employee_id }}</td>
-                        <td>{{ detail.employee_name }}</td>
+                        <td class="sticky -left-1 !z-[3]">{{ detail.employee_name }}</td>
                         <td>{{ detail.employee_role }}</td>
                         <td>{{ detail.employee_birth_place }}</td>
                         <td>{{ detail.employee_birth_date ? $moment(detail.employee_birth_date).format("DD-MM-Y") : "" }}</td>
@@ -346,30 +346,24 @@
                         <td>{{ pointFormat(detail.trip_jumlah) }}</td>
                         <td>{{ pointFormat(detail.uj_gaji) }}</td>
                         <td class="!bg-gray-400 font-bold">
-                          <InputPointFormat
+                          <InputPointFormatV2
                           :key="index"
-                          class="min-w-[110px] h-full p-1" :class="parseFloat(detail.uj_gaji)!=parseFloat(detail.uj_gaji_manual) ? 'text-orange-500':''"
-                          type="text" 
-                          :value="detail.uj_gaji_manual || 0" 
-                          @input="detail.uj_gaji_manual = $event"/>
+                          class="min-w-[120px] h-full p-1" :class="parseFloat(detail.uj_gaji)!=parseFloat(detail.uj_gaji_manual) ? 'text-orange-500':''" 
+                          v-model="detail.uj_gaji_manual" placeholder="0,00"/>
                         </td>
                         <td>{{ pointFormat(detail.uj_makan) }}</td>
                         <td class="!bg-gray-400 font-bold">
-                          <InputPointFormat
+                          <InputPointFormatV2
                           :key="index"
-                          class="min-w-[110px] h-full p-1"  :class="parseFloat(detail.uj_makan)!=parseFloat(detail.uj_makan_manual) ? 'text-orange-500':''"
-                          type="text" 
-                          :value="detail.uj_makan_manual || 0" 
-                          @input="detail.uj_makan_manual = $event"/>
+                          class="min-w-[120px] h-full p-1"  :class="parseFloat(detail.uj_makan)!=parseFloat(detail.uj_makan_manual) ? 'text-orange-500':''" 
+                          v-model="detail.uj_makan_manual" placeholder="0,00"/>
                         </td>
                         <td>{{ pointFormat(detail.uj_dinas) }}</td>
                         <td class="!bg-gray-400 font-bold">
-                          <InputPointFormat
+                          <InputPointFormatV2
                           :key="index"
-                          class="min-w-[110px] h-full p-1 " :class="parseFloat(detail.uj_dinas)!=parseFloat(detail.uj_dinas_manual) ? 'text-orange-500':''"
-                          type="text" 
-                          :value="detail.uj_dinas_manual || 0" 
-                          @input="detail.uj_dinas_manual = $event"/>
+                          class="min-w-[120px] h-full p-1 " :class="parseFloat(detail.uj_dinas)!=parseFloat(detail.uj_dinas_manual) ? 'text-orange-500':''"
+                          v-model="detail.uj_dinas_manual" placeholder="0,00"/>
                         </td>
                         <td class="!bg-gray-400 font-bold">
                           <textarea :key="index" 
@@ -399,8 +393,8 @@
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
-            <button v-if="!disabled" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doGen()">
-              Generate {{ rpt_salary.id=="" ? "& Save" : '' }}
+            <button v-if="!disabled" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+              Save
             </button>
           </div>
         </form>
@@ -543,6 +537,15 @@ const doSave = async () => {
     data_in.append("id", id);
     data_in.append("_method", "PUT");
   }
+  let dtls = details.value.filter((x)=>{
+    return parseFloat(x.uj_gaji)!=parseFloat(x.uj_gaji_manual) || parseFloat(x.uj_makan)!=parseFloat(x.uj_makan_manual) || parseFloat(x.uj_dinas)!=parseFloat(x.uj_dinas_manual);
+  });
+
+  console.log(dtls);
+
+  data_in.append("details", JSON.stringify(details.value.filter((x)=>{
+    return parseFloat(x.uj_gaji)!=parseFloat(x.uj_gaji_manual) || parseFloat(x.uj_makan)!=parseFloat(x.uj_makan_manual) || parseFloat(x.uj_dinas)!=parseFloat(x.uj_dinas_manual);
+  })));
 
   const { data, error, status } = await useMyFetch("/rpt_salary/save_manual", {
     method: $method,
@@ -562,12 +565,12 @@ const doSave = async () => {
     return;
   }
 
-  details.value = data.value.details;
+  // details.value = data.value.details;
   if(id<=0){
-    rpt_salary.value.id = data.value.id;
-    rpt_salary.value.created_at = data.value.created_at;
-    rpt_salary.value.updated_at = data.value.updated_at;
-    props.p_data.unshift(rpt_salary.value);
+    // rpt_salary.value.id = data.value.id;
+    // rpt_salary.value.created_at = data.value.created_at;
+    // rpt_salary.value.updated_at = data.value.updated_at;
+    // props.p_data.unshift(rpt_salary.value);
   }else{
     rpt_salary.value.updated_at = data.value.updated_at;
 

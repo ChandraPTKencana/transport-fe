@@ -78,11 +78,10 @@
                   <div class="w-full sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
                     <label for="">Nominal</label>
                     <div class="w-full" >
-                      <InputPointFormat
+                      <InputPointFormatV2
                       class="w-full h-full p-1" 
-                      type="text" 
-                      :value="extra_money.nominal || 0" 
-                      @input="extra_money.nominal = $event"/>
+                      v-model="extra_money.nominal" 
+                      placeholder="0,00"/>
                     </div>
                     <p class="text-red-500">{{ field_errors.nominal }}</p>
                   </div>
@@ -90,11 +89,10 @@
                   <div class="w-full sm:w-4/12 md:w-4/12 lg:w-4/12 flex flex-col flex-wrap p-1">
                     <label for="">Qty</label>
                     <div class="w-full" >
-                      <InputPointFormat
+                      <InputPointFormatV2
                       class="w-full h-full p-1" 
-                      type="text" 
-                      :value="extra_money.qty || 0" 
-                      @input="extra_money.qty = $event"/>
+                      v-model="extra_money.qty" 
+                      placeholder="0,00"/>
                     </div>
                     <p class="text-red-500">{{ field_errors.qty }}</p>
                   </div>
