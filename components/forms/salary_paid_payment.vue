@@ -1,7 +1,7 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Form Master Standby Validation'" :fn="fnClose" class="w-100 flex align-items-center"
+      <HeaderPopup :title="'Salary Paid Payment'" :fn="fnClose" class="w-100 flex align-items-center"
         style="color:white;" />
 
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
@@ -53,32 +53,91 @@
                 placeholder="Nama">
             </div>
 
-            <div v-if="source.length" class="w-full flex p-1 justify-between flex-wrap">
+            <div v-if="source.length" class="w-full flex p-1 justify-between flex-wrap  overflow-auto">
               <div class="w-full" role="sticky">
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
                   <thead >
-                    <tr class="sticky -top-1 !z-[2]">
-                      <td colspan="15" class="!bg-slate-800 text-white font-bold">
+                    <tr>
+                      <td colspan="15" class="sticky -top-1 !z-[4] !bg-slate-800 text-white font-bold">
                         Detail
                       </td>
                     </tr>
-                    <tr class="sticky top-7 !z-[2]">
-                      <th >No</th>
-                      <th >Jabatan</th>
-                      <th >Nama Pekerja</th>
-                      <th >No KTP</th>
-                      <!-- <th >No SIM</th> -->
-                      <th >Rek No</th>
-                      <th >Rek Nama</th>
-                      <th >Bank Name</th>
-                      <th >SB.Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji || 0) }})</span></th>
-                      <th >SB.Makan <span class="text-sm">({{pointFormat(ttl_sb_makan || 0) }})</span></th>
-                      <th >SB.Dinas <span class="text-sm">({{pointFormat(ttl_sb_dinas || 0) }})</span></th>
-                      <th >Nominal Bonus <span class="text-sm">({{pointFormat(total_bonus || 0) }})</span></th>
-                      <th >Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_sb_dinas + total_bonus) || 0) }})</span></th>
-                      <th> Status </th>
-                      <th> Aksi </th>
-                      <th> Alasan Gagal </th>
+                    <tr>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          No
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          Jabatan
+                        </div>
+                      </th>
+                      <th class="sticky top-7 -left-1 !z-[4]">
+                        <div>
+                          Nama Pekerja
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          No KTP
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          Rek No
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          Rek Nama
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          Bank Name
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          SB.Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji || 0) }})</span>
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          SB.Makan <span class="text-sm">({{pointFormat(ttl_sb_makan || 0) }})</span>
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          SB.Dinas <span class="text-sm">({{pointFormat(ttl_sb_dinas || 0) }})</span>
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          Nominal Bonus <span class="text-sm">({{pointFormat(total_bonus || 0) }})</span>
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_sb_dinas + total_bonus) || 0) }})</span>
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          Status
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          Aksi
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          Alasan Gagal
+                        </div>
+                      </th>
                     </tr>
                   </thead>
                   <tbody ref="to_move">
@@ -86,7 +145,7 @@
                       <tr v-if="detail.p_status!='Remove'"  :data-index="index">
                         <td>{{ index + 1 }}.</td>
                         <td>{{ detail.employee_role }}</td>
-                        <td>{{ detail.employee_name }}</td>
+                        <td class="sticky -left-1 !z-[3]">{{ detail.employee_name }}</td>
                         <td>{{ detail.employee_ktp_no }}</td>
                         <!-- <td>{{ detail.employee?.sim_no }}</td> -->
                         <td>{{ detail.employee_rek_no }}</td>
@@ -348,24 +407,6 @@ const source = computed(()=>{
   return details.value;
 });
 
-
-const show_send = computed(()=>{
-  let showit = 0;
-
-  details.value.every(e => {
-    if(e.payment_status=='READY') {
-      showit = 1;
-      return false;
-    }else if(e.payment_status=='INQUIRY_FAILED'){
-      showit = 2;
-      return false;
-    }
-    return true;
-  });
-  
-  return showit;
-})
-
 const sendCSV = ref(false);
 
 const genCSVandSend = async () => {
@@ -453,8 +494,8 @@ const getUpdate = async () => {
     }
   });
 
-  console.log(data.value.details);
-  console.log(details.value);
+  // console.log(data.value.details);
+  // console.log(details.value);
 
   salary_paid.value.payment_status='WAIT';
   
@@ -535,28 +576,14 @@ const renewData = async (id,idx) => {
   }
 
   
-  details.value[idx].rek_no                 = data.value.employee_rek_no;
-  details.value[idx].rek_name               = data.value.employee_rek_name;
-  details.value[idx].bank_code              = data.value.employee_bank_code;
+  details.value[idx].employee_rek_no        = data.value.employee_rek_no;
+  details.value[idx].employee_rek_name      = data.value.employee_rek_name;
+  details.value[idx].employee_bank_code     = data.value.employee_bank_code;
   details.value[idx].payment_status         = data.value.payment_status;
   details.value[idx].payment_failed_reason  = data.value.payment_failed_reason;
   
   display({ show: true, status: "Success", message: "Data Berhasil Diperbaharui" });
 }
-
-
-watch(() => props.show, (newVal, oldVal) => {
-  if (newVal == true){
-    if(props.id==0)
-    salary_paid.value = {...salary_paid_temp};
-    details.value = [];
-
-    if(props.id!=0)
-    callData();
-  }
-}, {
-  immediate: true
-});
 
 const setPaidDone = async () => {
   useCommonStore().loading_full = true;
@@ -586,7 +613,7 @@ const setPaidDone = async () => {
     return;
   }
 
-  fin_payment_req.value.payment_status = 'CLOSE';
+  salary_paid.value.payment_status = 'CLOSE';
   details.value.forEach((x)=>{
     x.payment_status="DONE";
   });
@@ -598,6 +625,20 @@ const setPaidDone = async () => {
 
   display({ show: true, status: "Success", message: "PAID IS DONE" });
 }
+
+watch(() => props.show, (newVal, oldVal) => {
+  if (newVal == true){
+    if(props.id==0)
+    salary_paid.value = {...salary_paid_temp};
+    details.value = [];
+
+    if(props.id!=0)
+    callData();
+  }
+}, {
+  immediate: true
+});
+
 </script>
 <style scoped="">
 /* table.sticky thead th:nth-child(2) {

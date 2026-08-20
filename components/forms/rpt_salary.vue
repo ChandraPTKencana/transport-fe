@@ -63,10 +63,10 @@
                         <div>Tmpt Lahir</div>
                       </th>
                       <th  class="sticky top-7 !z-[2]" rowspan="2" >
-                        <div class="w-[85px]">Tgl Lahir</div>
+                        <div class="w-[90px]">Tgl Lahir</div>
                       </th>
                       <th  class="sticky top-7 !z-[2]" rowspan="2" >
-                        <div class="w-[85px]">TMK</div>
+                        <div class="w-[90px]">TMK</div>
                       </th>
                       <th  class="sticky top-7 !z-[2]" rowspan="2" >
                         <div>No KTP</div>
@@ -312,53 +312,53 @@
                   <tbody ref="to_move">
                     <template v-for="(detail, index) in source" :key="index">
                       <tr v-if="detail.p_status!='Remove'"  :data-index="index">
-                        <td>{{ index + 1 }}.</td>
-                        <td>{{ detail.employee_id }}</td>
-                        <td class="sticky -left-1 !z-[3]">{{ detail.employee_name }}</td>
-                        <td>{{ detail.employee_role }}</td>
-                        <td>{{ detail.employee_birth_place }}</td>
-                        <td>{{ detail.employee_birth_date ? $moment(detail.employee_birth_date).format("DD-MM-Y") : "" }}</td>
-                        <td>{{ detail.employee_tmk ? $moment(detail.employee_tmk).format("DD-MM-Y") : "" }}</td>
-                        <td>{{ detail.employee_ktp_no }}</td>
-                        <td>{{ detail.employee_address }}</td>
-                        <td>{{ detail.employee_status }}</td>
-                        <td>{{ detail.employee_rek_no }}</td>
-                        <td>{{ detail.employee_rek_name }}</td>
-                        <td>{{ detail.employee_bank_name }}</td>
-                        <td>{{ pointFormat(detail.sb_gaji) }}</td>
-                        <td>{{ pointFormat(detail.sb_makan) }}</td>
-                        <td>{{ pointFormat(detail.sb_dinas) }}</td>
-                        <td>{{ pointFormat(detail.salary_bonus_nominal) }}</td>
-                        <td>{{ pointFormat(detail.periode_1_ttl) }}</td>
-                        <td>{{ pointFormat(detail.sb_gaji_2) }}</td>
-                        <td>{{ pointFormat(detail.sb_makan_2) }}</td>
-                        <td>{{ pointFormat(detail.sb_dinas_2) }}</td>
-                        <td>{{ pointFormat(detail.salary_bonus_nominal_2) }}</td>
-                        <td>{{ pointFormat(detail.kerajinan) }}</td>
-                        <td>{{ pointFormat(detail.bonus_trip_gaji) }}</td>
-                        <td>{{ pointFormat(detail.bonus_trip_dinas) }}</td>
-                        <td>{{ pointFormat(detail.salary_bonus_bonus_trip) }}</td>
-                        <td>{{ pointFormat(detail.periode_2_ttl) }}</td>
-                        <td>{{ pointFormat(detail.potongan_manual) }}</td>
+                        <td :class="detectDiff(detail)">{{ index + 1 }}.</td>
+                        <td :class="detectDiff(detail)">{{ detail.employee_id }}</td>
+                        <td class="sticky -left-1 !z-[3]" :class="detectDiff(detail)">{{ detail.employee_name }}</td>
+                        <td :class="detectDiff(detail)">{{ detail.employee_role }}</td>
+                        <td :class="detectDiff(detail)">{{ detail.employee_birth_place }}</td>
+                        <td :class="detectDiff(detail)">{{ detail.employee_birth_date ? $moment(detail.employee_birth_date).format("DD-MM-Y") : "" }}</td>
+                        <td :class="detectDiff(detail)">{{ detail.employee_tmk ? $moment(detail.employee_tmk).format("DD-MM-Y") : "" }}</td>
+                        <td :class="detectDiff(detail)">{{ detail.employee_ktp_no }}</td>
+                        <td :class="detectDiff(detail)">{{ detail.employee_address }}</td>
+                        <td :class="detectDiff(detail)">{{ detail.employee_status }}</td>
+                        <td :class="detectDiff(detail)">{{ detail.employee_rek_no }}</td>
+                        <td :class="detectDiff(detail)">{{ detail.employee_rek_name }}</td>
+                        <td :class="detectDiff(detail)">{{ detail.employee_bank_name }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.sb_gaji) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.sb_makan) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.sb_dinas) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.salary_bonus_nominal) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.periode_1_ttl) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.sb_gaji_2) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.sb_makan_2) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.sb_dinas_2) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.salary_bonus_nominal_2) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.kerajinan) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.bonus_trip_gaji) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.bonus_trip_dinas) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.salary_bonus_bonus_trip) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.periode_2_ttl) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.potongan_manual) }}</td>
                         <!-- <td>{{ pointFormat(detail.periode_2_ttl_stlh_pot) }}</td> -->
-                        <td>{{ pointFormat(detail.payment_total) }}</td>
-                        <td>{{ pointFormat(detail.periode_ttl) }}</td>
-                        <td>{{ pointFormat(detail.trip_jumlah) }}</td>
-                        <td>{{ pointFormat(detail.uj_gaji) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.payment_total) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.periode_ttl) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.trip_jumlah) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.uj_gaji) }}</td>
                         <td class="!bg-gray-400 font-bold">
                           <InputPointFormatV2
                           :key="index"
                           class="min-w-[120px] h-full p-1" :class="parseFloat(detail.uj_gaji)!=parseFloat(detail.uj_gaji_manual) ? 'text-orange-500':''" 
                           v-model="detail.uj_gaji_manual" placeholder="0,00"/>
                         </td>
-                        <td>{{ pointFormat(detail.uj_makan) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.uj_makan) }}</td>
                         <td class="!bg-gray-400 font-bold">
                           <InputPointFormatV2
                           :key="index"
                           class="min-w-[120px] h-full p-1"  :class="parseFloat(detail.uj_makan)!=parseFloat(detail.uj_makan_manual) ? 'text-orange-500':''" 
                           v-model="detail.uj_makan_manual" placeholder="0,00"/>
                         </td>
-                        <td>{{ pointFormat(detail.uj_dinas) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.uj_dinas) }}</td>
                         <td class="!bg-gray-400 font-bold">
                           <InputPointFormatV2
                           :key="index"
@@ -369,18 +369,18 @@
                           <textarea :key="index" 
                           v-model="detail.uj_manual_reason" class="min-w-[200px] h-full"></textarea>
                         </td>
-                        <td>{{ pointFormat(detail.trip_lain) }}</td>
-                        <td>{{ pointFormat(detail.trip_lain_gaji) }}</td>
-                        <td>{{ pointFormat(detail.trip_lain_makan) }}</td>
-                        <td>{{ pointFormat(detail.trip_lain_dinas) }}</td>
-                        <td>{{ pointFormat(detail.trip_tunggu) }}</td>
-                        <td>{{ pointFormat(detail.trip_tunggu_gaji) }}</td>
-                        <td>{{ pointFormat(detail.trip_tunggu_dinas) }}</td>
-                        <td>{{ pointFormat(detail.nominal_cut) }}</td>
-                        <td>{{ pointFormat(detail.total) }}</td>
-                        <td>{{ pointFormat(detail.employee_bpjs_kesehatan) }}</td>
-                        <td>{{ pointFormat(detail.employee_bpjs_jamsos) }}</td>
-                        <td>{{ pointFormat(detail.total_grand) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.trip_lain) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.trip_lain_gaji) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.trip_lain_makan) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.trip_lain_dinas) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.trip_tunggu) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.trip_tunggu_gaji) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.trip_tunggu_dinas) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.nominal_cut) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.total) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.employee_bpjs_kesehatan) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.employee_bpjs_jamsos) }}</td>
+                        <td :class="detectDiff(detail)">{{ pointFormat(detail.total_grand) }}</td>
                       </tr>
                     </template>
                   </tbody>
@@ -413,6 +413,7 @@ import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
 
 const { pointFormat } = useUtils();
+const { display } = useAlertStore();
 
 const props = defineProps({
   show: {
@@ -518,6 +519,7 @@ const doGen = async () => {
       props.p_data.splice(idx,1,{...rpt_salary.value});    
     }
   }
+  display({ show: true, status: "Success", message: "Generate Berhasil" });
 
   // props.fnClose();
   // router.go(-1);
@@ -540,8 +542,6 @@ const doSave = async () => {
   let dtls = details.value.filter((x)=>{
     return parseFloat(x.uj_gaji)!=parseFloat(x.uj_gaji_manual) || parseFloat(x.uj_makan)!=parseFloat(x.uj_makan_manual) || parseFloat(x.uj_dinas)!=parseFloat(x.uj_dinas_manual);
   });
-
-  console.log(dtls);
 
   data_in.append("details", JSON.stringify(details.value.filter((x)=>{
     return parseFloat(x.uj_gaji)!=parseFloat(x.uj_gaji_manual) || parseFloat(x.uj_makan)!=parseFloat(x.uj_makan_manual) || parseFloat(x.uj_dinas)!=parseFloat(x.uj_dinas_manual);
@@ -579,6 +579,7 @@ const doSave = async () => {
       props.p_data.splice(idx,1,{...rpt_salary.value});    
     }
   }
+  display({ show: true, status: "Success", message: "Save Berhasil" });
 
   // props.fnClose();
   // router.go(-1);
@@ -778,9 +779,18 @@ const all_data=computed(()=>{
 
   return resdata;
 })
+
+
+const detectDiff=(detail)=>{
+  return ['',null].indexOf(detail.uj_manual_reason)==-1?'diffVal':'';
+}
 </script>
 
 <style scoped>
+
+  .diffVal{
+    @apply bg-orange-200 text-red-950 ;
+  }
   /* tbody tr td{
     background-color: rgb(100, 100, 100);
   } */

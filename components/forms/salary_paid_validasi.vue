@@ -27,30 +27,76 @@
                 placeholder="Nama">
             </div>
 
-            <div v-if="source.length" class="w-full flex p-1 justify-between flex-wrap">
+            <div v-if="source.length" class="w-full flex p-1 justify-between flex-wrap  overflow-auto">
               <div class="w-full" role="sticky">
                 <table class="tacky w-full !table-auto" style="white-space:normal;">
                   <thead >
-                    <tr class="sticky -top-1 !z-[2]">
-                      <td colspan="12" class="!bg-slate-800 text-white font-bold">
+                    <tr>
+                      <td colspan="12" class="sticky -top-1 !z-[4] !bg-slate-800 text-white font-bold">
                         Detail
                       </td>
                     </tr>
-                    <tr class="sticky top-7 !z-[2]">
-                      <th >No</th>
-                      <th >Jabatan</th>
-                      <th >Nama Pekerja</th>
-                      <th >No KTP</th>
-                      <!-- <th >No SIM</th> -->
-                      <th >Rek No</th>
-                      <th >Rek Nama</th>
-                      <th >Bank Name</th>
-                      <th >SB.Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji || 0) }})</span></th>
-                      <th >SB.Makan <span class="text-sm">({{pointFormat(ttl_sb_makan || 0) }})</span></th>
-                      <th >SB.Dinas <span class="text-sm">({{pointFormat(ttl_sb_dinas || 0) }})</span></th>
-                      <!-- <th >Nominal Standby <span class="text-sm">({{pointFormat(total_standby || 0) }})</span></th> -->
-                      <th >Nominal Bonus <span class="text-sm">({{pointFormat(total_bonus || 0) }})</span></th>
-                      <th >Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_sb_dinas + total_bonus) || 0) }})</span></th>
+                    <tr>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          No
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          Jabatan
+                        </div>
+                      </th>
+                      <th class="sticky top-7 -left-1 !z-[4]">
+                        <div>
+                          Nama Pekerja
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          No KTP
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          Rek No
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          Rek Nama
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          Bank Name
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          SB.Gaji <span class="text-sm">({{pointFormat(ttl_sb_gaji || 0) }})</span>
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          SB.Makan <span class="text-sm">({{pointFormat(ttl_sb_makan || 0) }})</span>
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          SB.Dinas <span class="text-sm">({{pointFormat(ttl_sb_dinas || 0) }})</span>
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          Nominal Bonus <span class="text-sm">({{pointFormat(total_bonus || 0) }})</span>
+                        </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]">
+                        <div>
+                          Total <span class="text-sm">({{pointFormat((ttl_sb_gaji + ttl_sb_makan + ttl_sb_dinas + total_bonus) || 0) }})</span>
+                        </div>
+                      </th>
                     </tr>
                   </thead>
                   <tbody ref="to_move">
@@ -58,7 +104,7 @@
                       <tr v-if="detail.p_status!='Remove'"  :data-index="index">
                         <td>{{ index + 1 }}.</td>
                         <td>{{ detail.employee_role }}</td>
-                        <td>{{ detail.employee_name }}</td>
+                        <td class="sticky -left-1 !z-[3]">{{ detail.employee_name }}</td>
                         <td>{{ detail.employee_ktp_no }}</td>
                         <!-- <td>{{ detail.employee_sim_no }}</td> -->
                         <td>{{ detail.employee_rek_no }}</td>

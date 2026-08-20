@@ -1,12 +1,33 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Salary Report Validation'" :fn="fnClose" class="w-100 flex align-items-center"
+      <HeaderPopup :title="'Salary Report Payment'" :fn="fnClose" class="w-100 flex align-items-center"
         style="color:white;" />
 
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
+              
+              <button v-show="detailStatus('TRANSFER_PROCESS')" type="button" name="button" class="m-1 bg-violet-600 text-white"
+                @click="setPaidDone()">
+                Set Paid Done
+              </button>
+
+              <button v-show="detailStatus('READY')" type="button" name="button" class="m-1 text-2xl "
+                @click="genCSVandSend()">
+                <IconsSend />
+              </button>
+
+              <button v-show="detailStatus('INQUIRY_PROCESS')" type="button" name="button" class="m-1 text-2xl "
+                @click="getUpdate()">
+                <IconsCloudDownload />
+              </button> 
+
+              <button v-show="detailStatus('INQUIRY_PROCESS')" type="button" name="button" class="m-1 text-2xl "
+                @click="setToReady()">
+                <IconsHistory />
+              </button>
+                
               <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
                 <label for="">Period End</label>
                 <div class="card-border">
@@ -21,7 +42,7 @@
             </div>
   
 
-            <div v-if="source.length" class="w-full flex p-1 justify-between flex-wrap  overflow-auto">
+            <div v-if="source.length" class="w-full flex p-1 justify-between flex-wrap overflow-auto">
               <div class="w-full" role="sticky">
                 <table class="backy w-full" style="white-space:normal;">
                   <thead >
@@ -168,6 +189,21 @@
                           Grand Total 
                           <span class="text-sm">({{pointFormat(all_data.total_grand) }})</span>
                         </div>
+                      </th>
+                      <th class="sticky top-7 !z-[2]" rowspan="2">
+                        <div>
+                          Status 
+                        </div> 
+                      </th>
+                      <th class="sticky top-7 !z-[2]" rowspan="2">
+                        <div>
+                          Aksi 
+                        </div> 
+                      </th>
+                      <th class="sticky top-7 !z-[2]" rowspan="2">
+                        <div>
+                          Alasan Gagal 
+                        </div> 
                       </th>
                     </tr>
                     <tr >
@@ -347,6 +383,23 @@
                         <td :class="detectDiff(detail)">{{ pointFormat(detail.employee_bpjs_kesehatan) }}</td>
                         <td :class="detectDiff(detail)">{{ pointFormat(detail.employee_bpjs_jamsos) }}</td>
                         <td :class="detectDiff(detail)">{{ pointFormat(detail.total_grand) }}</td>
+                        <td :class="detectDiff(detail)" class="cell">
+                          <div class="w-full h-full flex items-center justify-end p-1">
+                            {{detail.payment_status}}  
+                          </div>
+                        </td>
+                        <td :class="detectDiff(detail)" class="cell">
+                          <div class="w-full h-full flex items-center justify-end p-1">
+                            <button v-if="detail.payment_status=='INQUIRY_FAILED'" class="bg-yellow-400 rounded" @click.prevent="renewData(detail.id,index)">
+                              Renew Data
+                            </button>
+                          </div>
+                        </td>
+                        <td :class="detectDiff(detail)" class="cell">
+                          <div class="w-full h-full flex items-center justify-end p-1">
+                            {{detail.payment_failed_reason}}  
+                          </div>
+                        </td>
                       </tr>
                     </template>
                   </tbody>
@@ -358,30 +411,12 @@
           </div>
           
           <div class="w-full flex items-center justify-end">
-            <div class="w-full flex flex-wrap p-3 items-center">
-              <div>
-                Di Validasi oleh : 
-              </div>
-              <div v-if="rpt_salary.val1 || rpt_salary.val2 || rpt_salary.val3" class="border-solid border-2 w-fit p-1 bg-slate-700 text-white text-xs">
-                <div v-if="rpt_salary.val1">
-                  App 1 : {{ rpt_salary.val1_by.username}} ( {{ rpt_salary.val1_at ? $moment(rpt_salary.val1_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
-                </div>
-                <div v-if="rpt_salary.val2">
-                  App 2 : {{ rpt_salary.val2_by.username}} ( {{ rpt_salary.val2_at ? $moment(rpt_salary.val2_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
-                </div>
-                <!-- 
-                <div v-if="rpt_salary.val3">
-                  App 3 : {{ rpt_salary.val3_by.username}} ( {{ rpt_salary.val3_at ? $moment(rpt_salary.val3_at).format("DD-MM-YYYY HH:mm:ss") :"" }} )
-                </div> -->
-              </div>
-            </div>
-
             <button type="button" name="button" class="w-36 m-1" @click="fnClose()">
               Cancel
             </button>
-            <button ref="it_val" v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
+            <!-- <button ref="it_val" v-if="is_view==0" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
               Validasi
-            </button>
+            </button> -->
           </div>
         </form>
     </div>
@@ -513,6 +548,13 @@ const doSave = async () => {
   props.fnClose();
 }
 
+const detailStatus = (v)=>{
+  let lngt = details.value.length;
+  if(lngt==0){
+    return v=='';
+  }
+  return details.value.filter((x)=>x.payment_status==v).length == details.value.length ? true : false;
+};
 
 const callData = async () => {
   useCommonStore().loading_full = true;
@@ -552,22 +594,235 @@ const source = computed(()=>{
   return details.value;
 });
 
+
+const genCSVandSend = async () => {
+
+  if(sendCSV.value) return;
+  sendCSV.value = true;
+
+  useCommonStore().loading_full = true;
+  field_errors.value = {};
+
+  const data_in = new FormData();
+  data_in.append("id", rpt_salary.value.id);
+  data_in.append("_method", "PUT");
+
+  let $method = "post";
+
+  const { data, error, status } = await useMyFetch("/rpt_salary/gen_csv_and_send_mandiri", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // "Content-Type": "multipart/form-data",
+    },
+    body: data_in,
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+  sendCSV.value = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error, field_errors);
+    return;
+  }
+  display({ show: true, status: "Success", message: "Kirim Ke Mandiri Berhasil" });
+
+  details.value.forEach((x)=>{
+    x.payment_status="INQUIRY_PROCESS";
+  });
+  // trx_trps.value.splice(selected.value,1);
+  // selected.value = -1;
+  // show_confirm.value = false;
+  // pop_show.value = false;
+
+}
+
+
+const getUpdate = async () => {
+  useCommonStore().loading_full = true;
+  field_errors.value = {};
+
+  const data_in = new FormData();
+  data_in.append("id", rpt_salary.value.id);
+  data_in.append("_method", "PUT");
+
+  let $method = "post";
+
+  const { data, error, status } = await useMyFetch("/rpt_salary/get_update", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // "Content-Type": "multipart/form-data",
+    },
+    body: data_in,
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error, field_errors);
+    return;
+  }
+
+  display({ show: true, status: "Success", message: "Update Data Berhasil" });
+
+  data.value.details.forEach((dt)=>{
+    // x.status="INQUIRY_PROCESS";
+    let idx = details.value.map((x)=>x.id).indexOf(dt.id);
+    if(idx>-1){
+      details.value[idx].payment_status = dt.payment_status;
+      details.value[idx].payment_failed_reason = dt.payment_failed_reason;
+    }
+  });
+
+  // console.log(data.value.details);
+  // console.log(details.value);
+
+  rpt_salary.value.payment_status='WAIT';
+
+
+  // details.value.forEach((x)=>{
+  //   x.status="INQUIRY_PROCESS";
+  // });
+  // trx_trps.value.splice(selected.value,1);
+  // selected.value = -1;
+  // show_confirm.value = false;
+  // pop_show.value = false;
+
+}
+
+const setToReady = async () => {
+  useCommonStore().loading_full = true;
+  field_errors.value = {};
+
+  const data_in = new FormData();
+  data_in.append("id", rpt_salary.value.id);
+  data_in.append("_method", "PUT");
+
+  let $method = "post";
+
+  const { data, error, status } = await useMyFetch("/rpt_salary/set_to_ready", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // "Content-Type": "multipart/form-data",
+    },
+    body: data_in,
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error, field_errors);
+    return;
+  }
+
+  display({ show: true, status: "Success", message: "Update Data Berhasil" });
+
+  details.value.forEach(el => {
+    el.payment_status             = "READY";    
+  });
+
+  rpt_salary.value.payment_status='OPEN';
+}
+
+const renewData = async (id,idx) => {
+  useCommonStore().loading_full = true;
+  field_errors.value = {};
+
+  const data_in = new FormData();
+  data_in.append("detail_id", id);
+  data_in.append("_method", "PUT");
+
+  let $method = "post";
+
+  const { data, error, status } = await useMyFetch("/rpt_salary_dtl/renew_data", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // "Content-Type": "multipart/form-data",
+    },
+    body: data_in,
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error, field_errors);
+    return;
+  }
+
+  details.value[idx].employee_rek_no         = data.value.employee_rek_no;
+  details.value[idx].employee_rek_name       = data.value.employee_rek_name;
+  details.value[idx].employee_bank_name      = data.value.employee_bank_name;
+  details.value[idx].payment_status         = data.value.payment_status;
+  details.value[idx].payment_failed_reason  = data.value.payment_failed_reason;
+
+  display({ show: true, status: "Success", message: "Data Berhasil Diperbaharui" });
+}
+
+
+const setPaidDone = async () => {
+  useCommonStore().loading_full = true;
+  field_errors.value = {};
+
+  const data_in = new FormData();
+  data_in.append("id", rpt_salary.value.id);
+  data_in.append("_method", "PUT");
+
+  let $method = "post";
+
+  const { data, error, status } = await useMyFetch("/rpt_salary/set_paid_done", {
+    method: $method,
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // "Content-Type": "multipart/form-data",
+    },
+    body: data_in,
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error, field_errors);
+    return;
+  }
+
+  rpt_salary.value.payment_status = 'CLOSE';
+  details.value.forEach((x)=>{
+    x.payment_status="DONE";
+  });
+
+  let idx= props.p_data.map((x)=>x.id).indexOf(rpt_salary.value.id);
+  if(idx>-1){
+    props.p_data.splice(idx,1,{...rpt_salary.value});    
+  }
+
+  display({ show: true, status: "Success", message: "PAID IS DONE" });
+}
+
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true){
     rpt_salary.value = {...rpt_salary_temp};
     details.value = [];
-    if(props.is_view==false){
-      setTimeout(()=>{
-        it_val.value.focus();
-      },1);
-    }
+
+    if(props.id!=0)
     callData();
   }
 }, {
   immediate: true
 });
-
-
 
 const all_data=computed(()=>{
   let xdetails = details.value;
@@ -699,11 +954,11 @@ const all_data=computed(()=>{
   return resdata;
 })
 
-
 const detectDiff=(detail)=>{
   return ['',null].indexOf(detail.uj_manual_reason)==-1?'diffVal':'';
 }
 </script>
+
 <style scoped="">
  .diffVal{
     @apply bg-orange-200 text-red-950;

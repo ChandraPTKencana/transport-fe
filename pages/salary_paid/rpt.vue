@@ -7,13 +7,17 @@
           @click="form_add()">
           <IconsPlus />
         </button>
-        <button v-if="useUtils().checkPermissions(['rpt_salary.modify'])" type="button" name="button" class="m-1 text-2xl "
+        <button v-if="useUtils().checkPermissions(['rpt_salary.modify']) && selected > -1 && dt_selected.val1 == 0" type="button" name="button" class="m-1 text-2xl "
           @click="form_edit()">
           <IconsEdit/>
         </button>
         <button v-if="useUtils().checkPermissions(['rpt_salary.val1','rpt_salary.val2','rpt_salary.val3'])" type="button" name="button" class="m-1 text-2xl "
           @click="validasi()">
           <IconsSignature />
+        </button>
+        <button v-if="useUtils().checkPermissions(['rpt_salary.gen_mandiri']) && selected > -1  && dt_selected.val2 == 1" type="button" name="button" class="m-1 text-2xl "
+          @click="openToGen()">
+          <IconsMoney />
         </button>
         <!-- <button v-if="selected>-1 && rpt_salarys[selected].val1==1" type="button" name="button" class="m-1 text-2xl "
           @click="printPreview()">
@@ -52,8 +56,10 @@
             <thead>
               <tr class="sticky top-0 !z-[2]">
                 <th>Logistik</th>
+                <th>HR</th>
                 <th>ID</th>
                 <th>Period End</th>
+                <th>Payment Complete?</th>
                 <th>Created At</th>
                 <th>Updated At</th>
               </tr>
@@ -67,8 +73,19 @@
                     <IconsCheck v-else/>
                   </div>
                 </td>
+                <td>
+                  <div class="flex items-center justify-center">
+                    <IconsLine v-if="!rpt_salary.val2"/>
+                    <IconsCheck v-else/>
+                  </div>
+                </td>
                 <td class="bold">{{ rpt_salary.id }}</td>
                 <td>{{ rpt_salary.period_end ? $moment(rpt_salary.period_end).format("MM-Y") : "" }}</td>
+                <td>
+                  <div class="flex items-center justify-center">
+                    {{ rpt_salary.payment_status }}
+                  </div>
+                </td>
                 <td>{{ rpt_salary.created_at ? $moment(rpt_salary.created_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
                 <td>{{ rpt_salary.updated_at ? $moment(rpt_salary.updated_at).format("DD-MM-Y HH:mm:ss") : "" }}</td>
               </tr>
@@ -88,6 +105,7 @@
     </LazyPopupMini>
     <LazyFormsRptSalary :show="forms_rpt_salary_show" :fnClose="()=>{forms_rpt_salary_show=false}" :id="forms_rpt_salary_id" :p_data="rpt_salarys" :is_copy="forms_rpt_salary_copy"/>
     <LazyFormsRptSalaryValidasi :show="forms_rpt_salary_valid_show" :fnClose="()=>{forms_rpt_salary_valid_show=false}" :id="forms_rpt_salary_valid_id" :p_data="rpt_salarys"/>
+    <LazyFormsRptSalaryPayment :show="forms_rpt_salary_gen_show" :fnClose="()=>{forms_rpt_salary_gen_show=false}" :id="forms_rpt_salary_id" :p_data="rpt_salarys" :is_copy="forms_rpt_salary_copy"/>
     <LazyFormsRptSalaryCheck :show="forms_rpt_salary_check_show" :fnClose="()=>{forms_rpt_salary_check_show=false}" :id="forms_rpt_salary_check_id"/>
   </div>
 </template>
@@ -160,6 +178,10 @@ watch(
   { immediate: true }
 );
 // const popup_request = ref(false);
+
+const dt_selected = computed(()=>{  
+  return rpt_salarys.value[selected.value];
+})
 
 const search = ref("");
 const sort = ref({
@@ -297,6 +319,17 @@ const validasi = () => {
     forms_rpt_salary_valid_id.value = rpt_salarys.value[selected.value].id;
     forms_rpt_salary_copy.value = true;
     forms_rpt_salary_valid_show.value = true;
+  }
+};
+
+const forms_rpt_salary_gen_show =  ref(false);
+const openToGen = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    forms_rpt_salary_id.value = rpt_salarys.value[selected.value].id;
+    forms_rpt_salary_copy.value = false;
+    forms_rpt_salary_gen_show.value = true;
   }
 };
 
