@@ -33,9 +33,30 @@ const formatter = new Intl.NumberFormat('id-ID', {
 })
 
 /**
- * Parse any common number format → pure number
+ * Parse the DISPLAY value (always Indonesian format)
+ * . = thousand separator
+ * , = decimal separator
  */
-function parse(value: string | number | null | undefined): number | null {
+function parseDisplay(value: string): number | null {
+  if (!value || value.trim() === '' || value === '-') return null
+
+  let str = value
+    .replace(/\./g, '')   // remove thousand separators
+    .replace(',', '.')    // decimal comma → dot
+    .replace(/[^\d.-]/g, '')
+
+  if (!props.allowNegative) {
+    str = str.replace(/-/g, '')
+  }
+
+  const num = parseFloat(str)
+  return isNaN(num) ? null : num
+}
+
+/**
+ * Parse incoming modelValue (can be number or English/Indonesian string)
+ */
+function parseModel(value: string | number | null | undefined): number | null {
   if (value === null || value === undefined || value === '') return null
   if (typeof value === 'number') return isNaN(value) ? null : value
 
@@ -47,10 +68,8 @@ function parse(value: string | number | null | undefined): number | null {
 
   if (hasComma && hasDot) {
     if (str.lastIndexOf(',') > str.lastIndexOf('.')) {
-      // Indonesian: 1.234.567,89
       str = str.replace(/\./g, '').replace(',', '.')
     } else {
-      // English: 1,234,567.89
       str = str.replace(/,/g, '')
     }
   } else if (hasComma) {
@@ -98,9 +117,6 @@ function setCursorByDigitCount(el: HTMLInputElement, digitCount: number) {
   el.setSelectionRange(newPos, newPos)
 }
 
-/**
- * Prevent typing invalid characters
- */
 function onKeydown(e: KeyboardEvent) {
   const allowedKeys = [
     'Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
@@ -108,42 +124,25 @@ function onKeydown(e: KeyboardEvent) {
     'Home', 'End'
   ]
 
-  // Allow navigation & control keys
-  if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey) {
-    return
-  }
+  if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey) return
 
-  // Allow digits
-  if (/^\d$/.test(e.key)) {
-    return
-  }
+  if (/^\d$/.test(e.key)) return
 
-  // Allow decimal comma (,)
   if (e.key === ',') {
-    // Prevent second comma
-    if (displayValue.value.includes(',')) {
-      e.preventDefault()
-    }
+    if (displayValue.value.includes(',')) e.preventDefault()
     return
   }
 
-  // Allow thousand separator (.) - optional, we can also block it
-  if (e.key === '.') {
-    return
-  }
+  if (e.key === '.') return
 
-  // Allow minus only at the beginning
   if (e.key === '-' && props.allowNegative) {
     const el = e.target as HTMLInputElement
     const cursorPos = el.selectionStart ?? 0
-    if (cursorPos === 0 && !displayValue.value.includes('-')) {
-      return
-    }
+    if (cursorPos === 0 && !displayValue.value.includes('-')) return
     e.preventDefault()
     return
   }
 
-  // Block everything else (letters, symbols, space, etc.)
   e.preventDefault()
 }
 
@@ -151,7 +150,7 @@ function onInput(e: Event) {
   const el = e.target as HTMLInputElement
   let value = el.value
 
-  // Extra safety: strip anything that is not allowed
+  // Strip invalid characters
   value = value.replace(/[^\d.,-]/g, '')
 
   // Only one minus at the beginning
@@ -173,13 +172,15 @@ function onInput(e: Event) {
   const cursorPos = el.selectionStart ?? value.length
   const digitsBefore = getDigitsBeforeCursor(value, cursorPos)
 
-  const num = parse(value)
+  const num = parseDisplay(value)
   let formatted = value
 
   if (num !== null) {
     if (value.endsWith(',') && !value.slice(0, -1).includes(',')) {
+      // Just typed the comma
       formatted = format(num).replace(/,\d+$/, '') + ','
     } else if (value.includes(',')) {
+      // Editing decimal part
       const [intPart, decPart = ''] = value.replace(/\./g, '').split(',')
       const intNum = parseFloat(intPart || '0')
       const formattedInt = isNaN(intNum)
@@ -188,6 +189,7 @@ function onInput(e: Event) {
 
       formatted = formattedInt + ',' + decPart.slice(0, props.precision)
     } else {
+      // Integer only → format without forcing ,00
       formatted = format(num).replace(/,\d+$/, '')
     }
   } else if (value === '-' || value === '') {
@@ -195,7 +197,7 @@ function onInput(e: Event) {
   }
 
   displayValue.value = formatted
-  emit('update:modelValue', parse(formatted))
+  emit('update:modelValue', parseDisplay(formatted))
 
   nextTick(() => {
     if (inputRef.value) {
@@ -205,7 +207,7 @@ function onInput(e: Event) {
 }
 
 function onBlur() {
-  const num = parse(displayValue.value)
+  const num = parseDisplay(displayValue.value)
   displayValue.value = format(num)
   emit('update:modelValue', num)
 }
@@ -216,7 +218,7 @@ watch(
   (val) => {
     if (document.activeElement === inputRef.value) return
 
-    const num = parse(val)
+    const num = parseModel(val)
     displayValue.value = format(num)
   },
   { immediate: true }
@@ -242,8 +244,7 @@ watch(
 <style scoped>
 .input-number-mask {
   width: 100%;
-  padding: 0.25rem 0.5rem;
-  /* padding: 0.5rem 0.75rem; */
+  padding: 0.5rem 0.75rem;
   border: 1px solid #d1d5db;
   border-radius: 0.375rem;
   font-size: 1rem;
