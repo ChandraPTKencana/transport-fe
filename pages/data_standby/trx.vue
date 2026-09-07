@@ -314,7 +314,7 @@ const { data: dt_async } = await useAsyncData(async () => {
         'Authorization': `Bearer ${token.value}`,
         'Accept': 'application/json'
       },
-      params:{filter_status},
+      params:{filter_status:'trx_not_done'},
       retry: 0,
     }),
     // useMyFetch("/trx_load_for_trp", {

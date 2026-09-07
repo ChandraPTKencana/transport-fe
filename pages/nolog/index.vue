@@ -187,7 +187,7 @@ const { data: dt_async } = await useAsyncData(async () => {
   const [data1, data2] = await Promise.all([
     useMyFetch("/trx_trp_nologs", {
       method: 'get',
-      params:{filter_status},
+      params:{filter_status:'pv_not_done'},
       retry: 0,
     }),
     // useMyFetch("/trx_load_for_trp", {

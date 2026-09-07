@@ -11,6 +11,10 @@
           @click="form_edit()">
           <IconsEdit/>
         </button>
+        <button v-if="selected > -1 && rpt_salarys[selected].val1==1" type="button" name="button" class="m-1 text-2xl "
+          @click="form_view()">
+          <IconsEyes/>
+        </button>
         <button v-if="useUtils().checkPermissions(['rpt_salary.val1','rpt_salary.val2','rpt_salary.val3'])" type="button" name="button" class="m-1 text-2xl "
           @click="validasi()">
           <IconsSignature />
@@ -104,7 +108,7 @@
       </template>
     </LazyPopupMini>
     <LazyFormsRptSalary :show="forms_rpt_salary_show" :fnClose="()=>{forms_rpt_salary_show=false}" :id="forms_rpt_salary_id" :p_data="rpt_salarys" :is_copy="forms_rpt_salary_copy"/>
-    <LazyFormsRptSalaryValidasi :show="forms_rpt_salary_valid_show" :fnClose="()=>{forms_rpt_salary_valid_show=false}" :id="forms_rpt_salary_valid_id" :p_data="rpt_salarys"/>
+    <LazyFormsRptSalaryValidasi :show="forms_rpt_salary_valid_show" :fnClose="()=>{forms_rpt_salary_valid_show=false}" :id="forms_rpt_salary_valid_id" :p_data="rpt_salarys" :is_view="forms_rpt_salary_is_view"/>
     <LazyFormsRptSalaryPayment :show="forms_rpt_salary_gen_show" :fnClose="()=>{forms_rpt_salary_gen_show=false}" :id="forms_rpt_salary_id" :p_data="rpt_salarys" :is_copy="forms_rpt_salary_copy"/>
     <LazyFormsRptSalaryCheck :show="forms_rpt_salary_check_show" :fnClose="()=>{forms_rpt_salary_check_show=false}" :id="forms_rpt_salary_check_id"/>
   </div>
@@ -276,6 +280,7 @@ const searching = () => {
 const router = useRouter();
 
 const forms_rpt_salary_show =  ref(false);
+const forms_rpt_salary_is_view =  ref(false);
 const forms_rpt_salary_id = ref(0);
 const forms_rpt_salary_copy = ref(0);
 const form_add = () => {
@@ -299,6 +304,18 @@ const form_edit = () => {
   }
 };
 
+const form_view = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+   forms_rpt_salary_valid_id.value = rpt_salarys.value[selected.value].id;
+   forms_rpt_salary_is_view.value = true;
+   forms_rpt_salary_copy.value = false;
+  //  forms_rpt_salary_valid_state.value = -1;
+   forms_rpt_salary_valid_show.value = true;
+  }
+};
+
 const form_copy = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
@@ -318,6 +335,7 @@ const validasi = () => {
   } else {
     forms_rpt_salary_valid_id.value = rpt_salarys.value[selected.value].id;
     forms_rpt_salary_copy.value = true;
+    forms_rpt_salary_is_view.value = false;
     forms_rpt_salary_valid_show.value = true;
   }
 };

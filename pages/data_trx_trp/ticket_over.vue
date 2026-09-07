@@ -94,7 +94,7 @@
           'Authorization': `Bearer ${token.value}`,
           'Accept': 'application/json'
         },
-        params:{filter_status},
+        params:{filter_status:'ticket_not_done'},
         retry: 0,
       }),
     ]);    
