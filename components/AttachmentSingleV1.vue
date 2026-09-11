@@ -3,24 +3,30 @@
       <div class="w-full">
         <label for="">{{label}}</label>
       </div>
-      <div v-if="isLoading"  class="skeleton w-full" ></div>
+      <div v-if="isLoading" class="skeleton w-full"></div>
       <div v-else class="w-full flex justify-center items-center flex-col">
+        <!-- TAMPILAN JIKA TERJADI ERROR SEMENTARA -->
+        <div v-if="isError && !src" class="w-full flex flex-col justify-center items-center p-4 bg-gray-50 border-[1px] border-red-300 mb-1">
+          <p class="text-red-500 text-sm mb-2 text-center">Gagal memuat attachment (Server Busy)</p>
+          <button type="button" class="bg-blue-600 px-4 py-1 text-sm text-white rounded hover:bg-blue-700" @click="manualReload">
+            ↻ Muat Ulang
+          </button>
+        </div>
+
         <div v-if="src" class="w-full flex justify-center items-center border-[1px] border-gray-300 mb-1">
           <div class="image-box">
             <img
-              v-if="blob?.type.match(/image/)"
+              v-if="blob?.type?.match(/image/)"
               :src="src"
               class="w-full h-full object-cover"
             />
-            <LazyPDFJsView v-if="blob?.type.match(/application\/pdf/)"  :pdfObjUrl="objectUrl" />
+            <LazyPDFJsView v-if="blob?.type?.match(/application\/pdf/)" :pdfObjUrl="objectUrl" />
           </div>
         </div>
         <button v-if="can_remove" type="button" v-show="src" class="bg-gray-600 w-36 text-white" @click="clearFile()">Clear</button>
-        <input v-if="can_remove" class="w-full" v-show="!src" @change="changeFile($event)" ref="photo_input" type="file" name="photo">
+        <input v-if="can_remove" class="w-full" v-show="!src && !isError" @change="changeFile($event)" ref="photo_input" type="file" name="photo">
       </div>
     </div>
-
-    
 </template>
   
 <script setup lang="ts">
@@ -79,7 +85,9 @@ const blob = ref();
 const loadedOnce = ref(false)
 const isUserFile = ref(false)
 const isLoading = ref(true)
+const isError = ref(false) 
 
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 // const changeFile = ($e) => {
 //   var files = $e.target.files;
 //   if (files.length > 0) {
@@ -177,32 +185,80 @@ const clearFile = () => {
       return
     }
 
-    try {
-      const url = props.link.startsWith('http')
-      ? props.link
-      : `${apiBase}${props.link}`
+    isLoading.value = true
+    isError.value = false // Reset status error setiap kali load dipanggil
 
-      const res = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${token.value}`
-        },
-      })
+    const maxRetries = 3 // Maksimal mencoba ulang otomatis sebanyak 3 kali
+    let attempts = 0
+    let success = false
 
-      if (!res.ok) {
+    while (attempts < maxRetries && !success) {
+
+      try {
+        const url = props.link.startsWith('http')
+        ? props.link
+        : `${apiBase}${props.link}`
+
+        const separator = url.includes('?') ? '&' : '?'
+        const finalUrl = `${url}${separator}t=${new Date().getTime()}`
+  
+        const res = await fetch(finalUrl, {
+          headers: {
+            Authorization: `Bearer ${token.value}`
+          },
+        })
+
+        if (!res.ok) {
+          throw new Error(`Server error with status: ${res.status}`)
+        }
+
+        blob.value = await res.blob()
+        objectUrl = URL.createObjectURL(blob.value)
+        src.value = objectUrl
+        loadedOnce.value = true
+        success = true // 🟢 Sukses, keluar dari loop retry
+  
+        // if (!res.ok) {
+        //   let elPhotoInput = photo_input.value;
+        //   if (elPhotoInput) {
+        //     elPhotoInput.value = "";
+        //   }
+        //   return;
+        // }
+      
+        // blob.value = await res.blob()
+        // objectUrl = URL.createObjectURL(blob.value)
+        // src.value = objectUrl
+        // loadedOnce.value = true
+      } catch (err) {
+        attempts++
+        console.warn(`[Attachment] Gagal memuat file berat, mencoba ulang ke-${attempts}/${maxRetries}...`);
+        
+        if (attempts < maxRetries) {
+          // Beri jeda 400ms sebelum menembak ulang agar antrean thread di XAMPP berkurang
+          await delay(400) 
+        }
+      }
+      // finally {
+      //     isLoading.value = false
+      //   }
+      // }
+
+      if (!success) {
+        isError.value = true
         let elPhotoInput = photo_input.value;
         if (elPhotoInput) {
           elPhotoInput.value = "";
         }
-        return;
       }
-    
-      blob.value = await res.blob()
-      objectUrl = URL.createObjectURL(blob.value)
-      src.value = objectUrl
-      loadedOnce.value = true
-    } finally {
+
       isLoading.value = false
     }
+
+  }
+
+  function manualReload() {
+    load()
   }
   
   function unload(force=false) {
