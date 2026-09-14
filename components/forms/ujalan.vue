@@ -7,6 +7,12 @@
         <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
           <div class="w-full flex flex-col items-center grow overflow-auto">
             <div class="w-full flex flex-row flex-wrap">
+              
+              <div class="w-full sm:w-8/12 md:w-6/12 lg:w-5/12 flex flex-col flex-wrap p-1">
+                <label for="">Group Name</label>
+                <input v-model="ujalan.group_name">
+                <p class="text-red-500">{{ field_errors.group_name }}</p>
+              </div>
 
               <div class="w-full sm:w-8/12 md:w-6/12 lg:w-5/12 flex flex-col flex-wrap p-1">
                 <label for="">To</label>
@@ -375,6 +381,7 @@ const props = defineProps({
 
 const ujalan_temp = {
     id: -1,
+    group_name: "",
     xto: "",
     km_range:0,
     bonus_trip_supir:0,
@@ -568,6 +575,7 @@ const doSave = async () => {
   field_errors.value = {};
 
   const data_in = new FormData();
+  data_in.append("group_name", ujalan.value.group_name);
   data_in.append("xto", ujalan.value.xto);
   data_in.append("km_range", ujalan.value.km_range);
   data_in.append("tipe", ujalan.value.tipe);

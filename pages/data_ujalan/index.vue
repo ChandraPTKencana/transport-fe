@@ -28,9 +28,21 @@
             @click="form_view()">
             <IconsEyes/>
           </button>
-          <button  v-if="enabled_remove" type="button" name="button" aria-label="Delete Data" class="m-1 text-2xl "
+          <button  v-if="enabled_remove" type="button" name="button" class="m-1 text-2xl "
             @click="remove()">
             <IconsDelete />
+          </button>
+          <button  v-if="enabled_unremove" type="button" name="button" class="m-1 text-2xl "
+            @click="unRemove()">
+            <IconsDeleteOff />
+          </button>
+          <button  v-if="enabled_group_remove" type="button" name="button" class="m-1 text-2xl whitespace-nowrap grid grid-cols-2"
+            @click="groupRemove()">
+            <IconsDelete /><IconsDelete />
+          </button>
+          <button  v-if="enabled_group_unremove" type="button" name="button" class="m-1 text-2xl whitespace-nowrap grid grid-cols-2"
+            @click="groupUnRemove()">
+            <IconsDeleteOff /><IconsDeleteOff />
           </button>
           <button v-if="enabled_validasi" type="button" name="button" aria-label="Validate Data" class="m-1 text-2xl "
             @click="validasi()">
@@ -119,6 +131,40 @@
         <div class="grow mb-5" >
           <textarea  v-model="deleted_reason"></textarea>
         </div>
+      </template>
+    </LazyPopupMini>
+
+    <LazyPopupMini :type="'delete'" :show="delete_group_box" :fnClose="toggleDeleteGroupBox" :fnConfirm="confirmed_group_delete" :enabledOk="enabledGroupOk" >
+      <template #footer>
+        Masukkan Group Yang akan dihapus:
+        <div class="grow mb-5" >
+          <input type="text" v-model="deleted_group">
+        </div>
+        <br>
+        Masukkan Alasan Penghapusan:
+        <div class="grow mb-5" >
+          <textarea  v-model="deleted_group_reason"></textarea>
+        </div>
+      </template>
+    </LazyPopupMini>
+
+    <LazyPopupMini :type="'custome'" :show="undelete_box" :fnClose="()=>undelete_box=false" :fnConfirm="confirmed_undelete" > 
+      <template #words>
+        Alasan Keluar Sebelumnya : <b class="text-red-500"> {{ ujalans[selected].deleted_reason }}</b>. 
+        <br>
+        , yakin <b class="text-green-500">mengembalikan data </b> ?
+      </template>
+    </LazyPopupMini>
+
+    <LazyPopupMini :type="'custome'" :show="undelete_group_box" :fnClose="()=>undelete_group_box=false" :fnConfirm="confirmed_group_undelete" :enabledOk="deleted_group!=''" > 
+      <template #footer>
+        Masukkan Group Yang akan dikembalikan:
+        <div class="grow mb-5" >
+          <input type="text" v-model="deleted_group">
+        </div>
+      </template>
+      <template #words>
+        Yakin <b class="text-green-500">mengembalikan data </b> ?
       </template>
     </LazyPopupMini>
 
@@ -444,9 +490,30 @@ const enabledOk = ref(false);
 const delete_data = ref({});
 const delete_box = ref(false);
 const deleted_reason = ref("");
+
+const undelete_box = ref(false);
+
+
+const deleted_group = ref("");
+const deleted_group_reason = ref("");
+const delete_group_box = ref(false);
+
+const enabledGroupOk = computed(()=>{
+  return deleted_group_reason.value!='' && deleted_group.value!='';
+});
+
+const undeleted_group = ref("");
+const undelete_group_box = ref(false);
+
 const toggleDeleteBox = async()=>{  
   if (delete_box.value) {
     delete_box.value = false;
+  }
+};
+
+const toggleDeleteGroupBox = async()=>{  
+  if (delete_group_box.value) {
+    delete_group_box.value = false;
   }
 };
 
@@ -458,6 +525,25 @@ const remove = () => {
     delete_data.value = {id : ujalans.value[selected.value].id, "tujuan":ujalans.value[selected.value].xto};
     delete_box.value = true;
   }
+};
+
+const unRemove = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    undelete_box.value = true;
+  }
+};
+
+const groupRemove = () => {
+  deleted_group_reason.value = '';
+  deleted_group.value = '';
+  delete_group_box.value = true;
+};
+
+const groupUnRemove = () => {
+  undeleted_group.value = '';
+  undelete_group_box.value = true;
 };
 
 watch(()=>deleted_reason.value,(newval)=>{
@@ -507,6 +593,134 @@ const confirmed_delete = async() => {
   delete_box.value = false;
 }
 
+const confirmed_group_delete = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("deleted_reason", deleted_group_reason.value);  
+  data_in.append("deleted_group", deleted_group.value);  
+  data_in.append("_method", "DELETE");
+
+  const { data, error, status } = await useMyFetch("/ujalan/group_remove", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+  
+  data.value.deletes.forEach(el => {
+    let index = ujalans.value.map(x=>x.id).indexOf(el.id); 
+    if(index>-1){
+      let old = {...ujalans.value[index]};
+      old['deleted']        = data.value.deleted;
+      old['deleted_user']   = data.value.deleted_user;
+      old['deleted_at']     = data.value.deleted_at;
+      old['deleted_by']     = data.value.deleted_by;
+      old['deleted_reason'] = data.value.deleted_reason;
+    }
+    
+    if(filter_status.value!='all'){
+      ujalans.value.splice(index,1);
+    }else{
+      ujalans.value.splice(index,1,{...old});
+    }
+  });
+
+  selected.value = -1;
+  delete_group_box.value = false;
+}
+
+const confirmed_undelete = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("id", ujalans.value[selected.value].id);  
+  data_in.append("_method", "PUT");
+
+  const { data, error, status } = await useMyFetch("/ujalan/unremove", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  let old = {...ujalans.value[selected.value]};
+  old['deleted'] = data.value.deleted;
+  old['deleted_user'] = data.value.deleted_user;
+  old['deleted_at'] = data.value.deleted_at;
+  old['deleted_by'] = data.value.deleted_by;
+  old['deleted_reason'] = data.value.deleted_reason;
+  
+  if(filter_status.value!='all'){
+    ujalans.value.splice(selected.value,1);
+  }else{
+    ujalans.value.splice(selected.value,1,{...old});
+  }
+
+  selected.value = -1;
+  undelete_box.value = false;
+}
+
+const confirmed_group_undelete = async() => {
+  useCommonStore().loading_full = true;
+
+  const data_in = new FormData();
+  data_in.append("deleted_group", deleted_group.value);  
+  data_in.append("_method", "PUT");
+
+  const { data, error, status } = await useMyFetch("/ujalan/group_unremove", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },
+    body: data_in,
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
+
+  data.value.deletes.forEach(el => {
+    let index = ujalans.value.map(x=>x.id).indexOf(el.id); 
+    if(index>-1){
+      let old = {...ujalans.value[index]};
+      old['deleted']        = data.value.deleted;
+      old['deleted_user']   = data.value.deleted_user;
+      old['deleted_at']     = data.value.deleted_at;
+      old['deleted_by']     = data.value.deleted_by;
+      old['deleted_reason'] = data.value.deleted_reason;
+    }
+    
+    if(filter_status.value!='all'){
+      ujalans.value.splice(index,1);
+    }else{
+      ujalans.value.splice(index,1,{...old});
+    }
+  });
+
+  selected.value = -1;
+  undelete_group_box.value = false;
+}
+
 const { printHtml } = useDownload();
 
 // const printPreview = async()=>{
@@ -542,7 +756,8 @@ const fields_thead=ref([
   {key:"val1",label:"Kasir",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"val2",label:"SPV Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
   {key:"val3",label:"MGR Logistik",filter_on:1,type:"select",select_item:[{k:'1',v:'Approve'},{k:'0',v:'Unapprove'}]},
-  {key:"id",label:"ID",filter_on:1,type:"number"},
+  {key:"group_name",label:"Group Name",filter_on:1,type:'string'},
+  {key:"id",label:"ID",filter_on:1,type:"number"}, 
   {key:"xto",label:"Tujuan",freeze:1,filter_on:1,type:'string'},
   {key:"asst_opt",label:"Info",filter_on:1,type:'string'},
   {key:"tipe",label:"Tipe",filter_on:1,type:'string'},  
@@ -626,6 +841,21 @@ const enabled_remove = computed(()=>{
   && useUtils().checkPermission('ujalan.remove') 
   && [undefined,0].indexOf(dt_selected.value.deleted) > -1;
   return result;
+})
+
+const enabled_unremove = computed(()=>{  
+  let result = selected.value > -1
+  && useUtils().checkPermission('ujalan.unremove') 
+  && [undefined,0].indexOf(dt_selected.value.deleted) == -1;
+  return result;
+})
+
+const enabled_group_remove = computed(()=>{  
+  return useUtils().checkPermission('ujalan.remove');
+})
+
+const enabled_group_unremove = computed(()=>{  
+  return useUtils().checkPermission('ujalan.unremove');
 })
 
 // const enabled_print_preview = computed(()=>{
