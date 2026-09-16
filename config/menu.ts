@@ -48,6 +48,12 @@ export const menuList = [
         icon:'IconsProduct'
       },
       {
+        activeMenu:"/fin_payment_req/separate",
+        permission:'fin_payment_req.views',
+        title:"Mandiri TF2",
+        icon:'IconsProduct'
+      },
+      {
         activeMenu:"/data_trx_trp/transfer",
         permission:'trp_trx.transfer.views',
         title:"Trx Transfer",
